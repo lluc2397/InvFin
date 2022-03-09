@@ -1,0 +1,7 @@
+{% extends "account/email/base_message.txt" %}
+{% load account %}
+{% load i18n %}
+
+{% block content %}{% autoescape off %}{% user_display user as user_display %}{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}El usuario {{ user_display }} ha usado este correo para registrarse en {{ site_domain }}.
+
+Para confirmar haz click en el enlace {{ activate_url }}{% endblocktrans %}{% endautoescape %}{% endblock %}

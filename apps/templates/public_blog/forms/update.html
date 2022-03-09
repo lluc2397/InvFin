@@ -1,0 +1,40 @@
+{% extends "general/bases/base_forms.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block FormContent %}
+<form method="POST" action="{% url 'public_blog:create_blog' %}">
+    <div class="card">
+        {% csrf_token %}
+        {{ form.media }}
+        {% for field in form %}
+            {% if field.errors %}
+            <div class="alert alert-danger" role="alert">
+            {{ field.errors|striptags }}
+            </div>
+            {% endif %}
+        {% endfor %}
+        <div class="card-body">
+            <div class="row">
+                {{form.title|as_crispy_field}}
+                {{form.resume|as_crispy_field}}                        
+                {{form.content}}
+                
+                <div class="col-4">
+                    {{form.status|as_crispy_field}}
+                </div>
+                <div class="col-4">
+                    enviar como newsletter
+                </div>
+                <div class="col-4 mt-4">
+                    <input name="tags" type="text" class="form-control" 
+                    value="{% for tag in current_tags %} {{tag.name}} {% endfor %}" 
+                    data-toggle="tags" required/>
+                </div>
+            </div>
+            <div class="col-12 mt-4">
+                <button class="btn btn-primary col-12" type="submit">Guardar</button>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock FormContent %}

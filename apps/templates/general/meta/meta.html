@@ -1,0 +1,49 @@
+{% load static %}
+
+ <link rel="manifest" href=/webmanifest.json>
+
+ <!-- Favicon -->
+ <link rel="icon" href="{% static 'general/assets/img/favicon/favicon.ico' %}">
+ <link rel="apple-touch-icon" sizes="120x120" href="{% static 'general/assets/img/favicon/favicon.ico' %}">
+ <link rel="icon" type="image/png" sizes="32x32" href="{% static 'general/assets/img/favicon/favicon.ico' %}">
+ <link rel="icon" type="image/png" sizes="16x16" href="{% static 'general/assets/img/favicon/favicon.ico' %}">
+ <link rel="manifest" href="../../assets/img/favicon/site.webmanifest">
+ <link rel="mask-icon" href="{% static 'general/assets/img/favicon/favicon.ico' %}" color="#ffffff">
+ <meta name="msapplication-TileColor" content="#ffffff">
+ <meta name="theme-color" content="#ffffff">
+
+ <meta property="fb:pages" content="107326904530301" />
+ <meta charset="UTF-8">    
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <meta name="keywords" content="{{meta_tags}}">
+ <meta name="Description" content="{{meta_desc}}">
+ <title>{{meta_title}}</title>
+ <link rel=”canonical” href={{meta_url}}/>
+ 
+ <!-- Twitter Card data -->
+ <meta name="twitter:site" content="@InvFinz">
+ <meta name="twitter:title" content="{{ meta_title}}">
+ <meta name="twitter:description" content="{{meta_desc}}">
+ <meta name="twitter:creator" content="@InvFinz">
+ <meta name="twitter:url" content="@InvFinz">
+ <meta name="twitter:card" content="summary">
+ <meta name="twitter:image" content="{% static 'general/assets/img/favicon/favicon.ico' %}">
+
+
+ <!-- Open Graph data -->
+ <meta property="og:locale" content="es" />
+ <meta property="og:title" content="{{meta_title}}" />
+ <meta property="og:url" content="{{meta_url}}" />
+ <meta property="og:description" content="{{meta_desc}}" />
+ <meta property="og:site_name" content="Inversiones & Finanzas" />
+ <meta name="author" content="Lucas Montes">
+ <meta property="og:type" content="website">
+ <meta property="og:image" content="{% static 'general/assets/img/favicon/favicon.ico' %}" />
+
+ <!-- Schema.org markup for Google+ -->
+ <meta itemprop="name" content="{{ meta_title }}">
+ <meta itemprop="description" content="{{meta_desc}}">
+
+ <meta itemprop="image" content="{% static 'general/assets/img/favicon/favicon.ico' %}">
+

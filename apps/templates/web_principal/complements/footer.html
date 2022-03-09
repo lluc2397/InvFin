@@ -1,0 +1,73 @@
+{% load static %}
+        <footer class="footer section pt-6 pt-md-8 pt-lg-10 pb-3 bg-primary text-white overflow-hidden">
+            <div class="pattern pattern-soft top"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 mb-4 mb-lg-0">
+                        <a class="footer-brand mr-lg-5 d-flex" href="../../index.html">
+                            <img src="{% static 'general/assets/img/general/inversionesyfinanzas.WebP' %}" height="35" class="mr-3" alt="Footer logo">
+                        </a>
+                        <p class="my-4">Una comunidad y todos los recursos que todo inversor necesita para mejorar sus rendimientos.</p>
+                        <div class="mb-4 mb-lg-0">
+                            <a href="https://www.facebook.com/Inversiones.y.Finanzas.Para.Todos" class="btn btn-white mr-1">
+                                <i class="fab fa-facebook text-primary"></i>
+                            </a>
+                            <a href="https://twitter.com/InvFinz" class="btn btn-white mr-1">
+                                <i class="fab fa-twitter text-primary"></i>
+                            </a>
+                            <a href="https://www.tiktok.com/@inversionesyfinanzas" class="btn btn-white mr-1">
+                                <i class="fab fa-tiktok text-danger"></i>
+                            </a>
+                            <a href="https://www.youtube.com/channel/UCLC5OpaeNlcUyIKHFOXRlpw?sub_confirmation=1" class="btn btn-white mr-1">
+                                <i class="fab fa-youtube text-danger"></i>
+                            </a>
+                            <a href="https://www.instagram.com/inversiones.finanzas/" class="btn btn-white mr-1">
+                                <i class="fab fa-instagram text-danger"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-3 col-lg-2 mb-4 mb-lg-0">
+                        <h6>InvFin</h6>
+                        <ul class="links-vertical">
+                            <li><a href="{% url 'escritos:glosario' %}">Glosario</a></li>
+                            <li><a href="{% url 'screener:screener_inicio' %}">Empresas</a>
+                            <li><a href="{% url 'preguntas_respuestas:list_questions' %}">Preguntas</a></li>
+                            <li><a href="{% url 'web:soporte' %}">Contáctanos</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6 col-sm-3 col-lg-2 mb-4 mb-lg-0">
+                        <h6>Útiles</h6>
+                        <ul class="links-vertical">
+                            <li><a href="{% url 'general:escritos' %}">Blog</a></li>
+                            <li><a href="{% url 'web:excel' %}">Excel</a></li>
+                            <li><a href="{% url 'public_blog:blog_list' %}">Escritores</a></li>
+                            <li><a href="{% url 'preguntas_respuestas:list_questions' %}">Campus</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <!-- <h6>Únete</h6>
+                        <p class="font-small">Únete a la newsletter para recibir noticias, promociones y novedades</p>
+                        <form action="#">
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <input type="email" class="form-control" placeholder="Email" name="email" required aria-label="Email Address" aria-describedby="button-addon2">
+                                    <div class="input-group-append">
+                                      <button class="btn btn-invfin-gold rounded-right" type="button" id="button-addon2">Unirse</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <small class="mt-2 form-text"><a href="{% url 'web:asuntos_legales' slug='politicas' %}" target="_blank" class="font-weight-bold text-underline">Privacy Policy</a></small> -->
+                    </div>
+                </div>
+                <hr class="my-4 my-lg-5">
+                <div class="row">
+                    <div class="col pb-4 mb-md-0">
+                        <div class="d-flex text-center justify-content-center align-items-center">
+                            <p class="font-weight-normal mb-0">© Inversiones & Finanzas<span class="current-year"></span>. All rights reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>

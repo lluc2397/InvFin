@@ -1,0 +1,42 @@
+<div class="col-12 mb-3">
+    <div class="card">
+        <div class="text-center">
+            <div class="spinner-border" id="cashflow_jsonChartLoader" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <div class="card-body">
+            <canvas id="cashflow_jsonChartID"></canvas>
+        </div>
+    </div>
+  </div>
+  
+  <div class="col-12">
+    <div class="card">
+        <div class="card-body">
+            <div class="card-header">Estado de flujo de caja</div>
+            <div class="text-center">
+                <div class="spinner-border" id="cashflow_jsonLoader" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div class="table-responsive fixedTable" id="cashflow_jsonTable">
+            </div>
+        </div>
+    </div>
+  </div>
+  
+  <script>
+    var cashflow_jsonTable = document.getElementById('cashflow_jsonTable');
+    var cashflow_jsonLoader = document.getElementById('cashflow_jsonLoader');
+  
+    var cashflow_jsonChartLoader = document.getElementById('cashflow_jsonChartLoader');
+    var cashflow_jsonChartID = document.getElementById('cashflow_jsonChartID');
+  
+    var chartTitle = 'Free cash flows'
+  
+    var cashflow_json = {{the_company.cashflow_json|safe}};
+    var cashflowChart = {{the_company.comparing_cashflows|safe}};
+  
+    createContent(cashflow_json, cashflow_jsonTable, cashflow_jsonLoader, cashflowChart, chartTitle, cashflow_jsonChartID, cashflow_jsonChartLoader)
+  </script>

@@ -1,0 +1,27 @@
+{% for answer in current_profile.answers_apported.all %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex flex-column h-100">
+            <a href="{{answer.question_related.get_absolute_url}}">
+                <p class="h1 mb-1 pt-2 text-bold">
+                    {{answer.question_related.title}}
+                </p>
+            </a>
+            
+            <div class="d-flex">
+                {% for tag in answer.question_related.tags.all %}
+                <a href="#" class="badge badge-info text-center mr-2">
+                    <span class="font-weight-bolder">{{tag.name}}</span>
+                </a>
+                {% endfor %}
+            </div>
+            
+            <div class="mb-2 mt-2">
+                <a href="{{question.get_absolute_url}}">
+                    {{answer.content|safe|truncatechars:200}}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}

@@ -1,0 +1,56 @@
+{% extends "general/bases/base_content.html" %}
+{% load static %}
+{% block header %}{% include "public_blog/header/inicio.html" %}{% endblock header%}
+
+{% block FirstCtaContent %}
+{% include "public_blog/cta/inicio.html" %}
+{% endblock FirstCtaContent %}
+
+{% block FirstContent %}
+{% include "public_blog/complements/first_content.html" %}
+{% endblock FirstContent%}
+
+{% block ListContent %}
+{% for blog in blogs %}
+<div class="card-translucent bg-transparent">
+    <div class="card-body p-3">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="d-flex flex-column h-100">
+                    <a href="{{blog.get_absolute_url}}">
+                        <p class="h1 mb-1 pt-2 text-bold">
+                            {{blog.title}}
+                        </p>
+                    </a>
+                    <h5 class="font-weight-bolder">
+                        <div class="d-flex">
+                            {% for tag in blog.tags.all %}
+                            <a href="#" class="badge badge-info text-center mr-2">
+                                <span class="font-weight-bolder">{{tag.name}}</span>
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </h5>
+                    <p class="mb-5"><a href="{{blog.get_absolute_url}}">
+                        {{blog.resume}}
+                    </a></p>
+                    <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="{{blog.get_absolute_url}}">
+                    Leer más
+                    <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 ms-auto text-center mt-5 mt-lg-0">
+                <div class="bg-gradient-yellow border-radius-lg h-100 ">
+                    <img src="{{blog.image}}" class="h-100 w-100 rounded top-0 d-lg-block d-none" alt="waves">                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock ListContent %}
+
+{% block MiddleCtaContent %}
+{% include "public_blog/cta/inicio_middle.html" %}
+{% endblock MiddleCtaContent %}

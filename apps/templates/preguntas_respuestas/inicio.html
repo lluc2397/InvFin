@@ -1,0 +1,62 @@
+{% extends "general/bases/base_content.html" %}
+{% load static %}
+
+{% block header %}
+<script>
+    (function(h,o,t,j,a,r){
+        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+        h._hjSettings={hjid:2775382,hjsv:6};
+        a=o.getElementsByTagName('head')[0];
+        r=o.createElement('script');r.async=1;
+        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+        a.appendChild(r);
+    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
+{% include "preguntas_respuestas/header/inicio.html" %}{% endblock header%}
+
+{% block FirstCtaContent %}
+{% include "preguntas_respuestas/cta/inicio.html" %}
+{% endblock FirstCtaContent %}
+
+{% block LeftSide %}
+{% for question in questions %}
+    <div class="card-translucent bg-transparent pb-4">
+        <div class="card-body p-3">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex flex-column h-100">
+                        <a href="{{question.get_absolute_url}}">
+                            <p class="h1 mb-1 pt-2 text-bold">
+                                {{question.title}}
+                            </p>
+                        </a>
+                        
+                        <div class="d-flex">
+                            {% for tag in question.tags.all %}
+                            <a href="#" class="badge badge-info text-center mr-2">
+                                <span class="font-weight-bolder">{{tag.name}}</span>
+                            </a>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="mb-2 mt-2">
+                            <a href="{{question.get_absolute_url}}">
+                                {{question.content|safe|truncatechars:200}}
+                            </a>
+                        </div>
+                        <!-- <a class="text-body text-sm font-weight-bold mb-0 icon-move-right" href="javascript:;">
+                        Read More
+                        <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
+                        </a> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% endblock LeftSide %}
+
+{% block RightSide %}
+<!-- {% include "preguntas_respuestas/side/inicio.html" %} -->
+{% endblock RightSide %}
+    

@@ -1,0 +1,18 @@
+{% extends "general/bases/shared_source.html" %}
+{% block meta %}{% include "general/meta/meta.html" %}{% endblock meta%}
+{% block css %}{% include "general/complements/styling.html" %}{% endblock css%}
+
+{% block MasterBody %}
+{% block body %}{% endblock body%}
+{% block modal %}
+{% include "general/modals/become_writter.html" %}
+{% include "general/modals/share_content.html" %}
+{% include "general/modals/user_required.html" %}
+{% endblock modal %}
+<!-- {% block inline_javascript %}    
+<script>
+  window.addEventListener('DOMContentLoaded', () => {/* Run whatever you want */});
+</script>
+{% endblock inline_javascript %} -->
+{% block javascript %}{% include "general/complements/scripts.html" %}{% endblock javascript %}
+{% endblock MasterBody %}

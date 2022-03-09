@@ -1,0 +1,113 @@
+{% load extra %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-2">
+                        <div style="text-align: center;">
+                            <img class="img-fluid" src="{{the_company.image}}">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="table-responsive ">
+                            <table class="table table-borderless">
+                                <thead>
+                                <tr>                                    
+                                    <th colspan="2" scope="row"><h4>{{the_company.name}} ({{the_company.ticker}})</h4></th>
+                                    <th>Capitalización bursátil</th>
+                                    <td>{{marketcap}}</td>
+                                    {% if the_company.exchange.main_org.id == 1 %}
+                                    <th><a class="btn btn-secondary" href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&ticker={{the_company.ticker}}&type=10-k&dateb=&owner=exclude&count=40&search_text=" target="_blank">Ver 10-K</a></th>
+                                    <th><a class="btn btn-secondary" href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&ticker={{the_company.ticker}}&type=10-q&dateb=&owner=exclude&count=40&search_text=" target="_blank">Ver 10-Q</a></th>
+                                    {%else%}
+                                    <th><a class="btn btn-secondary" href="{{the_company.website}}" target="_blank">Web</a></th>
+                                    <!-- <th><a class="btn btn-secondary"></a>WEB</th> -->
+                                    {%endif%}
+                                </tr>
+                                </thead>                          
+                                <tbody>
+                                    <tr>
+                                        <th>CIK</th>
+                                        <td>{{the_company.cik}}</td>
+                                        <th>ISIN</th>
+                                        <td>{{the_company.isin}}</td>
+                                        <th>CUSIP</th>
+                                        <td>{{the_company.cusip}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Exchange</th>
+                                        <td>{{the_company.exchange.exchanges_name}} ({{the_company.exchange}})</td>
+                                        <th>OPA</th>                                       
+                                        <td>{{the_company.ipoDate}}</td>
+                                        <th>Cantidad de empleados</th>
+                                        <td>{{the_company.employees}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>CEO</th>
+                                        <td>{{the_company.ceo}}</td>
+                                        <th>Indústria</th>
+                                        <td>{{the_company.industry}}</td>
+                                        <th>Sector</th>
+                                        <td>{{the_company.sector}}</td>
+                                    </tr>                                    
+                                    <tr>
+                                        <th>País</th>
+                                        <td>{{the_company.country}}</td>
+                                        <th>Estado</th>
+                                        <td>{{the_company.state}} - {{the_company.zip_code}}</td>
+                                        <th>Dirección</th>
+                                        <td>{{the_company.city}}, {{the_company.address}}</td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p style="text-align: justify;">{{the_company.description}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="ms-2">Noticias </h4>
+            </div>
+            {% for new in news_response %}
+            <div class="card-body p-4">
+                <div class="d-flex flex-start">
+                    <img
+                        class="rounded-circle shadow-1-strong me-3"
+                        src="{{new.image}}"
+                        alt="avatar"
+                        width="60"
+                        height="60"/>
+                    <div>
+                        <h6 class="fw-bold mb-1">{{new.headline}}</h6>
+                        <div class="d-flex align-items-center mb-3">
+                        <p class="mb-0">
+                        {{new.datetime|readable_date}}
+                        </p>
+                        <span class="me-2 ms-2">
+                        {{new.source}}
+                        </span>
+                        <span class="me-2">
+                        
+                        </span>
+                        </div>
+                        <p class="mb-0" style="text-align: justify;">
+                        <a href="{{new.url}}" target="_blank">{{new.summary}}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {%empty%}
+            No parece haber noticias para esta empresa actualmente.
+            {%endfor%}
+        </div>
+    </div>    
+</div>
+

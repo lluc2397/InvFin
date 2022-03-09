@@ -1,0 +1,196 @@
+{% load extra %}
+
+<div class="card">
+    <div class="card-header">
+      Rellena todos los campos para calcular el valor intrínseco
+    </div>
+    <div class="card-header">
+        <div class="table-responsive ">
+            <table class="table table-borderless">                        
+                <tbody>
+                    <tr>
+                        <th>Ingresos CAGR</th>
+                        <td>{{cagr|floatformat:2}} %</td>
+                        <th>Margen beneficio promedio</th>
+                        <td>{{average_margin|floatformat:2}} %</td>
+                        <th>Recompara de acciones promedio</th>
+                        <td>{{sharesbuyback|floatformat:2}} %</td>
+                        <th>PER promedio</th>
+                        <td>{{average_per|floatformat:2}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      </div>
+    <div class="card-body">
+        <div class="row">  
+                <!-- Crecimiento revenue -->
+            <div class="col-xl-4 col-sm-12 mt-2">
+                <div class="form-floating">
+                    <input type="text" value="0" class="form-control" id="complex_opt_growth" placeholder="% crecimiento del ingreso optimista" aria-required="true">
+                    <label for="opt_growth" class="form-floating">% crecimiento del ingreso optimista</label>
+                </div>
+            </div>
+            <div class="col-xl-4 col-sm-12 mt-2">
+                <div class="form-floating">
+                    <input type="text" value="0" class="form-control" id="complex_neu_growth" placeholder="% crecimiento del ingreso neutral" aria-required="true">
+                    <label for="neu_growth" class="form-floating">% crecimiento del ingreso neutral</label>
+                </div>
+            </div>
+            <div class="col-xl-4 col-sm-12 mt-2">
+                <div class="form-floating ">
+                    <input type="text" value="0" class="form-control" id="complex_pes_growth" placeholder="% crecimiento del ingreso pesimista" aria-required="true">
+                    <label for="pes_growth" class="form-floating">% crecimiento del ingreso pesimista</label>
+                </div>
+            </div>
+            <!-- Margenes de beneficio -->
+            <div class="col-xl-4 col-sm-12 mt-2">
+                <div class="form-floating">
+                    <input type="text" value="0" class="form-control" id="complex_opt_margin" placeholder="% margen de beneficio neto optimista" aria-required="true">
+                    <label for="opt_margin" class="form-floating">% margen de beneficio neto optimista</label>
+                </div>
+            </div>
+            <div class="col-xl-4 col-sm-12 mt-2">
+                <div class="form-floating">
+                    <input type="text" value="0" class="form-control" id="complex_neu_margin" placeholder="% margen de beneficio neto neutral" aria-required="true">
+                    <label for="neu_margin" class="form-floating">% margen de beneficio neto neutral</label>
+                </div>
+            </div>
+            <div class="col-xl-4 col-sm-12 mt-2">
+                <div class="form-floating ">
+                    <input type="text" value="0" class="form-control" id="complex_pes_margin" placeholder="% margen de beneficio neto pesimista" aria-required="true">
+                    <label for="pes_margin" class="form-floating">% margen de beneficio neto pesimista</label>
+                </div>
+            </div>
+            <!-- % recompra de acciones -->
+            <div class="col-xl-4 col-sm-12 mt-2">
+                <div class="form-floating">
+                    <input type="text" value="0" class="form-control" id="complex_opt_buyback" placeholder="% de recompra de acciones optimista" aria-required="true">
+                    <label for="opt_buyback" class="form-floating">% de recompra de acciones optimista</label>
+                </div>
+            </div>
+            <div class="col-xl-4 col-sm-12 mt-2">
+                <div class="form-floating">
+                    <input type="text" value="0" class="form-control" id="complex_neu_buyback" placeholder="% de recompra de acciones neutral" aria-required="true">
+                    <label for="neu_buyback" class="form-floating">% de recompra de acciones neutral</label>
+                </div>
+            </div>
+            <div class="col-xl-4 col-sm-12 mt-2">
+                <div class="form-floating ">
+                    <input type="text" value="0" class="form-control" id="complex_pes_buyback" placeholder="% de recompra de acciones pesimista" aria-required="true">
+                    <label for="pes_buyback" class="form-floating">% de recompra de acciones pesimista</label>
+                </div>
+            </div>
+            <!-- PER -->
+            <div class="col-xl-4 col-sm-12 mt-2">
+                <div class="form-floating">
+                    <input type="text" value="0" class="form-control" id="complex_opt_per" placeholder="PER optimista" aria-required="true">
+                    <label for="opt_per" class="form-floating">PER optimista</label>
+                </div>
+            </div>
+            <div class="col-xl-4 col-sm-12 mt-2">
+                <div class="form-floating">
+                    <input type="text" value="0" class="form-control" id="complex_neu_per" placeholder="PER neutral" aria-required="true">
+                    <label for="neu_per" class="form-floating">PER neutral</label>
+                </div>
+            </div>
+            <div class="col-xl-4 col-sm-12 mt-2">
+                <div class="form-floating ">
+                    <input type="text" value="0" class="form-control" id="complex_pes_per" placeholder="PER pesimista" aria-required="true">
+                    <label for="pes_per" class="form-floating">PER pesimista</label>
+                </div>
+            </div>
+            
+
+            <div class="col-12 mt-2" style="text-align: center;">          
+
+                <button onclick="Showcomplexresults()" id="complexevaluar" class="btn btn-warning" >Calcular</button>   
+                        
+            </div>            
+            <div class="col-xl-4 col-sm-12 mt-2" id="complex_val_opt" style="display: none;">
+                <div id="complex_opt_valuation"></div>
+            </div>
+            <div class="col-xl-4 col-sm-12 mt-2" id="complex_val_neu" style="display: none;">
+                <div id="complex_neu_valuation"></div>
+            </div>
+            <div class="col-xl-4 col-sm-12 mt-2" id="complex_val_pes" style="display: none;">
+                <div id="complex_pes_valuation"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+   
+
+    function Showcomplexresults() {
+
+        var complex_opt_growth = document.querySelector("#complex_opt_growth").value
+        var complex_neu_growth = document.querySelector("#complex_neu_growth").value
+        var complex_pes_growth = document.querySelector("#complex_pes_growth").value
+        var complex_opt_margin = document.querySelector("#complex_opt_margin").value
+        var complex_neu_margin = document.querySelector("#complex_neu_margin").value
+        var complex_pes_margin = document.querySelector("#complex_pes_margin").value
+        var complex_opt_buyback = document.querySelector("#complex_opt_buyback").value
+        var complex_neu_buyback = document.querySelector("#complex_neu_buyback").value
+        var complex_pes_buyback = document.querySelector("#complex_pes_buyback").value
+        var complex_opt_per = document.querySelector("#complex_opt_per").value
+        var complex_neu_per = document.querySelector("#complex_neu_per").value
+        var complex_pes_per = document.querySelector("#complex_pes_per").value
+        var company_id = "{{the_company.id}}"
+        var current_per = "{{current_per}}"
+
+    formData = JSON.stringify({
+        complex_opt_growth :complex_opt_growth,
+        complex_neu_growth :complex_neu_growth,
+        complex_pes_growth :complex_pes_growth,
+        complex_opt_margin :complex_opt_margin,
+        complex_neu_margin :complex_neu_margin,
+        complex_pes_margin :complex_pes_margin,
+        complex_opt_buyback :complex_opt_buyback,
+        complex_neu_buyback :complex_neu_buyback,
+        complex_pes_buyback :complex_pes_buyback,
+        complex_opt_per :complex_opt_per,
+        complex_neu_per :complex_neu_per,
+        complex_pes_per :complex_pes_per,
+        company_id :company_id,
+        current_per :current_per
+    
+    })
+   
+  event.preventDefault(); // <---- Add this line
+  $.ajax({
+      url: '#',
+      type: "POST",
+      dataType: "json",
+      data: formData,
+      headers: {
+      "X-Requested-With": "XMLHttpRequest",
+      'X-CSRFToken': csrftoken,
+      
+      },
+      
+      success: (data) => {
+      
+      var complex_valone = document.getElementById("complex_val_opt");
+      var complex_valtwo = document.getElementById("complex_val_neu");
+      var complex_valthree = document.getElementById("complex_val_pes");
+
+      complex_valone.style.display = "block";
+      complex_valtwo.style.display = "block";
+      complex_valthree.style.display = "block";
+      
+      $('#complex_opt_valuation').append('<div class="form-floating mt-1"><input type="text" value="0" class="form-control" value="'+data.complex_opt_valuation+'" readonly><label class="form-floating">Valoración optimista</label></div>');
+      $('#complex_neu_valuation').append('<div class="form-floating mt-1"><input type="text" value="0" class="form-control" value="'+data.complex_neu_valuation+'" readonly><label class="form-floating">Valoración neutral</label></div>');
+      $('#complex_pes_valuation').append('<div class="form-floating mt-1"><input type="text" value="0" class="form-control" value="'+data.complex_pes_valuation+'" readonly><label class="form-floating">Valoración pesimista</label></div>');
+
+      
+      },
+    
+  });
+}
+
+
+</script>

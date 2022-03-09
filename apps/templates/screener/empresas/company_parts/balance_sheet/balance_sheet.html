@@ -1,0 +1,42 @@
+<div class="col-12 mb-3">
+	<div class="card">
+		<div class="text-center">
+			<div class="spinner-border" id="balance_ChartLoader" style="width: 3rem; height: 3rem;" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+		</div>
+		<div class="card-body">
+			<canvas id="balance_ChartID"></canvas>
+		</div>
+	</div>
+  </div>
+  
+  <div class="col-12">
+	<div class="card">
+		<div class="card-body">
+			<div class="card-header">Balance general</div>
+			<div class="text-center">
+				<div class="spinner-border" id="balance_Loader" style="width: 3rem; height: 3rem;" role="status">
+					<span class="visually-hidden">Loading...</span>
+				</div>
+			</div>
+			<div class="table-responsive fixedTable" id="balance_Table">
+			</div>
+		</div>
+	</div>
+  </div>
+  
+  <script>
+	var balance_Table = document.getElementById('balance_Table');
+	var balance_Loader = document.getElementById('balance_Loader');
+  
+	var balance_ChartLoader = document.getElementById('balance_ChartLoader');
+	var balance_ChartID = document.getElementById('balance_ChartID');
+  
+	var chartTitle = 'Ingresos y Gastos'
+  
+	var balance = {{the_company.balance_json|safe}};
+	var balanceChart = {{the_company.comparing_balance_json|safe}};
+  
+	createContent(balance, balance_Table, balance_Loader, balanceChart, chartTitle, balance_ChartID, balance_ChartLoader)
+  </script>

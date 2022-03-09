@@ -1,0 +1,56 @@
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+    <div class="row">
+        {{writter_form.media}}
+        <div class="col-xl-4 col-sm-12">
+          <div class="form-group mt-4">
+            {{writter_form.facebook|as_crispy_field }}
+          </div>
+        </div>
+        <div class="col-xl-4 col-sm-12">
+          <div class="form-group mt-4">
+            {{writter_form.twitter|as_crispy_field }}
+            </div>
+        </div>
+        <div class="col-xl-4 col-sm-12">
+          <div class="form-group mt-4">
+            {{writter_form.insta|as_crispy_field }}
+            </div>
+        </div>
+        <div class="col-xl-4 col-sm-12">
+          <div class="form-group mt-4">
+            {{writter_form.youtube|as_crispy_field }}
+            </div>
+        </div>
+        <div class="col-xl-4 col-sm-12">
+          <div class="form-group mt-4">
+            {{writter_form.linkedin|as_crispy_field }}
+            </div>
+        </div>
+        <div class="col-xl-4 col-sm-12">
+          <div class="form-group mt-4">
+            {{writter_form.tiktok|as_crispy_field }}
+            </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col mb-3">
+          <div class="form-group mt-4">
+            <label>
+              Esta biografía irá en la parte de perfil de tu web. Está pensada para que puedas escribir tanto como quieras y estructurarlo como quieras
+              (títulos grandes o medianos, letras en negrita o subrayadas, etc...). Utilizalo para describirte y contar a tus lectores lo que quieras sobre ti. 
+              Puedes hablar de tus estudios, tu vida en general, tu experiencia laboral, anéctodas o lo que consideres más útil. 
+          </label>
+            {{writter_form.long_description|safe }}
+            <label>
+              El editor puede parecerte pequeño, pero puedes ensancharlo haciendo click en Maximize (las cuatro flechas negras en la primera linea).
+  De igual manera tu mismo puedes elegir el tamaño del texto, el tipo, decidir si es un título o texto normal, etc...
+          </label>
+          </div>
+        </div>
+      </div>
+      <div class="col-12"><button type="submit" class="btn btn-primary col-12">Guardar</button></div>
+

@@ -1,0 +1,76 @@
+{% extends "general/bases/base_forms.html" %}
+{% load static %}
+{% block FormContent %}
+      <div class="card">
+        <div class="card-body">
+          <div class="e-profile">
+
+            <div class="row">
+              <div class="col-12 col-sm-auto mb-3">
+                <div class="mx-auto" style="width: 140px;">
+                  <div class="d-flex justify-content-center align-items-center rounded" style="height: 140px; background-color: rgb(233, 236, 239);">
+                    <img src="{{ request.user.user_profile.foto_perfil.url }}" style="width: 140px; height: 140px;" alt="avatar">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
+                <div class="text-center text-sm-left mb-2 mb-sm-0">
+                  <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap">{{request.user.first_name}} {{request.user.last_name}}</h4>
+                  <p class="mb-0">@{{request.user.username}}</p>
+                  <div class="mt-2">                        
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#picture-modal">
+                      <i class="fa fa-fw fa-camera"></i>
+                      <span>Cambiar imagen</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="text-center text-sm-right">
+                  <!-- <span class="badge bg-secondary">administrator</span>
+                  <div class="text-muted"><small>Joined 09 Dec 2017</small></div> -->
+                </div>
+              </div>
+
+            </div>
+
+            <ul class="nav nav-tabs" id="myTabs" role="tablist">
+              <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab" aria-controls="info" aria-selected="true">
+                  Perfil
+                </button>
+              </li>
+              <!-- <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#notifs" type="button" role="tab" aria-controls="notifs" aria-selected="false">
+                  Notificaciones
+                </button>
+              </li> -->
+              {% if request.user.is_writter %}
+              <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#writter" type="button" role="tab" aria-controls="writter" aria-selected="false">
+                  Escritor
+                </button>
+              </li>
+              {% endif %}
+            </ul>
+
+            <form method="POST" enctype="multipart/form-data" action="{% url 'users:update' %}">
+              {% csrf_token %}
+            <div class="tab-content pt-3">
+
+              <div class="tab-pane active" id="info" role="tabpanel" aria-labelledby="info-tab">                    
+                {% include "profile/forms/profile_form.html" %}
+              </div>
+
+              <!-- <div class="tab-pane" id="notifs" role="tabpanel" aria-labelledby="notifs-tab">
+                
+              </div> -->
+              {% if request.user.is_writter %}
+              <div class="tab-pane" id="writter" role="tabpanel" aria-labelledby="writter-tab">
+                {% include "profile/forms/writter_form.html" %}
+              </div>{% endif %}
+            </div>
+          </form>           
+          </div>
+        </div>
+      </div>
+{% endblock FormContent %}

@@ -1,0 +1,106 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{% translate "Signup" %}{% endblock %}
+
+{% block inner %}
+<!-- Header -->
+<div class="header bg-gradient-primary py-7 py-lg-8 pt-lg-9">
+  <div class="container">
+    <div class="header-body text-center mb-7">
+      <div class="row justify-content-center">
+        <div class="col-xl-5 col-lg-6 col-md-8 px-5">
+          <h1 class="text-white">Bienvenido</h1>
+          <p class="text-lead text-white">Crea tu cuenta</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="separator separator-bottom separator-skew zindex-100">
+    <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
+    </svg>
+  </div>
+</div>
+<!-- Page content -->
+<div class="container mt--9 pb-5">
+  <!-- Table -->
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+      <div class="card bg-secondary border border-soft">
+        <div class="card-header bg-transparent pb-5">
+          <div class="text-muted text-center mt-2 mb-4"><small>O</small></div>
+          <div class="text-center">
+            <a href="{% url 'account_login' %}" class="btn btn-neutral mr-4">
+              
+              <span class="btn-inner--text">Login</span>
+            </a>
+            <a href="{% url 'account_reset_password' %}" class="btn btn-neutral">
+              
+              <span class="btn-inner--text">Recuperar contraseña</span>
+            </a>
+          </div>
+        </div>
+        <div class="card-body px-lg-5 py-lg-5">
+          <div class="text-center text-muted mb-4">
+            <small>Crea tu nombre de usuario</small>
+          </div>
+          <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+            {% csrf_token %}
+            <div class="form-group mb-3">
+              <div class="input-group input-group-merge input-group-alternative">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-user"></i></span>
+                </div>
+                <input class="form-control" name="username" placeholder="Nombre de usuario" type="text">
+              </div>
+              {{ form.errors.username }}
+            </div>
+            <div class="form-group mb-3">
+              <div class="input-group input-group-merge input-group-alternative">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                </div>
+                <input class="form-control" name="email" placeholder="Email" type="email">
+              </div>
+              {{ form.errors.email }}
+            </div>
+            <div class="form-group mb-3">
+              <div class="input-group input-group-merge input-group-alternative">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-lock"></i></i></span>
+                </div>
+                <input class="form-control" name="password1" placeholder="Contraseña" type="password">
+              </div>
+              {{ form.errors.password1 }}
+            </div>
+            <div class="form-group">
+              <div class="input-group input-group-merge input-group-alternative">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-lock"></i></i></span>
+                </div>
+                <input class="form-control" name="password2" placeholder="Confirmar contraseña" type="password">
+              </div>
+              {{ form.errors.password2 }}
+            </div>
+            {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+            {% endif %}
+            <div class="custom-control custom-control-alternative custom-checkbox">
+              <input class="custom-control-input" id=" customCheckLogin" type="checkbox">
+              <label class="custom-control-label" for=" customCheckLogin">
+                <span>Remember me</span>
+              </label>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary my-4">Registrarse</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock inner%}

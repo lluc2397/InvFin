@@ -1,0 +1,68 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% translate "Verify Your E-mail Address" %}{% endblock %}
+
+{% block inner %}
+<div class="header bg-gradient-primary py-7 py-lg-8 pt-lg-9">
+    <div class="container">
+      <div class="header-body text-center mb-7">
+        <div class="row justify-content-center">
+          <div class="col-xl-5 col-lg-6 col-md-8 px-5">
+            <h1 class="text-white">Verifica tu email</h1>
+            <p class="text-lead text-white">
+                Te hemos enviado un email para verificar tu cuenta. En el email encontrarás el enlace para continuar con
+                el registro. Revisa la bandeja de spam u otros. En caso de no recibir el email contáctanos.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="separator separator-bottom separator-skew zindex-100">
+      <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
+      </svg>
+    </div>
+</div>
+<div class="container mt--9 pb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card bg-secondary border border-soft">
+                <div class="card-header bg-transparent pb-5 text-center">
+                    Pide un nuevo email
+                </div>
+                <div class="card-body px-lg-5 py-lg-5">
+                    <form class="login" method="POST" action="{% url 'account_login' %}">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                          <div class="input-group input-group-merge input-group-alternative">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input class="form-control" name="login" placeholder="Nombre de usuario o email" type="text">
+                          </div>
+                          {{ form.errors.login }}
+                        </div>
+                        <div class="form-group mb-3">
+                          <div class="input-group input-group-merge input-group-alternative">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-lock"></i></i></span>
+                            </div>
+                            <input class="form-control" name="password" placeholder="Contraseña" type="password">
+                          </div>
+                          {{ form.errors.password }}
+                        </div>
+                        {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                        {% endif %}
+                        <div class="text-center">
+                          <button type="submit" class="btn btn-primary my-4">Reenviar</button>
+                        </div>
+                      </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

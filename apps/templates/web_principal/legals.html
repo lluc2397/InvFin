@@ -1,0 +1,12 @@
+{% extends "web_principal/complements/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<section class="section-header bg-soft">
+    <div class="container">
+        {{object.content|safe}}
+    </div>
+</section>
+
+{% endblock content %}

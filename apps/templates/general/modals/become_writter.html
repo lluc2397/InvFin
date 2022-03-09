@@ -1,0 +1,39 @@
+<div class="modal fade" id="BecomingWritterModal" tabindex="-1" role="dialog" aria-labelledby="BecomingWritterModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
+        <div class="modal-content bg-gradient-danger">
+            <div class="modal-header">
+                <h6 class="modal-title" id="modal-title-notification">Conviértete en escritor</h6>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form method="POST" action="{% url 'public_blog:user_become_writter' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="py-3 text-center">
+                        <i class="ni ni-bell-55 ni-3x"></i>
+                        <h4 class="heading mt-4">Elige tu dominio</h4>
+                        <p>
+                            Puedes convertirte en escritor y compartir tus experiencias, historias, ideas, lo que quieras...
+                            Antes de empezar puedes elegir el dominio que quieras usar para que la gente pueda encontrarte
+                        </p>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon3">https://</span>
+                                </div>
+                            <input type="text" name="domain" class="form-control" value="{{request.user.full_name|slugify}}" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon2">.com</span>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-white">Empezar</button>                
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,42 @@
+{% extends "general/sidebar/base_sidebar.html" %}
+{% load static %}
+{% block favorites %}
+<li class="nav-item">
+    <a class="nav-link" href="#navbar-companies" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-companies">
+      <i class="fas fa-building text-danger"></i>
+      <span class="nav-link-text">Empresas</span>
+    </a>
+    <div class="collapse" id="navbar-companies">
+      <ul class="nav nav-sm flex-column">
+        {% block FavoritesStocks %}                  
+        {% endblock FavoritesStocks %}
+      </ul>
+    </div>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link" href="#navbar-writters" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-writters">
+      <i class="fas fa-newspaper text-info"></i>
+      <span class="nav-link-text">Escritores</span>
+    </a>
+    <div class="collapse" id="navbar-writters">
+      <ul class="nav nav-sm flex-column">
+        {% block FavoritesWritters %}
+        {% endblock FavoritesWritters %}
+      </ul>
+    </div>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link" href="#navbar-terms" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-terms">
+      <i class="fas fa-chalkboard-teacher text-success"></i>
+      <span class="nav-link-text">Términos</span>
+    </a>
+    <div class="collapse" id="navbar-terms">
+      <ul class="nav nav-sm flex-column">
+        {% block FavoritesTerms %}                  
+        {% endblock FavoritesTerms %}
+      </ul>
+    </div>
+  </li>
+  {% endblock favorites %}

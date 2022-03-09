@@ -1,0 +1,17 @@
+{% extends "general/bases/shared_source.html" %}
+{% block meta %}{% include "general/meta/meta.html" %}{% endblock meta %}
+{% block css %}{% include "web_principal/complements/styling.html" %}{% endblock css %}
+
+
+{% block MasterBody %}
+{% block navbar %}{% include "web_principal/complements/navbar.html" %}{% endblock navbar%}
+{% block content %}{% endblock content%}
+{% block modal %}{% endblock modal %}
+{% block footer %}{% include "web_principal/complements/footer.html" %}{% endblock footer %}
+<!-- {% block inline_javascript %}    
+<script>
+window.addEventListener('DOMContentLoaded', () => {/* Run whatever you want */});
+</script>
+{% endblock inline_javascript %} -->
+{% block javascript %}{% include "web_principal/complements/scripts.html" %}{% endblock javascript %}
+{% endblock MasterBody %}

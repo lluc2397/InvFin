@@ -1,0 +1,58 @@
+{% load static %}
+
+ <link rel="manifest" href=/webmanifest.json>
+
+ <!-- Favicon -->
+ <link rel="apple-touch-icon" sizes="120x120" href="{% static 'general/assets/img/favicon/favicon.ico' %}">
+ <link rel="icon" type="image/png" sizes="32x32" href="{% static 'general/assets/img/favicon/favicon.ico' %}">
+ <link rel="icon" type="image/png" sizes="16x16" href="{% static 'general/assets/img/favicon/favicon.ico' %}">
+ <link rel="manifest" href="../../assets/img/favicon/site.webmanifest">
+ <link rel="mask-icon" href="{% static 'general/assets/img/favicon/favicon.ico' %}" color="#ffffff">
+ <meta name="msapplication-TileColor" content="#ffffff">
+ <meta name="theme-color" content="#ffffff">
+
+ <meta property="fb:pages" content="107326904530301" />
+ <meta charset="UTF-8">    
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <meta name="keywords" content="{{object.meta_info.meta_tags}}">
+ <meta name="Description" content="{{object.meta_info.meta_desc|safe}}">
+ <title>{{ object.meta_info.meta_title}}</title>
+ <link rel=”canonical” href={{object.meta_info.meta_url}}>
+ 
+ <!-- Twitter Card data -->
+ <meta name="twitter:site" content="Inversiones & Finanzas">
+ <meta name="twitter:title" content="{{ object.meta_info.meta_title}}">
+ <meta name="twitter:description" content="{{object.meta_info.meta_desc|safe}}">
+ <meta name="twitter:creator" content="{{object.meta_info.meta_author}}">
+ <meta name="twitter:url" content="{{object.meta_info.meta_url}}">
+ <meta name="twitter:card" content="summary">
+ <meta name="twitter:image" content="{{object.meta_info.meta_image}}">
+
+
+ <!-- Open Graph data -->
+ <meta property="og:locale" content="es" />
+ <meta property="og:title" content="{{ object.meta_info.meta_title }}" />
+ <meta property="og:url" content="{{object.meta_info.meta_url}}" />
+ <meta property="og:description" content="{{object.meta_info.meta_desc|safe}}" />
+ <meta property="og:site_name" content="Inversiones & Finanzas" />
+ <meta name="author" content="{{object.meta_info.meta_author}}">
+ <meta property="og:type" content="article">
+ <meta name="image" property="og:image" content="{{object.meta_info.meta_image}}" />
+ <meta property="og:image" content="{{object.meta_info.meta_image}}" />
+ <meta property="article:author" content="{{object.meta_info.meta_author}}" />
+ <meta property="article:section" content="{{object.meta_info.meta_category}}" />
+ <meta property="article:tag" content="{{object.meta_info.meta_tags}}" />
+ <meta property="article:published_time" content="{{published_time}}"/>
+ <meta property="article:modified_time" content="{{modified_time}}"/>
+
+
+ <!-- Schema.org markup for Google+ -->
+ <meta itemprop="name" content="{{object.meta_info.meta_title}}">
+ <meta itemprop="description" content="{{object.meta_info.meta_desc|safe}}">
+
+ <meta itemprop="image" content="{{object.meta_info.meta_image}}">
+
+ <script type="application/ld+json">
+    {{object.meta_info.schema_org|safe}}
+</script>

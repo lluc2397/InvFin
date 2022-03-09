@@ -1,0 +1,63 @@
+
+    <div class="row">
+        <div class="col-xl-12 col-sm-12 mt-1 mb-1">
+            <div class="card">
+                <div class="card-body table-responsive">
+                    <h4>ETFs con la empresa</h4>
+                    <table class="display table table-striped table-bordered text-center" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Ticker</th>
+                                <th>Nombre del ETF</th>
+                                <th>Composición</th>
+                                <th>Cantidad de acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for etf in etfs_related %}
+                            <tr>
+                        <td>
+                            <a href="#">
+                                {{etf.etf_related.ticker}}
+                            </a>
+                        </td>
+                        <td>{{etf.etf_related.name}}</td>
+                        <td>{{etf.company_size}} %</td>
+                        <td>{{etf.number_shares}}</td>
+                            </tr>
+                            {% endfor %}                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-12 col-sm-12">
+            <div class="card">                
+                <div class="card-body table-responsive">
+                    <h4>Súper inversores con la empresa</h4>
+                    <table class="display table table-striped table-bordered text-center" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Parte de la cartera</th>
+                                <th>Cantidad de acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody >
+                        {% for super in super_holdings %}
+                            <tr>
+                        <td>
+                            <a href="#">
+                                {{super.superinvestor_related.name}}
+                            </a>
+                        </td>
+                        <td>{{super.percentage}} %</td>
+                        <td>{{super.num_shares}}</td>
+                            </tr>
+                            {% endfor %}                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>

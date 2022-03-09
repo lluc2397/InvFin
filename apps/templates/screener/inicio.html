@@ -1,0 +1,25 @@
+{% extends "general/bases/base_content.html" %}
+{% load static %}
+{% block header %}{% include "screener/headers/inicio_header.html" %}{% endblock header%}
+
+
+{% block FirstCta %}
+<div class="row">
+    {% for org in organisations %}
+    <div class="col-lg-3 col-md-6 col-sm-12">
+
+        <div class="card bg-dark text-white h-75">
+            <a href="{% url 'screener:companies_by' org.name %}">
+                <img src="{{org.image}}" class="card-img" alt="...">
+                <div class="card-img-overlay">
+                    <div style="color: white;text-shadow: 2px 2px 4px #000000;">
+                        <strong>{{org.name}}</strong><br>
+                        {{org.sub_exchange1}}{% if org.sub_exchange2 %}, {{org.sub_exchange2}} {% endif %}
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock FirstCta %}

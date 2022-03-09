@@ -1,0 +1,29 @@
+{% extends "general/bases/base_content.html" %}
+{% load static %}
+{% block meta %}{% include "general/meta/content_meta.html" %}{% endblock meta%}
+{% block header %}{% include "glosario/header/details.html" %}{% endblock header%}
+
+{% block FirstCta %}
+{% endblock FirstCta %}
+
+{% block LeftSide %}
+{% for parts in object.term_parts %} 
+<section>
+<h2 id="{{ parts.title }}">{{ parts.title }} <span style="font-size: 15px;">[<a href="#">Editar</a>]</span></h2>
+<div class="text-black">{{ parts.content | safe }}</div>
+</section>
+<br>
+{% endfor %}
+{% endblock LeftSide %}
+
+{% block RightSide %}
+{% include "glosario/side/details.html" %}
+{% endblock RightSide %}
+
+{% block MiddleCtaContent %}
+<!-- {% include "glosario/cta/details_middle.html" %} -->
+{% endblock MiddleCtaContent %}
+
+{% block ListContinuation %}
+
+{% endblock ListContinuation %}

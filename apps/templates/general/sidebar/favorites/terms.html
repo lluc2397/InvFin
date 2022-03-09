@@ -1,0 +1,19 @@
+{% for term in request.user.fav_terms %}
+<li class="nav-item">
+  <a href="{{term.get_absolute_url}}" class="nav-link">
+    <span class="sidenav-mini-icon"> D </span>
+    <span class="sidenav-normal">
+        {{term.title|truncatechars:50}}
+    </span>
+  </a>
+  </li>
+{% empty %}
+<li class="nav-item">
+    <a href="{% url 'escritos:glosario' %}" class="nav-link">
+      <span class="sidenav-mini-icon"> D </span>
+      <span class="sidenav-normal btn btn-primary btn-sm">
+        Añade un término
+     </span>
+    </a>
+  </li>
+{% endfor %}

@@ -1,0 +1,15 @@
+{% extends "general/bases/base_content.html" %}
+{% load static %}
+{% block header %}{% include "profile/header/private.html" %}{% endblock header%}
+{% block content %}
+<div class="row">
+
+    <div class="col-sm-12">
+      <a class="btn btn-primary"  role="button">My Info</a>
+      <a class="btn btn-primary" href="{% url 'account_email' %}" role="button">E-Mail</a>
+      <!-- Your Stuff: Custom user template urls -->
+    </div>
+  
+  </div>
+{{usuario}}
+{% endblock content %}

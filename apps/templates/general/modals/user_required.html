@@ -1,0 +1,29 @@
+<div class="modal fade" id="BeUserRequiredModal" tabindex="-1" role="dialog" aria-labelledby="BeUserRequiredModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
+        <div class="modal-content bg-gradient-danger">
+            <div class="modal-header">
+                <h6 class="modal-title" id="modal-title-notification">Necesitas tener una cuenta</h6>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form method="POST" action="{% url 'account_signup' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="py-3 text-center">
+                        <i class="ni ni-bell-55 ni-3x"></i>
+                        <h4 class="heading mt-4">Crea tu usuario</h4>
+                        <input class="form-control mb-3" type="text" name="username" placeholder="Nombre usuario" required>
+                
+                            <input class="form-control mb-3" type="email" name="email" placeholder="Email" required>
+                            
+                            <input class="form-control mb-3" type="password" name="password1" placeholder="Contraseña" required>
+
+                            <input class="form-control mb-3" type="password" name="password2" placeholder="Confirmar contraseña" required>
+                            <button class="btn btn-white" type="submit">Validar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

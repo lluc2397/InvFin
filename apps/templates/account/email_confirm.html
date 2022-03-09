@@ -1,0 +1,61 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account %}
+
+{% block head_title %}{% translate "Confirm E-mail Address" %}{% endblock %}
+
+
+{% block inner %}
+<div class="header bg-gradient-primary py-7 py-lg-8 pt-lg-9">
+    <div class="container">
+      <div class="header-body text-center mb-7">
+        <div class="row justify-content-center">
+          <div class="col-xl-5 col-lg-6 col-md-8 px-5">
+            <h1 class="text-white">Verifica tu email</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="separator separator-bottom separator-skew zindex-100">
+      <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
+      </svg>
+    </div>
+</div>
+<div class="container mt--9 pb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            {% if confirmation %}
+
+            {% user_display confirmation.email_address.user as user_display %}
+            <div class="card bg-secondary border border-soft">
+                <div class="card-header bg-transparent pb-5 text-center">
+                    {% blocktranslate with confirmation.email_address.email as email %}Confirma que <a href="mailto:{{ email }}">{{ email }}</a> es el correo de <b>{{ user_display }}</b>{% endblocktranslate %}
+                </div>
+                <div class="card-body px-lg-5 py-lg-5">
+                    <div class="text-center text-muted mb-4">
+                        <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+                            {% csrf_token %}
+                                <button class="btn btn-primary" type="submit">{% translate 'Confirm' %}</button>
+                            </form>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="card bg-secondary border border-soft">
+                <div class="card-header bg-transparent pb-5 text-center">
+                    Este enlace es inválido o a expirado. Pide un nuevo email de verificación.
+                </div>
+                <div class="card-body px-lg-5 py-lg-5">
+                    <div class="text-center text-muted mb-4">
+                        {% url 'account_email' as email_url %}
+                        <a class="btn btn-primary" href="{{ email_url }}">Pedir nuevo email</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

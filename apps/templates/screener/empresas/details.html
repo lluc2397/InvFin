@@ -1,0 +1,72 @@
+{% extends "general/bases/base_content.html" %}
+{% load static %}
+{% block TopHeader %}{% include "screener/headers/empresa_header.html" %}{% endblock TopHeader%}
+{% block MainContent %}
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js" 
+integrity="sha512-UXumZrZNiOwnTcZSHLOfcTs0aos2MzBWHXOHOuB0J/R44QB0dwY5JgfbvljXcklVf65Gc4El6RjZ+lnwd2az2g==" 
+crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/1.2.0/chartjs-plugin-zoom.min.js" 
+integrity="sha512-TT0wAMqqtjXVzpc48sI0G84rBP+oTkBZPgeRYIOVRGUdwJsyS3WPipsNh///ay2LJ+onCM23tipnz6EvEy2/UA==" 
+crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="{% static 'general/assets/js/screener.js' %}"></script>
+
+<style>
+.fixedTable th:first-child, td:first-child{
+  position:sticky;
+  left:0px;
+  background-color:#fff;
+}
+
+</style>
+<div class="col-12">
+    <div class="tab-content" id="pills-tabContent">
+      <!-- resume tab -->
+      <div class="tab-pane fade show active" id="pills-resume" role="tabpanel" aria-labelledby="pills-resume-tab">
+        {% include "screener/empresas/company_parts/resume/response.html" %}
+        </div>
+      <!-- First tab -->
+      <div class="tab-pane fade show" id="pills-income" role="tabpanel" aria-labelledby="pills-income-tab"> 
+        {% include "screener/empresas/company_parts/income_statement/income_statement.html" %}
+      </div>
+      <!-- Second tab -->
+      <div class="tab-pane fade" id="pills-balancesh" role="tabpanel" aria-labelledby="pills-balancesh-tab">
+        {% include "screener/empresas/company_parts/balance_sheet/balance_sheet.html" %}
+      </div>
+      <!-- Third tab -->
+      <div class="tab-pane fade" id="pills-cashflow" role="tabpanel" aria-labelledby="pills-cashflow-tab">
+        {% include "screener/empresas/company_parts/cashflow_statement/cashflow_statement.html" %}
+      </div>
+      <!-- ratios tab -->
+      <div class="tab-pane fade" id="pills-ratios" role="tabpanel" aria-labelledby="pills-ratios-tab">
+          {% include "screener/empresas/company_parts/ratios/ratios.html" %}
+      </div>
+      <!-- other ratios tab -->
+      <div class="tab-pane fade" id="pills-othervaluations" role="tabpanel" aria-labelledby="pills-othervaluations-tab">            
+        {% include "screener/empresas/company_parts/ratios/other_ratios.html" %}
+      </div>
+        <!-- valuations tab -->
+      <div class="tab-pane fade" id="pills-valuations" role="tabpanel" aria-labelledby="pills-valuations-tab">             
+          {% include "screener/empresas/company_parts/valuations/valuations.html" %}
+      </div>  
+      <!-- predictions tab -->
+      <div class="tab-pane fade" id="pills-predictions" role="tabpanel" aria-labelledby="pills-predictions-tab">    
+        {% include "screener/empresas/company_parts/predictions/predictions.html" %}
+      </div>               
+      <!-- recommendation tab -->
+      <div class="tab-pane fade" id="pills-recoms" role="tabpanel" aria-labelledby="pills-recoms-tab">
+        <div id="recommendations"></div>
+        {% include "screener/empresas/company_parts/cashflow_statement/cashflow_statement.html" %}
+      </div>
+      
+      <div class="tab-pane fade" id="pills-relations" role="tabpanel" aria-labelledby="pills-relations-tab">
+        {% include "screener/empresas/company_parts/relationships/relations.html" %}
+      </div>
+    </div>
+</div>
+{% endblock MainContent %}

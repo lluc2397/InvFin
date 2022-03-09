@@ -1,0 +1,18 @@
+{% load static %}
+<form method="post" action="{% url 'public_blog:following_management_view' %}">
+  <div class="input-group mb-3">
+    {% csrf_token %}
+      <input type="text" name="email" class="form-control" 
+      {% if request.user.is_authenticated %}
+      value="{{request.user.email}}"
+      {% else %}
+      value="{{anon_email}}"
+      {% endif %}
+      placeholder="Email" aria-label="Email" aria-describedby="button-addon2">
+      <input name="writter" type="text" value="{{object.author.id}}" hidden>
+      <input name="what" type="text" value="start" hidden>
+      <div class="input-group-append">
+        <button class="btn bg-gradient-danger text-white" type="submit" id="button-addon2">Subscribirse</button>
+      </div>
+  </div>
+</form>

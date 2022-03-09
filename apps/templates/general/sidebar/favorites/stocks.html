@@ -1,0 +1,19 @@
+{% for stock in request.user.fav_stocks %}
+<li class="nav-item">
+    <a href="{{stock.get_absolute_url}}" class="nav-link">
+      <span class="sidenav-mini-icon"> D </span>
+      <span class="sidenav-normal">
+          {{stock.ticker}}
+      </span>
+    </a>
+  </li>
+  {% empty %}
+  <li class="nav-item">
+      <a href="{% url 'screener:screener_inicio' %}" class="nav-link">
+        <span class="sidenav-mini-icon"> D </span>
+        <span class="sidenav-normal btn btn-primary btn-sm">
+           Añade una empresa
+        </span>
+      </a>
+    </li>
+{% endfor %}

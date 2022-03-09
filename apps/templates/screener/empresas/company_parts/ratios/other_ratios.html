@@ -1,0 +1,44 @@
+{% for obj in the_company.secondary_ratios %}
+<div class="col-12 mb-3">
+    <div class="card">
+        <div class="text-center">
+            <div class="spinner-border" id="{{obj.kind}}ChartLoader" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <div class="card-body">
+            <canvas id="{{obj.kind}}ChartID"></canvas>
+        </div>
+    </div>
+  </div>
+  
+  <div class="col-12">
+    <div class="card">
+        <div class="card-body">
+            <div class="card-header">{{obj.title}}</div>
+            <div class="text-center">
+                <div class="spinner-border" id="{{obj.kind}}Loader" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div class="table-responsive fixedTable" id="{{obj.kind}}Table">
+            </div>
+        </div>
+    </div>
+  </div>
+  
+  <script>
+    var {{obj.kind}}Table = document.getElementById('{{obj.kind}}Table');
+    var {{obj.kind}}Loader = document.getElementById('{{obj.kind}}Loader');
+  
+    var {{obj.kind}}ChartLoader = document.getElementById('{{obj.kind}}ChartLoader');
+    var {{obj.kind}}ChartID = document.getElementById('{{obj.kind}}ChartID');
+  
+    var chartTitle = '{{obj.title}}'
+  
+    var {{obj.kind}} = {{obj.table|safe}};
+    var {{obj.kind}}Chart = {{obj.graph|safe}};
+  
+    createContent({{obj.kind}}, {{obj.kind}}Table, {{obj.kind}}Loader, {{obj.kind}}Chart, chartTitle, {{obj.kind}}ChartID, {{obj.kind}}ChartLoader)
+  </script>
+{% endfor %}
