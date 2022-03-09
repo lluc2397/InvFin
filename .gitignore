@@ -277,14 +277,6 @@ apps/media/
 .ipython/
 .envs/*
 
-
-pytest.ini
-.readthedocs.yml
 geoip
-.pre-commit-config.yaml
+
 .env
-setup.cfg
-.pylintrc
-README.md
-CONTRIBUTORS.txt
-local.yml
