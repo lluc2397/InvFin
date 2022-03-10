@@ -3,7 +3,7 @@ from .views import (
     HomePage,
     LegalPages,
     ExcelView,
-    SoporteView
+    soporte_view
 )
 
 app_name = "web"
@@ -14,5 +14,5 @@ urlpatterns = [
     path('asuntos-legales/<slug>', LegalPages.as_view(), name="asuntos_legales"),
 
     path('excel-analisis/', ExcelView.as_view(), name="excel"),
-    path('soporte/', SoporteView.as_view(), name="soporte"),
+    path('soporte/', soporte_view, name="soporte"),
 ]

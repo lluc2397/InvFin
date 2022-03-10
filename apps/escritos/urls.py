@@ -13,5 +13,5 @@ urlpatterns = [
 
     path('definicion/<slug>/', TermDetailsView.as_view(), name='single_term'),
 
-    path('correction/<id>', TermCorrectionView.as_view(), name='correction_term'),
+    path('correction/<pk>', TermCorrectionView.as_view(), name='correction_term'),
 ]

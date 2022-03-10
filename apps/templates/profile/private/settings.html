@@ -1,5 +1,6 @@
 {% extends "general/bases/base_forms.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block FormContent %}
       <div class="card">
         <div class="card-body">
@@ -59,6 +60,7 @@
 
               <div class="tab-pane active" id="info" role="tabpanel" aria-labelledby="info-tab">                    
                 {% include "profile/forms/profile_form.html" %}
+                
               </div>
 
               <!-- <div class="tab-pane" id="notifs" role="tabpanel" aria-labelledby="notifs-tab">
@@ -68,6 +70,19 @@
               <div class="tab-pane" id="writter" role="tabpanel" aria-labelledby="writter-tab">
                 {% include "profile/forms/writter_form.html" %}
               </div>{% endif %}
+            </div>
+            <div class="modal fade" id="picture-modal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Cambiar foto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    {{profile_form.foto_perfil|as_crispy_field}}
+                  </div>
+                </div>
+              </div>
             </div>
           </form>           
           </div>

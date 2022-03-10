@@ -35,7 +35,7 @@ class NewsletterDefaultTitle(Model):
 
 
 class NewsletterDefaultIntroduction(Model):
-    content = TextField()
+    content = RichTextField(config_name='simple')
     times_used = PositiveIntegerField(default=0)
 
     class Meta:
@@ -48,7 +48,7 @@ class NewsletterDefaultIntroduction(Model):
 
 
 class NewsletterDefaultDespedida(Model):
-    content = TextField()
+    content = RichTextField(config_name='simple')
     times_used = PositiveIntegerField(default=0)
 
     class Meta:

@@ -146,6 +146,3 @@ LOGGING = {
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-#GOOGLE KEYS
-GOOGLE_RECAPTCHA_SECRET_KEY = env.str('GOOGLE_RECAPTCHA_SECRET_KEY')
-GOOGLE_RECAPTCHA_PUBLIC_KEY = '6LcaMPMaAAAAAGYTUDEfP_6cR8spI0PWYGxEaTP3'

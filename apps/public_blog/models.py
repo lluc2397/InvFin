@@ -83,7 +83,7 @@ class PublicBlog(BaseEscrito):
     date_to_publish = DateTimeField(null=True, blank=True)
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['total_views']
         verbose_name = "Public blog post"
         db_table = "blog_post"
     

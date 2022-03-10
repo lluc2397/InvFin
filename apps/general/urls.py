@@ -6,7 +6,8 @@ from .views import (
     EscritosView,
     suggest_list_search,
     search_results,
-    update_favorites
+    update_favorites,
+    coming_soon
 )
 
 app_name = "general"
@@ -22,4 +23,6 @@ urlpatterns = [
     path('buscador/', search_results, name="searcher"),
 
     path('update-favs/', update_favorites, name="update_favorites"),
+
+    path('coming-soon/', coming_soon, name="coming_soon"),
 ]

@@ -1,9 +1,19 @@
-{% extends "general/bases/source.html" %}
+{% extends "general/bases/base_errors.html" %}
 
-{% block title %}Page not found{% endblock %}
+{% block mensaje %}
 
-{% block body %}
-<h1>Page not found</h1>
+<body>
+	<div id="notfound">
+		<div class="notfound">
+			<div class="notfound-404">
+				<h1>404</h1>
+			</div>
+			<h2>Ups la página ya no está</h2>
+			<p>Disculpa, quizás hayamos cambiando la página de sitio. No dudes en mandarnos un mensaje si necesitas encontrarla urgentemente.</p>
+			<a href="{% url 'users:user_inicio' %}">Regresar al perfil</a>
+		</div>
+	</div>
+</body>
 
-<p>{% if exception %}{{ exception }}{% else %}This is not the page you were looking for.{% endif %}</p>
-{% endblock body %}
+
+{% endblock mensaje %}

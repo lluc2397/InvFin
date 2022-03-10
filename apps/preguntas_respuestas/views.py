@@ -12,6 +12,7 @@ from django.views.generic import (
 	UpdateView)
 
 from apps.general.models import Tag
+from apps.general.tasks import prepare_notifications_task
 
 from .models import (
     Question,
@@ -79,6 +80,7 @@ class CreateQuestionView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 			modelo.is_answered = True
 			modelo.has_accepted_answer = True
 		
+		prepare_notifications_task.delay(modelo, 4)
 		return super().form_valid(form)
 	
 	def form_invalid(self, form):

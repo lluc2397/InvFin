@@ -43,23 +43,23 @@ class TermAdmin(admin.ModelAdmin):
     actions = [find_images]
 
     list_display = [
-        'id',
         'title',
         'slug',
-        'created_at',
-        'updated_at',
-        'total_votes',
-        'total_views',
-        'times_shared',
         'category',
-        'author',
-        'published_at',
         'status',
         'meta_information',
+        'total_votes',
+        'total_views',
+        'times_shared',        
+        'published_at',
+        'created_at',
+        'updated_at',
     ]
 
     list_editable = [
         'category',
+        'status',
+        'meta_information',
     ]
     search_fields = ['title']
 

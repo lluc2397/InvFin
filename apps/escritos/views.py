@@ -7,9 +7,11 @@ from django.contrib.messages.views import SuccessMessageMixin
 
 from .models import (
     Term,
+    TermContent,
     TermCorrection
 )
 
+from .forms import CreateCorrectionForm
 
 class GlosarioView(ListView):
 	model = Term
@@ -17,6 +19,10 @@ class GlosarioView(ListView):
 	ordering = ['title']
 	context_object_name = "terms"
 	paginate_by = 10
+
+	def get_queryset(self):
+		queryset = Term.objects.filter(status = 1)
+		return queryset
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
@@ -42,10 +48,17 @@ class TermDetailsView(DetailView):
 
 
 class TermCorrectionView(SuccessMessageMixin, CreateView):
-	model = TermCorrection
+	model = TermContent
+	form_class = CreateCorrectionForm
 	template_name = 'glosario/correction.html'
-	fields = ['content']
 	success_message = 'Gracias por tu aporte'
+	slug_field = 'pk'
+
+	def get_initial(self, *args, **kwargs):
+		initial = super(TermCorrectionView, self).get_initial(**kwargs)
+		initial['title'] = self.get_object().title
+		initial['content'] = self.get_object().content
+		return initial
 
 	def form_valid(self, form):
 		form.instance.author = self.request.user

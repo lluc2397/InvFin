@@ -27,9 +27,10 @@ class UserDetailView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        profile = user.user_profile
-        context['contributions'] = user.number_of_contributions
-        context['accepted_answers'] = user.number_of_accepted_answers
+        context["meta_desc"] = 'Todo lo que necesitas para invertir'
+        context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir'
+        context["meta_title"] = 'Dashboard'
+        context["meta_url"] = '/inicio/'
         return context
 
 

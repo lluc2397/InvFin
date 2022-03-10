@@ -11,8 +11,8 @@
             </nav> -->
           </div>
           <div class="col-lg-6 col-5 text-right">
+            <!-- <a href="{% url 'account_email' %}" class="btn btn-sm btn-neutral">E-Mail</a> -->
             <a href="{% url 'users:update' %}" class="btn btn-sm btn-neutral">Editar</a>
-            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
           </div>
         </div>
         <!-- Card stats -->
@@ -20,15 +20,15 @@
           <div class="col-xl-3 col-md-6">
             <div class="card card-stats">
               <!-- Card body -->
-              <div class="card-body">
+              <div class="card-body" data-bs-toggle="tooltip" data-bs-placement="top" title="Todas las aportaciones que has hecho tanto en las preguntas, como las empresas o términos del glosario">
                 <div class="row">
                   <div class="col">
                     <h5 class="card-title text-uppercase text-muted mb-0">Contribuciones</h5>
-                    <span class="h2 font-weight-bold mb-0">{{contributions}}</span>
+                    <span class="h2 font-weight-bold mb-0">{{request.user.number_of_contributions}}</span>
                   </div>
                   <div class="col-auto">
                     <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
-                      <i class="ni ni-active-40"></i>
+                      <i class="fas fa-brain"></i>
                     </div>
                   </div>
                 </div>
@@ -42,7 +42,7 @@
           <div class="col-xl-3 col-md-6">
             <div class="card card-stats">
               <!-- Card body -->
-              <div class="card-body">
+              <div class="card-body" data-bs-toggle="tooltip" data-bs-placement="top" title="Los créditos son monedas digitales que puedes utilizar para obtener ventajas">
                 <div class="row">
                   <div class="col">
                     <h5 class="card-title text-uppercase text-muted mb-0">Créditos</h5>
@@ -50,7 +50,7 @@
                   </div>
                   <div class="col-auto">
                     <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
-                      <i class="ni ni-chart-pie-35"></i>
+                      <i class="fas fa-coins"></i>
                     </div>
                   </div>
                 </div>
@@ -64,7 +64,7 @@
           <div class="col-xl-3 col-md-6">
             <div class="card card-stats">
               <!-- Card body -->
-              <div class="card-body">
+              <div class="card-body" data-bs-toggle="tooltip" data-bs-placement="top" title="La reputación muestra tu participación en la sección de preguntas y la cantidad de inversores que has ayudado">
                 <div class="row">
                   <div class="col">
                     <h5 class="card-title text-uppercase text-muted mb-0">Reputación</h5>
@@ -72,7 +72,7 @@
                   </div>
                   <div class="col-auto">
                     <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
-                      <i class="ni ni-money-coins"></i>
+                      <i class="fas fa-award fa-fw"></i>
                     </div>
                   </div>
                 </div>
@@ -86,15 +86,15 @@
           <div class="col-xl-3 col-md-6">
             <div class="card card-stats">
               <!-- Card body -->
-              <div class="card-body">
+              <div class="card-body" data-bs-toggle="tooltip" data-bs-placement="top" title="Tus respuestas acceptadas en la sección de preguntas, sigue participando y ayudando para ganar más créditos y reputación">
                 <div class="row">
                   <div class="col">
                     <h5 class="card-title text-uppercase text-muted mb-0">Respuestas acceptadas</h5>
-                    <span class="h2 font-weight-bold mb-0">{{accepted_answers}}</span>
+                    <span class="h2 font-weight-bold mb-0">{{request.user.number_of_accepted_answers}}</span>
                   </div>
                   <div class="col-auto">
                     <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
-                      <i class="ni ni-chart-bar-32"></i>
+                      <i class="fas fa-check"></i>
                     </div>
                   </div>
                 </div>

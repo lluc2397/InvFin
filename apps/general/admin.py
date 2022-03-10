@@ -5,8 +5,26 @@ from .models import (
     Industry,
     Sector,
     Country,
-    Currency
+    Currency,
+    Notification,
+    NotificationsType
 )
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'user',
+        'object',
+    ]
+
+
+@admin.register(NotificationsType)
+class NotificationsTypeAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'name'
+    ]
 
 
 @admin.register(Category)

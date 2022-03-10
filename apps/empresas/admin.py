@@ -21,6 +21,7 @@ from .models import (
     NonGaap
 )
 
+from .utils import UpdateCompany
 
 @admin.register(CashflowStatement)
 class CashflowStatementAdmin(admin.ModelAdmin):
@@ -52,8 +53,16 @@ class BalanceSheetAdmin(admin.ModelAdmin):
     search_fields = ['company_name']
 
 
+@admin.action(description='Put logos')
+def find_logos(modeladmin, request, queryset):
+    for query in queryset:
+        UpdateCompany(query).add_logo()
+
+
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
+    actions = [find_logos]
+
     list_display = [
         'id',
         'name',
@@ -70,7 +79,14 @@ class CompanyAdmin(admin.ModelAdmin):
         'description_translated',
         'has_logo',
     ]
-    search_fields = ['name']
+    list_editable = [
+        'no_incs',
+        'no_bs',
+        'no_cfs',
+        'description_translated',
+        'has_logo',
+    ]
+    search_fields = ['name', 'ticker']
 
 
 @admin.register(CompanyGrowth)

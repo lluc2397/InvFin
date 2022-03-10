@@ -1,4 +1,4 @@
-
+{% load static %}
 <nav class="navbar navbar-top sticky-top navbar-expand navbar-dark bg-white border-bottom">
   <div class="container-fluid">
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -56,24 +56,24 @@
           </a>
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-dark bg-default  dropdown-menu-right ">
             <div class="row shortcuts px-4">
-              <!-- <a href="{% url 'screener:screener_inicio' %}" class="col-4 shortcut-item">
+              <a href="{% url 'general:coming_soon' %}" class="col-4 shortcut-item">
                 <span class="shortcut-media avatar rounded-circle bg-gradient-red">
                   <i class="fas fa-hand-holding-usd"></i>
                 </span>
                 <small>Portfolio</small>
-              </a> -->
+              </a>
               <a href="{% url 'screener:screener_inicio' %}" class="col-4 shortcut-item">
                 <span class="shortcut-media avatar rounded-circle bg-gradient-purple">
                   <i class="fas fa-chart-area"></i>
                 </span>
                 <small>Screener</small>
               </a>
-              <!-- <a href="{% url 'screener:screener_inicio' %}" class="col-4 shortcut-item">
+              <a href="{% url 'general:coming_soon' %}" class="col-4 shortcut-item">
                 <span class="shortcut-media avatar rounded-circle bg-gradient-info">
                   <i class="fas fa-robot"></i>
                 </span>
                 <small>Roboadvisor</small>
-              </a> -->
+              </a>
               <a href="{% url 'preguntas_respuestas:list_questions' %}" class="col-4 shortcut-item">
                 <span class="shortcut-media avatar rounded-circle bg-gradient-green">
                   <i class="far fa-question-circle"></i>
@@ -102,7 +102,7 @@
           <a class="nav-link pr-0" href="{% url 'account_signup' %}" role="button" aria-haspopup="true" aria-expanded="false">
             <div class="media align-items-center">
               <span class="avatar avatar-sm rounded-circle">
-                <img alt="Image placeholder" src="/media/avatar/inversorinteligente.png">
+                <img alt="Image placeholder" src="{% static 'general/assets/img/general/inversorinteligente.WebP' %}">
               </span>
               <div class="media-body  ml-2  d-none d-lg-block">
                 <span class="mb-0 text-sm text-dark font-weight-bold">Únete</span>
@@ -124,7 +124,7 @@
             <div class="dropdown-header noti-title">
               <h6 class="text-overflow m-0">Bienvenido</h6>
             </div>            
-            <a href="{% url 'users:user_public_profile' request.user.username%}" class="dropdown-item">
+            <a href="{% url 'users:user_inicio' %}" class="dropdown-item">
               <i class="fas fa-user"></i>
               <span>Perfil</span>
             </a>
@@ -149,12 +149,12 @@
               <span>Soporte</span>
             </a>
             <div class="dropdown-divider"></div>
-            <a href="#!" class="dropdown-item">
+            <a href="#!" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#CreditsExplanationModal">
               <i class="fas fa-coins"></i>
               <span>Créditos</span>
               <span class="badge badge-danger">{{request.user.user_profile.creditos}}</span>
             </a>
-            <a href="#!" class="dropdown-item">
+            <a href="#!" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#RepExplanationModal">
               <i class="fas fa-award fa-fw"></i>
               <span>Reputación</span>
               <span class="badge badge-success">{{request.user.user_profile.reputation_score}}</span>

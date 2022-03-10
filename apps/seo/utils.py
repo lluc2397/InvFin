@@ -4,8 +4,6 @@ from .models import (
 )
 
 from django.contrib.sessions.models import Session
-from django.conf import settings
-
 
 class SeoInformation:
 
@@ -37,7 +35,7 @@ class SeoInformation:
 
     def update_visiteur_session(self, visiteur, request):
         request.session.save()
-        visiteur.session_id = request.COOKIES[settings.SESSION_COOKIE_NAME]
+        visiteur.session_id = request.session.session_key
         visiteur.save()
         request.session['visiteur_id'] = visiteur.id
         return visiteur
@@ -45,7 +43,7 @@ class SeoInformation:
 
     def get_visiteur_by_old_session(self, request):
         try:
-            session_id = request.COOKIES[settings.SESSION_COOKIE_NAME]
+            session_id = request.session.session_key
             session = Session.objects.get(session_key = session_id)
             visiteur = Visiteur.objects.get(id = session.get_decoded()['visiteur_id'])
             return visiteur
@@ -80,7 +78,7 @@ class SeoInformation:
     def create_visiteur(self, request):
         seo = self.meta_information(request)
         request.session.save()
-        session_id = request.COOKIES[settings.SESSION_COOKIE_NAME]
+        session_id = request.session.session_key
         visiteur = Visiteur.objects.create(
             ip = seo['ip'],
             session_id = session_id,

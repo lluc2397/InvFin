@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Inversiones y Finanzas">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+
+<body>
+    <p>Hola {% if usuario.username%} {{usuario.username}} {%else%} {{usuario}} {%endif%}, Qué tal estás?
+        <br>
+        {{newsl_content|safe}}        
+    </p>
+    <br>
+    Atentamente,
+    <br>
+    Lucas Montes
+   
+    <img src="https://inversionesyfinanzas.xyz{% url 'emailing:email_opened_view' image_tag%}" width=1 height=1>
+</body>

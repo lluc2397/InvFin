@@ -62,6 +62,7 @@ DJANGO_APPS = [
     "django.contrib.humanize",
     "django.contrib.admin",
     "django.forms",
+    'django.contrib.sitemaps',
 ]
 
 THIRD_PARTY_APPS = [
@@ -244,6 +245,11 @@ EMAIL_BACKEND = env(
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
+EMAIL_CONTACT = env('EMAIL_CONTACT')
+EMAIL_NEWSLETTER = env('EMAIL_NEWSLETTER')
+MAIN_EMAIL = env('MAIN_EMAIL')
+EMAIL_ACCOUNTS = env('EMAIL_ACCOUNTS')
+
 # ADMIN
 # ------------------------------------------------------------------------------
 # Django Admin URL.
@@ -380,9 +386,56 @@ CKEDITOR_CONFIGS ={
 			{ 'name': 'basicstyles', 'items': [ 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ] },
 			{ 'name': 'paragraph', 'items': [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },
 			{ 'name': 'links', 'items': [ 'Link', 'Unlink' ] },
-			{ 'name': 'insert', 'items': [ 'Image', 'EmbedSemantic', 'Table' ] },
+			{ 'name': 'insert', 'items': [ 'Image', 'EmbedSemantic', 'Table', 'emoji' ] },
 			{ 'name': 'tools', 'items': [ 'Maximize' ] },
-			{ 'name': 'editing', 'items': [ 'Scayt' ] }
+			{ 'name': 'editing', 'items': [ 'Scayt' ] },
+            {
+        "name": "document",
+        "items": [
+            "Styles",
+            "Format",
+            "Bold",
+            "Italic",
+            "Underline",
+            "Strike",
+            "-",
+            "TextColor",
+            "BGColor",
+            "-",
+            "JustifyLeft",
+            "JustifyCenter",
+            "JustifyRight",
+            "JustifyBlock",
+        ],
+    },
+    {
+        "name": "widgets",
+        "items": [
+            "Undo",
+            "Redo",
+            "-",
+            "NumberedList",
+            "BulletedList",
+            "-",
+            "Outdent",
+            "Indent",
+            "-",
+            "Link",
+            "Unlink",
+            "-",
+            "Image",
+            "CodeSnippet",
+            "Table",
+            "HorizontalRule",
+            "Smiley",
+            "SpecialChar",
+            "-",
+            "Blockquote",
+            "-",
+            "ShowBlocks",
+            "Maximize",
+        ],
+    }
 		],
 
 		'customConfig': '',
@@ -445,3 +498,7 @@ CKEDITOR_CONFIGS ={
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 FINHUB_TOKEN = env.str("FINHUB_TOKEN")
+
+#GOOGLE KEYS
+GOOGLE_RECAPTCHA_SECRET_KEY = env.str('GOOGLE_RECAPTCHA_SECRET_KEY')
+GOOGLE_RECAPTCHA_PUBLIC_KEY = env.str('GOOGLE_RECAPTCHA_PUBLIC_KEY')

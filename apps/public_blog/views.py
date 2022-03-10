@@ -13,6 +13,12 @@ from django.views.generic import (
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 
+from apps.emailing.models import (
+    NewsletterDefaultDespedida,
+    NewsletterDefaultIntroduction,
+    NewsletterDefaultTitle
+)
+
 from .models import (
     PublicBlog,
     WritterProfile,
@@ -55,11 +61,28 @@ def following_management_view(request):
 		return redirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
+def user_become_writter_view(request):
+	if request.method == 'POST':
+		domain = request.POST['domain'].lower()
+		WritterProfile.objects.create(user = request.user, host_name = domain)
+		request.user.is_writter = True
+		request.user.save()
+		NewsletterFollowers.objects.create(user = request.user)
+		messages.success(request, f'Pon al día tu perfil, \
+				añade tus redes sociales, una buena descripción y tu nombre para que la gente pueda conocerte.')
+		return redirect('users:update')
+
+
 class PublicBlogsListView(ListView):
 	model = PublicBlog
 	template_name = 'public_blog/inicio.html'
 	ordering = ['-published_at']
 	context_object_name = "blogs"
+
+	def get_queryset(self):
+		queryset = PublicBlog.objects.filter(status = 1)
+		return queryset
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
@@ -85,7 +108,37 @@ class PublicBlogDetailsView(DetailView):
 		return context
 
 
-class UpdatePublicBlogPostView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
+class WritterOnlyView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin):
+
+    def test_func(self):
+        valid = False
+        if self.request.user.is_writter:
+            valid = True
+        return valid
+
+    def handle_no_permission(self):
+        return redirect("public_blog:blog_list")
+
+
+class WritterOwnBlogsListView(WritterOnlyView, DetailView):
+	model = User
+	template_name = 'public_blog/profile/manage_blogs.html'
+	ordering = ['-published_at']
+	slug_field = 'username'
+
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		writter = self.get_object()
+		context["blogs"] = PublicBlog.objects.filter(author = writter)
+		context["meta_desc"] = 'El blog donde tu también puedes escribir de forma libre'
+		context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir'
+		context["meta_title"] = 'Dashboard'
+		context["meta_url"] = f'management/escritos/{writter.username}/'
+		return context
+
+
+class UpdatePublicBlogPostView(WritterOnlyView, UpdateView):
 	model = PublicBlog
 	form_class = PublicBlogForm
 	context_object_name = "public_blog_form"
@@ -106,11 +159,8 @@ class UpdatePublicBlogPostView(LoginRequiredMixin, UserPassesTestMixin, SuccessM
 			valid = True
 		return valid
 
-	def handle_no_permission(self):
-		return redirect("public_blog:blog_list")
 
-
-class CreatePublicBlogPostView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
+class CreatePublicBlogPostView(WritterOnlyView, CreateView):
 	model = PublicBlog
 	form_class = PublicBlogForm
 	success_message = 'Escrito creado'
@@ -124,24 +174,22 @@ class CreatePublicBlogPostView(LoginRequiredMixin, UserPassesTestMixin, SuccessM
 		modelo.save_secondary_info('blog')
 		return super(CreatePublicBlogPostView, self).form_valid(form)
 
-	def test_func(self):
-		valid = False
-		if self.request.user.is_writter:
-			valid = True
-		return valid
 
-	def handle_no_permission(self):
-		return redirect("public_blog:blog_list")
+class CreateDefaultFieldView(WritterOnlyView, CreateView):
+    pass
 
+class UpdateDefaultFieldView(WritterOnlyView, UpdateView):
+	model = PublicBlog
+	form_class = PublicBlogForm
+	context_object_name = "public_blog_form"
+	success_message = 'Escrito actualizado'
+	template_name = 'public_blog/forms/update.html'
 
-@login_required
-def user_become_writter_view(request):
-	if request.method == 'POST':
-		domain = request.POST['domain'].lower()
-		WritterProfile.objects.create(user = request.user, host_name = domain)
-		request.user.is_writter = True
-		request.user.save()
-		NewsletterFollowers.objects.create(user = request.user)
-		messages.success(request, f'Pon al día tu perfil, \
-				añade tus redes sociales, una buena descripción y tu nombre para que la gente pueda conocerte.')
-		return redirect('users:update')
+	def get_context_data(self, **kwargs):
+		context = super(UpdateDefaultFieldView, self).get_context_data(**kwargs)        
+		context['current_tags'] = self.get_object().tags.all()
+		return context
+
+	def form_valid(self, form):
+		return super(UpdateDefaultFieldView, self).form_valid(form)
+

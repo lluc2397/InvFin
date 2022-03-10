@@ -21,7 +21,7 @@
       <div class="float-start">
         <strong>{{the_company.name}} - ({{the_company.ticker}})</strong>
         <br>
-        Precio actual: {{current_price}} {{current_currency}}
+        Precio actual: {{the_company.current_price}} {{the_company.current_currency}}
       </div>
       <div class="float-end">
         {% if request.user.is_authenticated %}

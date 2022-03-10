@@ -16,7 +16,7 @@
                                 <tr>                                    
                                     <th colspan="2" scope="row"><h4>{{the_company.name}} ({{the_company.ticker}})</h4></th>
                                     <th>Capitalización bursátil</th>
-                                    <td>{{marketcap}}</td>
+                                    <td>{{the_company.marketcap}}</td>
                                     {% if the_company.exchange.main_org.id == 1 %}
                                     <th><a class="btn btn-secondary" href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&ticker={{the_company.ticker}}&type=10-k&dateb=&owner=exclude&count=40&search_text=" target="_blank">Ver 10-K</a></th>
                                     <th><a class="btn btn-secondary" href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&ticker={{the_company.ticker}}&type=10-q&dateb=&owner=exclude&count=40&search_text=" target="_blank">Ver 10-Q</a></th>
@@ -76,7 +76,7 @@
             <div class="card-header">
                 <h4 class="ms-2">Noticias </h4>
             </div>
-            {% for new in news_response %}
+            {% for new in the_company.show_news %}
             <div class="card-body p-4">
                 <div class="d-flex flex-start">
                     <img
@@ -89,7 +89,7 @@
                         <h6 class="fw-bold mb-1">{{new.headline}}</h6>
                         <div class="d-flex align-items-center mb-3">
                         <p class="mb-0">
-                        {{new.datetime|readable_date}}
+                        {{new.datetime}}
                         </p>
                         <span class="me-2 ms-2">
                         {{new.source}}

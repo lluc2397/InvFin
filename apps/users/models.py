@@ -107,7 +107,7 @@ class User(UserBaseMixin):
     
     @property
     def fav_terms(self):
-        fav_terms = self.favorites_terms.term.all()
+        fav_terms = self.favorites_terms.term.all()        
         return fav_terms
     
     @property

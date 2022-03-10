@@ -1,10 +1,15 @@
-from django import forms
+from django.forms import (
+    ModelForm,
+    ValidationError,
+    ModelForm,
+    Textarea,
+) 
 from .models import (
     Question,
     Answer
 )
 
-class CreateQuestionForm(forms.ModelForm):
+class CreateQuestionForm(ModelForm):
 
     class Meta:
         model = Question
@@ -25,24 +30,24 @@ class CreateQuestionForm(forms.ModelForm):
     def clean_title(self):
         title = self.cleaned_data['title']
         if title.endswith('?') == False:
-            raise forms.ValidationError("Añade puntuación a tu pregunta ¿ ?")
+            raise ValidationError("Añade puntuación a tu pregunta ¿ ?")
 
         if len(title) < 10:
-            raise forms.ValidationError("Formula tu pregunta para que la comunidad pueda ayudarte")
+            raise ValidationError("Formula tu pregunta para que la comunidad pueda ayudarte")
         
         if title == '¿Cuál es tu pregunta?':
-            raise forms.ValidationError("Formula tu pregunta para que la comunidad pueda ayudarte")
+            raise ValidationError("Formula tu pregunta para que la comunidad pueda ayudarte")
         return title
     
     def clean_content(self):
         content = self.cleaned_data['content']
         if len(content) < 10:
-            raise forms.ValidationError("Detalla precisamente tu pregunta para que la comunidad pueda ayudarte.")
+            raise ValidationError("Detalla precisamente tu pregunta para que la comunidad pueda ayudarte.")
         return content
 
 
-class CreateAnswerForm(forms.ModelForm):
-    content = forms.Textarea()
+class CreateAnswerForm(ModelForm):
+    content = Textarea()
     class Meta:
         model = Answer
         exclude = [

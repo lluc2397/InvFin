@@ -1,9 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 import base64
 from django.utils import timezone
 from django.http.response import HttpResponseRedirect, HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.messages.views import SuccessMessageMixin
+from django.views.generic import (
+	ListView,
+	TemplateView,
+	DetailView,
+	UpdateView,
+	CreateView)
 
 def email_opened_view(request, uidb64):
     
@@ -23,5 +31,9 @@ def email_opened_view(request, uidb64):
         return HttpResponse(pixel_gif, content_type='image/gif')
 
 
-# from django.core.mail import send_mail
-# send_mail('subject', 'message', 'Dont Reply <do_not_reply@domain.com>', ['youremail@example.com'])
+
+
+
+
+
+	

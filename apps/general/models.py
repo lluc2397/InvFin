@@ -30,6 +30,7 @@ from apps.seo.models import MetaParametersHistorial
 from .mixins import CommonMixin, BaseEscritosMixins
 from .manager import VotesManager
 
+
 class EscritosClassification(Model):
     name = CharField(max_length=99999,null = True, blank=True, unique = True)
     slug = CharField(max_length=99999,null = True, blank=True, unique = True)
@@ -116,6 +117,8 @@ class BaseEscrito(BasicWrittenContent, BaseEscritosMixins):
         image = self.non_thumbnail_url
         if self.thumbnail:
             image = self.thumbnail.url
+        if not image:
+            image = '/static/general/assets/img/general/why-us.webp'
         return image
     
     

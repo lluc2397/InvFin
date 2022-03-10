@@ -11,7 +11,7 @@ from django.urls import reverse
 
 import json
 
-from apps.escritos.models import Term, FavoritesTermsHistorial
+from apps.escritos.models import Term, FavoritesTermsHistorial, FavoritesTermsList
 from apps.public_blog.models import PublicBlog
 from apps.empresas.models import Company
 from apps.screener.models import FavoritesStocksHistorial
@@ -116,8 +116,11 @@ def update_favorites(request):
 		else:
 			term_id = data.get('term')
 			current_term = Term.objects.get(id = term_id)
-
-			if current_term in user.fav_stocks:
+			try:
+				user.favorites_terms
+			except:
+				FavoritesTermsList.objects.create(user = user)
+			if current_term in user.fav_terms:
 				user.favorites_terms.term.remove(current_term)
 				FavoritesTermsHistorial.objects.create(user = user, term = current_term, removed = True)
 				is_favorite = False
@@ -127,6 +130,9 @@ def update_favorites(request):
 				is_favorite = True
 				
 		return JsonResponse ({'is_favorite':is_favorite})
+
+def coming_soon(request):
+	return render(request, 'general/complements/coming_soon.html')
 
 
 class EscritosView(TemplateView):

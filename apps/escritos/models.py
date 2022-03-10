@@ -30,6 +30,7 @@ class Term(BaseEscrito):
     class Meta:
         verbose_name = "Término del glosario"
         db_table = "term"
+        ordering = ['total_views']
     
     def get_absolute_url(self):
         return reverse("escritos:single_term", kwargs={"slug": self.slug})

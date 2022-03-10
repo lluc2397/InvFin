@@ -111,7 +111,8 @@ class CreateCompanyObservationView(CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        form.instance.company = self.request.POST['company']
+        company = Company.objects.get(ticker = self.request.POST['company'])
+        form.instance.company = company
         form.save()	
         return super(CreateCompanyObservationView, self).form_valid(form)
 

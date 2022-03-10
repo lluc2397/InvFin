@@ -15,7 +15,7 @@ from apps.seo.sitemaps import (
 )
 
 sitemaps = {
-    'blog':PublicBlogSitemap,    
+    'blogs':PublicBlogSitemap,    
     'preguntas':QuestionSitemap,
     'empresas':CompanySitemap,
     'glosario':TermSitemap
@@ -39,7 +39,7 @@ urlpatterns = [
     path("screener/", include("apps.screener.urls", namespace="screener")),
 
     # path("", include("apps.super_investors.urls", namespace="super_investors")),    
-    # path("", include("apps.empresas.urls", namespace="empresas")),
+    path("", include("apps.empresas.urls", namespace="empresas")),
     # path("", include("apps.etfs.urls", namespace="etfs")),
 
     # path("", include("apps.cartera.urls", namespace="cartera")),
@@ -48,8 +48,6 @@ urlpatterns = [
 
     path("", include("apps.emailing.urls", namespace="emailing")),
 
-    # Docs: 
-    # path("", include("apps.users.urls")),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

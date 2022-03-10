@@ -1,13 +1,21 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.conf import settings
 from django.views.generic import (
-    TemplateView, 
+    TemplateView,
+    FormView,
     DetailView)
+
+import json
+import urllib
+import requests
 
 from apps.web.models import WebsiteLegalPage
 from apps.public_blog.models import WritterProfile
 from apps.public_blog.views import writter_profile_view
 from apps.general.utils import HostChecker
 
+from .forms import ContactForm
 
 class HomePage(TemplateView):
     template_name = 'web_principal/inicio.html'
@@ -43,8 +51,34 @@ class LegalPages(DetailView):
         return context
 
 
-class SoporteView(TemplateView):
-    template_name = 'web_principal/soporte.html'
+def soporte_view(request):    
+    form = ContactForm()
+    public_key = settings.GOOGLE_RECAPTCHA_PUBLIC_KEY
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+
+            recaptcha_response = request.POST.get('g-recaptcha-response')
+            url = 'https://www.google.com/recaptcha/api/siteverify'
+            values = {
+                'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+                'response': recaptcha_response
+            }
+            data = urllib.parse.urlencode(values).encode()
+            req =  urllib.request.Request(url, data=data)
+            response = urllib.request.urlopen(req)
+            result = json.loads(response.read().decode())
+
+            
+            if result['success']:
+                messages.success(request, 'Gracias por tu mensaje, te responderemos lo antes posible.')
+                # SEND_EMAIL_FOR_CONTACT(nombre, email, comentario, peticion)
+                return redirect ('web:soporte')
+
+        messages.error(request, 'Ha habido un error')
+        return redirect ('web:soporte')
+
+    return render(request, 'web_principal/soporte.html', {'form':form, 'public_key':public_key})
 
 
 class ExcelView(TemplateView):

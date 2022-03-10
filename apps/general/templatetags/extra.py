@@ -16,5 +16,5 @@ def readable_date(date):
     return (datetime.utcfromtimestamp(date).strftime('%Y-%m-%d %H:%M:%S'))
 
 @register.filter(name='per_cent')
-def readable_date(value):
+def percentagement(value):
     return (value * 100)

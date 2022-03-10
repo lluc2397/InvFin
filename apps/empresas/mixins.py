@@ -28,18 +28,28 @@ class CompanyMixin(Model):
     class Meta:
         abstract = True
     
+    
+    @property
+    def show_news(self):
+        news = get_news(self.ticker)
+        return news
+
+
     @property
     def limited_incomes(self):
         return self.inc_statements.all()[:10]
+
 
     @property
     def limited_balances(self):
         return self.balance_sheets.all()[:10]
     
+
     @property
     def limited_cf(self):
         return self.cf_statements.all()[:10]
     
+
     def generate_json(self, comparing_json, items=None):
         labels = comparing_json['labels']
         # labels.reverse()
@@ -1644,11 +1654,17 @@ class CompanyMixin(Model):
             'ps':ps, 'ps_lvl':ps_lvl,
             'fair_value':fair_value,
             'ev':ev,
+            'marketcap':marketcap,
             'cagr':cagr,
-            'evebitda':evebitda, 'evebitd_lvl':evebitd_lvl,
-            'evsales':evsales, 'evsales_lvl':evsales_lvl,
+            'evebitda':evebitda, 
+            'evebitd_lvl':evebitd_lvl,
+            'evsales':evsales, 
+            'evsales_lvl':evsales_lvl,
             'gramvalu':gramvalu,
             'sharesbuyback':sharesbuyback,
-            'safety_margin_pes':safety_margin_pes, 'safety_margin_opt':safety_margin_opt,
+            'safety_margin_pes':safety_margin_pes, 
+            'safety_margin_opt':safety_margin_opt,
+            'current_price':current_price,
+            'current_currency':current_currency,
         }
         return context

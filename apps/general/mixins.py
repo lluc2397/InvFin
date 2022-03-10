@@ -150,16 +150,20 @@ class CommonMixin(Model):
             meta_info['meta_author'] = self.author
             meta_info['schema_org'] = self.ques_schema
         else:
-            saved_meta = self.meta_information.parameter_settings
-            meta_info['modified_time'] = saved_meta.modified_time
-            meta_info['meta_image'] = saved_meta.meta_img
-            meta_info['meta_title'] = saved_meta.meta_title
-            meta_info['meta_desc'] = saved_meta.meta_description
-            meta_info['meta_url'] = saved_meta.meta_url
-            meta_info['meta_tags'] = saved_meta.meta_keywords
-            meta_info['meta_category'] = 'Inversiones'
-            meta_info['meta_author'] = saved_meta.meta_author
-            meta_info['schema_org'] = saved_meta.schema_org        
+            try:
+                saved_meta = self.meta_information.parameter_settings
+            except:
+                self.save_secondary_info(str(self._meta).split('.')[1])
+            else:
+                meta_info['modified_time'] = saved_meta.modified_time
+                meta_info['meta_image'] = saved_meta.meta_img
+                meta_info['meta_title'] = saved_meta.meta_title
+                meta_info['meta_desc'] = saved_meta.meta_description
+                meta_info['meta_url'] = saved_meta.meta_url
+                meta_info['meta_tags'] = saved_meta.meta_keywords
+                meta_info['meta_category'] = 'Inversiones'
+                meta_info['meta_author'] = saved_meta.meta_author
+                meta_info['schema_org'] = saved_meta.schema_org
 
         return meta_info
 
