@@ -280,3 +280,4 @@ apps/media/
 geoip
 
 .env
+cop.sql

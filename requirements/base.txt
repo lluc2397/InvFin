@@ -16,6 +16,7 @@ django-countries
 yfinance
 django-admin-honeypot
 django-import-export
+beautifulsoup4
 
 # Django
 # ------------------------------------------------------------------------------

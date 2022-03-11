@@ -68,9 +68,9 @@ class Newsletter(Model):
     introduction = TextField()
     despedida = TextField()
     content = RichTextField()
-    default_title = ForeignKey(NewsletterDefaultTitle, on_delete=SET_NULL, null=True)
-    default_introduction = ForeignKey(NewsletterDefaultIntroduction, on_delete=SET_NULL, null=True)
-    default_despedida = ForeignKey(NewsletterDefaultDespedida, on_delete=SET_NULL, null=True)
+    default_title = ForeignKey(NewsletterDefaultTitle, on_delete=SET_NULL,blank=True, null=True)
+    default_introduction = ForeignKey(NewsletterDefaultIntroduction, on_delete=SET_NULL,blank=True, null=True)
+    default_despedida = ForeignKey(NewsletterDefaultDespedida, on_delete=SET_NULL,blank=True, null=True)
     sent = BooleanField(default=False)
     date_to_send = DateTimeField(null=True, blank=True)
 

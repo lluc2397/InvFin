@@ -1,6 +1,6 @@
 {% extends "general/bases/base_content.html" %}
 {% load static %}
-{% block header %}{% include "public_blog/header/details.html" %}{% endblock header%}
+{% block header %}{% include "public_blog/header/managle_blogs.html" %}{% endblock header%}
 
 {% block FirstCta %}
 <div class="col-12">
@@ -10,6 +10,37 @@
 {% endblock FirstCta %}
 
 {% block FirstContent %}
+{% for blog in blogs %}
+<div class="col-6 col-sm-12">
+    <div class="card">
+        <!-- Card body -->
+        <div class="card-body">
+           <div class="row align-items-center">
+              <div class="col-auto">
+                 <!-- Avatar -->
+                 <a href="{% url 'public_blog:blog_details' blog.slug %}" class="avatar avatar-xl rounded">
+                 <img alt="blog" src="{{blog.image}}">
+                 </a>
+              </div>
+              <div class="col ml--2">
+                 <h4 class="mb-0">
+                    <a href="{% url 'public_blog:blog_details' blog.slug %}" >{{blog.title}}</a>
+                 </h4>
+                 <p class="text-sm text-muted mb-0">{{blouncatewords:"25"}</p>
+              </div>
+              <div class="col-auto">
+                 <!-- <button type="button" class="btn btn-sm btn-success mb-1">Añadir favoritos</button>
+                 <br> -->
+                 <a type="button" class="btn btn-sm btn-primary mb-1">Preparar newsletter</a>
+                 <br>
+                 <a href="{% url 'public_blog:blog_details' blog.slug %}" type="button" class="btn btn-sm btn-primary">Visitar</a>
+                 
+              </div>
+           </div>
+        </div>
+     </div>
+</div>
+{% endfor %}
 {% endblock FirstContent%}
 
 {% block ListContent %}

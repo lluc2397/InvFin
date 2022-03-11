@@ -11,8 +11,6 @@ from PIL import Image
 from io import BytesIO
 
 
-domain = Site.objects.get_current().domain
-
 class ResizeImageMixin:
     def resize(self, imageField: ImageField, size:tuple):
         im = Image.open(imageField)  # Catch original
@@ -138,6 +136,7 @@ class CommonMixin(Model):
 
     @property
     def meta_info(self):
+        domain = Site.objects.get_current().domain
         meta_info = {}
         if self.object_name == 'Question':
             meta_info['modified_time'] = self.author
@@ -192,6 +191,7 @@ class BaseEscritosMixins(Model):
 
     def create_meta_information(self, type_content):
         from apps.seo.models import MetaParameters, MetaParametersHistorial
+        domain = Site.objects.get_current().domain
         
         meta_url = f'https://{domain}/definicion/{self.slug}/'
         if type_content == 'blog':
@@ -227,8 +227,8 @@ class BaseEscritosMixins(Model):
                 "logo": {
                     "@type": "ImageObject",
                     "url": "href=/static/general/assets/img/favicon/favicon.ico"
-                }
-                }
+                },
+                },
             },
         )
         meta_historial = MetaParametersHistorial.objects.create(

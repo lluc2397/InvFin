@@ -1,0 +1,104 @@
+
+        <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+              <h6 class="h2 d-inline-block mb-0">Escritos</h6>
+            </div>
+            <div class="col-lg-6 col-5 text-right">
+              {% if request.user.is_writter %}
+              <a href="{% url 'users:user_inicio' %}" class="btn btn-sm btn-neutral">Perfil</a>
+              {% endif %}
+              <!-- <a href="{% url 'account_email' %}" class="btn btn-sm btn-neutral">E-Mail</a> -->
+              <a href="{% url 'users:update' %}" class="btn btn-sm btn-neutral">Editar</a>
+            </div>
+          </div>
+          <!-- Card stats -->
+          <div class="row">
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body" data-bs-toggle="tooltip" data-bs-placement="top" title="Visitas a tus escritos">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Visitas</h5>
+                      <span class="h2 font-weight-bold mb-0">{{request.user.number_of_contributions}}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
+                        <i class="fas fa-brain"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-sm">
+                    <!-- <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                    <span class="text-nowrap">Since last month</span> -->
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body" data-bs-toggle="tooltip" data-bs-placement="top" title="Interacciones de los usuarios con tus escritos">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Interaccions</h5>
+                      <span class="h2 font-weight-bold mb-0">{{request.user.user_profile.creditos}}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                        <i class="fas fa-coins"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-sm">
+                    <!-- <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                    <span class="text-nowrap">Since last month</span> -->
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body" data-bs-toggle="tooltip" data-bs-placement="top" title="% de apertura de tus newsletters">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Tasa de apertura</h5>
+                      <span class="h2 font-weight-bold mb-0">{{request.user.user_profile.reputation_score}}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                        <i class="fas fa-award fa-fw"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-sm">
+                    <!-- <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                    <span class="text-nowrap">Since last month</span> -->
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body" data-bs-toggle="tooltip" data-bs-placement="top" title="Cantidad de lectores que te siguen">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title text-uppercase text-muted mb-0">Lectores</h5>
+                      <span class="h2 font-weight-bold mb-0">{{request.user.number_of_accepted_answers}}</span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
+                        <i class="fas fa-check"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="mt-3 mb-0 text-sm">
+                    <!-- <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                    <span class="text-nowrap">Since last month</span> -->
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>

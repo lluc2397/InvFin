@@ -16,7 +16,7 @@ urlpatterns = [
     path('blog-financiero/', PublicBlogsListView.as_view(), name="blog_list"),
     path('p/<slug>/', PublicBlogDetailsView.as_view(), name="blog_details"),
 
-    path('management/escritos/<username>/', WritterOwnBlogsListView.as_view(), name="manage_blogs"),
+    path('management/escritos/<slug>/', WritterOwnBlogsListView.as_view(), name="manage_blogs"),
 
     path('create-blog', CreatePublicBlogPostView.as_view(), name="create_blog"),
     path('update-blog/<id>', UpdatePublicBlogPostView.as_view(), name="update_blog"),

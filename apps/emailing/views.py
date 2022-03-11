@@ -32,7 +32,22 @@ def email_opened_view(request, uidb64):
 
 
 
+class BaseNewsletterView(LoginRequiredMixin, UserPassesTestMixin):
+    def can_create_newsl(self):
+        valid = False
+        if self.request.user.is_writter or self.request.user.is_superuser:
+            valid = True
+        return valid
 
+    def test_func(self):
+        return self.can_create_newsl()
+
+
+# class CreateNewsletterView(BaseNewsletterView, CreateView):
+
+    
+
+# class UpdateNewsletterView(BaseNewsletterView, UpdateView):
 
 
 
