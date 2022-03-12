@@ -30,7 +30,7 @@ class Term(BaseEscrito):
     class Meta:
         verbose_name = "Término del glosario"
         db_table = "term"
-        ordering = ['total_views']
+        ordering = ['id']
     
     def get_absolute_url(self):
         return reverse("escritos:single_term", kwargs={"slug": self.slug})
@@ -44,7 +44,7 @@ class TermContent(Model):
     term_related = ForeignKey(Term, on_delete=SET_NULL, null=True, related_name="term_content_parts") 
     title = CharField(max_length=3000)
     order = PositiveIntegerField(default=0)
-    content = RichTextField(config_name='simple')
+    content = RichTextField()
 
     class Meta:
         ordering = ['order']

@@ -101,7 +101,14 @@ class BaseEmail(Model):
 
     class Meta:
         abstract = True
+    
+    def get_or_create_emails(self, app_label, object_name, id):
+        from django.apps import apps
 
+        modelo = apps.get_model(app_label, object_name, require_ready=True)
+        specific_modelo = modelo.objects.get_or_create(email_related__id=id)[0]
+        return specific_modelo
+        
 
 class EmailNotification(BaseEmail):
     email_related = ForeignKey(Notification,null=True, blank=True, on_delete=CASCADE)

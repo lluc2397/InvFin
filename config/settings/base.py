@@ -34,7 +34,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#locale-paths
 LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 
+# Boolean that sets whether to add thousand separator when formatting numbers
 USE_THOUSAND_SEPARATOR = True
+
+# Number of digits that will be together, when splitting them by
+# THOUSAND_SEPARATOR. 0 means no grouping, 3 means splitting by thousands...
+NUMBER_GROUPING = 3
+
+# Thousand separator symbol
+THOUSAND_SEPARATOR = "."
+
+
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
@@ -226,8 +236,10 @@ FIXTURE_DIRS = (str(APPS_DIR / "fixtures"),)
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-httponly
 SESSION_COOKIE_HTTPONLY = True
-
 SESSION_COOKIE_NAME = "sessionid"
+# Whether to save the session data on every request.
+SESSION_SAVE_EVERY_REQUEST = False
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-httponly
 CSRF_COOKIE_HTTPONLY = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-browser-xss-filter
@@ -502,3 +514,14 @@ FINHUB_TOKEN = env.str("FINHUB_TOKEN")
 #GOOGLE KEYS
 GOOGLE_RECAPTCHA_SECRET_KEY = env.str('GOOGLE_RECAPTCHA_SECRET_KEY')
 GOOGLE_RECAPTCHA_PUBLIC_KEY = env.str('GOOGLE_RECAPTCHA_PUBLIC_KEY')
+
+# List of compiled regular expression objects representing User-Agent strings
+# that are not allowed to visit any page, systemwide. Use this for bad
+# robots/crawlers. Here are a few examples:
+#     import re
+#     DISALLOWED_USER_AGENTS = [
+#         re.compile(r'^NaverBot.*'),
+#         re.compile(r'^EmailSiphon.*'),
+#         re.compile(r'^SiteSucker.*'),
+#         re.compile(r'^sohu-search'),
+#     ]

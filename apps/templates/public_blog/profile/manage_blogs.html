@@ -1,5 +1,6 @@
 {% extends "general/bases/base_content.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block header %}{% include "public_blog/header/managle_blogs.html" %}{% endblock header%}
 
 {% block FirstCta %}
@@ -31,7 +32,7 @@
               <div class="col-auto">
                  <!-- <button type="button" class="btn btn-sm btn-success mb-1">Añadir favoritos</button>
                  <br> -->
-                 <a type="button" class="btn btn-sm btn-primary mb-1">Preparar newsletter</a>
+                 <a href="{% url 'public_blog:blog_details' blog.slug %}" class="btn btn-sm btn-primary mb-1">Newsletter</a>
                  <br>
                  <a href="{% url 'public_blog:blog_details' blog.slug %}" type="button" class="btn btn-sm btn-primary">Visitar</a>
                  
@@ -68,3 +69,39 @@
 
 {% block LastCta %}
 {% endblock LastCta %}
+
+
+{% block modal %}
+{{block.super}}
+<div class="modal fade" id="DefaultOptions" tabindex="-1" role="dialog" aria-labelledby="DefaultOptionsLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-md-down" role="document">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h6 class="modal-title" id="modal-title-notification">Prepara tus newsletters</h6>
+               <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                   <span aria-hidden="true">×</span>
+               </button>
+           </div>
+           <div class="modal-body">
+            <form action="" method="post">
+            {{newsletter_fields_form.media}}
+               <div class="row">
+                  <div class="col-12">
+                     {{newsletter_fields_form.title|as_crispy_field}}
+                  </div>
+                  <div class="col-12 mt-2">
+                     {{newsletter_fields_form.intro}}
+                  </div>
+                  <div class="col-12 mt-2">
+                     {{newsletter_fields_form.despedida}}
+                  </div>
+                  <div class="col-12 mt-2">
+                     <button class="btn btn-primary col-12">Guardar</button>
+                  </div>
+               </div>
+            </form>
+           </div>
+       </div>
+   </div>
+</div>
+{% endblock modal %}

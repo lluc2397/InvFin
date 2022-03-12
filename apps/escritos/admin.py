@@ -41,13 +41,12 @@ class TermAdmin(admin.ModelAdmin):
     inlines = [TermContentInline]
     
     actions = [find_images]
+    
 
     list_display = [
         'title',
-        'slug',
         'category',
         'status',
-        'meta_information',
         'total_votes',
         'total_views',
         'times_shared',        
@@ -59,7 +58,6 @@ class TermAdmin(admin.ModelAdmin):
     list_editable = [
         'category',
         'status',
-        'meta_information',
     ]
     search_fields = ['title']
 

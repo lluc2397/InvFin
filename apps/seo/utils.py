@@ -34,7 +34,8 @@ class SeoInformation:
 
 
     def update_visiteur_session(self, visiteur, request):
-        request.session.save()
+        if not request.session or not request.session.session_key:
+            request.session.save()
         visiteur.session_id = request.session.session_key
         visiteur.save()
         request.session['visiteur_id'] = visiteur.id
@@ -77,7 +78,8 @@ class SeoInformation:
 
     def create_visiteur(self, request):
         seo = self.meta_information(request)
-        request.session.save()
+        if not request.session or not request.session.session_key:
+            request.session.save()
         session_id = request.session.session_key
         visiteur = Visiteur.objects.create(
             ip = seo['ip'],

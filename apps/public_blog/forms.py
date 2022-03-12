@@ -1,8 +1,13 @@
-from django import forms
-
+from django.forms import (
+    ModelForm,
+    ChoiceField,
+    CharField,
+    Form
+)
 from .models import WritterProfile, PublicBlog
 
-class WritterProfileForm(forms.ModelForm):
+
+class WritterProfileForm(ModelForm):
 
     class Meta:
         model = WritterProfile
@@ -17,10 +22,10 @@ class WritterProfileForm(forms.ModelForm):
         ]
 
 
-class PublicBlogForm(forms.ModelForm):
+class PublicBlogForm(ModelForm):
     STATUS = ((1, 'Publicar'), (2, 'Guardar como borrador'), (3, 'Programar'))
 
-    status = forms.ChoiceField(choices=STATUS)
+    status = ChoiceField(choices=STATUS)
 
     class Meta:
         model = PublicBlog

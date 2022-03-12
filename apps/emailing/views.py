@@ -13,6 +13,8 @@ from django.views.generic import (
 	UpdateView,
 	CreateView)
 
+from .forms import NewsletterForm, DefaultNewsletterFieldsForm
+
 def email_opened_view(request, uidb64):
     
     pixel_gif = base64.b64decode(b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=')
@@ -33,6 +35,14 @@ def email_opened_view(request, uidb64):
 
 
 class BaseNewsletterView(LoginRequiredMixin, UserPassesTestMixin):
+    form_class = NewsletterForm
+
+    def get_initial(self, *args, **kwargs):
+        initial = super(BaseNewsletterView, self).get_initial(**kwargs)
+        initial['title'] = '¿Cuál es tu pregunta?'
+        initial['content'] = 'Explica tu duda con todo lujo de detalles'
+        return initial
+
     def can_create_newsl(self):
         valid = False
         if self.request.user.is_writter or self.request.user.is_superuser:
@@ -43,11 +53,27 @@ class BaseNewsletterView(LoginRequiredMixin, UserPassesTestMixin):
         return self.can_create_newsl()
 
 
-# class CreateNewsletterView(BaseNewsletterView, CreateView):
+class CreateDefaultFieldView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    form_class = DefaultNewsletterFieldsForm
+    context_object_name = "newsletter_fields_form"
 
-    
+    def form_valid(self, form):
+        return super(CreateDefaultFieldView, self).form_valid(form)
 
-# class UpdateNewsletterView(BaseNewsletterView, UpdateView):
+
+class UpdateDefaultFieldView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+	form_class = DefaultNewsletterFieldsForm
+	context_object_name = "newsletter_fields_form"
+	success_message = 'Escrito actualizado'
+	template_name = 'public_blog/forms/update.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(UpdateDefaultFieldView, self).get_context_data(**kwargs)        
+		context['current_tags'] = self.get_object().tags.all()
+		return context
+
+	def form_valid(self, form):
+		return super(UpdateDefaultFieldView, self).form_valid(form)
 
 
 

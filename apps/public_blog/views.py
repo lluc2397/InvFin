@@ -13,15 +13,13 @@ from django.views.generic import (
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 
-from apps.emailing.models import (
-    NewsletterDefaultDespedida,
-    NewsletterDefaultIntroduction,
-    NewsletterDefaultTitle
-)
+from apps.emailing.views import BaseNewsletterView
+from apps.emailing.forms import DefaultNewsletterFieldsForm
 
 from .models import (
     PublicBlog,
     WritterProfile,
+	PublicBlogAsNewsletter,
 	NewsletterFollowers
 )
 
@@ -109,7 +107,6 @@ class PublicBlogDetailsView(DetailView):
 
 
 class WritterOnlyView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin):
-
     def test_func(self):
         valid = False
         if self.request.user.is_writter:
@@ -126,10 +123,10 @@ class WritterOwnBlogsListView(WritterOnlyView, DetailView):
 	ordering = ['-published_at']
 	slug_field = 'username'
 
-
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		writter = self.get_object()
+		context["newsletter_fields_form"] = DefaultNewsletterFieldsForm()
 		context["blogs"] = PublicBlog.objects.filter(author = writter)
 		context["meta_desc"] = 'El blog donde tu también puedes escribir de forma libre'
 		context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir'
@@ -175,21 +172,27 @@ class CreatePublicBlogPostView(WritterOnlyView, CreateView):
 		return super(CreatePublicBlogPostView, self).form_valid(form)
 
 
-class CreateDefaultFieldView(WritterOnlyView, CreateView):
-    pass
-
-class UpdateDefaultFieldView(WritterOnlyView, UpdateView):
+class CreateBlogNewsletterView(BaseNewsletterView, CreateView):
 	model = PublicBlog
-	form_class = PublicBlogForm
-	context_object_name = "public_blog_form"
+	context_object_name = "newsletter_form"
 	success_message = 'Escrito actualizado'
 	template_name = 'public_blog/forms/update.html'
 
-	def get_context_data(self, **kwargs):
-		context = super(UpdateDefaultFieldView, self).get_context_data(**kwargs)        
-		context['current_tags'] = self.get_object().tags.all()
-		return context
+	def test_func(self):
+		valid = False
+		if self.get_object().author == self.request.user:
+			valid = True
+		return valid
+    
 
-	def form_valid(self, form):
-		return super(UpdateDefaultFieldView, self).form_valid(form)
+class UpdateBlogNewsletterView(BaseNewsletterView, UpdateView):
+	model = PublicBlogAsNewsletter
+	context_object_name = "newsletter_form"
+	success_message = 'Escrito actualizado'
+	template_name = 'public_blog/forms/update.html'
 
+	def test_func(self):
+		valid = False
+		if self.get_object().blog_related.author == self.request.user:
+			valid = True
+		return valid

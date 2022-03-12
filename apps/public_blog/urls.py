@@ -3,11 +3,14 @@ from django.urls import path
 from .views import (
     PublicBlogDetailsView,
     PublicBlogsListView,
+    UpdateBlogNewsletterView,
     user_become_writter_view,
     CreatePublicBlogPostView,
     UpdatePublicBlogPostView,
     following_management_view,
-    WritterOwnBlogsListView
+    WritterOwnBlogsListView,
+    CreateBlogNewsletterView,
+    UpdateBlogNewsletterView
 )
 
 app_name = "public_blog"
@@ -17,6 +20,9 @@ urlpatterns = [
     path('p/<slug>/', PublicBlogDetailsView.as_view(), name="blog_details"),
 
     path('management/escritos/<slug>/', WritterOwnBlogsListView.as_view(), name="manage_blogs"),
+
+    path('create-newsletter-blog/<slug>', CreateBlogNewsletterView.as_view(), name="create_newsletter_blog"),
+    path('update-newsletter-blog/<id>', UpdateBlogNewsletterView.as_view(), name="update_newsletter_blog"),
 
     path('create-blog', CreatePublicBlogPostView.as_view(), name="create_blog"),
     path('update-blog/<id>', UpdatePublicBlogPostView.as_view(), name="update_blog"),

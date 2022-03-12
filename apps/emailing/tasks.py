@@ -1,27 +1,36 @@
 from config import celery_app
 from django.utils import timezone
-from .utils import send_email
-from apps.public_blog.models import PublicBlog, PublicBlogAsNewsletter
+from .utils import enviar_email
+from apps.public_blog.models import PublicBlog, PublicBlogAsNewsletter, NewsletterFollowers
 
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
+
+@celery_app.task()
+def enviar_email_task():
+    enviar_email
 
 
 @celery_app.task()
 def check_programmed_blog_posts_task():
     for blog_post in PublicBlog.objects.filter(status = 3):
         if blog_post.date_to_publish <= timezone.now():
-            send_email
+            return #publicar los blogs
 
 
 @celery_app.task()
 def check_programmed_newsletters_task():
     for blog_newsletter in PublicBlogAsNewsletter.objects.filter(sent = False):
         if blog_newsletter.date_to_send <= timezone.now():
-            send_email
+            return enviar_email_task.delay()
 
 
 @celery_app.task()
-def send_newsletter_email():
-    pass
+def send_newsletter_to_followers_email(id):
+    writter = User.objects.get(id = id)
+    for follower in NewsletterFollowers.objects.get(user = writter):
+        return enviar_email_task.delay()
 
 
 @celery_app.task()

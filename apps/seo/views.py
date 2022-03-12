@@ -20,20 +20,18 @@ def redirect_old_urls(request, ques_slug=False, term_slug=False, publs_slug=Fals
         model = Term.objects
         slug = term_slug
 
-    model_filtered = model.filter(Q(title_icontains=slug) | Q(slug__icontains=slug))
+    model_filtered = model.filter(Q(title__icontains=slug) | Q(slug__icontains=slug))
     if model_filtered.exists():
         redirect_to = model_filtered[0].get_absolute_url()
-        return redirect(redirect_to)
     else:
-        second_model = Term.objects.filter(Q(title_icontains=slug) | Q(slug__icontains=slug))
+        second_model = Term.objects.filter(Q(title__icontains=slug) | Q(slug__icontains=slug))
         if second_model.exists():
-            redirect_to = model_filtered[0].get_absolute_url()
-            return redirect(redirect_to)
+            redirect_to = second_model[0].get_absolute_url()
         else:
             old_url = TermsRelatedToResume.objects.filter(Q(term_to_delete__slug__icontains=slug))
             if old_url.exists():
                 redirect_to = old_url[0].get_absolute_url()
             else:
                 redirect_to = 'general:escritos'
-        return redirect(redirect_to)
+    return redirect(redirect_to)
         
