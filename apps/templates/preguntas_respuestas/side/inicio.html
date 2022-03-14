@@ -1,6 +1,18 @@
-<div class="card">
-    <div class="card-header">Categorías</div>
+<div class="card text-center">
+    <div class="card-header">
+        Recomendaciones
+    </div>    
     <div class="card-body">
-hola hola
-</div>
+        <div class="row">
+            <div class="col-12">                
+                <a class="btn btn-secondary" href="{% url 'screener:screener_inicio' %}">No te pierdas las empresas</a>
+            </div>
+            <div class="col-12 mt-4">
+                <a class="btn btn-youtube" href="{% url 'escritos:glosario' %}">Participa en el diccionario</a>
+            </div>
+            <div class="col-12 mt-4">
+                <a class="btn btn-slack" href="{% url 'public_blog:blog_list' %}">Descubre los escritores</a>
+            </div>
+        </div>
+    </div>
 </div>

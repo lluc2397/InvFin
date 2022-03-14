@@ -391,6 +391,17 @@ CKEDITOR_CONFIGS ={
         'width': 'auto',
         "removePlugins": "exportpdf",
     },
+    'newsletter' : {
+        'toolbar' : [
+		{ 'name': 'insert', 'items': [ 'Smiley' ] },
+		{ 'name': 'styles', 'items': [ 'Styles' ] },
+		{ 'name': 'colors', 'items': [ 'Colors' ] },
+		{ 'name': 'basicstyles', 'items': [ 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ] },
+	],
+    'width': 'auto',
+    'height': 200,
+    'bodyClass': 'inline-editor',
+    },
     'simple' : {
         'toolbar': [
 			{ 'name': 'clipboard', 'items': [ 'Undo', 'Redo' ] },
@@ -398,7 +409,7 @@ CKEDITOR_CONFIGS ={
 			{ 'name': 'basicstyles', 'items': [ 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ] },
 			{ 'name': 'paragraph', 'items': [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },
 			{ 'name': 'links', 'items': [ 'Link', 'Unlink' ] },
-			{ 'name': 'insert', 'items': [ 'Image', 'EmbedSemantic', 'Table', 'emoji' ] },
+			{ 'name': 'insert', 'items': [ 'Image', 'EmbedSemantic', 'Table', 'smiley' ] },
 			{ 'name': 'tools', 'items': [ 'Maximize' ] },
 			{ 'name': 'editing', 'items': [ 'Scayt' ] },
             {
@@ -510,6 +521,7 @@ CKEDITOR_CONFIGS ={
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 FINHUB_TOKEN = env.str("FINHUB_TOKEN")
+FINPREP_KEY = env.str("FINPREP_KEY")
 
 #GOOGLE KEYS
 GOOGLE_RECAPTCHA_SECRET_KEY = env.str('GOOGLE_RECAPTCHA_SECRET_KEY')

@@ -1,0 +1,69 @@
+{% extends "general/bases/base_forms.html" %}
+{% block extra %}
+{% load static %}
+{% load crispy_forms_tags %}
+<script type="text/javascript" src="{% static 'general/assets/vendor/moment.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'general/assets/vendor/bootstrap-datetimepicker.js' %}"></script>
+{% endblock extra %}
+
+{% block FormContent %}
+<style>
+    .invalid-feedback {
+        display: block;
+      }
+</style>
+<div class="card">
+        <form method="POST" action="{% url 'web:email_web' %}">
+                {% csrf_token %}
+                {{form.media}}
+                {% for field in form %}
+                {% if field.errors %}
+                <div class="alert alert-danger" role="alert">
+                {{ field.errors|striptags }}
+                </div>
+                {% endif %}
+                {% endfor %}
+                <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12">
+                        {{form.title|as_crispy_field}}
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                        {{form.intro|as_crispy_field}}
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                        {{form.content|as_crispy_field}}
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                        {{form.despedida|as_crispy_field}}
+                    </div>                    
+                    <div class="col-lg-6 col-sm-12">
+                        {{form.date_to_send|as_crispy_field}}
+                    </div>                       
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </div>
+                </div>
+                </div>
+        </form>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#id_date_to_send').datetimepicker({
+          icons: {
+            time: "fa fa-clock",
+            date: "fa fa-calendar-day",
+            up: "fa fa-chevron-up",
+            down: "fa fa-chevron-down",
+            previous: 'fa fa-chevron-left',
+            next: 'fa fa-chevron-right',
+            today: 'fa fa-screenshot',
+            clear: 'fa fa-trash',
+            close: 'fa fa-remove'
+          },
+          format: 'd/M/Y HH:mm'
+        });
+    });
+</script>
+{% endblock FormContent %}

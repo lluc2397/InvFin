@@ -7,7 +7,7 @@ from django.db.models import (
 from django.template.defaultfilters import slugify
 from ckeditor.fields import RichTextField
 
-from apps.emailing.models import Newsletter
+from apps.emailing.models import Newsletter, BaseEmail
 
 class WebsiteLegalPage(Model):
     title = CharField(max_length=8000)
@@ -30,8 +30,11 @@ class WebsiteEmailsType(Model):
 
     class Meta:
         ordering = ['-id']
-        verbose_name = "Emails by website"
+        verbose_name = "Emails type by website"
         db_table = "website_emails_type"
+    
+    def __str__(self) -> str:
+        return self.name
 
 
 class WebsiteEmail(Newsletter):
@@ -41,4 +44,16 @@ class WebsiteEmail(Newsletter):
         ordering = ['-id']
         verbose_name = "Emails by website"
         db_table = "website_emails"
+
+    def __str__(self) -> str:
+        return self.title
+
+class WebsiteEmailTrack(BaseEmail):
+    email_related = ForeignKey(WebsiteEmail, null = True, blank=True, on_delete=SET_NULL, related_name = "email_related")
+
+    class Meta:
+        verbose_name = "Email counting"
+        db_table = "website_emails_track"
     
+    def __str__(self) -> str:
+        return self.email_related.title

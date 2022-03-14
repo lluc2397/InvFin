@@ -90,7 +90,7 @@ function generateChart(chartDatasets, chartTitle, chartID, chartLoaderID){
         data: info,
         options: {
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
             plugins: {
               legend: {
                 position: 'top',

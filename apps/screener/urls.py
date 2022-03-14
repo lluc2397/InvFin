@@ -7,7 +7,9 @@ from .views import (
     CompanyDetailsView,
     EtfDetailsView,
     CreateCompanyObservationView,
-    suggest_list_search_companies
+    suggest_list_search_companies,
+    simple_valuation_view,
+    medium_valuation_view
 )
 
 # from apps.screener.api.views import CompanyBaseAPIView
@@ -31,6 +33,9 @@ urlpatterns = [
     path('add-observation/', CreateCompanyObservationView.as_view(), name="create_company_observation"),
 
     path('user-search-company/', suggest_list_search_companies, name="suggest_list_search_companies"),
+
+    path('screener-simple-valuation/', simple_valuation_view, name="simple_valuation_view"),
+    path('screener-medium-valuation/', medium_valuation_view, name="medium_valuation_view"),
 ]
 
 # for serializer in list_of_serializers:

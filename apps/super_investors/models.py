@@ -4,7 +4,7 @@ from django.db.models import (
     SET_NULL,
     CASCADE,
     ForeignKey,
-    TextField,
+    DateTimeField,
     DateField,
     BooleanField,
     PositiveIntegerField,
@@ -25,6 +25,8 @@ class Superinvestor(Model):
     fund_name = CharField(max_length=600000, null=True, blank=True)
     info_accronym = CharField(max_length=600000, null=True, blank=True)
     slug = CharField(max_length=600000, null=True, blank=True)
+    updated = BooleanField(default=False)
+    last_update = DateTimeField(null=True, blank=True)
     
     def save(self, *args, **kwargs): # new
         if not self.slug:

@@ -44,19 +44,29 @@
                                 {{question.content|safe|truncatechars:200}}
                             </a>
                         </div>
-                        <!-- <a class="text-body text-sm font-weight-bold mb-0 icon-move-right" href="javascript:;">
-                        Read More
-                        <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
-                        </a> -->
+                        <div class="row">
+                            <div class="clearfix">
+                                <div class="float-start">
+                                    <span class="me-2"><i class="fas fa-eye"></i> {{ question.total_views }}  </span>
+                                    <span class="me-2"><i style=" font-size: 16px;" class="far fa-comment"></i> {{ question.related_answers.count }}</span>
+                                    <span class="me-2"><i class="fas fa-arrow-circle-up"></i> {{question.upvotes.all.count}}</span>
+                                    <span class="me-2"><i class="fas fa-arrow-circle-down"></i> {{question.downvotes.all.count}}</span>
+                                </div>
+                                <div class="float-end">
+                                    {{question.created_at|date:"d.m.y"}}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <hr style="margin-top: 0em;">
 {% endfor %}
 {% endblock LeftSide %}
 
 {% block RightSide %}
-<!-- {% include "preguntas_respuestas/side/inicio.html" %} -->
+{% include "preguntas_respuestas/side/inicio.html" %}
 {% endblock RightSide %}
     

@@ -33,21 +33,6 @@ class CompanyMixin(Model):
     def show_news(self):
         news = get_news(self.ticker)
         return news
-
-
-    @property
-    def limited_incomes(self):
-        return self.inc_statements.all()[:10]
-
-
-    @property
-    def limited_balances(self):
-        return self.balance_sheets.all()[:10]
-    
-
-    @property
-    def limited_cf(self):
-        return self.cf_statements.all()[:10]
     
 
     def generate_json(self, comparing_json, items=None):
@@ -412,7 +397,7 @@ class CompanyMixin(Model):
     @property
     def comparing_balance_json(self):
         comparing_json = self.balance_json()
-        chartData = self.generate_json(comparing_json, [2, 6, 13, 15, 21, 26, 29])
+        chartData = self.generate_json(comparing_json)
         return chartData
 	
 
@@ -583,7 +568,7 @@ class CompanyMixin(Model):
     @property
     def comparing_cashflows(self):
         inc_json = self.cashflow_json()
-        chartData = self.generate_json(inc_json, [0,11,17,23,29])
+        chartData = self.generate_json(inc_json)
         return chartData
 
 
@@ -649,7 +634,7 @@ class CompanyMixin(Model):
     @property
     def comparing_rentability_ratios_json(self):
         comparing_json = self.rentability_ratios_json()
-        chartData = self.generate_json(comparing_json, [i for i in range(len(comparing_json['fields']))])
+        chartData = self.generate_json(comparing_json)
         return chartData
         
 
@@ -1028,7 +1013,7 @@ class CompanyMixin(Model):
                 'short': 'true',
                 'values': [data.cash_coverage for data in cf]},
                 {
-                'title': '',
+                'title': 'Tasa de cobertura del servicio de la deuda',
                 'url':"#!",
                 'percent': 'false',
                 'short': 'true',
@@ -1449,222 +1434,221 @@ class CompanyMixin(Model):
 
     @property
     def current_price_ratios(self):
-        try:
-            try:
-                company_info = yf.Ticker(self.ticker).info
-                current_price = company_info['currentPrice']
-                current_currency = company_info['currency']
-            except Exception as e:
+        context = {}
+        # current_price = 1
+        # current_currency = 'None'
+        # try:
+        #     company_info = yf.Ticker(self.ticker).info
+        #     current_price = company_info['currentPrice']
+        #     current_currency = company_info['currency']
+        # except Exception as e:
+        #     print(e)
+        #     url_current_price = f'https://query1.finance.yahoo.com/v8/finance/chart/{self.ticker}'
+
+        #     current_price_jsn = requests.get(url_current_price, headers=headers).json()['chart']['result']
+            
+        #     current_price = [infos['meta']['regularMarketPrice'] for infos in current_price_jsn][0]
+
+        #     current_currency = [infos['meta']['currency'] for infos in current_price_jsn][0]
+
+        # inc_statement = self.inc_statements.all()
+
+        # last_balance_sheet = self.balance_sheets.latest()
+
+        # last_per_share = self.per_share_values.latest()
+        # last_margins = self.margins.latest()
+
+        # last_income_statement = inc_statement.first()
+        # last_revenue = last_income_statement.revenue
+        # average_shares_out = last_income_statement.weighted_average_shares_outstanding
+
+        # num_ics = 10 if inc_statement.count() >= 10 else inc_statement.count() 
+        # number = num_ics - 1
+
+        # try:
+        #     sharesbuyback = abs((((average_shares_out/inc_statement[number].weighted_average_shares_outstanding)**((1/num_ics)))-1)*100)
+        # except ZeroDivisionError:
+        #     sharesbuyback = 0
+
+        # try:
+        #     cagr = (((last_revenue/inc_statement[number].revenue)**((1/num_ics)))-1)*100
+        # except ZeroDivisionError:
+        #     cagr = 0
+        # current_eps = last_per_share.eps    
+        # marketcap = average_shares_out * current_price
+
+        # try:
+        #     pfcf = (current_price / last_per_share.fcf_ps)
+        # except ZeroDivisionError:
+        #     pfcf = 0
+
+        # try:
+        #     pb = (current_price / last_per_share.book_ps)
+        # except ZeroDivisionError:
+        #     pb = 0
+
+        # try:
+        #     pta = (current_price / last_per_share.tangible_ps)
+        # except ZeroDivisionError:
+        #     pta = 0
+
+        # try:
+        #     pcps = (current_price / last_per_share.cash_ps)
+        # except ZeroDivisionError:
+        #     pcps = 0
+
+        # try:
+        #     pocf = (current_price / last_per_share.operating_cf_ps)
+        # except ZeroDivisionError:
+        #     pocf = 0
+
+        # try:
+        #     per = (current_price / current_eps)
+        # except ZeroDivisionError:
+        #     per = 0
+
+        # try:
+        #     pas = (current_price / last_per_share.total_assets_ps)
+        # except ZeroDivisionError:
+        #     pas=0
+
+        # try:
+        #     peg = (per / cagr).real
+        # except ZeroDivisionError:
+        #     peg =0
+
+        # try:
+        #     ps = (current_price / last_per_share.sales_ps)
+        # except ZeroDivisionError:
+        #     ps = 0
+
+        # ev = marketcap + last_balance_sheet.total_debt - last_balance_sheet.cash_and_short_term_investements
+
+        # try:
+        #     evebitda = (ev / last_income_statement.ebitda)
+        # except ZeroDivisionError:
+        #     evebitda = 0
+
+        # try:
+        #     evsales = (ev / last_revenue)
+        # except ZeroDivisionError:
+        #     evsales = 0
+
+        # gramvalu = (math.sqrt(22.5*current_eps * last_per_share.book_ps)) if current_eps > 0 else 0
+        # safety_margin_pes = ((gramvalu / current_price)-1)*100
         
-                url_current_price = f'https://query1.finance.yahoo.com/v8/finance/chart/{self.ticker}'
+        # fair_value = discounted_cashflow(
+        #     last_revenue = last_revenue,
+        #     revenue_growth = cagr,
+        #     net_income_margin = last_margins.net_income_margin,
+        #     fcf_margin = last_margins.fcf_margin,
+        #     buyback = sharesbuyback,
+        #     average_shares_out = average_shares_out,
+        # )
+        # safety_margin_opt = ((fair_value / current_price)-1)*100
 
-                current_price_jsn = requests.get(url_current_price, headers=headers).json()['chart']['result']
-                
-                current_price = [infos['meta']['regularMarketPrice'] for infos in current_price_jsn][0]
+        # if per > 30 or per <= 0: 
+        #     per_lvl = 1 
+        # elif per < 30 and per > 15: 
+        #     per_lvl = 2 
+        # else: 
+        #     per_lvl = 3
 
-                current_currency = [infos['meta']['currency'] for infos in current_price_jsn][0]
-        except:
-            current_price = 0
-            current_currency = 'None'
-    
-        inc_statement = self.inc_statements.all()
+        # if pb > 3 or pb <= 0: 
+        #     pb_lvl = 1 
+        # elif pb < 3 and pb > 2: 
+        #     pb_lvl = 2 
+        # else: 
+        #     pb_lvl = 3
 
-        balance_sheet = self.balance_sheets.all()
+        # if pas > 6 or pas <= 0: 
+        #     pas_lvl = 1 
+        # elif pas < 3 and pas > 2: 
+        #     pas_lvl = 2 
+        # else: 
+        #     pas_lvl = 3
 
-        last_per_share = self.per_share_values.all().first()
-        last_margins = self.margins.all().first()
+        # if pta > 3 or pta <= 0: 
+        #     pta_lvl = 1 
+        # elif pta < 3 and pta > 2: 
+        #     pta_lvl = 2 
+        # else: 
+        #     pta_lvl = 3
 
-        last_income_statement = inc_statement.first()
-        last_revenue = last_income_statement.revenue
-        average_shares_out = last_income_statement.weightedAverageShsOut
+        # if pcps > 10 or pcps <= 0: 
+        #     pcps_lvl = 1 
+        # elif pcps < 5 and pcps > 2: 
+        #     pcps_lvl = 2 
+        # else: 
+        #     pcps_lvl = 3
 
-        num_ics = 10 if inc_statement.count() >= 10 else inc_statement.count() 
-        number = num_ics - 1
+        # if pocf > 25 or pocf <= 0: 
+        #     pocf_lvl = 1 
+        # elif pocf < 18 and pocf > 10: 
+        #     pocf_lvl = 2 
+        # else: 
+        #     pocf_lvl = 3
 
-        try:
-            sharesbuyback = abs((((average_shares_out/inc_statement[number].weightedAverageShsOut)**((1/num_ics)))-1)*100)
-        except ZeroDivisionError:
-            sharesbuyback = 0
+        # if peg > 2 or peg <= 0: 
+        #     peg_lvl = 1 
+        # elif peg < 2 and peg > 1: 
+        #     peg_lvl = 2 
+        # else: 
+        #     peg_lvl = 3
 
-        try:
-            cagr = (((last_revenue/inc_statement[number].revenue)**((1/num_ics)))-1)*100
-        except ZeroDivisionError:
-            cagr = 0
-        current_eps = last_per_share.eps    
-        marketcap = average_shares_out * current_price
-
-        try:
-            pfcf = (current_price / last_per_share.freeCashFlowPerShare)
-        except ZeroDivisionError:
-            pfcf = 0
-
-        try:
-            pb = (current_price / last_per_share.book_ps)
-        except ZeroDivisionError:
-            pb = 0
-
-        try:
-            pta = (current_price / last_per_share.tangible_ps)
-        except ZeroDivisionError:
-            pta = 0
-
-        try:
-            pcps = (current_price / last_per_share.cashPerShare)
-        except ZeroDivisionError:
-            pcps = 0
-
-        try:
-            pocf = (current_price / last_per_share.operatingCashFlowPerShare)
-        except ZeroDivisionError:
-            pocf = 0
-
-        try:
-            per = (current_price / current_eps)
-        except ZeroDivisionError:
-            per = 0
-
-        try:
-            pas = (current_price / last_per_share.totalAssetsPS)
-        except ZeroDivisionError:
-            pas=0
-
-        try:
-            peg = (per / cagr).real
-        except ZeroDivisionError:
-            peg =0
-
-        try:
-            ps = (current_price / last_per_share.sales_ps)
-        except ZeroDivisionError:
-            ps = 0
-
-        ev = marketcap + balance_sheet.totalDebt - balance_sheet.cashAndShortTermInvestments
-
-        try:
-            evebitda = (ev / last_income_statement.ebitda)
-        except ZeroDivisionError:
-            evebitda = 0
-
-        try:
-            evsales = (ev / last_revenue)
-        except ZeroDivisionError:
-            evsales = 0
-
-        gramvalu = (math.sqrt(22.5*current_eps * last_per_share.book_ps)) if current_eps > 0 else 0
-        safety_margin_pes = ((gramvalu / current_price)-1)*100
-
-        fair_value = discounted_cashflow(
-            last_revenue = last_revenue,
-            revenue_growth = cagr,
-            net_income_margin = last_margins.net_income_margin,
-            fcf_margin = last_margins.fcf_margin,
-            buyback = sharesbuyback,
-            average_shares_out = average_shares_out,
-        )
-        safety_margin_opt = ((fair_value / current_price)-1)*100
-
-        if per > 30 or per <= 0: 
-            per_lvl = 1 
-        elif per < 30 and per > 15: 
-            per_lvl = 2 
-        else: 
-            per_lvl = 3
-
-        if pb > 3 or pb <= 0: 
-            pb_lvl = 1 
-        elif pb < 3 and pb > 2: 
-            pb_lvl = 2 
-        else: 
-            pb_lvl = 3
-
-        if pas > 6 or pas <= 0: 
-            pas_lvl = 1 
-        elif pas < 3 and pas > 2: 
-            pas_lvl = 2 
-        else: 
-            pas_lvl = 3
-
-        if pta > 3 or pta <= 0: 
-            pta_lvl = 1 
-        elif pta < 3 and pta > 2: 
-            pta_lvl = 2 
-        else: 
-            pta_lvl = 3
-
-        if pcps > 10 or pcps <= 0: 
-            pcps_lvl = 1 
-        elif pcps < 5 and pcps > 2: 
-            pcps_lvl = 2 
-        else: 
-            pcps_lvl = 3
-
-        if pocf > 25 or pocf <= 0: 
-            pocf_lvl = 1 
-        elif pocf < 18 and pocf > 10: 
-            pocf_lvl = 2 
-        else: 
-            pocf_lvl = 3
-
-        if peg > 2 or peg <= 0: 
-            peg_lvl = 1 
-        elif peg < 2 and peg > 1: 
-            peg_lvl = 2 
-        else: 
-            peg_lvl = 3
-
-        if ps > 4 or ps <= 0: 
-            ps_lvl = 1 
-        elif ps < 4 and ps > 2: 
-            ps_lvl = 2 
-        else: 
-            ps_lvl = 3
+        # if ps > 4 or ps <= 0: 
+        #     ps_lvl = 1 
+        # elif ps < 4 and ps > 2: 
+        #     ps_lvl = 2 
+        # else: 
+        #     ps_lvl = 3
 
 
-        if pfcf > 30 or pfcf < 0: 
-            pfcf_lvl = 1 
-        elif pfcf < 30 and pfcf > 15: 
-            pfcf_lvl = 2 
-        else: 
-            pfcf_lvl = 3
+        # if pfcf > 30 or pfcf < 0: 
+        #     pfcf_lvl = 1 
+        # elif pfcf < 30 and pfcf > 15: 
+        #     pfcf_lvl = 2 
+        # else: 
+        #     pfcf_lvl = 3
 
-        if evebitda > 30 or evebitda <= 0: 
-            evebitd_lvl = 1 
-        elif evebitda < 30 and evebitda > 15: 
-            evebitd_lvl = 2 
-        else: 
-            evebitd_lvl = 3
+        # if evebitda > 30 or evebitda <= 0: 
+        #     evebitd_lvl = 1 
+        # elif evebitda < 30 and evebitda > 15: 
+        #     evebitd_lvl = 2 
+        # else: 
+        #     evebitd_lvl = 3
 
-        if evsales > 4 or evsales <= 0: 
-            evsales_lvl = 1 
-        elif evsales < 4 and evsales > 1: 
-            evsales_lvl = 2 
-        else: 
-            evsales_lvl = 3
+        # if evsales > 4 or evsales <= 0: 
+        #     evsales_lvl = 1 
+        # elif evsales < 4 and evsales > 1: 
+        #     evsales_lvl = 2 
+        # else: 
+        #     evsales_lvl = 3
 
 
-        context = {
-            'pfcf':pfcf, 'pfcf_lvl':pfcf_lvl,
-            'pas':pas, 'pas_lvl':pas_lvl,
-            'pta':pta, 'pta_lvl':pta_lvl,
-            'pcps':pcps, 'pcps_lvl':pcps_lvl,
-            'pocf':pocf, 'pocf_lvl':pocf_lvl,
-            'per':per, 'per_lvl':per_lvl,
-            'pb':pb,  'pb_lvl':pb_lvl,    
-            'peg':peg,'peg_lvl':peg_lvl,
-            'ps':ps, 'ps_lvl':ps_lvl,
-            'fair_value':fair_value,
-            'ev':ev,
-            'marketcap':marketcap,
-            'cagr':cagr,
-            'evebitda':evebitda, 
-            'evebitd_lvl':evebitd_lvl,
-            'evsales':evsales, 
-            'evsales_lvl':evsales_lvl,
-            'gramvalu':gramvalu,
-            'sharesbuyback':sharesbuyback,
-            'safety_margin_pes':safety_margin_pes, 
-            'safety_margin_opt':safety_margin_opt,
-            'current_price':current_price,
-            'current_currency':current_currency,
-        }
+        # context = {
+        #     'pfcf':pfcf, 'pfcf_lvl':pfcf_lvl,
+        #     'pas':pas, 'pas_lvl':pas_lvl,
+        #     'pta':pta, 'pta_lvl':pta_lvl,
+        #     'pcps':pcps, 'pcps_lvl':pcps_lvl,
+        #     'pocf':pocf, 'pocf_lvl':pocf_lvl,
+        #     'per':per, 'per_lvl':per_lvl,
+        #     'pb':pb,  'pb_lvl':pb_lvl,    
+        #     'peg':peg,'peg_lvl':peg_lvl,
+        #     'ps':ps, 'ps_lvl':ps_lvl,
+        #     'fair_value':fair_value,
+        #     'ev':ev,
+        #     'marketcap':marketcap,
+        #     'cagr':cagr,
+        #     'evebitda':evebitda, 
+        #     'evebitd_lvl':evebitd_lvl,
+        #     'evsales':evsales, 
+        #     'evsales_lvl':evsales_lvl,
+        #     'gramvalu':gramvalu,
+        #     'sharesbuyback':sharesbuyback,
+        #     'safety_margin_pes':safety_margin_pes, 
+        #     'safety_margin_opt':safety_margin_opt,
+        #     'current_price':current_price,
+        #     'current_currency':current_currency,
+        # }
         return context

@@ -1,107 +1,222 @@
-{% block extra %}
 {% load static %}
-{% load crispy_forms_tags %}
-<script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
-<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
-{% endblock extra %}
-<div class="col-12">
-    <div class="card">
-        <div class="row">
-            {% for part in the_company.foda_analysis %}
-            {% with part.status as status %}            
-            <div class="col-lg-6 col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-header">                            
-                            {% if status == 'Fuerza' or status == 'Amenaza' %}
-                            {{status}}s
-                            {% else %}
-                            {{status}}es
-                            {% endif %}
-                            </div>
-                        {% for analysis in part.values %}
-                        <div class="card-text">                            
-                            <div class="d-flex flex-column h-100">                                
-                                <div class="mb-2 mt-2 text-dark text-justify font-weight-bolder">
-                                    {{analysis.observation|safe}}
-                                </div>
-                                <div class="mt-2 text-right">
-                                    <img class="avatar-sm" src="{{question.user.user_profile.foto_perfil.url}}">
-                                    {{analysis.user}} - {{analysis.user.user_profile.reputation_score}}
-                                </div>
-                            </div>                            
-                        </div>
-                        {% empty %}
-                        <div class="card-text">
-                            Sé el primero en añadir las 
-                            {% if status == 'Fuerza' or status == 'Amenaza' %}
-                            {{status|lower}}s 
-                            {% else %}
-                            {{status|lower}}es 
-                            {% endif %}de la empresa
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-            {% endwith %}
-            {% endfor %}
-        </div>
-        <div class="accordion mt-1" id="accordionExample">
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingOne">
-                <button style="padding: 10px;" class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    Comenta sobre la empresa
-                </button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                    <div class="row">
-                        <div class="panel panel-default widget">
-                            <div class="panel-body">
-                                <ul class="list-group">
-                                    {% if user.is_authenticated%}
-                                    <li style="text-align: center;" class="list-group-item">
-                                        <form method="POST" action="{% url 'screener:create_company_observation' %}">
-                                            {% csrf_token %}
-                                            {{observation_form.media}}
-                                            <input hidden value="{{the_company.ticker}}" name="company">
-                                            <div class="input-group mb-3">
-                                                <div class="row">
-                                                    <div class="col-lg-9 col-sm-12">
-                                                        {{observation_form.observation}}
-                                                    </div>
-                                                    <div class="col-lg-3 col-sm-12">
-                                                        {{observation_form.observation_type|as_crispy_field}}
-                                                        <button class="btn btn-success" type="submit">Publicar</button>
-                                                    </div>
-                                                </div>                                                
-                                            </div>
-                                        </form>
-                                    </li>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-gauge@0.3.0/dist/chartjs-gauge.min.js"></script>
+{% include "screener/empresas/company_parts/valuations/price_valuations.html" %}
+
+
+
+<div class="row">
+  <div class="col-6">
+      <div class="card">
+          <div class="card-header">
+              Múltiplos de valoración
+          </div>
+          <div class="card-body">
+              <div class="table-responsive ">
+                  <table class="table table-borderless">                        
+                      <tbody>
+                          <tr>
+                              <th>PER</th>
+                              <td>{{the_company.current_price_ratios.per|floatformat:2}}</td>
+                              <td>
+                                  <div class="progress" id='revalorizacion' style="height: 20px;">
+                                      {% if the_company.current_price_ratios.per_lvl == 1 %}
+                                      <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
+                                      {% elif the_company.current_price_ratios.per_lvl == 2 %}
+                                      <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
+                                      {% else %}
+                                      <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
+                                      {% endif %}
+                                  </div>
+                              </td>
+                          </tr>
+                          <tr>
+                              <th>PB</th>
+                              <td>{{the_company.current_price_ratios.pb|floatformat:2}}</td>
+                              <td>
+                                  <div class="progress" id='revalorizacion' style="height: 20px;">
+                                      {% if the_company.current_price_ratios.pb_lvl == 1 %}
+                                      <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
+                                      {% elif the_company.current_price_ratios.pb_lvl == 2 %}
+                                      <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
+                                      {% else %}
+                                      <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
+                                      {% endif %}
+                                  </div>
+                              </td>
+                          </tr>
+                          <tr>
+                              <th>PS</th>
+                              <td>{{the_company.current_price_ratios.ps|floatformat:2}}</td>
+                              <td>
+                                  <div class="progress" id='revalorizacion' style="height: 20px;">
+                                      {% if the_company.current_price_ratios.ps_lvl == 1 %}
+                                      <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
+                                      {% elif the_company.current_price_ratios.ps_lvl == 2 %}
+                                      <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
+                                      {% else %}
+                                      <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
+                                      {% endif %}
+                                  </div>
+                              </td>
+                          </tr>
+                          <tr>
+                              <th>PFCF</th>
+                              <td>{{the_company.current_price_ratios.pfcf|floatformat:2}}</td>
+                              <td>
+                                  <div class="progress" id='revalorizacion' style="height: 20px;">
+                                      {% if the_company.current_price_ratios.pfcf_lvl == 1 %}
+                                      <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
+                                      {% elif the_company.current_price_ratios.pfcf_lvl == 2 %}
+                                      <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
+                                      {% else %}
+                                      <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
+                                      {% endif %}
+                                  </div>
+                              </td>
+                          </tr>
+                          <tr>
+                            <th>PEG</th>
+                            <td>{{the_company.current_price_ratios.peg|floatformat:2}}</td>
+                            <td>
+                                <div class="progress" id='revalorizacion' style="height: 20px;">
+                                    {% if the_company.current_price_ratios.peg_lvl == 1 %}
+                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
+                                    {% elif the_company.current_price_ratios.peg_lvl == 2 %}
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
                                     {% else %}
-                                    <li style="text-align: center;" class="list-group-item">
-                                        <div class="input-group mb-3">
-                                            <div class="col-12">
-                                                <div class="row">
-                                                    <div class="col-lg-9 col-sm-12">
-                                                        {{observation_form.observation}}
-                                                    </div>
-                                                    <div class="col-lg-3 col-sm-12">
-                                                        {{observation_form.observation_type|as_crispy_field}}
-                                                        <button class="btn btn-success col-12" data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" id="button-addon2">Publicar</button>
-                                                    </div>
-                                                </div>
-                                            </div>                                                
-                                        </div>
-                                    </li>
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
                                     {% endif %}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                                </div>
+                            </td>
+                        </tr>
+                          <tr>
+                              <th>Precio Activos Totales</th>
+                              <td>{{the_company.current_price_ratios.pas|floatformat:2}}</td>
+                              <td>
+                                  <div class="progress" id='revalorizacion' style="height: 20px;">
+                                      {% if the_company.current_price_ratios.pas_lvl == 1 %}
+                                      <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
+                                      {% elif the_company.current_price_ratios.pas_lvl == 2 %}
+                                      <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
+                                      {% else %}
+                                      <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
+                                      {% endif %}
+                                  </div>
+                              </td>
+                          </tr> 
+                          <tr>
+                            <th>Precio Activos Tangibles</th>
+                            <td>{{the_company.current_price_ratios.pta|floatformat:2}}</td>
+                            <td>
+                                <div class="progress" id='revalorizacion' style="height: 20px;">
+                                    {% if the_company.current_price_ratios.pta_lvl == 1 %}
+                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
+                                    {% elif the_company.current_price_ratios.pta_lvl == 2 %}
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
+                                    {% else %}
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Precio Efectivo</th>
+                            <td>{{the_company.current_price_ratios.pcps|floatformat:2}}</td>
+                            <td>
+                                <div class="progress" id='revalorizacion' style="height: 20px;">
+                                    {% if the_company.current_price_ratios.pcps_lvl == 1 %}
+                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
+                                    {% elif the_company.current_price_ratios.pcps_lvl == 2 %}
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
+                                    {% else %}
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Precio Flujo efectivo operativo</th>
+                            <td>{{the_company.current_price_ratios.pocf|floatformat:2}}</td>
+                            <td>
+                                <div class="progress" id='revalorizacion' style="height: 20px;">
+                                    {% if the_company.current_price_ratios.pocf_lvl == 1 %}
+                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
+                                    {% elif the_company.current_price_ratios.pocf_lvl == 2 %}
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
+                                    {% else %}
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                                       
+                          <tr>
+                              <th>EV/EBITDA</th>
+                              <td>{{the_company.current_price_ratios.evebitda|floatformat:2}}</td>
+                              <td>
+                                  <div class="progress" id='revalorizacion' style="height: 20px;">
+                                      {% if the_company.current_price_ratios.evebitd_lvl == 1 %}
+                                      <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
+                                      {% elif the_company.current_price_ratios.evebitd_lvl == 2 %}
+                                      <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
+                                      {% else %}
+                                      <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
+                                      {% endif %}
+                                  </div>
+                              </td>
+                          </tr>
+                          <tr>
+                              <th>EV/SALES</th>
+                              <td>{{the_company.current_price_ratios.evsales|floatformat:2}}</td>
+                              <td>
+                                  <div class="progress" id='revalorizacion' style="height: 20px;">
+                                      {% if the_company.current_price_ratios.evsales_lvl == 1 %}
+                                      <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
+                                      {% elif the_company.current_price_ratios.evsales_lvl == 2 %}
+                                      <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
+                                      {% else %}
+                                      <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
+                                      {% endif %}
+                                  </div>
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="col-6">
+      <div class="card">
+          <div class="card-header">
+              Valor de empresa
+          </div>
+          <div class="card-body">
+              <div class="table-responsive ">
+                  <table class="table table-borderless">                        
+                      <tbody>
+                          <tr>
+                              <th>Enterprise Value</th>
+                              <td>{{the_company.current_price_ratios.ev|floatformat:2}}</td>
+                              <th>CAGR</th> 
+                              <td class="pe-4">{{the_company.current_price_ratios.cagr|floatformat:2}}%</td>                               
+                          </tr>
+                          <tr>
+                              <th>Valoración tradicional</th>
+                              <td>{{the_company.current_price_ratios.gramvalu|floatformat:2}}</td>
+                              <th>Margen de seguridad</th>
+                              <td>{{the_company.current_price_ratios.safety_margin_pes|floatformat:2}}%</td>                               
+                          </tr>
+                          <tr>
+                              <th>Valoración DCF</th>
+                              <td>{{the_company.current_price_ratios.fair_value|floatformat:2}}</td>
+                              <th >Margen de seguridad</th>
+                              <td class="pe-4">{{the_company.current_price_ratios.safety_margin_opt|floatformat:2}}%</td>                               
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+  </div>  
 </div>
-<!-- {% include "screener/empresas/company_parts/valuations/price_valuations.html" %} -->

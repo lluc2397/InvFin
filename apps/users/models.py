@@ -65,6 +65,17 @@ class User(UserBaseMixin):
         return full_name
     
     @property
+    def default_options(self):
+        options = False        
+        if self.is_writter and self.writter_default_options.writter_has_default_options:
+            options = {
+                'title':self.writter_default_options.default_titles.get(in_use = True),
+                'intro':self.writter_default_options.default_introductions.get(in_use = True),
+                'despedida':self.writter_default_options.default_despedidas.get(in_use = True)
+            }
+        return options
+    
+    @property
     def questions_asked(self):
         return self.question_set.all()
     

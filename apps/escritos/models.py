@@ -26,6 +26,7 @@ User = get_user_model()
 class Term(BaseEscrito):
     upvotes = ManyToManyField(User, blank=True, related_name="user_upvote_term")
     downvotes = ManyToManyField(User, blank=True, related_name="user_downvote_term")
+    # contributors = ManyToManyField(User, blank=True, related_name="contributors")
 
     class Meta:
         verbose_name = "Término del glosario"

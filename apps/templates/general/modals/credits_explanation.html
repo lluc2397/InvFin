@@ -1,6 +1,6 @@
 <div class="modal fade" id="CreditsExplanationModal" tabindex="-1" role="dialog" aria-labelledby="CreditsExplanationModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-yellow modal-dialog-centered modal-" role="document">
-        <div class="modal-content bg-gradient-yellow">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-" role="document">
+        <div class="modal-content">
             <div class="modal-header">
                 <h6 class="modal-title" id="modal-title-notification">Créditos</h6>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
@@ -8,19 +8,20 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-6 col-sm-12">
-                        <button type="button" class="btn btn-facebook btn-icon">
-                            <span class="btn-inner--icon"><i class="fab fa-facebook"></i></span>
-                            <span class="btn-inner--text">Facebook</span>
-                        </button>
-                    </div>
-                    <div class="col-lg-6 col-sm-12">
-                        <button type="button" class="btn btn-twitter btn-icon">
-                            <span class="btn-inner--icon"><i class="fab fa-twitter"></i></span>
-                            <span class="btn-inner--text">Twitter</span>
-                        </button>
-                    </div>
+                <p>Los créditos son monedas que puedes usar en la web para tener accesos privilegiados.
+                    <br>
+                    Puedes conseguir créditos:                    
+                    <ul>
+                        <li>Aportando respuestas</li>
+                        <li>Haciendo preguntas</li>
+                        <li>Colaborando en el glosario</li>
+                        <li>Contribuyendo en las empresas</li>
+                    </ul>
+                </p>
+                <div class="col-12">
+                    <a class="btn btn-youtube" href="{% url 'preguntas_respuestas:list_questions' %}" >Preguntas</a>
+                    <a class="btn btn-slack" href="{% url 'escritos:glosario' %}" >Glosario</a>
+                    <a class="btn btn-danger" href="{% url 'screener:screener_inicio' %}" >Empresas</a>
                 </div>
             </div>
         </div>

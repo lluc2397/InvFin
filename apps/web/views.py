@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.contrib import messages
 from django.conf import settings
 from django.views.generic import (
@@ -8,9 +9,9 @@ from django.views.generic import (
 
 import json
 import urllib
-import requests
 
-from apps.web.models import WebsiteLegalPage
+from apps.emailing.views import BaseNewsletterView
+from apps.web.models import WebsiteLegalPage, WebsiteEmailsType, WebsiteEmail
 from apps.public_blog.models import WritterProfile
 from apps.public_blog.views import writter_profile_view
 from apps.general.utils import HostChecker
@@ -87,6 +88,28 @@ class ExcelView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
+
+class CreateWebEmailView(BaseNewsletterView, FormView):
+    model = WebsiteEmail	
+    template_name = 'web_principal/mandar_emails.html'
+
+    def get_success_url(self) -> str:
+        return reverse("users:user_inicio")
+
+    def form_valid(self, form):
+        form.send_email(self.model)
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def test_func(self):
+        valid = False
+        if self.request.user.is_superuser:
+            valid = True
+        return valid
 
 
 def handler403(request, exception):

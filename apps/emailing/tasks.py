@@ -8,8 +8,8 @@ User = get_user_model()
 
 
 @celery_app.task()
-def enviar_email_task():
-    enviar_email
+def enviar_email_task(newsletter, user_id):
+    enviar_email(newsletter, user_id)
 
 
 @celery_app.task()
@@ -27,12 +27,16 @@ def check_programmed_newsletters_task():
 
 
 @celery_app.task()
-def send_newsletter_to_followers_email(id):
+def send_newsletter_to_followers_task(id):
     writter = User.objects.get(id = id)
     for follower in NewsletterFollowers.objects.get(user = writter):
         return enviar_email_task.delay()
 
 
 @celery_app.task()
-def send_notification_email():
-    pass
+def send_website_email_task(
+    newsletter
+):
+    for user in User.objects.all()[:2]:
+        enviar_email_task.delay(newsletter, user.id)
+    return 

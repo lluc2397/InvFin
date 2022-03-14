@@ -6,8 +6,6 @@ from .models import (
     NewsletterDefaultTitle,
     WritterNewsletterDefaultOptions,
     EmailNotification,
-    EmailPublicBlog,
-    EmailWebsite
 )
 
 @admin.register(NewsletterDefaultDespedida)
@@ -51,27 +49,3 @@ class EmailNotificationAdmin(admin.ModelAdmin):
         'id',
         'email_related'
     ]
-
-
-@admin.register(EmailPublicBlog)    
-class EmailPublicBlogAdmin(admin.ModelAdmin):
-    list_display = [
-        'id',
-        'email_related'
-    ]
-
-
-@admin.register(EmailWebsite)    
-class EmailWebsiteAdmin(admin.ModelAdmin):
-    list_display = [
-        'id',
-        'email_related'
-    ]
-
-
-
-
-
-
-
-

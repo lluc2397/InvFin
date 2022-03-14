@@ -1,4 +1,4 @@
-from email.policy import default
+from django.urls import reverse
 from django.db.models import (
     Model,
     DateTimeField,
@@ -128,3 +128,6 @@ class UserCompanyObservation(Model):
 
     def __str__(self):
         return self.user.username + ' ' +self.company.ticker + ' ' + str(self.date)
+    
+    def get_absolute_url(self):
+        return reverse("screener:company", kwargs={"ticker": self.company.ticker})

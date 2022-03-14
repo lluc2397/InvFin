@@ -5,6 +5,9 @@ from django.db.models import Q
 
 from apps.empresas.models import Company, ExchangeOrganisation, Exchange
 from apps.etfs.models import Etf
+from apps.empresas.utils import UpdateCompany
+from apps.empresas.valuations import discounted_cashflow
+
 
 from .models import (
     UserCompanyObservation,
@@ -16,7 +19,6 @@ from .models import (
 from .forms import UserCompanyObservationForm
 
 
-from apps.empresas.utils import UpdateCompany
 import json
 
 
@@ -134,3 +136,118 @@ def suggest_list_search_companies(request):
 		data = json.dumps(results)
 	mimetype = "application/json"
 	return HttpResponse(data, mimetype)
+
+
+
+def medium_valuation_view(request):
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+    if request.user.is_authenticated:
+        user = request.user
+    else:
+        user = None
+
+    if is_ajax:
+        if request.method == 'POST':
+            data = json.load(request)
+            
+            opt_growth = float(data.get('complex_opt_growth').replace(',', '.'))
+            neu_growth = float(data.get('complex_neu_growth').replace(',', '.'))
+            pes_growth = float(data.get('complex_pes_growth').replace(',', '.'))
+            company_id = data.get('company_id')
+            current_per = float(data.get('current_per').replace(',', '.'))
+            opt_margin = float(data.get('complex_opt_margin').replace(',', '.'))
+            neu_margin = float(data.get('complex_neu_margin').replace(',', '.'))
+            pes_margin = float(data.get('complex_pes_margin').replace(',', '.'))
+            opt_buyback = float(data.get('complex_opt_buyback').replace(',', '.'))
+            neu_buyback = float(data.get('complex_neu_buyback').replace(',', '.'))
+            pes_buyback = float(data.get('complex_pes_buyback').replace(',', '.'))
+            opt_per = float(data.get('complex_opt_per').replace(',', '.'))
+            neu_per = float(data.get('complex_neu_per').replace(',', '.'))
+            pes_per = float(data.get('complex_pes_per').replace(',', '.'))
+
+            the_company = Company.objects.get(id = company_id)
+            UserScreenerMediumPrediction.objects.create(
+                user = user, 
+                company = the_company,
+                optimistic_growth = opt_growth,
+                current_per= current_per,
+                neutral_growth = neu_growth,
+                pesimistic_growth = pes_growth,
+                opt_margin = opt_margin,
+                neu_margin = neu_margin,
+                pes_margin = pes_margin,
+                opt_buyback = opt_buyback,
+                neu_buyback = neu_buyback,
+                pes_buyback = pes_buyback,
+                opt_per = opt_per,
+                neu_per = neu_per,
+                pes_per = pes_per
+                )
+
+            opt_valuation = discounted_cashflow(
+                the_company, 
+                opt_growth,
+                opt_margin,
+                opt_buyback,
+                opt_per,
+                current_per
+                )
+            neu_valuation = discounted_cashflow(
+                the_company,
+                neu_growth,
+                neu_margin,
+                neu_buyback,
+                neu_per,
+                current_per
+                )
+            pes_valuation = discounted_cashflow(
+                the_company,
+                pes_growth,
+                pes_margin,
+                pes_buyback,
+                pes_per,
+                current_per
+                )
+
+            return JsonResponse ({'complex_opt_valuation':opt_valuation, 
+            'complex_neu_valuation':neu_valuation, 'complex_pes_valuation':pes_valuation
+            })
+
+
+
+def simple_valuation_view(request):
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+    if request.user.is_authenticated:
+        user = request.user
+    else:
+        user = None
+
+    if is_ajax:
+        if request.method == 'POST':
+            data = json.load(request)
+            
+
+            opt_growth = float(data.get('opt_grow').replace(',', '.'))
+            neu_growth = float(data.get('neu_grow').replace(',', '.'))
+            pes_growth = float(data.get('pes_grow').replace(',', '.'))
+            company_id = data.get('comp')
+
+            
+            the_company = Company.objects.get(id = company_id)
+            UserScreenerSimplePrediction.objects.create(
+                user = user, 
+                company = the_company,
+                optimistic_growth = opt_growth,
+                neutral_growth = neu_growth,
+                pesimistic_growth = pes_growth
+                )
+
+            opt_valuation = discounted_cashflow(the_company, opt_growth)
+            neu_valuation = discounted_cashflow(the_company, neu_growth)
+            pes_valuation = discounted_cashflow(the_company, pes_growth)
+
+            return JsonResponse ({'opt_valuation':opt_valuation, 
+            'neu_valuation':neu_valuation, 'pes_valuation':pes_valuation
+            })

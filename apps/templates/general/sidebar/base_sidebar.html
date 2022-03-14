@@ -29,7 +29,7 @@
               {% if request.user.is_anonymous %}
               <a class="nav-link active" href="{% url 'preguntas_respuestas:list_questions' %}">
                 {% else %}
-              <a class="nav-link active" href="{% url 'users:user_public_profile' request.user.username %}">
+              <a class="nav-link active" href="{% url 'users:user_inicio' %}">
                 {% endif %}
                 <i class="fas fa-home text-primary"></i>
                 <span class="nav-link-text">Inicio</span>

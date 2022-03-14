@@ -3,7 +3,8 @@ from .views import (
     HomePage,
     LegalPages,
     ExcelView,
-    soporte_view
+    soporte_view,
+    CreateWebEmailView
 )
 
 app_name = "web"
@@ -15,4 +16,6 @@ urlpatterns = [
 
     path('excel-analisis/', ExcelView.as_view(), name="excel"),
     path('soporte/', soporte_view, name="soporte"),
+
+    path('mensaje-web/', CreateWebEmailView.as_view(), name="email_web"),
 ]

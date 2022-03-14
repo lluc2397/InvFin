@@ -23,6 +23,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   background-color:#fff;
 }
 
+    .chart-canvas{height: 600px !important;}
 </style>
 <div class="col-12">
     <div class="tab-content" id="pills-tabContent">
@@ -31,7 +32,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         {% include "screener/empresas/company_parts/resume/response.html" %}
         </div>
       <!-- First tab -->
-      <div class="tab-pane fade show" id="pills-income" role="tabpanel" aria-labelledby="pills-income-tab"> 
+      <div class="tab-pane fade" id="pills-income" role="tabpanel" aria-labelledby="pills-income-tab"> 
         {% include "screener/empresas/company_parts/income_statement/income_statement.html" %}
       </div>
       <!-- Second tab -->
@@ -49,6 +50,10 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
       <!-- other ratios tab -->
       <div class="tab-pane fade" id="pills-othervaluations" role="tabpanel" aria-labelledby="pills-othervaluations-tab">            
         {% include "screener/empresas/company_parts/ratios/other_ratios.html" %}
+      </div>
+      <!-- foda tab -->
+      <div class="tab-pane fade" id="pills-foda" role="tabpanel" aria-labelledby="pills-foda-tab">             
+      {% include "screener/empresas/company_parts/valuations/foda.html" %}
       </div>
         <!-- valuations tab -->
       <div class="tab-pane fade" id="pills-valuations" role="tabpanel" aria-labelledby="pills-valuations-tab">             

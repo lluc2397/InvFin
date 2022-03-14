@@ -59,30 +59,7 @@ class IncomeStatementSerializer(ModelSerializer):
 
     class Meta:        
         model = IncomeStatement
-        fields = [
-            'date',
-            'reported_currency',
-            'revenue',
-            'cost_of_revenue',
-            'gross_profit',
-            'rd_expenses',
-            'general_administrative_expenses',
-            'selling_marketing_expenses',
-            'sga_expenses',
-            'other_expenses',
-            'operating_expenses',
-            'cost_and_expenses',
-            'interest_expense',
-            'depreciation_amortization',
-            'ebitda',
-            'operating_income',
-            'net_total_other_income_expenses',
-            'income_before_tax',
-            'income_tax_expenses',
-            'net_income',
-            'weighted_average_shares_outstanding',
-            'weighted_average_diluated_shares_outstanding'
-        ]
+        exclude = ['id']
 
 
 class BalanceSheetSerializer(ModelSerializer):

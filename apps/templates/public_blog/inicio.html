@@ -31,13 +31,24 @@
                             {% endfor %}
                         </div>
                     </h5>
-                    <p class="mb-5"><a href="{{blog.get_absolute_url}}">
+                    <p class="mb-5">
+                        <a href="{{blog.get_absolute_url}}">
                         {{blog.resume}}
-                    </a></p>
-                    <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="{{blog.get_absolute_url}}">
-                    Leer más
-                    <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
-                    </a>
+                        </a>
+                    </p>
+                    <div class="row">
+                        <div class="clearfix">
+                            <div class="float-start">
+                                <img class="avatar" src="{{blog.author.foto}}">
+                                <a href="{{blog.author.custom_url}}">
+                                    {{blog.author}}
+                                </a>
+                            </div>
+                            <div class="float-end">
+                               
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-3 ms-auto text-center mt-5 mt-lg-0">

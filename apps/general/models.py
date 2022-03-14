@@ -189,7 +189,6 @@ class Country(Model):
 
 
 class GenericModelsBase(Model):
-    user = ForeignKey(User, on_delete=CASCADE)
     content_type = ForeignKey(ContentType, on_delete=CASCADE)
     object_id = PositiveIntegerField()
     object = GenericForeignKey("content_type", "object_id")
@@ -214,6 +213,7 @@ class NotificationsType(Model):
 
 
 class Notification(GenericModelsBase):
+    user = ForeignKey(User, on_delete=CASCADE)
     notification_type = ForeignKey(NotificationsType, on_delete=CASCADE)
     is_seen = BooleanField(default=False)
 

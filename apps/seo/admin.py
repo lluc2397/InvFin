@@ -18,15 +18,21 @@ class SessionAdmin(admin.ModelAdmin):
 @admin.register(VisiteurJourney)
 class VisiteurJourneyAdmin(admin.ModelAdmin):
     list_display = [
-        'id',
-        'user']
+        'user',
+        'date',
+        'current_path',
+        'comes_from'
+        ]
 
 
 @admin.register(UsersJourney)
 class UsersJourneyAdmin(admin.ModelAdmin):
     list_display = [
-        'id',
-        'user']
+        'user',
+        'date',
+        'current_path',
+        'comes_from'
+        ]
 
 
 @admin.register(Visiteur)

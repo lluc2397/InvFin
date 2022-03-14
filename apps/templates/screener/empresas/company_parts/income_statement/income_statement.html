@@ -1,42 +1,45 @@
+
 <div class="col-12 mb-3">
-  <div class="card">
-      <div class="text-center">
-          <div class="spinner-border" id="incomeChartLoader" style="width: 3rem; height: 3rem;" role="status">
-              <span class="visually-hidden">Loading...</span>
-          </div>
-      </div>
-      <div class="card-body">
-          <canvas id="incomeChartID"></canvas>
-      </div>
-  </div>
-</div>
-
-<div class="col-12">
-  <div class="card">
-      <div class="card-body">
-          <div class="card-header">Estado de resultados</div>
-          <div class="text-center">
-              <div class="spinner-border" id="incomeLoader" style="width: 3rem; height: 3rem;" role="status">
-                  <span class="visually-hidden">Loading...</span>
+    <div class="card">
+        <div class="text-center">
+            <div class="spinner-border" id="incomeChartLoader" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <div class="card-body">
+              <div class="chart-canvas">
+                  <canvas id="incomeChartID"></canvas>
               </div>
-          </div>
-          <div class="table-responsive fixedTable" id="incomeTable">
-          </div>
-      </div>
+        </div>
+    </div>
   </div>
-</div>
-
-<script>
-  var incomeTable = document.getElementById('incomeTable');
-  var incomeLoader = document.getElementById('incomeLoader');
-
-  var incomeChartLoader = document.getElementById('incomeChartLoader');
-  var incomeChartID = document.getElementById('incomeChartID');
-
-  var chartTitle = 'Ingresos y Gastos'
-
-  var income = {{the_company.income_json|safe}};
-  var incomeChart = {{the_company.comparing_income_json|safe}};
-
-  createContent(income, incomeTable, incomeLoader, incomeChart, chartTitle, incomeChartID, incomeChartLoader)
-</script>
+  
+  <div class="col-12">
+    <div class="card">
+        <div class="card-body">
+            <div class="card-header">Estado de resultados</div>
+            <div class="text-center">
+                <div class="spinner-border" id="incomeLoader" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div class="table-responsive fixedTable" id="incomeTableID">
+            </div>
+        </div>
+    </div>
+  </div>
+  
+  <script>
+    var incomeTable = document.getElementById('incomeTableID');
+    var incomeLoader = document.getElementById('incomeLoader');
+  
+    var incomeChartLoader = document.getElementById('incomeChartLoader');
+    var incomeChartID = document.getElementById('incomeChartID');
+  
+    var chartTitle = 'Estado de resultados'
+  
+    var income = {{the_company.income_json|safe}};
+    var incomeChart = {{the_company.comparing_income_json|safe}};
+  
+    createContent(income, incomeTable, incomeLoader, incomeChart, chartTitle, incomeChartID, incomeChartLoader)
+  </script>

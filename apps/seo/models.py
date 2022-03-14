@@ -40,6 +40,9 @@ class Visiteur(Model):
         verbose_name = "Visiteur"
         db_table = "visiteurs"
     
+    def __str__(self):
+        return str(self.id)
+    
 
 class MetaParameters(Model):
     meta_title = CharField(max_length=99999,null=True, blank=True)

@@ -18,7 +18,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 from apps.general.models import BaseEscrito, BaseComment, BaseContentShared
-from apps.emailing.models import Newsletter
+from apps.emailing.models import Newsletter, BaseEmail
 
 class WritterProfile(Model):
     user = OneToOneField(User, on_delete=SET_NULL, null=True, related_name="writter_profile")
@@ -145,3 +145,11 @@ class ProfileSharedHistorial(BaseContentShared):
     class Meta:
         verbose_name = "Proflie shared"
         db_table = "shared_profiles"
+
+
+class EmailPublicBlog(BaseEmail):
+    email_related = ForeignKey(PublicBlogAsNewsletter,null = True, blank=True, on_delete=SET_NULL)
+
+    class Meta:
+        verbose_name = "Email from public blog"
+        db_table = "emails_public_blog"

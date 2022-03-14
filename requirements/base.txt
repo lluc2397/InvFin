@@ -17,6 +17,8 @@ yfinance
 django-admin-honeypot
 django-import-export
 beautifulsoup4
+yahooquery
+
 
 # Django
 # ------------------------------------------------------------------------------
