@@ -1,6 +1,7 @@
 from django.contrib.sites.models import Site
 
-from apps.public_blog.models import (WritterProfile)
+from apps.public_blog.models import WritterProfile
+from apps.emailing.utils import EmailingSystem
 
 from .models import (
     Notification,
@@ -43,36 +44,35 @@ class NotificationSystem:
         self.answer_accepted = NotificationsType.objects.get_or_create(name = 'Answer accepted')[0]
 
         """
-        new_blog_post = 1
-        new_comment = 2
-        new_vote = 2
-        new_follower = 3
-        new_question = 4
-        new_answer = 5
-        answer_accepted = 6
-        """
-    
+        new_blog_post = 1    -----> followers
+        new_comment = 2      -----> related
+        new_vote = 3         -----> single
+        new_follower = 4     -----> sinlge
+        new_question = 5     -----> all
+        new_answer = 6       -----> related
+        answer_accepted = 7  -----> related
+        """  
 
     def select_notification_type(self, notif_type_num):
         if notif_type_num == 1:
-            notif_type = self.new_blog_post 
+            notif_type = self.new_blog_post
         elif notif_type_num == 2:
             notif_type = self.new_comment 
-        elif notif_type_num == 2:
-            notif_type = self.new_vote 
         elif notif_type_num == 3:
-            notif_type = self.new_follower 
+            notif_type = self.new_vote 
         elif notif_type_num == 4:
-            notif_type = self.new_question 
+            notif_type = self.new_follower 
         elif notif_type_num == 5:
-            notif_type = self.new_answer 
+            notif_type = self.new_question 
         elif notif_type_num == 6:
+            notif_type = self.new_answer 
+        elif notif_type_num == 7:
             notif_type = self.answer_accepted 
         return notif_type
 
 
-    def create_notif(self, user, object_related, notif_type):
-        notif_type = self.select_notification_type(notif_type)
+    def save_notif(self, user, object_related, notif_type_num):
+        notif_type = self.select_notification_type(notif_type_num)
 
         notification =Notification.objects.create(
         user = user,
@@ -82,9 +82,31 @@ class NotificationSystem:
         return notification
     
 
-    def users_to_notify(self, object_related, notif_type):
+    def notify_all_users(self, object_related, notif_type):
         for user in User.objects.all():
-            self.create_notif(user, object_related, notif_type)
+            self.save_notif(user, object_related, notif_type)
+    
+
+    def notify_all_followers(self, object_related, notif_type):
+        for user in User.objects.all():
+            self.save_notif(user, object_related, notif_type)
+
+
+    def notify_single_user(self, user, object_related, notif_type):
+        self.save_notif(user, object_related, notif_type)
+            
+
+    def notify(self, object_related, notif_type_num:int):
+        """
+        whom_notify may be all, followers or single
+        """
+        if whom_notify == 'all':
+            self
+        elif whom_notify == 'single':
+            self
+        else:
+            pass
+        EmailingSystem().enviar_email()
         
 
         

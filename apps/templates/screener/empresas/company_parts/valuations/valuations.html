@@ -2,8 +2,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-gauge@0.3.0/dist/chartjs-gauge.min.js"></script>
 {% include "screener/empresas/company_parts/valuations/price_valuations.html" %}
 
-
-
 <div class="row">
   <div class="col-6">
       <div class="card">
@@ -16,12 +14,12 @@
                       <tbody>
                           <tr>
                               <th>PER</th>
-                              <td>{{the_company.current_price_ratios.per|floatformat:2}}</td>
+                              <td>{{the_company_price_related.per|floatformat:2}}</td>
                               <td>
                                   <div class="progress" id='revalorizacion' style="height: 20px;">
-                                      {% if the_company.current_price_ratios.per_lvl == 1 %}
+                                      {% if the_company_price_related.per_lvl == 1 %}
                                       <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
-                                      {% elif the_company.current_price_ratios.per_lvl == 2 %}
+                                      {% elif the_company_price_related.per_lvl == 2 %}
                                       <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
                                       {% else %}
                                       <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
@@ -31,12 +29,12 @@
                           </tr>
                           <tr>
                               <th>PB</th>
-                              <td>{{the_company.current_price_ratios.pb|floatformat:2}}</td>
+                              <td>{{the_company_price_related.pb|floatformat:2}}</td>
                               <td>
                                   <div class="progress" id='revalorizacion' style="height: 20px;">
-                                      {% if the_company.current_price_ratios.pb_lvl == 1 %}
+                                      {% if the_company_price_related.pb_lvl == 1 %}
                                       <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
-                                      {% elif the_company.current_price_ratios.pb_lvl == 2 %}
+                                      {% elif the_company_price_related.pb_lvl == 2 %}
                                       <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
                                       {% else %}
                                       <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
@@ -46,12 +44,12 @@
                           </tr>
                           <tr>
                               <th>PS</th>
-                              <td>{{the_company.current_price_ratios.ps|floatformat:2}}</td>
+                              <td>{{the_company_price_related.ps|floatformat:2}}</td>
                               <td>
                                   <div class="progress" id='revalorizacion' style="height: 20px;">
-                                      {% if the_company.current_price_ratios.ps_lvl == 1 %}
+                                      {% if the_company_price_related.ps_lvl == 1 %}
                                       <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
-                                      {% elif the_company.current_price_ratios.ps_lvl == 2 %}
+                                      {% elif the_company_price_related.ps_lvl == 2 %}
                                       <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
                                       {% else %}
                                       <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
@@ -61,12 +59,12 @@
                           </tr>
                           <tr>
                               <th>PFCF</th>
-                              <td>{{the_company.current_price_ratios.pfcf|floatformat:2}}</td>
+                              <td>{{the_company_price_related.pfcf|floatformat:2}}</td>
                               <td>
                                   <div class="progress" id='revalorizacion' style="height: 20px;">
-                                      {% if the_company.current_price_ratios.pfcf_lvl == 1 %}
+                                      {% if the_company_price_related.pfcf_lvl == 1 %}
                                       <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
-                                      {% elif the_company.current_price_ratios.pfcf_lvl == 2 %}
+                                      {% elif the_company_price_related.pfcf_lvl == 2 %}
                                       <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
                                       {% else %}
                                       <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
@@ -76,12 +74,12 @@
                           </tr>
                           <tr>
                             <th>PEG</th>
-                            <td>{{the_company.current_price_ratios.peg|floatformat:2}}</td>
+                            <td>{{the_company_price_related.peg|floatformat:2}}</td>
                             <td>
                                 <div class="progress" id='revalorizacion' style="height: 20px;">
-                                    {% if the_company.current_price_ratios.peg_lvl == 1 %}
+                                    {% if the_company_price_related.peg_lvl == 1 %}
                                     <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
-                                    {% elif the_company.current_price_ratios.peg_lvl == 2 %}
+                                    {% elif the_company_price_related.peg_lvl == 2 %}
                                     <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
                                     {% else %}
                                     <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
@@ -91,12 +89,12 @@
                         </tr>
                           <tr>
                               <th>Precio Activos Totales</th>
-                              <td>{{the_company.current_price_ratios.pas|floatformat:2}}</td>
+                              <td>{{the_company_price_related.pas|floatformat:2}}</td>
                               <td>
                                   <div class="progress" id='revalorizacion' style="height: 20px;">
-                                      {% if the_company.current_price_ratios.pas_lvl == 1 %}
+                                      {% if the_company_price_related.pas_lvl == 1 %}
                                       <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
-                                      {% elif the_company.current_price_ratios.pas_lvl == 2 %}
+                                      {% elif the_company_price_related.pas_lvl == 2 %}
                                       <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
                                       {% else %}
                                       <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
@@ -106,12 +104,12 @@
                           </tr> 
                           <tr>
                             <th>Precio Activos Tangibles</th>
-                            <td>{{the_company.current_price_ratios.pta|floatformat:2}}</td>
+                            <td>{{the_company_price_related.pta|floatformat:2}}</td>
                             <td>
                                 <div class="progress" id='revalorizacion' style="height: 20px;">
-                                    {% if the_company.current_price_ratios.pta_lvl == 1 %}
+                                    {% if the_company_price_related.pta_lvl == 1 %}
                                     <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
-                                    {% elif the_company.current_price_ratios.pta_lvl == 2 %}
+                                    {% elif the_company_price_related.pta_lvl == 2 %}
                                     <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
                                     {% else %}
                                     <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
@@ -121,12 +119,12 @@
                         </tr>
                         <tr>
                             <th>Precio Efectivo</th>
-                            <td>{{the_company.current_price_ratios.pcps|floatformat:2}}</td>
+                            <td>{{the_company_price_related.pcps|floatformat:2}}</td>
                             <td>
                                 <div class="progress" id='revalorizacion' style="height: 20px;">
-                                    {% if the_company.current_price_ratios.pcps_lvl == 1 %}
+                                    {% if the_company_price_related.pcps_lvl == 1 %}
                                     <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
-                                    {% elif the_company.current_price_ratios.pcps_lvl == 2 %}
+                                    {% elif the_company_price_related.pcps_lvl == 2 %}
                                     <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
                                     {% else %}
                                     <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
@@ -136,12 +134,12 @@
                         </tr>
                         <tr>
                             <th>Precio Flujo efectivo operativo</th>
-                            <td>{{the_company.current_price_ratios.pocf|floatformat:2}}</td>
+                            <td>{{the_company_price_related.pocf|floatformat:2}}</td>
                             <td>
                                 <div class="progress" id='revalorizacion' style="height: 20px;">
-                                    {% if the_company.current_price_ratios.pocf_lvl == 1 %}
+                                    {% if the_company_price_related.pocf_lvl == 1 %}
                                     <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
-                                    {% elif the_company.current_price_ratios.pocf_lvl == 2 %}
+                                    {% elif the_company_price_related.pocf_lvl == 2 %}
                                     <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
                                     {% else %}
                                     <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
@@ -152,12 +150,12 @@
                                        
                           <tr>
                               <th>EV/EBITDA</th>
-                              <td>{{the_company.current_price_ratios.evebitda|floatformat:2}}</td>
+                              <td>{{the_company_price_related.evebitda|floatformat:2}}</td>
                               <td>
                                   <div class="progress" id='revalorizacion' style="height: 20px;">
-                                      {% if the_company.current_price_ratios.evebitd_lvl == 1 %}
+                                      {% if the_company_price_related.evebitd_lvl == 1 %}
                                       <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
-                                      {% elif the_company.current_price_ratios.evebitd_lvl == 2 %}
+                                      {% elif the_company_price_related.evebitd_lvl == 2 %}
                                       <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
                                       {% else %}
                                       <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
@@ -167,12 +165,12 @@
                           </tr>
                           <tr>
                               <th>EV/SALES</th>
-                              <td>{{the_company.current_price_ratios.evsales|floatformat:2}}</td>
+                              <td>{{the_company_price_related.evsales|floatformat:2}}</td>
                               <td>
                                   <div class="progress" id='revalorizacion' style="height: 20px;">
-                                      {% if the_company.current_price_ratios.evsales_lvl == 1 %}
+                                      {% if the_company_price_related.evsales_lvl == 1 %}
                                       <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Sobrevalorado</div>
-                                      {% elif the_company.current_price_ratios.evsales_lvl == 2 %}
+                                      {% elif the_company_price_related.evsales_lvl == 2 %}
                                       <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Neutral</div>
                                       {% else %}
                                       <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">Infravalorado</div>
@@ -197,21 +195,21 @@
                       <tbody>
                           <tr>
                               <th>Enterprise Value</th>
-                              <td>{{the_company.current_price_ratios.ev|floatformat:2}}</td>
+                              <td>{{the_company_price_related.ev|floatformat:2}}</td>
                               <th>CAGR</th> 
-                              <td class="pe-4">{{the_company.current_price_ratios.cagr|floatformat:2}}%</td>                               
+                              <td class="pe-4">{{the_company_price_related.cagr|floatformat:2}}%</td>                               
                           </tr>
                           <tr>
                               <th>Valoración tradicional</th>
-                              <td>{{the_company.current_price_ratios.gramvalu|floatformat:2}}</td>
+                              <td>{{the_company_price_related.gramvalu|floatformat:2}}</td>
                               <th>Margen de seguridad</th>
-                              <td>{{the_company.current_price_ratios.safety_margin_pes|floatformat:2}}%</td>                               
+                              <td>{{the_company_price_related.safety_margin_pes|floatformat:2}}%</td>                               
                           </tr>
                           <tr>
                               <th>Valoración DCF</th>
-                              <td>{{the_company.current_price_ratios.fair_value|floatformat:2}}</td>
+                              <td>{{the_company_price_related.fair_value|floatformat:2}}</td>
                               <th >Margen de seguridad</th>
-                              <td class="pe-4">{{the_company.current_price_ratios.safety_margin_opt|floatformat:2}}%</td>                               
+                              <td class="pe-4">{{the_company_price_related.safety_margin_opt|floatformat:2}}%</td>                               
                           </tr>
                       </tbody>
                   </table>

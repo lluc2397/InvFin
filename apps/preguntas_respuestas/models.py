@@ -41,12 +41,55 @@ class Question(BasicWrittenContent):
         return self.question_answers.all()
     
     def add_answer(self, answer):
-	    Answer.objects.create(
+        Answer.objects.create(
             author = self.author,
             content = answer,
             question_related = self,
             is_accepted = True,
         )
+
+    @property
+    def ques_schema(self):
+        ques_schema = {}
+        ques_schema['@context'] = "https://schema.org"
+        ques_schema['@type'] = "QAPage"
+        ques_schema['mainEntity'] = {}
+        ques_schema['mainEntity']["@type"] = "Question"
+        ques_schema['mainEntity']["name"] = self.title
+        ques_schema['mainEntity']["text"] = self.content
+        ques_schema['mainEntity']["answerCount"] = self.related_answers.count()
+        ques_schema['mainEntity']["upvoteCount"] = self.upvotes.all().count()
+        ques_schema['mainEntity']["dateCreated"] = self.created_at
+        ques_schema['mainEntity']["author"] = {}
+        ques_schema['mainEntity']["author"]["@type"] = "Person"
+        ques_schema['mainEntity']["author"]["name"] = self.author        
+        
+        ques_schema['mainEntity']["suggestedAnswer"] = []
+
+        for answer in self.related_answers:
+            if answer.is_accepted:
+                ques_schema['mainEntity']["acceptedAnswer"] = {}
+                ques_schema['mainEntity']["acceptedAnswer"]['@type'] = "Answer"
+                ques_schema['mainEntity']["acceptedAnswer"]['text'] = answer.content
+                ques_schema['mainEntity']["acceptedAnswer"]['dateCreated'] = answer.created_at
+                ques_schema['mainEntity']["acceptedAnswer"]['upvoteCount'] = answer.total_votes
+                ques_schema['mainEntity']["acceptedAnswer"]['url'] = answer.own_url
+                ques_schema['mainEntity']["acceptedAnswer"]['author'] = {}
+                ques_schema['mainEntity']["acceptedAnswer"]['author']['@type'] = "Person"
+                ques_schema['mainEntity']["acceptedAnswer"]['author']['name'] = answer.author.full_name
+
+            sug_answ = {}
+            sug_answ['@type'] = "Answer"
+            sug_answ['text'] = answer.content
+            sug_answ['dateCreated'] = answer.created_at
+            sug_answ['upvoteCount'] = answer.total_votes
+            sug_answ['url'] = answer.own_url
+            sug_answ['author'] = {}
+            sug_answ['author']['@type'] = "Person"
+            sug_answ['author']['name'] = answer.author.full_name
+            ques_schema['mainEntity']["suggestedAnswer"].append(sug_answ)
+
+        return ques_schema
 
 
 class Answer(CommonMixin):

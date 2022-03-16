@@ -29,19 +29,51 @@
                     <div class="col-6 col-sm-3 col-lg-2 mb-4 mb-lg-0">
                         <h6>InvFin</h6>
                         <ul class="links-vertical">
-                            <li><a href="{% url 'escritos:glosario' %}">Glosario</a></li>
-                            <li><a href="{% url 'screener:screener_inicio' %}">Empresas</a>
-                            <li><a href="{% url 'preguntas_respuestas:list_questions' %}">Preguntas</a></li>
-                            <li><a href="{% url 'web:soporte' %}">Contáctanos</a></li>
+                            <li>
+                                <a href="{% url 'escritos:glosario' %}?utm_source=invfin&utm_medium=web&utm_content=footer">
+                                    Glosario
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'screener:screener_inicio' %}?utm_source=invfin&utm_medium=web&utm_content=footer">
+                                    Empresas
+                                </a>
+
+                            <li>
+                                <a href="{% url 'preguntas_respuestas:list_questions' %}?utm_source=invfin&utm_medium=web&utm_content=footer">
+                                    Preguntas
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'web:soporte' %}?utm_source=invfin&utm_medium=web&utm_content=footer">
+                                    Contáctanos
+                                </a>
+                            </li>
                         </ul>
                     </div>
                     <div class="col-6 col-sm-3 col-lg-2 mb-4 mb-lg-0">
                         <h6>Útiles</h6>
                         <ul class="links-vertical">
-                            <li><a href="{% url 'general:escritos' %}">Blog</a></li>
-                            <li><a href="{% url 'web:excel' %}">Excel</a></li>
-                            <li><a href="{% url 'public_blog:blog_list' %}">Escritores</a></li>
-                            <li><a href="{% url 'preguntas_respuestas:list_questions' %}">Campus</a>
+                            <li>
+                                <a href="{% url 'general:escritos' %}?utm_source=invfin&utm_medium=web&utm_content=footer">
+                                    Blog
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'web:excel' %}?utm_source=invfin&utm_medium=web&utm_content=footer">
+                                    Excel
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'public_blog:blog_list' %}?utm_source=invfin&utm_medium=web&utm_content=footer">
+                                    Escritores
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'preguntas_respuestas:list_questions' %}?utm_source=invfin&utm_medium=web&utm_content=footer">
+                                    Campus
+                                </a>
+
                             </li>
                         </ul>
                     </div>

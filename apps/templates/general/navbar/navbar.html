@@ -56,37 +56,37 @@
           </a>
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-dark bg-default  dropdown-menu-right ">
             <div class="row shortcuts px-4">
-              <a href="{% url 'general:coming_soon' %}" class="col-4 shortcut-item">
+              <a href="{% url 'general:coming_soon' %}?utm_source=invfin&utm_medium=webapp&utm_content=sidebar" class="col-4 shortcut-item">
                 <span class="shortcut-media avatar rounded-circle bg-gradient-red">
                   <i class="fas fa-hand-holding-usd"></i>
                 </span>
                 <small>Portfolio</small>
               </a>
-              <a href="{% url 'screener:screener_inicio' %}" class="col-4 shortcut-item">
+              <a href="{% url 'screener:screener_inicio' %}?utm_source=invfin&utm_medium=webapp&utm_content=sidebar" class="col-4 shortcut-item">
                 <span class="shortcut-media avatar rounded-circle bg-gradient-purple">
                   <i class="fas fa-chart-area"></i>
                 </span>
                 <small>Screener</small>
               </a>
-              <a href="{% url 'general:coming_soon' %}" class="col-4 shortcut-item">
+              <a href="{% url 'general:coming_soon' %}?utm_source=invfin&utm_medium=webapp&utm_content=sidebar" class="col-4 shortcut-item">
                 <span class="shortcut-media avatar rounded-circle bg-gradient-info">
                   <i class="fas fa-robot"></i>
                 </span>
                 <small>Roboadvisor</small>
               </a>
-              <a href="{% url 'preguntas_respuestas:list_questions' %}" class="col-4 shortcut-item">
+              <a href="{% url 'preguntas_respuestas:list_questions' %}?utm_source=invfin&utm_medium=webapp&utm_content=sidebar" class="col-4 shortcut-item">
                 <span class="shortcut-media avatar rounded-circle bg-gradient-green">
                   <i class="far fa-question-circle"></i>
                 </span>
                 <small>Preguntas</small>
               </a>
-              <a href="{% url 'escritos:glosario' %}" class="col-4 shortcut-item">
+              <a href="{% url 'escritos:glosario' %}?utm_source=invfin&utm_medium=webapp&utm_content=sidebar" class="col-4 shortcut-item">
                 <span class="shortcut-media avatar rounded-circle bg-gradient-orange">
                   <i class="fas fa-book"></i>
                 </span>
                 <small>Diccionario</small>
               </a>
-              <a href="{% url 'public_blog:blog_list' %}" class="col-4 shortcut-item">
+              <a href="{% url 'public_blog:blog_list' %}?utm_source=invfin&utm_medium=webapp&utm_content=sidebar" class="col-4 shortcut-item">
                 <span class="shortcut-media avatar rounded-circle bg-gradient-yellow">
                   <i class="fas fa-newspaper"></i>
                 </span>
@@ -99,7 +99,7 @@
       <ul class="navbar-nav align-items-center  ml-auto ml-md-0 ">
         <li class="nav-item dropdown">
           {% if request.user.is_anonymous %}
-          <a class="nav-link pr-0" href="{% url 'account_signup' %}" role="button" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link pr-0" href="{% url 'account_signup' %}?utm_source=invfin&utm_medium=webapp&utm_content=sidebar" role="button" aria-haspopup="true" aria-expanded="false">
             <div class="media align-items-center">
               <span class="avatar avatar-sm rounded-circle">
                 <img alt="Image placeholder" src="{% static 'general/assets/img/general/inversorinteligente.WebP' %}">
@@ -124,27 +124,27 @@
             <div class="dropdown-header noti-title">
               <h6 class="text-overflow m-0">Bienvenido</h6>
             </div>            
-            <a href="{% url 'users:user_inicio' %}" class="dropdown-item">
+            <a href="{% url 'users:user_inicio' %}?utm_source=invfin&utm_medium=webapp&utm_content=sidebar" class="dropdown-item">
               <i class="fas fa-user"></i>
               <span>Perfil</span>
             </a>
-            <a href="{% url 'users:update' %}" class="dropdown-item">
+            <a href="{% url 'users:update' %}?utm_source=invfin&utm_medium=webapp&utm_content=sidebar" class="dropdown-item">
               <i class="fas fa-cog"></i>
               <span>Editar</span>
             </a>
             {% if request.user.is_writter %}
-            <a href="{% url 'public_blog:create_blog' %}" class="dropdown-item">
+            <a href="{% url 'public_blog:create_blog' %}?utm_source=invfin&utm_medium=webapp&utm_content=sidebar" class="dropdown-item">
               {% else %}
             <a href="#!" data-bs-toggle="modal" data-bs-target="#BecomingWritterModal" class="dropdown-item">
               {% endif %}
               <i class="fas fa-edit"></i>
               <span>Escribir</span>
             </a>
-            <a href="{% url 'preguntas_respuestas:create_question' %}" class="dropdown-item">
+            <a href="{% url 'preguntas_respuestas:create_question' %}?utm_source=invfin&utm_medium=webapp&utm_content=sidebar" class="dropdown-item">
               <i class="fas fa-question"></i>
               <span>Preguntar</span>
             </a>
-            <a href="{% url 'web:soporte' %}" class="dropdown-item">
+            <a href="{% url 'web:soporte' %}?utm_source=invfin&utm_medium=webapp&utm_content=sidebar" class="dropdown-item">
               <i class="fas fa-info"></i>
               <span>Soporte</span>
             </a>

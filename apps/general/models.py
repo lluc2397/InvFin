@@ -28,7 +28,7 @@ User = get_user_model()
 from apps.seo.models import MetaParametersHistorial
 
 from .mixins import CommonMixin, BaseEscritosMixins
-from .manager import VotesManager
+
 
 
 class EscritosClassification(Model):
@@ -92,6 +92,15 @@ class BasicWrittenContent(CommonMixin):
             else:
                 new_tag = Tag.objects.create(name = tag.lower())
                 self.tags.add(new_tag)
+    
+    @property
+    def shareable_link(self):        
+        try:
+            url = self.custom_url
+        except:
+            slug = self.get_absolute_url()
+            url = f"https://inversionesyfinanzas.xyz{slug}"
+        return url
 
 
 class BaseEscrito(BasicWrittenContent, BaseEscritosMixins):

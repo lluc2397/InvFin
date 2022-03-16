@@ -1,9 +1,17 @@
 from django.shortcuts import render
+from django.conf import settings
 from django.views.generic import (
 	ListView,
 	DetailView,
 	CreateView)
+from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
+
+import json
+import urllib
 
 from .models import (
     Term,
@@ -41,7 +49,7 @@ class TermDetailsView(DetailView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		model = self.get_object()
+		model = self.object
 		model.total_views += 1
 		model.save()
 		return context
@@ -54,13 +62,46 @@ class TermCorrectionView(SuccessMessageMixin, CreateView):
 	success_message = 'Gracias por tu aporte'
 	slug_field = 'pk'
 
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['public_key'] = settings.GOOGLE_RECAPTCHA_PUBLIC_KEY
+		return context
+
 	def get_initial(self, *args, **kwargs):
 		initial = super(TermCorrectionView, self).get_initial(**kwargs)
-		initial['title'] = self.get_object().title
-		initial['content'] = self.get_object().content
+		object = self.get_object()		
+		initial['title'] = object.title
+		initial['content'] = object.content
 		return initial
+	
+	def post(self, request, *args: str, **kwargs):
+		form = self.get_form(self.get_form_class())
+        
+		if self.request.user.is_anonymous:
+			recaptcha_response = self.request.POST.get('g-recaptcha-response')
+			url = 'https://www.google.com/recaptcha/api/siteverify'
+			values = {
+				'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+				'response': recaptcha_response
+			}
+			data = urllib.parse.urlencode(values).encode()
+			req =  urllib.request.Request(url, data=data)
+			response = urllib.request.urlopen(req)
+			result = json.loads(response.read().decode())
 
-	def form_valid(self, form):
-		form.instance.author = self.request.user
-		return super().form_valid(form)
+			if result['success']:
+				email = self.request.POST.get('email')
+				user = User.objects.get_or_create_quick_user(email, self.request, just_correction = True)
+			else:
+				messages.error(self.request, 'Hay un error con el captcha')
+				return self.form_invalid(form)
+		else:
+			user = self.request.user
+
+		return self.form_valid(form, user)
+
+	def form_valid(self, form, user):
+		print(form)
+		form.instance.author = user
+		# return super().form_valid(form)
 

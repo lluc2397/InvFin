@@ -8,14 +8,8 @@
 </head>
 
 <body>
-    <p>Hola {% if usuario.username%} {{usuario.username}} {%else%} {{usuario}} {%endif%}, Qué tal estás?
-        <br>
-        {{newsl_content|safe}}        
-    </p>
-    <br>
-    Atentamente,
-    <br>
-    Lucas Montes
+    {% block content %}
+    {% endblock content %}
    
     <img src="https://inversionesyfinanzas.xyz{% url 'emailing:email_opened_view' image_tag%}" width=1 height=1>
 </body>

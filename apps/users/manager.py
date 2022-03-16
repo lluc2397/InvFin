@@ -1,6 +1,28 @@
 import uuid
+import secrets
+import string
 
 from django.db.models import Manager
+
+
+class UserExtraManager(Manager):
+    
+    def get_or_create_quick_user(self, email, request, just_newsletter = False, just_correction = False):
+        if self.filter(email = email).exists():
+            user = self.get(email = email)
+
+        else:
+            user = self.create(
+            username = email.split('@')[0],
+            email = email,
+            password = ''.join((secrets.choice(string.ascii_letters + string.digits + string.punctuation) for i in range(20))),
+            just_newsletter = just_newsletter,
+            just_correction = just_correction)
+            
+            user.create_new_user(request)
+            user.session['F-E'] = email
+
+        return user
 
 
 class ProfileManager(Manager):

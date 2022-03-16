@@ -1,8 +1,13 @@
 {% extends "general/bases/base_content.html" %}
 {% load static %}
-{% block TopHeader %}{% include "screener/headers/empresa_header.html" %}{% endblock TopHeader%}
-{% block MainContent %}
 
+{% block TopHeader %}
+{% with the_company_price_related=the_company.current_price_ratios %}
+{% include "screener/headers/empresa_header.html" %}
+{% endwith %}
+{% endblock TopHeader%}
+{% block MainContent %}
+{% with the_company_price_related=the_company.current_price_ratios %}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -74,4 +79,5 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
       </div>
     </div>
 </div>
+{% endwith %}
 {% endblock MainContent %}

@@ -26,10 +26,7 @@ from .models import (
 from .forms import (
 	PublicBlogForm)
 
-from .utils import get_or_create_follower
-
 User = get_user_model()
-
 
 def writter_profile_view(request, host_name):
 	template_name = 'profile/public/profile.html'
@@ -47,7 +44,7 @@ def following_management_view(request):
 
 		writter = User.objects.get(id = writter)
 	
-		follower = get_or_create_follower(email, request)
+		follower = User.objects.get_or_create_quick_user(email, request, True)
 		
 		update_follower = writter.update_followers(follower, action)
 

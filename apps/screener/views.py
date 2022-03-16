@@ -82,7 +82,8 @@ class CompanyDetailsView(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        empresa = self.get_object()
+        print(self.__dict__)
+        empresa = self.object
         UpdateCompany(empresa).general_update()
         context["meta_desc"] = f'Estudia a fondo la empresa {empresa.name}. Más de 30 años de información, noticias, pros, contras y mucho más'
         context["meta_tags"] = f'finanzas, blog financiero, blog el financiera, invertir, {empresa.name}, {empresa.ticker}'
@@ -91,7 +92,7 @@ class CompanyDetailsView(DetailView):
 
         context['observation_form'] = UserCompanyObservationForm()
         context['company_is_fav'] = False
-        if self.request.user.is_authenticated and empresa in self.request.user.fav_stocks:
+        if self.request.user.is_authenticated and empresa.ticker in self.request.user.fav_stocks.only('ticker'):
             context['company_is_fav'] = True
         return context
 

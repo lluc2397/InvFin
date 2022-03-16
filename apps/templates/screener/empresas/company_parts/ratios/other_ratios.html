@@ -38,9 +38,8 @@
   
     var chartTitle = '{{obj.title}}'
   
-    var {{obj.kind}} = {{obj.table|safe}};
-    var {{obj.kind}}Chart = {{obj.graph|safe}};
+    var {{obj.kind}} = {{obj|safe}};
   
-    createContent({{obj.kind}}, {{obj.kind}}Table, {{obj.kind}}Loader, {{obj.kind}}Chart, chartTitle, {{obj.kind}}ChartID, {{obj.kind}}ChartLoader)
+    createContent({{obj.kind}}, {{obj.kind}}Table, {{obj.kind}}Loader, chartTitle, {{obj.kind}}ChartID, {{obj.kind}}ChartLoader)
   </script>
 {% endfor %}

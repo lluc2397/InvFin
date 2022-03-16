@@ -25,6 +25,7 @@ img {
 {% for parts in object.term_parts %} 
 <section>
 <h2 id="{{ parts.title }}">{{parts.title}} <span style="font-size: 15px;">[<a href="{% url 'escritos:correction_term' parts.id%}">Editar</a>]</span></h2>
+
 <div class="text-black">{{parts.content|safe}}</div>
 </section>
 <br>
@@ -32,7 +33,7 @@ img {
 {% endblock LeftSide %}
 
 {% block RightSide %}
-{% include "glosario/side/inicio.html" %}
+{% include "glosario/side/details.html" %}
 {% endblock RightSide %}
 
 {% block MiddleCtaContent %}

@@ -28,7 +28,19 @@
           <h2 class="card-title">Contenido</h2>
           <p class="card-text">Aporta las correcciones que consideres necesarias.</p>
           {{form.content}}
-          <div><button class="btn btn-slack col-12 mt-4" type="submit">Publicar corrección</button></div>
+          <div class="mt-4">
+            {% if request.user.is_anonymous %}
+            <div class="col-12">
+              <label for="exampleFormControlInput1" class="form-label">Email</label>
+              <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Tu email">
+            </div>
+            <div class="col-12 mt-4">
+              <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+              <div name='g-recaptcha' class="g-recaptcha" data-sitekey="{{public_key}}"></div>
+            </div>
+            {% endif %}
+            <button class="btn btn-slack col-12 mt-4" type="submit">Publicar corrección</button>
+          </div>
         </div>
       </form>
     </div>

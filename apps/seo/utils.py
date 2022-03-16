@@ -1,4 +1,6 @@
 from django.contrib.gis.geoip2 import GeoIP2
+from django.conf import settings
+
 from .models import (
     Visiteur
 )
@@ -24,6 +26,8 @@ class SeoInformation:
     def meta_information(self, request):
         g = GeoIP2()
         ip = self.get_client_ip(request)
+        if settings.DEBUG:
+            ip = '162.158.50.77'
         meta = {
             'http_user_agent' : request.META['HTTP_USER_AGENT'],
             'location':g.city(ip),
@@ -44,8 +48,7 @@ class SeoInformation:
 
     def get_visiteur_by_old_session(self, request):
         try:
-            session_id = request.session.session_key
-            session = Session.objects.get(session_key = session_id)
+            session = Session.objects.get(session_key = request.session.session_key)
             visiteur = Visiteur.objects.get(id = session.get_decoded()['visiteur_id'])
             return visiteur
         except KeyError:

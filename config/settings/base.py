@@ -261,6 +261,7 @@ EMAIL_CONTACT = env('EMAIL_CONTACT')
 EMAIL_NEWSLETTER = env('EMAIL_NEWSLETTER')
 MAIN_EMAIL = env('MAIN_EMAIL')
 EMAIL_ACCOUNTS = env('EMAIL_ACCOUNTS')
+EMAIL_DEFAULT = env('EMAIL_DEFAULT')
 
 # ADMIN
 # ------------------------------------------------------------------------------

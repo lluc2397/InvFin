@@ -167,9 +167,11 @@ function displayTable(tableDatasets, tableID, loaderID){
     tableID.innerHTML = table;
 }
 
-function createContent(tableDatasets, tableID, loaderID, chartDatasets, chartTitle, chartID, chartLoaderID){
+function createContent(datasets, tableID, loaderID, chartTitle, chartID, chartLoaderID){
    
     // if (chartID) {chartID.destroy();}
+    let tableDatasets = datasets['table']
+    let chartDatasets = datasets['chart']
     displayTable(tableDatasets, tableID, loaderID);
 
     generateChart(chartDatasets, chartTitle, chartID, chartLoaderID);

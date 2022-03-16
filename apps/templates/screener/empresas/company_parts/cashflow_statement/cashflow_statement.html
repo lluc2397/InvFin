@@ -37,8 +37,7 @@
   
     var chartTitle = 'Free cash flows'
   
-    var cashflow_json = {{the_company.cashflow_json|safe}};
-    var cashflowChart = {{the_company.comparing_cashflows|safe}};
+    var cashflow_json = {{the_company.comparing_cashflows|safe}};
   
-    createContent(cashflow_json, cashflow_jsonTable, cashflow_jsonLoader, cashflowChart, chartTitle, cashflow_jsonChartID, cashflow_jsonChartLoader)
+    createContent(cashflow_json, cashflow_jsonTable, cashflow_jsonLoader, chartTitle, cashflow_jsonChartID, cashflow_jsonChartLoader)
   </script>

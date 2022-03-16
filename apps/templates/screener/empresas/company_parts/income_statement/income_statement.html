@@ -38,8 +38,7 @@
   
     var chartTitle = 'Estado de resultados'
   
-    var income = {{the_company.income_json|safe}};
-    var incomeChart = {{the_company.comparing_income_json|safe}};
+    var income = {{the_company.comparing_income_json|safe}};
   
-    createContent(income, incomeTable, incomeLoader, incomeChart, chartTitle, incomeChartID, incomeChartLoader)
+    createContent(income, incomeTable, incomeLoader, chartTitle, incomeChartID, incomeChartLoader)
   </script>

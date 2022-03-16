@@ -5,10 +5,8 @@ from django.forms import (
     Form,
     Textarea
 )
-from django.apps import apps
 from ckeditor.widgets import CKEditorWidget
 
-from apps.emailing.tasks import send_website_email_task
 
 class DefaultNewsletterFieldsForm(Form):
     title = CharField()
@@ -61,9 +59,9 @@ class DefaultNewsletterForm(DefaultNewsletterFieldsForm):
 
         newsletter = newsletter.for_task
         print(newsletter)
-        send_website_email_task.delay(
-            newsletter
-        )
+        # send_website_email_task.delay(
+            # newsletter
+        # )
 
 
     
