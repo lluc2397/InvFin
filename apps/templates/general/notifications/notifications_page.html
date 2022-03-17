@@ -1,0 +1,29 @@
+{% extends "general/bases/base_content.html" %}
+{% load static %}
+{% load extra %}
+{% load humanize %}
+{% block content %}         
+<ul class="list-group list-group-flush list my--3">
+    {%for notification in user_notifs%} 
+    <li class="list-group-item px-0">
+       <div class="row align-items-center">
+          <div class="col-auto">
+             <!-- Avatar -->
+             <img alt="Image placeholder" src="{{notification.object.author.foto}}" class="avatar rounded-circle">
+          </div>
+          <div class="col ml--2">
+             <h4 class="mb-0">
+                <a href="#!">{{notification.object.title}}</a>
+             </h4>
+             <small>{{notification.object.content|safe|truncatechars:100}}</small>
+          </div>
+          <div class="col-auto">
+             <a href="" class="btn btn-sm btn-primary">Visitar</a>
+          </div>
+       </div>
+    </li>
+    {%empty%}
+Interactua más con el Campus para ganar puntos que podrás canjear por dinero, premios y descuentos.
+{%endfor%} 
+</ul>
+{% endblock content %}

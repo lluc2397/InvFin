@@ -4,9 +4,9 @@ from django.contrib import messages
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 from django.apps import apps
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView, DeleteView
 from django.http.response import JsonResponse, HttpResponse
 from django.db.models import Q
 
@@ -17,6 +17,8 @@ from apps.escritos.models import Term, FavoritesTermsHistorial, FavoritesTermsLi
 from apps.public_blog.models import PublicBlog
 from apps.empresas.models import Company
 from apps.screener.models import FavoritesStocksHistorial
+
+from .models import Notification
 
 @login_required
 def create_comment_view(request, url_encoded):
@@ -159,3 +161,20 @@ class EscritosView(TemplateView):
         context['terms'] = Term.objects.filter(status = 1)
         context['blogs'] = PublicBlog.objects.filter(status = 1)
         return context
+
+
+class NotificationsListView(LoginRequiredMixin, ListView):
+	model = Notification
+	template_name = 'general/notifications/notifications_page.html'
+
+	def get_queryset(self):
+		notifications = Notification.objects.filter(user = self.request.user)
+		notifications.update(is_seen = True)
+		return notifications
+
+
+@login_required(login_url='login')
+def delete_notification(request, notif_id):
+    user = request.user
+    Notification.objects.get(id = notif_id, user = user).delete()
+    return redirect("general:notifications_list")

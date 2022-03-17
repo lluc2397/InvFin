@@ -86,12 +86,6 @@ class PublicBlog(BaseEscrito):
         verbose_name = "Public blog post"
         db_table = "blog_post"
     
-    def save(self, *args, **kwargs): # new
-        return super().save(*args, **kwargs)
-        # if self.send_as_newsletter is True:
-        #     return super().save(*args, **kwargs)
-            #preparar y enviar newsletter
-    
     def get_absolute_url(self):
         return reverse ('public_blog:blog_details', kwargs={"slug": self.slug})
     

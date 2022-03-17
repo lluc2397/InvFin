@@ -5,6 +5,8 @@ from django.conf import settings
 from django.apps import apps
 from django.contrib.auth import get_user_model
 
+import time
+
 from apps.public_blog.models import WritterProfile
 
 from .models import (
@@ -99,10 +101,12 @@ class EmailingSystem():
     def prepare_email_notifications(self, email_content, receiver, image_tag):
         subject = email_content['subject']
         content = email_content['content']
+        url_to_join = email_content['url_to_join']
 
         message = render_to_string(self.newsletter_template, {
             'usuario': receiver,
             'content':content,
+            'url_to_join':url_to_join,
             'image_tag':image_tag
         })
 
@@ -139,13 +143,13 @@ class EmailingSystem():
 
 class NotificationSystem:
     def __init__(self) -> None:
-        self.new_blog_post = NotificationsType.objects.get_or_create(name = 'New blog post')[0]
-        self.new_comment = NotificationsType.objects.get_or_create(name = 'New comment')[0]
-        self.new_vote = NotificationsType.objects.get_or_create(name = 'New vote')[0]
-        self.new_follower = NotificationsType.objects.get_or_create(name = 'New follower')[0]
-        self.new_question = NotificationsType.objects.get_or_create(name = 'New question')[0]
-        self.new_answer = NotificationsType.objects.get_or_create(name = 'New answer')[0]
-        self.answer_accepted = NotificationsType.objects.get_or_create(name = 'Answer accepted')[0]
+        self.new_blog_post = NotificationsType.objects.get_or_create(name = 'Nuevo escrito')[0]
+        self.new_comment = NotificationsType.objects.get_or_create(name = 'Nuevo comentario')[0]
+        self.new_vote = NotificationsType.objects.get_or_create(name = 'Nuevo voto')[0]
+        self.new_follower = NotificationsType.objects.get_or_create(name = 'Nuevo seguidor')[0]
+        self.new_question = NotificationsType.objects.get_or_create(name = 'Nueva pregunta')[0]
+        self.new_answer = NotificationsType.objects.get_or_create(name = 'Nueva respuesta')[0]
+        self.answer_accepted = NotificationsType.objects.get_or_create(name = 'Respuesta acceptada')[0]
 
         """
         new_blog_post = 1    -----> followers
@@ -174,45 +178,63 @@ class NotificationSystem:
             notif_type = self.answer_accepted 
         return notif_type
 
-
     def save_notif(self, user, object_related, notif_type_num):
+        from .tasks import enviar_email_task
         notif_type = self.select_notification_type(notif_type_num)
 
-        notification =Notification.objects.create(
+        notification = Notification.objects.create(
         user = user,
         object = object_related,
         notification_type = notif_type,
         )
-        return notification
-    
-    def notify_related_users(self, question, notif_type):
+        email = {
+            'subject': object_related.title,
+            'content': object_related.content,
+            'url_to_join': object_related.shareable_link,
+            'app_label': notification.app_label,
+            'object_name': notification.object_name,
+            'id': notification.pk
+        }
+        return enviar_email_task.delay(email, user.pk, 'notif')
+
+    def notify_related_users(self, question, notif_type_num):
         pass
-    
-    def notify_all_users(self, object_related, notif_type):
+
+    def notify_all_users(self, object_related, notif_type_num):
         for user in User.objects.all():
-            self.save_notif(user, object_related, notif_type)
-    
+            self.save_notif(user, object_related, notif_type_num)
 
-    def notify_all_followers(self, object_related, notif_type):
-        for user in User.objects.all():
-            self.save_notif(user, object_related, notif_type)
+    def notify_all_followers(self, object_related, notif_type_num):
+        for user in object_related.author.main_writter_followed.followers.all():
+            self.save_notif(user, object_related, notif_type_num)
 
-
-    def notify_single_user(self, user, object_related, notif_type):
-        self.save_notif(user, object_related, notif_type)
-            
+    def notify_single_user(self, user, object_related, notif_type_num):
+        self.save_notif(user, object_related, notif_type_num)            
 
     def notify(self, object_related, notif_type_num:int):
         """
         whom_notify may be all, followers or single
         """
-        if whom_notify == 'all':
-            self
-        elif whom_notify == 'single':
-            self
-        else:
-            pass
-        EmailingSystem().enviar_email()
+        time.sleep(10)
+        app_label = object_related['app_label']
+        object_name = object_related['object_name']
+        id = object_related['id']
+
+        object_related = apps.get_model(app_label, object_name, require_ready=True).objects.get(pk=id)
+
+        if notif_type_num == 1:
+            self.notify_all_followers(object_related, notif_type_num)
+
+        elif notif_type_num == 2 or notif_type_num == 6 or notif_type_num == 7:
+            self.notify_related_users(object_related, notif_type_num)
+
+        elif notif_type_num == 3 or notif_type_num == 4:
+            self.notify_single_user(object_related, notif_type_num)
+
+        elif notif_type_num == 5:
+            self.notify_all_users(object_related, notif_type_num)
+
+        
         
 
         

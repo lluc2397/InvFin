@@ -14,6 +14,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 
 from apps.general.forms import DefaultNewsletterForm 
+from apps.general.tasks import prepare_notifications_task
 
 from .models import (
     PublicBlog,
@@ -121,7 +122,6 @@ class WritterOwnBlogsListView(WritterOnlyView, DetailView):
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		writter = self.get_object()
-		context["newsletter_fields_form"] = DefaultNewsletterFieldsForm()
 		context["blogs"] = PublicBlog.objects.filter(author = writter)
 		context["meta_desc"] = 'El blog donde tu también puedes escribir de forma libre'
 		context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir'
@@ -164,6 +164,8 @@ class CreatePublicBlogPostView(WritterOnlyView, CreateView):
 		modelo = form.save()
 		modelo.add_tags(tags)
 		modelo.save_secondary_info('blog')
+		if modelo.status == 1:
+			prepare_notifications_task.delay(modelo.for_task, 1)
 		return super(CreatePublicBlogPostView, self).form_valid(form)
 
 

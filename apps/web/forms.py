@@ -8,6 +8,7 @@ from django.forms import (
     DateTimeField
 )
 
+from .tasks import send_website_email_task
 from apps.general.utils import EmailingSystem
 from .models import WebsiteEmail
 
@@ -38,3 +39,8 @@ class WebEmailForm(ModelForm):
     class Meta:
         model = WebsiteEmail
         fields = ['title', 'content', 'date_to_send']
+    
+    def save(self):
+        web_email = super(WebEmailForm, self).save()
+        send_website_email_task.delay()
+        return web_email

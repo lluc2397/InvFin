@@ -18,6 +18,8 @@ from ckeditor.fields import RichTextField
 
 from apps.general.mixins import CommonMixin
 
+from itertools import chain
+
 class Question(BasicWrittenContent):
     content = RichTextField(config_name='simple')
     is_answered = BooleanField(default=False)
@@ -35,6 +37,15 @@ class Question(BasicWrittenContent):
     
     def get_absolute_url(self):
         return reverse("preguntas_respuestas:question", kwargs={"slug": self.slug})
+    
+    @property
+    def related_users(self):
+        answers_users = ''
+        upvotes_users = ''
+        downvotes_users = ''
+        comments_users = ''
+        result_list = list(chain(answers_users, upvotes_users))
+        return 
     
     @property
     def related_answers(self):

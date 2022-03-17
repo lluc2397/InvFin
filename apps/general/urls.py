@@ -8,7 +8,9 @@ from .views import (
     search_results,
     update_favorites,
     coming_soon,
-    email_opened_view
+    email_opened_view,
+    NotificationsListView,
+    delete_notification
 )
 
 app_name = "general"
@@ -28,4 +30,8 @@ urlpatterns = [
     path('coming-soon/', coming_soon, name="coming_soon"),
 
     path('email-image/<uidb64>', email_opened_view, name='email_opened_view'),
+
+    path('tus-notificaciones/', NotificationsListView.as_view(), name="notifications_list"),
+
+    path('delete-notif/<notif_id>', delete_notification, name="notification_delete"),
 ]

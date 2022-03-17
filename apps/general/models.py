@@ -232,6 +232,14 @@ class Notification(GenericModelsBase):
     class Meta:
         verbose_name = "Notification"
         db_table = "notifications"
+    
+    @property
+    def app_label(self):
+        return self._meta.app_label
+    
+    @property
+    def object_name(self):
+        return self._meta.object_name
 
 
 class BaseContentShared(Model):

@@ -60,6 +60,17 @@ class CommonMixin(Model):
         url = f'{self.id}-{self.app_label}-{self.object_name}-down'
         url = urlsafe_base64_encode(force_bytes(url))
         return url
+    
+    @property
+    def for_task(self):
+        to_json = {
+            'app_label': self.app_label,
+            'object_name': self.object_name,
+            'title': self.title,
+            'content': self.content,
+            'id': self.pk,
+        }        
+        return to_json
 
     def vote(self, user, action):
         user_already_upvoted = True if user in self.upvotes.all() else False

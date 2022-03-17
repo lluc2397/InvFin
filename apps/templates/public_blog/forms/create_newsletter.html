@@ -1,11 +1,15 @@
 {% extends "general/bases/base_forms.html" %}
+{% block extra %}
 {% load static %}
 {% load crispy_forms_tags %}
+<script type="text/javascript" src="{% static 'general/assets/vendor/moment.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'general/assets/vendor/bootstrap-datetimepicker.js' %}"></script>
+{% endblock extra %}
 {% block FormContent %}
 <form method="POST" action="{% url 'public_blog:create_blog' %}">
     <div class="card">
         {% csrf_token %}
-        {{ form.media }}
+        {{ newsletter_form.media }}
         {% for field in form %}
             {% if field.errors %}
             <div class="alert alert-danger" role="alert">
@@ -15,19 +19,14 @@
         {% endfor %}
         <div class="card-body">
             <div class="row">
-                {{newsletter_form.title|as_crispy_field}}
-                {{newsletter_form.resume|as_crispy_field}}                        
-                {{newsletter_form.content}}
-                
-                <div class="col-4">
-                    
+                <div class="col-lg-6 col-sm-12">
+                    {{newsletter_form.title|as_crispy_field}}
                 </div>
-                <div class="col-4">
-                    enviar como newsletter
+                <div class="col-lg-6 col-sm-12">
+                    {{newsletter_form.date_to_send|as_crispy_field}}
                 </div>
-                <div class="col-4 mt-4">
-                    <input name="tags" type="text" class="form-control" 
-                    value="" required/>
+                <div class="col-lg-12 col-sm-12">
+                    {{newsletter_form.content|as_crispy_field}}
                 </div>
             </div>
             <div class="col-12 mt-4">
@@ -36,4 +35,22 @@
         </div>
     </div>
 </form>
+<script type="text/javascript">
+    $(function () {
+    $("#id_date_to_send").datetimepicker({
+        icons: {
+            time: "fa fa-clock",
+            date: "fa fa-calendar-day",
+            up: "fa fa-chevron-up",
+            down: "fa fa-chevron-down",
+            previous: 'fa fa-chevron-left',
+            next: 'fa fa-chevron-right',
+            today: 'fa fa-screenshot',
+            clear: 'fa fa-trash',
+            close: 'fa fa-remove'
+          },
+      format: 'DD/MM/YYYY HH:mm',
+    });
+  });
+</script>
 {% endblock FormContent %}
