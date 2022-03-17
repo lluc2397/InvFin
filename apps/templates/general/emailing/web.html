@@ -1,0 +1,12 @@
+{% extends "general/emailing/base.html" %}
+
+{% block content %}
+<p>Hola {% if usuario.username%} {{usuario.username}} {%else%} {{usuario}} {%endif%}, Qué tal estás?
+    <br>
+    {{newsl_content|safe}}        
+</p>
+<br>
+Atentamente,
+<br>
+Lucas Montes
+{% endblock content %}

@@ -24,7 +24,7 @@ headers = {
     'Accept-Encoding': 'gzip, deflate'
 }
 
-class CompanyMixin(Model):
+class CompanyExtended(Model):
     class Meta:
         abstract = True
     

@@ -4,12 +4,15 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 from apps.public_blog.models import PublicBlog, PublicBlogAsNewsletter, NewsletterFollowers
-from apps.emailing.tasks import enviar_email_task
+
 
 User = get_user_model()
 
-from apps.general.utils import NotificationSystem
+from .utils import EmailingSystem, NotificationSystem
 
+@celery_app.task()
+def enviar_email_task(newsletter, receiver_id, email_type):
+    EmailingSystem().enviar_email(newsletter, receiver_id, email_type)
 
 
 @celery_app.task()

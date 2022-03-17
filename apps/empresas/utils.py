@@ -186,3 +186,13 @@ class UpdateCompany():
             operating_cf = csf_stt['operatingCashFlow'],
             capex = csf_stt['capitalExpenditure'],
             fcf = csf_stt['freeCashFlow'],)
+    
+    def create_rentability_ratios(self):
+        roa = ''
+        roe = ''
+        roc = ''
+        roce = ''
+        rota = ''
+        roic = ''
+        nopatroic = ''
+        rogic = ''

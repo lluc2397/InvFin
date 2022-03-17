@@ -46,7 +46,6 @@ urlpatterns = [
 
     path("", include("apps.seo.urls", namespace="seo")),
 
-    path("", include("apps.emailing.urls", namespace="emailing")),
 
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

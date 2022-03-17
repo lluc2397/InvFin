@@ -23,7 +23,7 @@ from apps.general.models import (
     Sector
 )
 
-from .mixins import CompanyMixin
+from .company_extension import CompanyExtended
 
 
 class ExchangeOrganisation(Model):
@@ -62,7 +62,7 @@ class Exchange(Model):
         return Company.objects.filter(exchange = self).count()
 
 
-class Company(CompanyMixin):
+class Company(CompanyExtended):
     ticker = CharField(max_length=6000000)
     name = CharField(max_length=600000, null=True, blank=True)
     currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)

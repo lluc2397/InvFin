@@ -51,7 +51,10 @@
                                     <span class="me-2"><i style=" font-size: 16px;" class="far fa-comment"></i> {{ question.related_answers.count }}</span>
                                     <span class="me-2"><i class="fas fa-arrow-circle-up"></i> {{question.upvotes.all.count}}</span>
                                     <span class="me-2"><i class="fas fa-arrow-circle-down"></i> {{question.downvotes.all.count}}</span>
-                                    <span class="me-2" ><i class="fas fa-share"></i></span>
+                                    <a href="#!" class="me-2" data-bs-toggle="modal" data-bs-target="#ShareContentModal"><i class="fas fa-share"></i></a>
+                                    {% with object=question content='question'%}
+                                    {% include "general/modals/share_content.html" %}
+                                    {% endwith %}
                                 </div>
                                 <div class="float-end">
                                     {{question.created_at|date:"d.m.y"}}

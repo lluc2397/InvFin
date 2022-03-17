@@ -29,17 +29,11 @@
                         {{form.title|as_crispy_field}}
                     </div>
                     <div class="col-lg-6 col-sm-12">
-                        {{form.intro|as_crispy_field}}
+                        {{form.date_to_send|as_crispy_field}}
                     </div>
-                    <div class="col-lg-6 col-sm-12">
+                    <div class="col-lg-12 col-sm-12">
                         {{form.content|as_crispy_field}}
                     </div>
-                    <div class="col-lg-6 col-sm-12">
-                        {{form.despedida|as_crispy_field}}
-                    </div>                    
-                    <div class="col-lg-6 col-sm-12">
-                        {{form.date_to_send|as_crispy_field}}
-                    </div>                       
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary">Enviar</button>
                     </div>
@@ -50,20 +44,9 @@
 
 <script type="text/javascript">
     $(function () {
-        $('#id_date_to_send').datetimepicker({
-          icons: {
-            time: "fa fa-clock",
-            date: "fa fa-calendar-day",
-            up: "fa fa-chevron-up",
-            down: "fa fa-chevron-down",
-            previous: 'fa fa-chevron-left',
-            next: 'fa fa-chevron-right',
-            today: 'fa fa-screenshot',
-            clear: 'fa fa-trash',
-            close: 'fa fa-remove'
-          },
-          format: 'd/M/Y HH:mm'
-        });
+    $("#datetimepicker1").datetimepicker({
+      format: 'DD/MM/YYYY HH:mm',
     });
+  });
 </script>
 {% endblock FormContent %}

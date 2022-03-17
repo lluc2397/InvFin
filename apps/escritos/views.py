@@ -101,7 +101,6 @@ class TermCorrectionView(SuccessMessageMixin, CreateView):
 		return self.form_valid(form, user)
 
 	def form_valid(self, form, user):
-		print(form)
 		form.instance.author = user
-		# return super().form_valid(form)
+		return super().form_valid(form)
 

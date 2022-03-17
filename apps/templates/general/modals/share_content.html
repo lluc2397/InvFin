@@ -1,26 +1,34 @@
 <div class="modal fade" id="ShareContentModal" tabindex="-1" role="dialog" aria-labelledby="ShareContentModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-info modal-dialog-centered modal-" role="document">
-        <div class="modal-content bg-gradient-info">
+    <div class="modal-dialog modal-dialog-centered modal-" role="document">
+        <div class="modal-content">
             <div class="modal-header">
                 <h6 class="modal-title" id="modal-title-notification">Compártelo</h6>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-6 col-sm-12">
-                        <button type="button" class="btn btn-facebook btn-icon">
-                            <span class="btn-inner--icon"><i class="fab fa-facebook"></i></span>
-                            <span class="btn-inner--text">Facebook</span>
-                        </button>
-                    </div>
-                    <div class="col-lg-6 col-sm-12">
-                        <button type="button" class="btn btn-twitter btn-icon">
-                            <span class="btn-inner--icon"><i class="fab fa-twitter"></i></span>
-                            <span class="btn-inner--text">Twitter</span>
-                        </button>
-                    </div>
+            <div class="modal-body text-center">
+                <div class="col-12 mt-4">
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{object.shareable_link}}?utm_source=facebook&utm_medium=shared&utm_content={{content}}"  
+                    target="_blank" class="btn btn-facebook btn-icon-only rounded-circle">
+                        <span class="btn-inner--icon"><i class="fab fa-facebook"></i></span>
+                    </a>
+                    <a href="https://twitter.com/intent/tweet?text={{object.shareable_link}}?utm_source=twitter&utm_medium=shared&utm_content={{content}}"  
+                    target="_blank" class="btn btn-twitter btn-icon-only rounded-circle">
+                        <span class="btn-inner--icon"><i class="fab fa-twitter"></i></span>
+                    </a>
+                    <a href="https://reddit.com/submit/?url={{object.shareable_link}}?utm_source=reddit&utm_medium=shared&utm_content={{content}}"  
+                    target="_blank" class="btn btn-youtube btn-icon-only rounded-circle">
+                        <span class="btn-inner--icon"><i class="fab fa-reddit"></i></span>
+                    </a>
+                    <a href="https://www.linkedin.com/shareArticle?url={{object.shareable_link}}?utm_source=linkedin&utm_medium=shared&utm_content={{content}}"  
+                    target="_blank" class="btn btn-facebook btn-icon-only rounded-circle">
+                        <span class="btn-inner--icon"><i class="fab fa-linkedin"></i></span>
+                    </a>
+                    <a href="https://api.whatsapp.com/send?text={{object.shareable_link}}?utm_source=whatsapp&utm_medium=shared&utm_content={{content}}"  
+                    target="_blank" class="btn btn-slack btn-icon-only rounded-circle">
+                        <span class="btn-inner--icon"><i class="fab fa-whatsapp"></i></span>
+                    </a>
                 </div>
             </div>
         </div>

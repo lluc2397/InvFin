@@ -7,23 +7,10 @@ from django.forms import (
 )
 from ckeditor.widgets import CKEditorWidget
 
-
-class DefaultNewsletterFieldsForm(Form):
+class DefaultNewsletterForm(Form):
     title = CharField()
-    intro = CharField(widget=CKEditorWidget(config_name='newsletter'))
-    despedida = CharField(widget=CKEditorWidget(config_name='newsletter'))
-
-
-class DefaultNewsletterForm(DefaultNewsletterFieldsForm):
-    # use_default_title = ''
-    # use_default_introduction = ''
-    # use_default_despedida = ''
     content = CharField(widget=CKEditorWidget(config_name='simple'))
-    # default_title = ''
-    # default_introduction = ''
-    # default_despedida = ''
     date_to_send = DateTimeField()
-
 
     def annotate_changes(self, user):
         title = self.fields['title']
@@ -36,8 +23,7 @@ class DefaultNewsletterForm(DefaultNewsletterFieldsForm):
         if intro.has_changed:
             print('si')
         if despedida.has_changed:
-            print('si')
-    
+            print('si')   
 
     def creating_newsletter(self, newsletter_model):
         title = self.cleaned_data['title']
@@ -57,11 +43,4 @@ class DefaultNewsletterForm(DefaultNewsletterFieldsForm):
     def send_email(self, newsletter_model):
         newsletter = self.creating_newsletter(newsletter_model)
 
-        newsletter = newsletter.for_task
-        print(newsletter)
-        # send_website_email_task.delay(
-            # newsletter
-        # )
-
-
-    
+        return newsletter.for_task

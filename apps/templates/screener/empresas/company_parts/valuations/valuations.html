@@ -1,9 +1,42 @@
 {% load static %}
-<script src="https://cdn.jsdelivr.net/npm/chartjs-gauge@0.3.0/dist/chartjs-gauge.min.js"></script>
-{% include "screener/empresas/company_parts/valuations/price_valuations.html" %}
+<!-- <script src="https://cdn.jsdelivr.net/npm/chartjs-gauge@0.3.0/dist/chartjs-gauge.min.js"></script>
+{% include "screener/empresas/company_parts/valuations/price_valuations.html" %} -->
 
 <div class="row">
-  <div class="col-6">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                Valor de empresa
+            </div>
+            <div class="card-body">
+                <div class="table-responsive ">
+                    <table class="table table-borderless">                        
+                        <tbody>
+                            <tr>
+                                <th>Enterprise Value</th>
+                                <td>{{the_company_price_related.ev|floatformat:2}}</td>
+                                <th>CAGR</th> 
+                                <td class="pe-4">{{the_company_price_related.cagr|floatformat:2}}%</td>                               
+                            </tr>
+                            <tr>
+                                <th>Valoración tradicional</th>
+                                <td>{{the_company_price_related.gramvalu|floatformat:2}}</td>
+                                <th>Margen de seguridad</th>
+                                <td>{{the_company_price_related.safety_margin_pes|floatformat:2}}%</td>                               
+                            </tr>
+                            <tr>
+                                <th>Valoración DCF</th>
+                                <td>{{the_company_price_related.fair_value|floatformat:2}}</td>
+                                <th >Margen de seguridad</th>
+                                <td class="pe-4">{{the_company_price_related.safety_margin_opt|floatformat:2}}%</td>                               
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+  <div class="col-12">
       <div class="card">
           <div class="card-header">
               Múltiplos de valoración
@@ -177,39 +210,6 @@
                                       {% endif %}
                                   </div>
                               </td>
-                          </tr>
-                      </tbody>
-                  </table>
-              </div>
-          </div>
-      </div>
-  </div>
-  <div class="col-6">
-      <div class="card">
-          <div class="card-header">
-              Valor de empresa
-          </div>
-          <div class="card-body">
-              <div class="table-responsive ">
-                  <table class="table table-borderless">                        
-                      <tbody>
-                          <tr>
-                              <th>Enterprise Value</th>
-                              <td>{{the_company_price_related.ev|floatformat:2}}</td>
-                              <th>CAGR</th> 
-                              <td class="pe-4">{{the_company_price_related.cagr|floatformat:2}}%</td>                               
-                          </tr>
-                          <tr>
-                              <th>Valoración tradicional</th>
-                              <td>{{the_company_price_related.gramvalu|floatformat:2}}</td>
-                              <th>Margen de seguridad</th>
-                              <td>{{the_company_price_related.safety_margin_pes|floatformat:2}}%</td>                               
-                          </tr>
-                          <tr>
-                              <th>Valoración DCF</th>
-                              <td>{{the_company_price_related.fair_value|floatformat:2}}</td>
-                              <th >Margen de seguridad</th>
-                              <td class="pe-4">{{the_company_price_related.safety_margin_opt|floatformat:2}}%</td>                               
                           </tr>
                       </tbody>
                   </table>

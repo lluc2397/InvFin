@@ -2,8 +2,15 @@ from django.forms import (
     Form,
     CharField,
     EmailField,
-    Textarea
-) 
+    Textarea,
+    ModelForm,
+    DateTimeInput,
+    DateTimeField
+)
+
+from apps.general.utils import EmailingSystem
+from .models import WebsiteEmail
+
 
 class ContactForm(Form):
     name = CharField(label='Nombre', required=True)
@@ -14,7 +21,20 @@ class ContactForm(Form):
         name = self.cleaned_data['name']
         email = self.cleaned_data['email']
         message = self.cleaned_data['message']
-        print(name)
-        print(email)
-        print(message)
-        pass
+
+        message = f"{name} con el email {email} ha enviado {message}"
+        EmailingSystem().simple_email(message)
+
+
+class WebEmailForm(ModelForm):
+    date_to_send = DateTimeField(
+        input_formats=['%d/%m/%Y %H:%M'],
+        widget=DateTimeInput(attrs={
+            'class': 'form-control datetimepicker-input',
+            'id': 'datetimepicker1'
+        })
+    )
+
+    class Meta:
+        model = WebsiteEmail
+        fields = ['title', 'content', 'date_to_send']

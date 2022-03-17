@@ -7,7 +7,8 @@ from .views import (
     suggest_list_search,
     search_results,
     update_favorites,
-    coming_soon
+    coming_soon,
+    email_opened_view
 )
 
 app_name = "general"
@@ -25,4 +26,6 @@ urlpatterns = [
     path('update-favs/', update_favorites, name="update_favorites"),
 
     path('coming-soon/', coming_soon, name="coming_soon"),
+
+    path('email-image/<uidb64>', email_opened_view, name='email_opened_view'),
 ]

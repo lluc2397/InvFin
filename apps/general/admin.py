@@ -7,8 +7,17 @@ from .models import (
     Country,
     Currency,
     Notification,
-    NotificationsType
+    NotificationsType,
+    EmailNotification
 )
+
+@admin.register(EmailNotification)    
+class EmailNotificationAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'email_related'
+    ]
+
 
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):

@@ -9,7 +9,7 @@ from .views import (
     UpdatePublicBlogPostView,
     following_management_view,
     WritterOwnBlogsListView,
-    CreateBlogNewsletterView,
+    create_newsletter_for_blog,
     UpdateBlogNewsletterView
 )
 
@@ -21,7 +21,7 @@ urlpatterns = [
 
     path('management/escritos/<slug>/', WritterOwnBlogsListView.as_view(), name="manage_blogs"),
 
-    path('create-newsletter-blog/<slug>', CreateBlogNewsletterView.as_view(), name="create_newsletter_blog"),
+    path('create-newsletter-blog/<slug>', create_newsletter_for_blog, name="create_newsletter_blog"),
     path('update-newsletter-blog/<id>', UpdateBlogNewsletterView.as_view(), name="update_newsletter_blog"),
 
     path('create-blog', CreatePublicBlogPostView.as_view(), name="create_blog"),

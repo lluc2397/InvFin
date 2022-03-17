@@ -4,19 +4,20 @@ from django.contrib import messages
 from django.conf import settings
 from django.views.generic import (
     TemplateView,
-    FormView,
+    CreateView,
     DetailView)
 
 import json
 import urllib
 
-from apps.emailing.views import BaseNewsletterView
 from apps.web.models import WebsiteLegalPage, WebsiteEmailsType, WebsiteEmail
 from apps.public_blog.models import WritterProfile
 from apps.public_blog.views import writter_profile_view
 from apps.general.utils import HostChecker
 
-from .forms import ContactForm
+from .forms import ContactForm, WebEmailForm
+from .tasks import send_website_email_task
+
 
 class HomePage(TemplateView):
     template_name = 'web_principal/inicio.html'
@@ -55,6 +56,11 @@ class LegalPages(DetailView):
 def soporte_view(request):    
     form = ContactForm()
     public_key = settings.GOOGLE_RECAPTCHA_PUBLIC_KEY
+    context = {
+        'form':form, 
+        'public_key':public_key,
+        'meta_title':'Soporte'}
+        
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
@@ -73,13 +79,13 @@ def soporte_view(request):
             
             if result['success']:
                 messages.success(request, 'Gracias por tu mensaje, te responderemos lo antes posible.')
-                # SEND_EMAIL_FOR_CONTACT(nombre, email, comentario, peticion)
+                form.send_email()
                 return redirect ('web:soporte')
 
         messages.error(request, 'Ha habido un error')
         return redirect ('web:soporte')
 
-    return render(request, 'web_principal/soporte.html', {'form':form, 'public_key':public_key})
+    return render(request, 'web_principal/soporte.html', context)
 
 
 class ExcelView(TemplateView):
@@ -90,20 +96,13 @@ class ExcelView(TemplateView):
         return context
 
 
-class CreateWebEmailView(BaseNewsletterView, FormView):
-    model = WebsiteEmail	
+class CreateWebEmailView(CreateView):
+    form_class = WebEmailForm
+    
     template_name = 'web_principal/mandar_emails.html'
 
     def get_success_url(self) -> str:
         return reverse("users:user_inicio")
-
-    def form_valid(self, form):
-        form.send_email(self.model)
-        return super().form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
 
     def test_func(self):
         valid = False

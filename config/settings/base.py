@@ -400,13 +400,12 @@ CKEDITOR_CONFIGS ={
 		{ 'name': 'basicstyles', 'items': [ 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ] },
 	],
     'width': 'auto',
-    'height': 200,
     'bodyClass': 'inline-editor',
     },
+
     'simple' : {
         'toolbar': [
 			{ 'name': 'clipboard', 'items': [ 'Undo', 'Redo' ] },
-			{ 'name': 'styles', 'items': [ 'Styles', 'Format' ] },
 			{ 'name': 'basicstyles', 'items': [ 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ] },
 			{ 'name': 'paragraph', 'items': [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },
 			{ 'name': 'links', 'items': [ 'Link', 'Unlink' ] },
@@ -418,10 +417,7 @@ CKEDITOR_CONFIGS ={
         "items": [
             "Styles",
             "Format",
-            "Bold",
-            "Italic",
             "Underline",
-            "Strike",
             "-",
             "TextColor",
             "BGColor",
@@ -435,8 +431,6 @@ CKEDITOR_CONFIGS ={
     {
         "name": "widgets",
         "items": [
-            "Undo",
-            "Redo",
             "-",
             "NumberedList",
             "BulletedList",

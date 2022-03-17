@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 from apps.public_blog.models import PublicBlog, PublicBlogAsNewsletter, NewsletterFollowers
-from apps.emailing.tasks import enviar_email_task
+from apps.general.tasks import enviar_email_task
 
 User = get_user_model()
 

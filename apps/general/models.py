@@ -19,6 +19,9 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.template.defaultfilters import slugify
 from django.utils import timezone
+from ckeditor.fields import RichTextField
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 
 from cloudinary.models import CloudinaryField
 
@@ -252,3 +255,64 @@ class FavoritesHistorial(Model):
 
     class Meta:
         abstract = True
+
+
+class Newsletter(Model):
+    title = CharField(max_length=99999)
+    content = RichTextField(config_name='simple')
+    sent = BooleanField(default=False)
+    date_to_send = DateTimeField(null=True, blank=True)
+
+    class Meta:
+        abstract = True
+    
+    @property
+    def app_label(self):
+        return self._meta.app_label
+    
+    @property
+    def object_name(self):
+        return self._meta.object_name
+    
+    @property
+    def for_task(self):
+        to_json = {
+            'app_label': self.app_label,
+            'object_name': self.object_name,
+            'title': self.title,
+            'content': self.content,
+            'id': self.pk,
+        }        
+        return to_json
+
+
+class BaseEmail(Model):
+    sent_to = ForeignKey(User, on_delete=CASCADE)
+    date_sent = DateTimeField(auto_now_add=True)
+    opened = BooleanField(default=False)
+    date_opened = DateTimeField(default=timezone.now)
+
+    class Meta:
+        abstract = True
+    
+    @property
+    def app_label(self):
+        return self._meta.app_label
+    
+    @property
+    def object_name(self):
+        return self._meta.object_name
+    
+    @property
+    def encoded_url(self):
+        url = f'{self.id}-{self.app_label}-{self.object_name}'
+        url = urlsafe_base64_encode(force_bytes(url))
+        return url
+        
+
+class EmailNotification(BaseEmail):
+    email_related = ForeignKey(Notification, null=True, blank=True, on_delete=SET_NULL, related_name = "email_related")
+
+    class Meta:
+        verbose_name = "Email from notifications"
+        db_table = "emails_notifications"

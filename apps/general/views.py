@@ -4,12 +4,14 @@ from django.contrib import messages
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 from django.apps import apps
-from django.views.generic import TemplateView, RedirectView
+
+from django.utils import timezone
+from django.views.generic import TemplateView
 from django.http.response import JsonResponse, HttpResponse
 from django.db.models import Q
-from django.urls import reverse
 
 import json
+import base64
 
 from apps.escritos.models import Term, FavoritesTermsHistorial, FavoritesTermsList
 from apps.public_blog.models import PublicBlog
@@ -133,6 +135,20 @@ def update_favorites(request):
 
 def coming_soon(request):
 	return render(request, 'general/complements/coming_soon.html')
+
+
+def email_opened_view(request, uidb64):
+    
+    pixel_gif = base64.b64decode(b'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=')
+    
+    if request.method == 'GET':
+        decoded_url = force_text(urlsafe_base64_decode(uidb64)).split("-")
+        id, app_label, object_name = decoded_url[0], decoded_url[1], decoded_url[2]
+        modelo = apps.get_model(app_label, object_name, require_ready=True).objects.get(id=id)
+        modelo.opened = True
+        modelo.date_opened = timezone.now()
+        modelo.save()
+        return HttpResponse(pixel_gif, content_type='image/gif')  
 
 
 class EscritosView(TemplateView):

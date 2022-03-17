@@ -13,8 +13,7 @@ from django.views.generic import (
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 
-from apps.emailing.views import BaseNewsletterView
-from apps.emailing.forms import DefaultNewsletterFieldsForm
+from apps.general.forms import DefaultNewsletterForm 
 
 from .models import (
     PublicBlog,
@@ -23,8 +22,7 @@ from .models import (
 	NewsletterFollowers
 )
 
-from .forms import (
-	PublicBlogForm)
+from .forms import PublicBlogForm
 
 User = get_user_model()
 
@@ -169,24 +167,34 @@ class CreatePublicBlogPostView(WritterOnlyView, CreateView):
 		return super(CreatePublicBlogPostView, self).form_valid(form)
 
 
-class CreateBlogNewsletterView(BaseNewsletterView, CreateView):
-	model = PublicBlog
-	context_object_name = "newsletter_form"
-	success_message = 'Escrito actualizado'
-	template_name = 'public_blog/forms/update.html'
+@login_required
+def create_newsletter_for_blog(request, slug):
+	user = request.user
+	blog = PublicBlog.objects.get(slug = slug)
+	initial_form_values = {
+		'title': blog.title,
+		'content': blog.content,
+	}
+	newsletter_form = DefaultNewsletterForm(initial=initial_form_values)
+	context = {
+		'blog':blog,
+		'newsletter_form':newsletter_form,
+	}
+	if blog.author == user:
+		if request.POST:
+			newsletter_form = DefaultNewsletterForm(request.POST)
+			messages.success(request, 'Newsletter creada')
+			return redirect('public_blog:manage_blogs', kwargs={'slug':user.username})
+		return render(request, 'public_blog/forms/create_newsletter.html', context)
+	else:
+		return redirect('public_blog:blog_details', kwargs={'slug':blog.slug})
 
-	def test_func(self):
-		valid = False
-		if self.get_object().author == self.request.user:
-			valid = True
-		return valid
     
-
-class UpdateBlogNewsletterView(BaseNewsletterView, UpdateView):
+class UpdateBlogNewsletterView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
 	model = PublicBlogAsNewsletter
 	context_object_name = "newsletter_form"
 	success_message = 'Escrito actualizado'
-	template_name = 'public_blog/forms/update.html'
+	template_name = 'public_blog/forms/update_newsletter.html'
 
 	def test_func(self):
 		valid = False
