@@ -122,7 +122,7 @@ class WritterOwnBlogsListView(WritterOnlyView, DetailView):
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		writter = self.get_object()
-		context["blogs"] = PublicBlog.objects.filter(author = writter)
+		context["blogs"] = PublicBlog.objects.filter(author = writter).order_by('-created_at')
 		context["meta_desc"] = 'El blog donde tu también puedes escribir de forma libre'
 		context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir'
 		context["meta_title"] = 'Dashboard'
@@ -130,33 +130,16 @@ class WritterOwnBlogsListView(WritterOnlyView, DetailView):
 		return context
 
 
-class UpdatePublicBlogPostView(WritterOnlyView, UpdateView):
-	model = PublicBlog
-	form_class = PublicBlogForm
-	context_object_name = "public_blog_form"
-	success_message = 'Escrito actualizado'
-	template_name = 'public_blog/forms/update.html'
-
-	def get_context_data(self, **kwargs):
-		context = super(UpdatePublicBlogPostView, self).get_context_data(**kwargs)        
-		context['current_tags'] = self.get_object().tags.all()
-		return context
-
-	def form_valid(self, form):
-		return super(UpdatePublicBlogPostView, self).form_valid(form)
-
-	def test_func(self):
-		valid = False
-		if self.get_object().author == self.request.user:
-			valid = True
-		return valid
-
-
 class CreatePublicBlogPostView(WritterOnlyView, CreateView):
 	model = PublicBlog
 	form_class = PublicBlogForm
 	success_message = 'Escrito creado'
-	template_name = 'public_blog/forms/create.html'
+	template_name = 'public_blog/forms/manage_escrito.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(CreatePublicBlogPostView, self).get_context_data(**kwargs)
+		context["meta_title"] = 'Dashboard'
+		return context
 
 	def form_valid(self, form):
 		form.instance.author = self.request.user
@@ -164,9 +147,44 @@ class CreatePublicBlogPostView(WritterOnlyView, CreateView):
 		modelo = form.save()
 		modelo.add_tags(tags)
 		modelo.save_secondary_info('blog')
+		if modelo.send_as_newsletter == True:
+			return redirect('public_blog:create_newsletter_blog', kwargs={'slug':modelo.slug})
 		if modelo.status == 1:
-			prepare_notifications_task.delay(modelo.for_task, 1)
+			prepare_notifications_task.delay(modelo.for_task, 1)			
 		return super(CreatePublicBlogPostView, self).form_valid(form)
+
+
+class UpdatePublicBlogPostView(WritterOnlyView, UpdateView):
+	model = PublicBlog
+	form_class = PublicBlogForm
+	success_message = 'Escrito actualizado'
+	template_name = 'public_blog/forms/manage_escrito.html'
+
+	def get_success_url(self) -> str:
+		return redirect('public_blog:manage_blogs', kwargs={'slug':self.request.user.username})
+
+	def get_context_data(self, **kwargs):
+		context = super(UpdatePublicBlogPostView, self).get_context_data(**kwargs)
+		context['tags'] = self.get_object().tags.all()
+		context["meta_title"] = 'Dashboard'
+		return context
+
+	def form_valid(self, form):
+		form.instance.author = self.request.user
+		tags = self.request.POST['tags'].split(',')		
+		modelo = form.save()
+		modelo.add_tags(tags)
+		if modelo.send_as_newsletter == True:
+			return redirect('public_blog:create_newsletter_blog', kwargs={'slug':modelo.slug})
+		if modelo.status == 1:
+			prepare_notifications_task.delay(modelo.for_task, 1)			
+		return super(UpdatePublicBlogPostView, self).form_valid(form)
+
+	def test_func(self):
+		valid = False
+		if self.get_object().author == self.request.user:
+			valid = True
+		return valid
 
 
 @login_required
@@ -181,6 +199,7 @@ def create_newsletter_for_blog(request, slug):
 	context = {
 		'blog':blog,
 		'newsletter_form':newsletter_form,
+		'meta_title': 'Dashboard'
 	}
 	if blog.author == user:
 		if request.POST:
@@ -197,6 +216,15 @@ class UpdateBlogNewsletterView(LoginRequiredMixin, UserPassesTestMixin, SuccessM
 	context_object_name = "newsletter_form"
 	success_message = 'Escrito actualizado'
 	template_name = 'public_blog/forms/update_newsletter.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['update'] = True
+		context['tags'] = self.get_object().blog_related.tags.all()
+		context["meta_title"] = 'Dashboard'
+		return 
+
+	
 
 	def test_func(self):
 		valid = False

@@ -91,10 +91,13 @@ class BasicWrittenContent(CommonMixin):
                 continue
             exist_tag = Tag.objects.filter(name = tag.lower())
             if exist_tag.exists():
-                self.tags.add(exist_tag[0])
+                tag = exist_tag[0]                
             else:
-                new_tag = Tag.objects.create(name = tag.lower())
-                self.tags.add(new_tag)
+                tag = Tag.objects.create(name = tag.lower())
+            
+            if tag in self.tags.all():
+                continue
+            self.tags.add(tag)
     
     @property
     def shareable_link(self):        

@@ -30,11 +30,11 @@
                  <p class="text-sm text-muted mb-0">{{blouncatewords:"25"}</p>
               </div>
               <div class="col-auto">
-                 <!-- <button type="button" class="btn btn-sm btn-success mb-1">Añadir favoritos</button>
-                 <br> -->
+                 {% if blog.send_as_newsletter == True %}
                  <a href="{% url 'public_blog:create_newsletter_blog' blog.slug %}" class="btn btn-sm btn-primary mb-1">Newsletter</a>
                  <br>
-                 <a href="{% url 'public_blog:blog_details' blog.slug %}" type="button" class="btn btn-sm btn-primary">Visitar</a>
+                 {% endif %}
+                 <a href="{% url 'public_blog:update_blog' blog.id %}" type="button" class="btn btn-sm btn-primary">Retocar</a>
                  
               </div>
            </div>

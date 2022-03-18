@@ -2,12 +2,14 @@ from django.forms import (
     ModelForm,
     ValidationError,
     ModelForm,
-    Textarea,
+    CharField,
 ) 
 from .models import (
     Question,
     Answer
 )
+
+from ckeditor.widgets import CKEditorWidget
 
 class CreateQuestionForm(ModelForm):
 
@@ -47,7 +49,7 @@ class CreateQuestionForm(ModelForm):
 
 
 class CreateAnswerForm(ModelForm):
-    content = Textarea()
+    content = CharField(widget=CKEditorWidget(config_name='writter'))
     class Meta:
         model = Answer
         exclude = [

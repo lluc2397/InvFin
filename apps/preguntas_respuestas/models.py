@@ -21,7 +21,7 @@ from apps.general.mixins import CommonMixin
 from itertools import chain
 
 class Question(BasicWrittenContent):
-    content = RichTextField(config_name='simple')
+    content = RichTextField(config_name='writter')
     is_answered = BooleanField(default=False)
     has_accepted_answer = BooleanField(default=False)
     upvotes = ManyToManyField(User, blank=True, related_name="user_upvote_question")
@@ -106,7 +106,7 @@ class Question(BasicWrittenContent):
 class Answer(CommonMixin):
     author = ForeignKey(User, on_delete=SET_NULL, null=True, related_name='answers_apported') 
     created_at = DateTimeField(auto_now_add=True)
-    content = RichTextField(config_name='simple')    
+    content = RichTextField(config_name='writter')    
     question_related = ForeignKey(
         Question,
         on_delete=CASCADE,

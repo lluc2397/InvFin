@@ -65,7 +65,7 @@ class TermCorrection(Model):
     date_suggested = DateTimeField(default=timezone.now)
     is_approved = BooleanField(default=False)
     date_approved = DateTimeField(default=timezone.now)
-    content = RichTextField(config_name='simple')
+    content = RichTextField(config_name='writter')
     reviwed_by = ForeignKey(
         User,
         null = True,

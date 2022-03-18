@@ -13,7 +13,7 @@
   </div>
   <div class="col-lg-8 col-12-md">
     <div class="card">
-      <form method="POST" action="{% url 'preguntas_respuestas:create_question' %}">
+      <form method="POST">
         {% csrf_token %}
         {{ form.media }}
         {% for field in form %}
@@ -24,9 +24,14 @@
         {% endif %}
         {% endfor %}
         <div class="card-body">
-          <h2 class="card-title">Contenido</h2>
-          <p class="card-text">Incluye toda la información que la comunidad pueda necesitar para poder responderte de la forma más exacta.</p>
-          {{form.content}}
+          <h2 class="card-title">Título</h2>
+        <p class="card-text">Sé lo más específico posible. Imagina que estás haciendo la pregunta a alguien en concreto.</p>
+        {{form.title|as_crispy_field}}
+        <hr class="invis">
+        <h2 class="card-title">Contenido</h2>
+        <p class="card-text">Incluye toda la información que la comunidad pueda necesitar para poder responderte de la forma más exacta.</p>
+        
+        {{form.content}}
           <div><button class="btn btn-slack col-12 mt-4" type="submit">Publicar pregunta</button></div>
         </div>
       </form>

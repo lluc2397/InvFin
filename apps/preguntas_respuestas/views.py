@@ -60,6 +60,7 @@ class CreateQuestionView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
 	def get_context_data(self, **kwargs):
 		context = super(CreateQuestionView, self).get_context_data(**kwargs)
+		context["meta_title"] = 'Dashboard'
 		return context
 
 	def get_initial(self, *args, **kwargs):
@@ -92,9 +93,13 @@ class UpdateQuestionView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessage
 	template_name = 'preguntas_respuestas/forms/update_question.html'
 	context_object_name = "question"
 	slug_field = 'slug'
-
-	fields = ['content']
+	fields = ["title", 'content']
 	success_message = 'Pregunta actualizada'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context["meta_title"] = 'Dashboard'
+		return context
 
 	def form_valid(self, form):
 		form.instance.author = self.request.user

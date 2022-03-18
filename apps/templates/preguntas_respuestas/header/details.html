@@ -2,8 +2,10 @@
       <div class="row align-items-center py-4">
         <div class="col-lg-6 col-7">
           <!-- <h6 class="h2 d-inline-block mb-0 mr-5">Preguntas</h6>
-          <a href="#" class="btn btn-sm btn-neutral">Nuevas</a>
-          <a href="#" class="btn btn-sm btn-neutral">Sin responder</a> -->
+          <a href="#" class="btn btn-sm btn-neutral">Nuevas</a> -->
+          {% if request.user == object.author %}
+          <a href="{% url 'preguntas_respuestas:update_question' object.slug %}" class="btn btn-sm btn-neutral">Mejorar pregunta</a> 
+          {% endif %}
           <a href="#doAnswer" class="btn btn-sm btn-neutral">Responder</a>            
         </div>
         <div class="col-lg-6 col-5 text-right">

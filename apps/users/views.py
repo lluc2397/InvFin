@@ -35,7 +35,6 @@ class UserDetailView(LoginRequiredMixin, TemplateView):
 
 
 class UserPublicProfileDetailView(DetailView):
-
     template_name = 'profile/public/profile.html'
     model = User
     slug_field = "username"
@@ -44,6 +43,10 @@ class UserPublicProfileDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["meta_desc"] = self.request.user.user_profile.bio
+        context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir, excel'
+        context["meta_title"] = self.request.user.username
+        context["meta_url"] = f'perfil/{self.request.user.username}/'
         return context
 
 
@@ -79,13 +82,14 @@ def user_update_profile(request):
         form = UserForm(instance=request.user)
         profile_form = UserProfileForm(instance=request.user.user_profile)
         writter_form = WritterProfileForm(instance=request.user.writter_profile)
+
+        context = {
+            'profile_form': profile_form, 
+            'form': form, 
+            'writter_form':writter_form,
+            
+            'meta_title': 'Tu perfil',
+            
+            }
    
-    return render(request, 'profile/private/settings.html', {'profile_form': profile_form, 'form': form, 'writter_form':writter_form})
-
-
-class UserRedirectView(LoginRequiredMixin, RedirectView):
-
-    permanent = False
-
-    def get_redirect_url(self):
-        return reverse("preguntas_respuestas:list_questions")
+    return render(request, 'profile/private/settings.html', context)

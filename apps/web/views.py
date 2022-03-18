@@ -49,7 +49,10 @@ class LegalPages(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context[''] = ''
+        context["meta_desc"] = 'Todo lo que necesitas para ser un mejor inversor'
+        context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir'
+        context["meta_title"] = 'Invierte correctamente'
+        context["meta_url"] = ''
         return context
 
 
@@ -93,6 +96,10 @@ class ExcelView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["meta_desc"] = 'El mejor excel para invertir correctamente y obtener mejores beneficios'
+        context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir, excel'
+        context["meta_title"] = 'Excel inteligente'
+        context["meta_url"] = 'excel-analisis/'
         return context
 
 

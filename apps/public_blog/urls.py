@@ -22,10 +22,10 @@ urlpatterns = [
     path('management/escritos/<slug>/', WritterOwnBlogsListView.as_view(), name="manage_blogs"),
 
     path('create-newsletter-blog/<slug>', create_newsletter_for_blog, name="create_newsletter_blog"),
-    path('update-newsletter-blog/<id>', UpdateBlogNewsletterView.as_view(), name="update_newsletter_blog"),
+    path('update-newsletter-blog/<pk>', UpdateBlogNewsletterView.as_view(), name="update_newsletter_blog"),
 
     path('create-blog', CreatePublicBlogPostView.as_view(), name="create_blog"),
-    path('update-blog/<id>', UpdatePublicBlogPostView.as_view(), name="update_blog"),
+    path('update-blog/<pk>', UpdatePublicBlogPostView.as_view(), name="update_blog"),
 
     path('become-writter', user_become_writter_view, name="user_become_writter"),
     path('start-following-writter', following_management_view, name="following_management_view"),

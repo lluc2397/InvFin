@@ -119,7 +119,7 @@ class UserCompanyObservation(Model):
     user = ForeignKey(User, on_delete=SET_NULL, null=True, blank=True)
     company = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True, related_name="company_foda")
     date = DateTimeField(auto_now_add=True)
-    observation = RichTextField(default='', config_name='newsletter')
+    observation = RichTextField(default='', config_name='simple')
     observation_type = IntegerField(null=True, blank=True,choices=STATUS)
 
     class Meta:

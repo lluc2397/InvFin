@@ -9,7 +9,7 @@ from ckeditor.widgets import CKEditorWidget
 
 class DefaultNewsletterForm(Form):
     title = CharField()
-    content = CharField(widget=CKEditorWidget(config_name='simple'))
+    content = CharField(widget=CKEditorWidget(config_name='writter'))
     date_to_send = DateTimeField()
 
     def annotate_changes(self, user):

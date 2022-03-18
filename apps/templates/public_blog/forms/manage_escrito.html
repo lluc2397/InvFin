@@ -6,7 +6,7 @@
 <script src="{% static 'general/assets/vendor/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js' %}"></script>
 {% endblock extra %}
 {% block FormContent %}
-<form method="POST" action="{% url 'public_blog:create_blog' %}">
+<form method="POST">
     <div class="card">
         {% csrf_token %}
         {{ form.media }}
@@ -29,8 +29,10 @@
                 <div class="col-4">
                     {{form.send_as_newsletter|as_crispy_field}}
                 </div>
-                <div class="col-4 mt-4">
-                    <input name="tags" type="text" class="form-control" value="Invertir" data-toggle="tags" required/>
+                <div class="col-4 mt-4">                    
+                    <input name="tags" type="text" class="form-control"
+                    value="{% for tag in tags %}{{tag}},{% endfor %}"
+                    data-toggle="tags" required/>
                 </div>
             </div>
             <div class="col-12 mt-4">

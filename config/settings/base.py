@@ -126,7 +126,7 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = "users:redirect"
+LOGIN_REDIRECT_URL = "users:user_inicio"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
 
@@ -392,7 +392,7 @@ CKEDITOR_CONFIGS ={
         'width': 'auto',
         "removePlugins": "exportpdf",
     },
-    'newsletter' : {
+    'simple' : {
         'toolbar' : [
 		{ 'name': 'insert', 'items': [ 'Smiley' ] },
 		{ 'name': 'styles', 'items': [ 'Styles' ] },
@@ -402,113 +402,69 @@ CKEDITOR_CONFIGS ={
     'width': 'auto',
     },
 
-    'simple' : {
+    'writter' : {
         'toolbar': [
-			{ 'name': 'clipboard', 'items': [ 'Undo', 'Redo' ] },
-			{ 'name': 'basicstyles', 'items': [ 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ] },
-			{ 'name': 'paragraph', 'items': [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },
-			{ 'name': 'links', 'items': [ 'Link', 'Unlink' ] },
-			{ 'name': 'insert', 'items': [ 'Image', 'EmbedSemantic', 'Table', 'smiley' ] },
-			{ 'name': 'tools', 'items': [ 'Maximize' ] },
-			{ 'name': 'editing', 'items': [ 'Scayt' ] },
-            {
-        "name": "document",
-        "items": [
-            "Styles",
-            "Format",
-            "Underline",
-            "-",
-            "TextColor",
-            "BGColor",
-            "-",
-            "JustifyLeft",
-            "JustifyCenter",
-            "JustifyRight",
-            "JustifyBlock",
-        ],
-    },
-    {
-        "name": "widgets",
-        "items": [
-            "-",
-            "NumberedList",
-            "BulletedList",
-            "-",
-            "Outdent",
-            "Indent",
-            "-",
-            "Link",
-            "Unlink",
-            "-",
-            "Image",
-            "CodeSnippet",
-            "Table",
-            "HorizontalRule",
-            "Smiley",
-            "SpecialChar",
-            "-",
-            "Blockquote",
-            "-",
-            "ShowBlocks",
-            "Maximize",
-        ],
-    }
-		],
+        { 'name': 'clipboard', 'items': [ 'Undo', 'Redo' ] },
+        { 'name': 'styles', 'items': [ 'Styles', 'Format' ] },
+        { 'name': 'basicstyles', 'items': [ 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ] },
+        { 'name': 'paragraph', 'items': [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },
+        { 'name': 'links', 'items': [ 'Link', 'Unlink' ] },
+        { 'name': 'insert', 'items': [ 'Image', 'EmbedSemantic', 'Table' ] },
+        { 'name': 'tools', 'items': [ 'Maximize' ] },
+        { 'name': 'editing', 'items': [ 'Scayt' ] }
+    ],
+    'width': 'auto',
+    'extraPlugins': 'autoembed,embedsemantic,image2,uploadimage',
 
-		'customConfig': '',
+    'removePlugins': 'image',
 
-		'extraPlugins': 'autoembed,embedsemantic,image2,uploadimage',
-		'removePlugins': 'image',
+    'bodyClass': 'article-editor',
 
-		
-		'width': 'auto',
-		
+    'format_tags': 'p;h1;h2;h3;pre',
 
-		'bodyClass': 'article-editor',
+    'removeDialogTabs': 'image:advanced;link:advanced',
+
+    'stylesSet': [
+
+        { 'name': 'Marker',			'element': 'span', 'attributes': { 'class': 'marker' } },
+        { 'name': 'Cited Work',		'element': 'cite' },
+        { 'name': 'Inline Quotation',	'element': 'q' },
 
 
-		'removeDialogTabs': 'image:advanced;link:advanced',
-
-		'stylesSet': [
-			
-			{ 'name': 'Marker',			'element': 'span', 'attributes': { 'class': 'marker' } },
-			{ 'name': 'Cited Work',		'element': 'cite' },
-			{ 'name': 'Inline Quotation',	'element': 'q' },
-
-			{
-				'name': 'Special Container',
-				'element': 'div',
-				'styles': {
-					'padding': '5px 10px',
-					'background': '#eee',
-					'border': '1px solid #ccc'
-				}
-			},
-			{
-				'name': 'Compact table',
-				'element': 'table',
-				'attributes': {
-					'cellpadding': '5',
-					'cellspacing': '0',
-					'border': '1',
-					'bordercolor': '#ccc'
-				},
-				'styles': {
-					'border-collapse': 'collapse'
-				}
-			},
-			{ 'name': 'Borderless Table',		'element': 'table',	'styles': { 'border-style': 'hidden', 'background-color': '#E6E6FA' } },
-			{ 'name': 'Square Bulleted List',	'element': 'ul',		'styles': { 'list-style-type': 'square' } },
+        {
+            'name': 'Special Container',
+            'element': 'div',
+            'styles': {
+                'padding': '5px 10px',
+                'background': '#eee',
+                'border': '1px solid #ccc'
+            }
+        },
+        {
+            'name': 'Compact table',
+            'element': 'table',
+            'attributes': {
+                'cellpadding': '5',
+                'cellspacing': '0',
+                'border': '1',
+                'bordercolor': '#ccc'
+            },
+            'styles': {
+                'border-collapse': 'collapse'
+            }
+        },
+        { 'name': 'Borderless Table',		'element': 'table',	'styles': { 'border-style': 'hidden', 'background-color': '#E6E6FA' } },
+        { 'name': 'Square Bulleted List',	'element': 'ul',		'styles': { 'list-style-type': 'square' } },
 
 
-			{ 'name': 'Illustration', 'type': 'widget', 'widget': 'image', 'attributes': { 'class': 'image-illustration' } },
+        { 'name': 'Illustration', 'type': 'widget', 'widget': 'image', 'attributes': { 'class': 'image-illustration' } },
 
-			{ 'name': '240p', 'type': 'widget', 'widget': 'embedSemantic', 'attributes': { 'class': 'embed-240p' } },
-			{ 'name': '360p', 'type': 'widget', 'widget': 'embedSemantic', 'attributes': { 'class': 'embed-360p' } },
-			{ 'name': '480p', 'type': 'widget', 'widget': 'embedSemantic', 'attributes': { 'class': 'embed-480p' } },
-			{ 'name': '720p', 'type': 'widget', 'widget': 'embedSemantic', 'attributes': { 'class': 'embed-720p' } },
-			{ 'name': '1080p', 'type': 'widget','widget': 'embedSemantic','attributes': { 'class': 'embed-1080p' } }
-		]
+        { 'name': '240p', 'type': 'widget', 'widget': 'embedSemantic', 'attributes': { 'class': 'embed-240p' } },
+        { 'name': '360p', 'type': 'widget', 'widget': 'embedSemantic', 'attributes': { 'class': 'embed-360p' } },
+        { 'name': '480p', 'type': 'widget', 'widget': 'embedSemantic', 'attributes': { 'class': 'embed-480p' } },
+        { 'name': '720p', 'type': 'widget', 'widget': 'embedSemantic', 'attributes': { 'class': 'embed-720p' } },
+        { 'name': '1080p', 'type': 'widget', 'widget': 'embedSemantic', 'attributes': { 'class': 'embed-1080p' } }
+    ]
     }
 }
 

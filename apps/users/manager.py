@@ -1,11 +1,11 @@
 import uuid
 import secrets
 import string
-
+from django.contrib.auth.models import BaseUserManager
 from django.db.models import Manager
 
 
-class UserExtraManager(Manager):
+class UserExtraManager(BaseUserManager):
     
     def get_or_create_quick_user(self, email, request, just_newsletter = False, just_correction = False):
         if self.filter(email = email).exists():

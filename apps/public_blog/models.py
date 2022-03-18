@@ -23,7 +23,7 @@ class WritterProfile(Model):
     user = OneToOneField(User, on_delete=SET_NULL, null=True, related_name="writter_profile")
     created_at = DateTimeField(auto_now_add=True)
     host_name = CharField(max_length=100000, null=True, blank=True, unique=True)
-    long_description = RichTextField(default='', config_name='simple')
+    long_description = RichTextField(default='', config_name='writter')
     facebook = CharField(max_length=100000, null=True, blank=True)
     twitter = CharField(max_length=100000, null=True, blank=True)
     insta = CharField(max_length=100000, null=True, blank=True)
@@ -75,7 +75,7 @@ class NewsletterFollowers(Model):
 
 class PublicBlog(BaseEscrito):
     send_as_newsletter = BooleanField(default=False)
-    content = RichTextField(config_name='simple')
+    content = RichTextField(config_name='writter')
     upvotes = ManyToManyField(User, blank=True, related_name="user_upvote_blog")
     downvotes = ManyToManyField(User, blank=True, related_name="user_downvote_blog")
     published_correctly = BooleanField(default=False)
@@ -93,6 +93,13 @@ class PublicBlog(BaseEscrito):
     def custom_url(self):
         domain = 'inversionesyfinanzas.xyz'
         return f"https://{self.author}.{domain}/p/{self.slug}"
+    
+    @property
+    def has_newsletter(self):
+        has_newsletter = False
+        if self.public_blog_newsletter.exists():
+            has_newsletter = True
+        return has_newsletter
 
 
 class PublicBlogAsNewsletter(Newsletter):
