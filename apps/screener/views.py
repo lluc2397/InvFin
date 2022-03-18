@@ -82,7 +82,6 @@ class CompanyDetailsView(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(self.__dict__)
         empresa = self.object
         UpdateCompany(empresa).general_update()
         context["meta_desc"] = f'Estudia a fondo la empresa {empresa.name}. Más de 30 años de información, noticias, pros, contras y mucho más'

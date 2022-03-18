@@ -12,7 +12,7 @@ User = get_user_model()
 def send_website_email_task():
     for email_to_send in WebsiteEmail.objects.filter(sent = False):
         if email_to_send.date_to_send <= timezone.now():
-            for user in User.objects.all()[:2]:
+            for user in User.objects.all():
                 enviar_email_task.delay(email_to_send.for_task, user.id, 'web')
             email_to_send.sent = True
             email_to_send.save()

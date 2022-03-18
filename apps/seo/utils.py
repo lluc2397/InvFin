@@ -47,12 +47,12 @@ class SeoInformation:
 
 
     def get_visiteur_by_old_session(self, request):
-        try:
+        session = Session.objects.filter(session_key = request.session.session_key)
+        visiteur = False
+        if session.exists():
             session = Session.objects.get(session_key = request.session.session_key)
             visiteur = Visiteur.objects.get(id = session.get_decoded()['visiteur_id'])
-            return visiteur
-        except KeyError:
-            return False
+        return visiteur
 
 
     def find_visiteur(self, request):

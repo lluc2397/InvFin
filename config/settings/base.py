@@ -400,7 +400,6 @@ CKEDITOR_CONFIGS ={
 		{ 'name': 'basicstyles', 'items': [ 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ] },
 	],
     'width': 'auto',
-    'bodyClass': 'inline-editor',
     },
 
     'simple' : {
