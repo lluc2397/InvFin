@@ -258,12 +258,6 @@ EMAIL_BACKEND = env(
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
-EMAIL_CONTACT = env('EMAIL_CONTACT')
-EMAIL_NEWSLETTER = env('EMAIL_NEWSLETTER')
-MAIN_EMAIL = env('MAIN_EMAIL')
-EMAIL_ACCOUNTS = env('EMAIL_ACCOUNTS')
-EMAIL_DEFAULT = env('EMAIL_DEFAULT')
-
 # ADMIN
 # ------------------------------------------------------------------------------
 # Django Admin URL.
@@ -398,6 +392,7 @@ CKEDITOR_CONFIGS ={
 		{ 'name': 'insert', 'items': [ 'Smiley' ] },
 		{ 'name': 'styles', 'items': [ 'Styles' ] },
 		{ 'name': 'colors', 'items': [ 'Colors' ] },
+        { 'name': 'links', 'items': [ 'Link', 'Unlink' ] },
 		{ 'name': 'basicstyles', 'items': [ 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ] },
 	],
     'width': 'auto',

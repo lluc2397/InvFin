@@ -26,10 +26,22 @@ CACHES = {
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = env(
-    "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend"
-)
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" 
 
+USE_GMAIL = env.bool("USE_GMAIL", False)
+if USE_GMAIL == True:
+    EMAIL_CONTACT = env("EMAIL_CONTACT")
+    EMAIL_SUBJECT_PREFIX = env("EMAIL_SUBJECT_PREFIX")
+    DEFAULT_EMAIL = env("DEFAULT_EMAIL")
+    EMAIL_HOST = env("EMAIL_HOST")
+    EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+    EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+    EMAIL_PORT = env("EMAIL_PORT")
+    EMAIL_USE_TLS = env("EMAIL_USE_TLS")
+    EMAIL_NEWSLETTER = env("EMAIL_NEWSLETTER")
+    MAIN_EMAIL = env("MAIN_EMAIL")
+    EMAIL_ACCOUNTS = env("EMAIL_ACCOUNTS")
+    EMAIL_DEFAULT = env("EMAIL_DEFAULT")
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites

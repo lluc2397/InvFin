@@ -1,12 +1,12 @@
 {% extends "general/emailing/base.html" %}
 
 {% block content %}
-<p>Hola {% if usuario.username%} {{usuario.username}} {%else%} {{usuario}} {%endif%}, Qué tal estás?
+<p>Hola {{usuario.full_name}} ¿Qué tal estás?
     <br>
-    {{newsl_content|safe}}        
+    {{content|safe}}        
 </p>
 <br>
-Atentamente,
+Atentamente
 <br>
-Lucas Montes
+Lucas Montes - Inversiones & Finanzas
 {% endblock content %}

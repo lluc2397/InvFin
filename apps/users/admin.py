@@ -38,10 +38,10 @@ class UserAdmin(ImportExportModelAdmin, auth_admin.UserAdmin):
         ),
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
-    list_display = ["username", "is_writter", "just_newsletter", "first_name", "last_name", "last_login", "date_joined", "is_superuser"]
+    list_display = ["username", "is_writter", "just_newsletter", "just_correction", "last_login", "date_joined"]
     search_fields = ["first_name", "last_name", "username", "email"]
-    list_editable = ['is_writter', 'just_newsletter']
-    list_filter = ['is_writter', 'just_newsletter']
+    list_editable = ['is_writter', 'just_newsletter', "just_correction"]
+    list_filter = ['is_writter', 'just_newsletter', "just_correction"]
 
 
 @admin.register(Profile)
