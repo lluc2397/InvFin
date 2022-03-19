@@ -14,6 +14,7 @@ from django.db.models import (
 
 from ckeditor.fields import RichTextField
 from django.urls import reverse
+from django.db.models import Avg, Sum
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -36,8 +37,29 @@ class WritterProfile(Model):
         db_table = "writter_profile"
     
     @property
+    def all_self_blogs(self):
+        return PublicBlog.objects.filter(author = self.user)
+    
+    @property
     def number_of_blogs(self):
-        return PublicBlog.objects.filter(author = self.user).count()
+        return self.all_self_blogs.count()
+    
+    @property
+    def average_opening_rate(self):
+        total = sum(item.opening_rate for item in self.all_self_blogs)
+        return total if total else 0
+
+    @property
+    def total_visits(self):
+        return self.all_self_blogs.aggregate(total_visits=Sum('total_views'))
+    
+    @property
+    def total_interactions(self):
+        return self.all_self_blogs.aggregate(total_interactions=Sum('total_votes'))
+
+    @property
+    def total_followers(self):
+        return self.user.main_writter_followed.followers.all().count()
 
 
 class FollowingHistorial(Model):
@@ -91,8 +113,7 @@ class PublicBlog(BaseEscrito):
     
     @property
     def custom_url(self):
-        domain = 'inversionesyfinanzas.xyz'
-        return f"https://{self.author}.{domain}/p/{self.slug}"
+        return f"https://{self.author.custom_url}/p/{self.slug}"
     
     @property
     def has_newsletter(self):
@@ -100,10 +121,24 @@ class PublicBlog(BaseEscrito):
         if self.public_blog_newsletter.exists():
             has_newsletter = True
         return has_newsletter
+    
+    @property
+    def number_comments(self):
+        number_comments = self.comments_related.all().count()
+        return number_comments
+    
+    @property
+    def opening_rate(self):
+        result = 0
+        if self.public_blog_newsletter.email_related.exists():
+            total = self.public_blog_newsletter.email_related.all().count()
+            opened = self.public_blog_newsletter.email_related.filter(opened = True).count()
+            result = total/opened if opened != 0 else 0
+        return result
 
 
 class PublicBlogAsNewsletter(Newsletter):
-    blog_related = ForeignKey(
+    blog_related = OneToOneField(
         PublicBlog,
         on_delete=SET_NULL,
         null=True,
@@ -148,7 +183,7 @@ class ProfileSharedHistorial(BaseContentShared):
 
 
 class EmailPublicBlog(BaseEmail):
-    email_related = ForeignKey(PublicBlogAsNewsletter,null = True, blank=True, on_delete=SET_NULL)
+    email_related = ForeignKey(PublicBlogAsNewsletter,null = True, blank=True, on_delete=SET_NULL, related_name = 'email_related')
 
     class Meta:
         verbose_name = "Email from public blog"

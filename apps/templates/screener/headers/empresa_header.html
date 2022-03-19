@@ -42,7 +42,7 @@
         <button class="nav-link mr-1" id="pills-othervaluations-tab" data-bs-toggle="pill" data-bs-target="#pills-othervaluations" type="button" role="tab" aria-controls="pills-othervaluations" aria-selected="false">Ratios</button>
         <button class="nav-link mr-1" id="pills-foda-tab" data-bs-toggle="pill" data-bs-target="#pills-foda" type="button" role="tab" aria-controls="pills-foda" aria-selected="false">FODA</button>
         <button class="nav-link mr-1" id="pills-valuations-tab" data-bs-toggle="pill" data-bs-target="#pills-valuations" type="button" role="tab" aria-controls="pills-valuations" aria-selected="false">Valoraciones</button>
-        <!-- <button class="nav-link mr-1" id="pills-predictions-tab" data-bs-toggle="pill" data-bs-target="#pills-predictions" type="button" role="tab" aria-controls="pills-predictions" aria-selected="false">Predicciones</button> -->
+        <button class="nav-link mr-1" id="pills-predictions-tab" data-bs-toggle="pill" data-bs-target="#pills-predictions" type="button" role="tab" aria-controls="pills-predictions" aria-selected="false">Predicciones</button>
         <!-- <button class="nav-link mr-1" id="pills-recoms-tab" data-bs-toggle="pill" data-bs-target="#pills-recoms" type="button" role="tab" aria-controls="pills-recoms" aria-selected="false">Recomendaciones</button>
         <button class="nav-link" id="pills-relations-tab" data-bs-toggle="pill" data-bs-target="#pills-relations" type="button" role="tab" aria-controls="pills-relations" aria-selected="false">Relaciones</button> -->
       </div>
@@ -52,8 +52,9 @@
 </div>
 
 <script>
-  function AddToFav(ticker){       
-    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  
+  function AddToFav(ticker){
 
     event.preventDefault(); // <---- Add this line
     $.ajax({

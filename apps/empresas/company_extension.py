@@ -63,8 +63,6 @@ class CompanyExtended(Model):
         return chartData
 
 
-
-
     def income_json(self, limit = 10):
         inc = self.inc_statements.all()
         if limit != 0:
@@ -1510,7 +1508,6 @@ class CompanyExtended(Model):
             current_price = company_info['currentPrice']
             current_currency = company_info['currency']
         except Exception as e:
-            print(e)
             url_current_price = f'https://query1.finance.yahoo.com/v8/finance/chart/{self.ticker}'
 
             current_price_jsn = requests.get(url_current_price, headers=headers).json()['chart']['result']
@@ -1518,7 +1515,7 @@ class CompanyExtended(Model):
             current_price = [infos['meta']['regularMarketPrice'] for infos in current_price_jsn][0]
 
             current_currency = [infos['meta']['currency'] for infos in current_price_jsn][0]
-
+        
         inc_statement = self.inc_statements.all()
 
         last_balance_sheet = self.balance_sheets.latest()
@@ -1526,7 +1523,7 @@ class CompanyExtended(Model):
         last_per_share = self.per_share_values.latest()
         last_margins = self.margins.latest()
 
-        last_income_statement = inc_statement.first()
+        last_income_statement = self.most_recent_inc_statement
         last_revenue = last_income_statement.revenue
         average_shares_out = last_income_statement.weighted_average_shares_outstanding
 
@@ -1718,5 +1715,10 @@ class CompanyExtended(Model):
             'safety_margin_opt':safety_margin_opt,
             'current_price':current_price,
             'current_currency':current_currency,
+            'last_revenue':last_revenue,
+            'average_shares_out':average_shares_out,
+            'average_per':average_per,
+            'average_margin':average_margin,
+            'average_fcf_margin':average_fcf_margin
         }
         return context

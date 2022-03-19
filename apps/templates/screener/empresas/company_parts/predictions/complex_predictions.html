@@ -10,13 +10,15 @@
                 <tbody>
                     <tr>
                         <th>Ingresos CAGR</th>
-                        <td>{{cagr|floatformat:2}} %</td>
+                        <td>{{the_company_price_related.cagr|floatformat:2}} %</td>
                         <th>Margen beneficio promedio</th>
-                        <td>{{average_margin|floatformat:2}} %</td>
+                        <td>{{the_company_price_related.average_margin|floatformat:2}} %</td>
+                        <th>Margen free cash flow promedio</th>
+                        <td>{{the_company_price_related.average_fcf_margin|floatformat:2}} %</td>
                         <th>Recompara de acciones promedio</th>
-                        <td>{{sharesbuyback|floatformat:2}} %</td>
+                        <td>{{the_company_price_related.sharesbuyback|floatformat:2}} %</td>
                         <th>PER promedio</th>
-                        <td>{{average_per|floatformat:2}}</td>
+                        <td>{{the_company_price_related.average_per|floatformat:2}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -81,23 +83,23 @@
                     <label for="pes_buyback" class="form-floating">% de recompra de acciones pesimista</label>
                 </div>
             </div>
-            <!-- PER -->
+            <!-- FCF -->
             <div class="col-xl-4 col-sm-12 mt-2">
                 <div class="form-floating">
-                    <input type="text" value="0" class="form-control" id="complex_opt_per" placeholder="PER optimista" aria-required="true">
-                    <label for="opt_per" class="form-floating">PER optimista</label>
+                    <input type="text" value="0" class="form-control" id="complex_opt_fcf_margin" placeholder="% de free cash flow optimista" aria-required="true">
+                    <label for="opt_per" class="form-floating">% de free cash flow optimista</label>
                 </div>
             </div>
             <div class="col-xl-4 col-sm-12 mt-2">
                 <div class="form-floating">
-                    <input type="text" value="0" class="form-control" id="complex_neu_per" placeholder="PER neutral" aria-required="true">
-                    <label for="neu_per" class="form-floating">PER neutral</label>
+                    <input type="text" value="0" class="form-control" id="complex_neu_fcf_margin" placeholder="% de free cash flow neutral" aria-required="true">
+                    <label for="neu_per" class="form-floating">% de free cash flow neutral</label>
                 </div>
             </div>
             <div class="col-xl-4 col-sm-12 mt-2">
                 <div class="form-floating ">
-                    <input type="text" value="0" class="form-control" id="complex_pes_per" placeholder="PER pesimista" aria-required="true">
-                    <label for="pes_per" class="form-floating">PER pesimista</label>
+                    <input type="text" value="0" class="form-control" id="complex_pes_fcf_margin" placeholder="% de free cash flow pesimista" aria-required="true">
+                    <label for="pes_per" class="form-floating">% de free cash flow pesimista</label>
                 </div>
             </div>
             
@@ -136,11 +138,11 @@
         var complex_opt_buyback = document.querySelector("#complex_opt_buyback").value
         var complex_neu_buyback = document.querySelector("#complex_neu_buyback").value
         var complex_pes_buyback = document.querySelector("#complex_pes_buyback").value
-        var complex_opt_per = document.querySelector("#complex_opt_per").value
-        var complex_neu_per = document.querySelector("#complex_neu_per").value
-        var complex_pes_per = document.querySelector("#complex_pes_per").value
+        var complex_opt_fcf_margin = document.querySelector("#complex_opt_fcf_margin").value
+        var complex_neu_fcf_margin = document.querySelector("#complex_neu_fcf_margin").value
+        var complex_pes_fcf_margin = document.querySelector("#complex_pes_fcf_margin").value
         var company_id = "{{the_company.id}}"
-        var current_per = "{{current_per}}"
+        var current_per = "{{the_company_price_related.per}}"
 
     formData = JSON.stringify({
         complex_opt_growth :complex_opt_growth,
@@ -152,9 +154,9 @@
         complex_opt_buyback :complex_opt_buyback,
         complex_neu_buyback :complex_neu_buyback,
         complex_pes_buyback :complex_pes_buyback,
-        complex_opt_per :complex_opt_per,
-        complex_neu_per :complex_neu_per,
-        complex_pes_per :complex_pes_per,
+        complex_opt_fcf_margin :complex_opt_fcf_margin,
+        complex_neu_fcf_margin :complex_neu_fcf_margin,
+        complex_pes_fcf_margin :complex_pes_fcf_margin,
         company_id :company_id,
         current_per :current_per
     
@@ -162,7 +164,7 @@
    
   event.preventDefault(); // <---- Add this line
   $.ajax({
-      url: '#',
+    url: "{% url 'screener:medium_valuation_view' %}",
       type: "POST",
       dataType: "json",
       data: formData,

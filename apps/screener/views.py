@@ -138,7 +138,6 @@ def suggest_list_search_companies(request):
 	return HttpResponse(data, mimetype)
 
 
-
 def medium_valuation_view(request):
     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 
@@ -162,52 +161,54 @@ def medium_valuation_view(request):
             opt_buyback = float(data.get('complex_opt_buyback').replace(',', '.'))
             neu_buyback = float(data.get('complex_neu_buyback').replace(',', '.'))
             pes_buyback = float(data.get('complex_pes_buyback').replace(',', '.'))
-            opt_per = float(data.get('complex_opt_per').replace(',', '.'))
-            neu_per = float(data.get('complex_neu_per').replace(',', '.'))
-            pes_per = float(data.get('complex_pes_per').replace(',', '.'))
+            opt_fcf_margin = float(data.get('complex_opt_fcf_margin').replace(',', '.'))
+            neu_fcf_margin = float(data.get('complex_neu_fcf_margin').replace(',', '.'))
+            pes_fcf_margin = float(data.get('complex_pes_fcf_margin').replace(',', '.'))
 
             the_company = Company.objects.get(id = company_id)
+            last_revenue = the_company.most_recent_inc_statement.revenue
+            average_shares_out = the_company.most_recent_inc_statement.weighted_average_shares_outstanding
+
             UserScreenerMediumPrediction.objects.create(
                 user = user, 
                 company = the_company,
                 optimistic_growth = opt_growth,
-                current_per= current_per,
                 neutral_growth = neu_growth,
                 pesimistic_growth = pes_growth,
-                opt_margin = opt_margin,
-                neu_margin = neu_margin,
-                pes_margin = pes_margin,
-                opt_buyback = opt_buyback,
-                neu_buyback = neu_buyback,
-                pes_buyback = pes_buyback,
-                opt_per = opt_per,
-                neu_per = neu_per,
-                pes_per = pes_per
+                optimistic_margin = opt_margin,
+                neutral_margin = neu_margin,
+                pesimistic_margin = pes_margin,
+                optimistic_buyback = opt_buyback,
+                neutral_buyback = neu_buyback,
+                pesimistic_buyback = pes_buyback,
+                optimistic_fcf_margin = opt_fcf_margin,
+                neutral_fcf_margin = neu_fcf_margin,
+                pesimistic_fcf_margin = pes_fcf_margin,
                 )
 
             opt_valuation = discounted_cashflow(
-                the_company, 
-                opt_growth,
-                opt_margin,
-                opt_buyback,
-                opt_per,
-                current_per
-                )
+                last_revenue = last_revenue,
+                revenue_growth = opt_growth,
+                net_income_margin = opt_margin,
+                fcf_margin = opt_fcf_margin,
+                buyback = opt_buyback,
+                average_shares_out = average_shares_out
+            )
             neu_valuation = discounted_cashflow(
-                the_company,
-                neu_growth,
-                neu_margin,
-                neu_buyback,
-                neu_per,
-                current_per
+                last_revenue = last_revenue,
+                revenue_growth = neu_growth,
+                net_income_margin = neu_margin,
+                fcf_margin = opt_fcf_margin,
+                buyback = neu_buyback,
+                average_shares_out = average_shares_out
                 )
             pes_valuation = discounted_cashflow(
-                the_company,
-                pes_growth,
-                pes_margin,
-                pes_buyback,
-                pes_per,
-                current_per
+                last_revenue = last_revenue,
+                revenue_growth = pes_growth,
+                net_income_margin = pes_margin,
+                fcf_margin = opt_fcf_margin,
+                buyback = pes_buyback,
+                average_shares_out = average_shares_out
                 )
 
             return JsonResponse ({'complex_opt_valuation':opt_valuation, 
@@ -233,20 +234,48 @@ def simple_valuation_view(request):
             neu_growth = float(data.get('neu_grow').replace(',', '.'))
             pes_growth = float(data.get('pes_grow').replace(',', '.'))
             company_id = data.get('comp')
-
+            buyback = float(data.get('buyback').replace(',', '.'))
             
             the_company = Company.objects.get(id = company_id)
+            last_revenue = the_company.most_recent_inc_statement.revenue
+            average_shares_out = the_company.most_recent_inc_statement.weighted_average_shares_outstanding
+            net_income_margin = the_company.most_recent_margins.net_income_margin
+            fcf_margin = the_company.most_recent_margins.fcf_margin
+            buyback = buyback
+
             UserScreenerSimplePrediction.objects.create(
                 user = user, 
                 company = the_company,
                 optimistic_growth = opt_growth,
                 neutral_growth = neu_growth,
                 pesimistic_growth = pes_growth
+                
                 )
 
-            opt_valuation = discounted_cashflow(the_company, opt_growth)
-            neu_valuation = discounted_cashflow(the_company, neu_growth)
-            pes_valuation = discounted_cashflow(the_company, pes_growth)
+            opt_valuation = discounted_cashflow(
+                last_revenue = last_revenue,
+                revenue_growth = opt_growth,
+                net_income_margin = net_income_margin,
+                fcf_margin = fcf_margin,
+                buyback = buyback,
+                average_shares_out = average_shares_out
+            )
+            neu_valuation = discounted_cashflow(
+                last_revenue = last_revenue,
+                revenue_growth = neu_growth,
+                net_income_margin = net_income_margin,
+                fcf_margin = fcf_margin,
+                buyback = buyback,
+                average_shares_out = average_shares_out
+                )
+            pes_valuation = discounted_cashflow(
+                last_revenue = last_revenue,
+                revenue_growth = pes_growth,
+                net_income_margin = net_income_margin,
+                fcf_margin = fcf_margin,
+                buyback = buyback,
+                average_shares_out = average_shares_out
+                )
 
             return JsonResponse ({'opt_valuation':opt_valuation, 
             'neu_valuation':neu_valuation, 'pes_valuation':pes_valuation

@@ -53,8 +53,14 @@ def find_images(modeladmin, request, queryset):
         query.save()
 
 
+class NewsletterInline(admin.StackedInline):
+    model = PublicBlogAsNewsletter
+
+
 @admin.register(PublicBlog)
 class PublicBlogAdmin(admin.ModelAdmin):
+    inlines = [NewsletterInline]
+
     actions = [find_images]
     
     list_display = [

@@ -58,44 +58,37 @@
                     <div class="row">
                         <div class="panel panel-default widget">
                             <div class="panel-body">
-                                <ul class="list-group">
-                                    {% if user.is_authenticated%}
-                                    <li style="text-align: center;" class="list-group-item">
-                                        <form method="POST" action="{% url 'screener:create_company_observation' %}">
-                                            {% csrf_token %}
-                                            {{observation_form.media}}
-                                            <input hidden value="{{the_company.ticker}}" name="company">
-                                            <div class="input-group mb-3">
-                                                <div class="row">
-                                                    <div class="col-lg-9 col-sm-12">
-                                                        {{observation_form.observation}}
-                                                    </div>
-                                                    <div class="col-lg-3 col-sm-12">
-                                                        {{observation_form.observation_type|as_crispy_field}}
-                                                        <button class="btn btn-success" type="submit">Publicar</button>
-                                                    </div>
-                                                </div>                                                
+                                {% if user.is_authenticated%}                                    
+                                <form method="POST" action="{% url 'screener:create_company_observation' %}">
+                                    {% csrf_token %}
+                                    {{observation_form.media}}
+                                    <input hidden value="{{the_company.ticker}}" name="company">
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="col-lg-9 col-sm-12">
+                                                {{observation_form.observation}}
                                             </div>
-                                        </form>
-                                    </li>
-                                    {% else %}
-                                    <li style="text-align: center;" class="list-group-item">
-                                        <div class="input-group mb-3">
-                                            <div class="col-12">
-                                                <div class="row">
-                                                    <div class="col-lg-9 col-sm-12">
-                                                        {{observation_form.observation}}
-                                                    </div>
-                                                    <div class="col-lg-3 col-sm-12">
-                                                        {{observation_form.observation_type|as_crispy_field}}
-                                                        <button class="btn btn-success col-12" data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" id="button-addon2">Publicar</button>
-                                                    </div>
-                                                </div>
-                                            </div>                                                
+                                            <div class="col-lg-3 col-sm-12">
+                                                {{observation_form.observation_type|as_crispy_field}}
+                                                <button class="btn btn-success" type="submit">Publicar</button>
+                                            </div>
+                                        </div>                                                
+                                    </div>
+                                </form>                            
+                            {% else %}                                   
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-lg-9 col-sm-12">
+                                            {{observation_form.observation}}
                                         </div>
-                                    </li>
-                                    {% endif %}
-                                </ul>
+                                        <div class="col-lg-3 col-sm-12">
+                                            {{observation_form.observation_type|as_crispy_field}}
+                                            <button class="btn btn-success col-12" data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" id="button-addon2">Publicar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                        
+                            {% endif %}
                             </div>
                         </div>
                     </div>

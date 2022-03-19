@@ -101,3 +101,5 @@ class UsersJourney(Journey):
         verbose_name = "Historial visitas usuarios"
         db_table = "visits_historial_users"
     
+
+# class CompaniesSearchHistorial()

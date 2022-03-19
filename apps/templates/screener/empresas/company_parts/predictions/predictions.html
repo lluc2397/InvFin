@@ -63,6 +63,7 @@
     var opt_grow = document.querySelector("#opt_growth").value
     var neu_grow = document.querySelector("#neu_growth").value
     var pes_grow = document.querySelector("#pes_growth").value
+    var buyback = "{{the_company_price_related.sharesbuyback}}"
     var comp = "{{the_company.id}}"
 
     formData = JSON.stringify({
@@ -70,11 +71,12 @@
         neu_grow : neu_grow,
         pes_grow : pes_grow,
         comp : comp,
+        buyback : buyback,
         })
     
     event.preventDefault(); // <---- Add this line
     $.ajax({
-        url: '#',
+        url: "{% url 'screener:simple_valuation_view' %}",
         type: "POST",
         dataType: "json",
         data: formData,

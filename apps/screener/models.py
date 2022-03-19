@@ -101,9 +101,9 @@ class UserScreenerMediumPrediction(BasePrediction):
     optimistic_buyback = FloatField(null=True, blank=True)
     neutral_buyback = FloatField(null=True, blank=True)
     pesimistic_buyback = FloatField(null=True, blank=True)
-    optimistic_per = FloatField(null=True, blank=True)
-    neutral_per = FloatField(null=True, blank=True)
-    pesimistic_per = FloatField(null=True, blank=True)
+    optimistic_fcf_margin = FloatField(null=True, blank=True)
+    neutral_fcf_margin = FloatField(null=True, blank=True)
+    pesimistic_fcf_margin = FloatField(null=True, blank=True)
 
     class Meta:
         verbose_name = "Predicciones elaboradas de los usuarios"

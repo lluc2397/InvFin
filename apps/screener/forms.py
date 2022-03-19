@@ -11,4 +11,4 @@ class UserCompanyObservationForm(forms.ModelForm):
             'user',
             'company',
             'date',
-]
+        ]
