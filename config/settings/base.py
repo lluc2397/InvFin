@@ -215,6 +215,7 @@ TEMPLATES = [
                 "apps.users.context_processors.users_notifications",
                 "apps.public_blog.context_processors.keep_email",
                 "apps.seo.context_processors.journey",
+                "apps.seo.context_processors.debug",
             ],
         },
     }
