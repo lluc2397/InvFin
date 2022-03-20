@@ -1717,8 +1717,8 @@ class CompanyExtended(Model):
             'current_currency':current_currency,
             'last_revenue':last_revenue,
             'average_shares_out':average_shares_out,
-            'average_per':average_per,
-            'average_margin':average_margin,
-            'average_fcf_margin':average_fcf_margin
+            # 'average_per':average_per,
+            # 'average_margin':average_margin,
+            # 'average_fcf_margin':average_fcf_margin
         }
         return context
