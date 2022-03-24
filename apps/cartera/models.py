@@ -14,7 +14,7 @@ from django.db.models import (
     DateField,
     DecimalField
 )
-
+import json
 from decimal import Decimal
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -28,169 +28,30 @@ from apps.etfs.models import (
     Etf)
 
 from django.contrib.auth import get_user_model
-User = get_user_model()
-
-
-class Patrimonio(Model):
-    usuario = OneToOneField(User, on_delete=SET_NULL, null=True, blank=True)
-    assets = ManyToManyField('cartera.Asset', blank=True)
-    liabilities = ManyToManyField('cartera.Liability', blank=True)
-    cashflow = ManyToManyField('cartera.CashflowMovement', blank=True)
-    default_currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)
-
-    class Meta:        
-        verbose_name = "Patrimonio"
-        verbose_name_plural = "Patrimonios"
-
-    def __str__(self):
-        return self.usuario.username
-    
-    @property
-    def empresas_en_cartera (self):
-        empresas = []
-        for empresa in self.cartera.all():
-            if empresa.asset is not None and empresa.asset.empresa is not None:            
-                empresas.append(empresa)
-        return empresas
-    
-    @property
-    def porcentaje_empresas_en_cartera (self):
-        return sum(Decimal(item.percentage_capital_invested) for item in self.empresas_en_cartera)
-    
-    
-    @property
-    def porcentaje_etfs_en_cartera (self):
-        etfs = []
-        for etf in self.cartera.all():
-            if etf.asset is not None and etf.asset.etf is not None:
-                etfs.append(etf)
-        return sum(Decimal(item.percentage_capital_invested) for item in etfs)
-
-
-    @property
-    def gastos_totales(self):
-        total = sum(Decimal(item.amount) for item in self.cashflow.filter(move_type = 2))
-        if total == None:
-            total = 0
-        return total
-    
-    @property
-    def ingresos_totales (self):
-        total = sum(Decimal(item.amount) for item in self.cashflow.filter(move_type = 1))
-        if total == None:
-            total = 0
-        return total
-    
-    @property
-    def cantidad_total_invertida(self):
-        total_invertido = sum((item.price) * item.quantity for item in self.cartera.all())
-        if total_invertido == None:
-            total_invertido = 0
-        return total_invertido
-    
-    @property
-    def ahorros_totales(self):
-        return self.ingresos_totales - self.gastos_totales - self.cantidad_total_invertida
-    
-    @property
-    def porcentaje_ahorros_totales (self):        
-        return (((self.ahorros_totales) / self.ingresos_totales) * 100) if self.ingresos_totales != 0 else 0   
-
-    
-    @property
-    def porcentaje_cantidad_invertida(self):
-        return ((self.cantidad_total_invertida / self.ingresos_totales) * 100) if self.ingresos_totales != 0 else 0
-
-    @property
-    def porcentaje_gastos_totales(self):
-        return ((self.gastos_totales / self.ingresos_totales) * 100) if self.ingresos_totales != 0 else 0
-
-
-class Liability(Model):
-    user = ForeignKey(User, on_delete=SET_NULL, null=True, blank=True)
-    name = CharField(max_length=10000, null=True, blank=True)
-    observation = TextField("Observaciones", default='')
-    amount = DecimalField ("Cantidad", max_digits=100, decimal_places=2, default=0)
+User = get_user_model()    
 
 
 class Asset(Model):
     user = ForeignKey(User, on_delete=SET_NULL, null=True, blank=True)
-    name = CharField(max_length=10000, null=True, blank=True)
     content_type = ForeignKey(ContentType, on_delete=SET_NULL, null=True)
     object_id = PositiveIntegerField()
     object = GenericForeignKey("content_type", "object_id")
     is_stock = BooleanField(default=False)
     is_etf = BooleanField(default=False)
     is_crypto = BooleanField(default=False)
-    average_price = DecimalField ("Valor", max_digits=100, decimal_places=2, default=0)
-    total_quantity = IntegerField("Cantidad", default=0)
-    total_fees = DecimalField ("Comisiones totales", max_digits=100, decimal_places=2, default=0)
-    sold_out = BooleanField(default=False)
 
     class Meta:        
         verbose_name = "Asset"
         verbose_name_plural = "Assets"
-
-    def save(self, *args, **kwargs):
-        if not self.name:
-            self.name = self.content_type
-        return super().save(*args, **kwargs)
+        db_table = "cartera_assets"
 
     def __str__(self):       
         return str(self.name)
     
     @property
-    def last_income_statement(self):
-        info = None
-        if self.asset.empresa is not None:
-            info = self.asset.empresa.income_statement_set.latest('date')
-        return info
-    
-    @property
-    def last_balance_statement(self):
-        info = None
-        if self.asset.empresa is not None:
-            info = self.asset.empresa.balance_sheet_set.latest('date')
-        return info
-    
-    @property
-    def last_cashflow_statement(self):
-        info = None
-        if self.asset.empresa is not None:
-            info = self.asset.empresa.cashflow_statement_set.latest('date')
-        return info
-    
-    @property
-    def last_rentability(self):
-        info = None
-        if self.asset.empresa is not None:
-            info = self.asset.empresa.rentability_ratio_set.latest('date')
-        return info
-    
-    @property
-    def last_per_share_value(self):
-        info = None
-        if self.asset.empresa is not None:
-            info = self.asset.empresa.per_share_value_set.latest('date')
-        return info
-    
-    @property
-    def last_growth(self):
-        info = None
-        if self.asset.empresa is not None:
-            info = self.asset.empresa.company_growth_set.latest('date')
-        return info
-    
-    @property
-    def capital_invested(self):
-        return self.price * self.quantity
-    
-    @property
-    def percentage_capital_invested(self):
-        total_invertido = self.user.patrimonio.cantidad_total_invertida
-        total_position = self.quantity * self.price
-
-        return ((total_position / total_invertido) * 100) if total_invertido !=0 else 0
+    def amount_invested(self):
+        moves = PositionMovement.objects.filter(asset_related = self)
+        return sum(move.movement_cost for move in moves)
 
 
 class PositionMovement(Model):
@@ -210,18 +71,20 @@ class PositionMovement(Model):
         ordering = ['date']
         verbose_name = "Position movement"
         verbose_name_plural = "Position movements"
+        db_table = "cartera_movements"
 
     def __str__(self):
         return str(self.id)
     
     @property
-    def total_price(self):
-        return self.price * self.quantity
-
+    def movement_cost(self):
+        total = (self.price * self.quantity) - self.fee
+        if self.move_type == 2:
+            total = total * (-1)
+        return total
+    
 
 class CashflowMovement(Model):
-    MOVE = ((1, "Ingreso"), (2, "Gasto"))
-
     user = ForeignKey(User,  on_delete=SET_NULL, null=True, blank=True)
     name = CharField("Nombre",max_length=1000)
     amount = DecimalField ("Monto", max_digits=100, decimal_places=2, default=0)
@@ -229,15 +92,27 @@ class CashflowMovement(Model):
     date = DateField("Fecha del movimiento", null=True, blank=True)
     currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)
     is_recurrent = BooleanField(default=False)
-    move_type = IntegerField(choices=MOVE, null=True, blank=True)
 
-    class Meta:        
+    class Meta:
+        abstract = True      
         ordering = ['date']
-        verbose_name = "Cashflow movement"
-        verbose_name_plural = "Cashflow movements"
     
     def __str__(self):
         return self.name
+
+
+class Income(CashflowMovement):
+    class Meta:
+        verbose_name = "Income"
+        verbose_name_plural = "Incomes"
+        db_table = "cartera_income"
+
+
+class Spend(CashflowMovement):
+    class Meta:
+        verbose_name = "Spend"
+        verbose_name_plural = "Spends"
+        db_table = "cartera_spend"
 
 
 class FinancialObjectif(Model):
@@ -256,3 +131,42 @@ class FinancialObjectif(Model):
         ordering = ['date_created']
         verbose_name = "Objetivo financiero"
         verbose_name_plural = "Objetivo financieros"
+        db_table = "cartera_objectives"
+
+
+class Patrimonio(Model):
+    user = OneToOneField(User, on_delete=SET_NULL, null=True, blank=True)
+    assets = ManyToManyField(Asset, blank=True)
+    objectives = ManyToManyField(FinancialObjectif, blank=True)
+    default_currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)
+
+    class Meta:        
+        verbose_name = "Patrimonio"
+        verbose_name_plural = "Patrimonios"
+        db_table = "cartera_patrimoine"
+
+    def __str__(self):
+        return self.user.username
+    
+
+    @property
+    def patrimoine(self):
+        user = self.user
+        incomes = list(Income.objects.filter(user = user))
+        spends = list(Spend.objects.filter(user = user))
+        income_earned = sum(move.amount for move in incomes) 
+        income_spend = sum(move.amount for move in spends)
+        income_saved = income_earned - income_spend
+        income_invested = sum(move.amount_invested for move in Asset.objects.filter(user = user))
+
+        data = {
+            'income_earned':str(income_earned),
+            'income_spend':str(income_spend),
+            'income_saved':str(income_saved),
+            'income_invested':str(income_invested),
+            'incomes_and_spends':incomes+ spends,
+        }
+        
+
+        return data
+

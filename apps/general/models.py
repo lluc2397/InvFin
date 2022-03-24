@@ -11,7 +11,8 @@ from django.db.models import (
     ImageField,
     IntegerField,
     ManyToManyField,
-    PositiveBigIntegerField
+    PositiveBigIntegerField,
+    DateField
 )
 
 from django.contrib.sitemaps import ping_google
@@ -31,7 +32,6 @@ User = get_user_model()
 from apps.seo.models import MetaParametersHistorial
 
 from .mixins import CommonMixin, BaseEscritosMixins
-
 
 
 class EscritosClassification(Model):

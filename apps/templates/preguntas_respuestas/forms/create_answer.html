@@ -1,15 +1,19 @@
-<div class="m-2" style="overflow-x: scroll;">
+<div class="m-2">
     <h3><strong>Aporta tu respuesta</strong></h3>
-    {% if user.is_authenticated %}
     <form method="POST" action="{% url 'preguntas_respuestas:create_answer' object.slug %}">
         {% csrf_token %}
         <textarea name="content"></textarea>
-        <button class="btn btn-primary mt-1" type="submit">Publica tu respuesta</button>
-    </form>
-    {% else %}
-    <textarea name="content"></textarea>
-    <a href="#"><div class="btn btn-primary mt-1" >Publica tu respuesta</div></a>
-    {% endif %}
+        <div class="row mt-4">
+            <div class="col-lg-8 col-sm-12">
+                {% if user.is_anonymous %}
+                <input type="email" class="form-control col-12" placeholder="Email" required>
+                {% endif %}
+            </div>
+            <div class="col-lg-4 col-sm-12">
+                <button class="btn btn-primary col-12 " type="submit">Publica tu respuesta</button>
+            </div>
+        </div>        
+    </form>    
 </div>
 <script>
     CKEDITOR.replace( 'content', {

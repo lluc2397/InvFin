@@ -1,0 +1,103 @@
+{% load static %}
+<div class="row align-items-center py-4">
+  <div class="col-lg-6 col-7">
+    <h6 class="h2 d-inline-block mb-0 mr-5">Patrimonio</h6>
+    <button data-bs-toggle="modal" data-bs-target="#CashflowMovementModal" class="btn btn-sm btn-neutral">Modificar cashflow</button>
+    {% comment %} <button data-bs-toggle="modal" data-bs-target="#" class="btn btn-sm btn-neutral">Añadir activo</button> 
+    <button data-bs-toggle="modal" data-bs-target="#" class="btn btn-sm btn-neutral">Modificar cartera</button> {% endcomment %}
+  </div>
+  <div class="col-lg-6 col-5 text-right">
+    {% comment %} <a href="{% url 'preguntas_respuestas:create_question' %}" class="btn btn-md btn-slack">Preguntar</a> {% endcomment %}
+  </div>
+</div>
+<!-- Card stats -->
+<div class="row">
+  <div class="col-xl-3 col-md-6">
+    <div class="card bg-gradient-info">
+      <!-- Card body -->
+      <div class="card-body">
+         <div class="row">
+            <div class="col">
+               <h5 class="card-title text-uppercase text-muted mb-0 text-white">Ingresos</h5>
+               <span class="h2 font-weight-bold mb-0 text-white">{{money.income_earned|floatformat:2}}</span>
+            </div>
+            <div class="col-auto">
+               <div class="icon icon-shape bg-white text-dark rounded-circle shadow">
+                  <i class="fas fa-coins"></i>
+               </div>
+            </div>
+         </div>
+         <p class="mt-3 mb-0 text-sm">
+            {% comment %} <span class="text-white mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+            <span class="text-nowrap text-light">Since last month</span> {% endcomment %}
+         </p>
+      </div>
+   </div>
+  </div>
+  <div class="col-xl-3 col-md-6">
+    <div class="card bg-gradient-info">
+      <!-- Card body -->
+      <div class="card-body">
+         <div class="row">
+            <div class="col">
+               <h5 class="card-title text-uppercase text-muted mb-0 text-white">Gastos</h5>
+               <span class="h2 font-weight-bold mb-0 text-white">{{money.income_spend|floatformat:2}}</span>
+            </div>
+            <div class="col-auto">
+               <div class="icon icon-shape bg-white text-dark rounded-circle shadow">
+                  <i class="fas fa-hand-holding-usd"></i>
+               </div>
+            </div>
+         </div>
+         <p class="mt-3 mb-0 text-sm">
+            {% comment %} <span class="text-white mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+            <span class="text-nowrap text-light">Since last month</span> {% endcomment %}
+         </p>
+      </div>
+   </div>
+  </div>
+  <div class="col-xl-3 col-md-6">
+   <div class="card bg-gradient-info">
+     <!-- Card body -->
+     <div class="card-body">
+        <div class="row">
+           <div class="col">
+              <h5 class="card-title text-uppercase text-muted mb-0 text-white">Ahorros</h5>
+              <span class="h2 font-weight-bold mb-0 text-white">{{money.income_saved|floatformat:2}}</span>
+           </div>
+           <div class="col-auto">
+              <div class="icon icon-shape bg-white text-dark rounded-circle shadow">
+                 <i class="fas fa-piggy-bank"></i>
+              </div>
+           </div>
+        </div>
+        <p class="mt-3 mb-0 text-sm">
+           {% comment %} <span class="text-white mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+           <span class="text-nowrap text-light">Since last month</span> {% endcomment %}
+        </p>
+     </div>
+  </div>
+ </div>
+ <div class="col-xl-3 col-md-6">
+   <div class="card bg-gradient-info">
+     <!-- Card body -->
+     <div class="card-body">
+        <div class="row">
+           <div class="col">
+              <h5 class="card-title text-uppercase text-muted mb-0 text-white">Inversiones</h5>
+              <span class="h2 font-weight-bold mb-0 text-white">{{money.income_invested|floatformat:2}}</span>
+           </div>
+           <div class="col-auto">
+              <div class="icon icon-shape bg-white text-dark rounded-circle shadow">
+                 <i class="fas fa-chart-line"></i>
+              </div>
+           </div>
+        </div>
+        <p class="mt-3 mb-0 text-sm">
+           {% comment %} <span class="text-white mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+           <span class="text-nowrap text-light">Since last month</span> {% endcomment %}
+        </p>
+     </div>
+  </div>
+ </div>
+</div>

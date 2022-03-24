@@ -16,3 +16,4 @@ class CreateCorrectionForm(ModelForm):
             'title',
             'content'
             ]
+

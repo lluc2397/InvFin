@@ -42,7 +42,7 @@ urlpatterns = [
     path("", include("apps.empresas.urls", namespace="empresas")),
     # path("", include("apps.etfs.urls", namespace="etfs")),
 
-    # path("", include("apps.cartera.urls", namespace="cartera")),
+    path("", include("apps.cartera.urls", namespace="cartera")),
 
     path("", include("apps.seo.urls", namespace="seo")),
 

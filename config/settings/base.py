@@ -105,7 +105,7 @@ LOCAL_APPS = [
     "apps.super_investors",
     "apps.etfs",
     "apps.screener",
-    # "apps.cartera",
+    "apps.cartera",
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

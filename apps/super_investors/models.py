@@ -27,6 +27,11 @@ class Superinvestor(Model):
     slug = CharField(max_length=600000, null=True, blank=True)
     updated = BooleanField(default=False)
     last_update = DateTimeField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Superinvestor"
+        verbose_name_plural = "Superinvestors"
+        db_table = "superinvestors"
     
     def save(self, *args, **kwargs): # new
         if not self.slug:
@@ -34,30 +39,18 @@ class Superinvestor(Model):
         return super().save(*args, **kwargs)
 
 
-class Period(Model):    
-    year = DateField()
-    quarter = IntegerField(default=1)
-    current_period = BooleanField(default=False)
+class Period(Model):
+    PERIODS = ((1, '1 Quarter'), (2, '2 Quarter'), (3, '3 Quarter'), (4, '4 Quarter'))
+    year = DateField(null=True, blank=True)
+    period = IntegerField(choices=PERIODS, null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Period"
+        verbose_name_plural = "Periods"
+        db_table = "assets_periods"
     
-
-
-class SuperinvestorHolding(Model):
-    superinvestor_related = ForeignKey(Superinvestor, on_delete=SET_NULL, null=True, blank=True)
-    period_related = ForeignKey(Period, on_delete=SET_NULL, null=True, blank=True)
-    company = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True)
-    percentage = FloatField(null=True, blank=True)
-    num_shares = FloatField(null=True, blank=True)
-    reported_price = FloatField(null=True, blank=True)
-
-    @property
-    def total_value(self):
-        return self.num_shares * self.reported_price
-
     def __str__(self):
-        texto = f'{self.superinvestor_related.name} - {self.company.ticker}'
-        return texto
-        
-
+        return str(self.year)     
 
 
 class SuperinvestorActivity(Model):

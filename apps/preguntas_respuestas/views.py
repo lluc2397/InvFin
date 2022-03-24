@@ -3,6 +3,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 
 from django.views.generic import (
 	ListView,
@@ -22,6 +23,8 @@ from .models import (
 from .forms import (
 	CreateQuestionForm
 )
+
+User = get_user_model()
 
 class QuestionsView(ListView):
 	model = Question
@@ -120,10 +123,16 @@ class UpdateQuestionView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessage
 @login_required
 def create_answer_view(request, slug):
 	if request.method == 'POST':
+		user = request.user
+		if request.user.is_anonymous:
+			email = request.POST['email']
+			user = User.objects.get_or_create_quick_user(email, request)
+
 		question = Question.objects.get(slug = slug)
+		
 		answer = Answer.objects.create(
 		content = request.POST['content'],
-		author = request.user,	
+		author = user,	
 		question_related = question
 		)
 		question.is_answered = True

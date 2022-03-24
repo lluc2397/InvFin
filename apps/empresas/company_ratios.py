@@ -11,7 +11,7 @@ class CalculateRatios:
             rota = ''
             roic = ''
             nopatroic = ''
-            rogic = '')
+            rogic = ''
 
     def calculate_liquidity_ratio():
         
@@ -21,7 +21,7 @@ class CalculateRatios:
             current_ratio = 
             quick_ratio = 
             operating_cashflow_ratio = 
-            debt_to_equity = )
+            debt_to_equity = 
 
     def calculate_margin_ratio():
         
@@ -34,7 +34,7 @@ class CalculateRatios:
             fcf_equity_to_net_income = 
             unlevered_fcf_to_net_income = 
             unlevered_fcf_ebit_to_net_income = 
-            owners_earnings_to_net_income = )
+            owners_earnings_to_net_income = 
 
     def calculate_fcf_ratio():
         
@@ -43,7 +43,7 @@ class CalculateRatios:
             fcf_equity = 
             unlevered_fcf = 
             unlevered_fcf_ebit = 
-            owners_earnings = )
+            owners_earnings = 
 
     def calculate_ps_value():
         
@@ -57,7 +57,7 @@ class CalculateRatios:
             cash_ps = 
             operating_cf_ps = 
             capex_ps = 
-            total_assets_ps = )
+            total_assets_ps = 
 
     def calculate_non_gaap():
         
@@ -78,7 +78,7 @@ class CalculateRatios:
             net_current_asset_value = 
             payout_ratio = 
             tangible_assets = 
-            retention_ratio = )
+            retention_ratio = 
 
     def calculate_operation_risk_ratio():
         
@@ -92,7 +92,7 @@ class CalculateRatios:
             operating_cashflow_ratio = 
             debtRatio = 
             longTermDebtToCapitalization = 
-            totalDebtToCapitalization = )
+            totalDebtToCapitalization = 
 
     def calculate_enterprise_value_ratio():
         
@@ -104,7 +104,7 @@ class CalculateRatios:
             ev_operating_cf = 
             ev_sales = 
             company_equity_multiplier = 
-            ev_multiple = )
+            ev_multiple = 
 
     def calculate_company_growth():
         
@@ -119,7 +119,7 @@ class CalculateRatios:
             fcf_growth = 
             owners_earnings_growth = 
             capex_growth = 
-            rd_expenses_growth = )
+            rd_expenses_growth = 
 
     def calculate_eficiency_ratio():
         
@@ -134,7 +134,7 @@ class CalculateRatios:
             days_payables_outstanding = 
             days_sales_outstanding = 
             fcf_to_operating_cf = 
-            operating_cycle = )
+            operating_cycle = 
 
 
     def calculate_price_to_ratio():
@@ -149,4 +149,4 @@ class CalculateRatios:
             price_total_assets = 
             price_fcf = 
             price_operating_cf = 
-            price_tangible_assets = )
+            price_tangible_assets = 

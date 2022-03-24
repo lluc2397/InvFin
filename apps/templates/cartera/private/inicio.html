@@ -1,0 +1,139 @@
+{% extends "general/bases/base_content.html" %}
+{% load static %}
+{% load extra %}
+{% block header %}
+{% with money=patrimonio.patrimoine %}
+{% include "cartera/header/inicio.html" %}
+{% endwith %}
+{% endblock header%}
+
+{% block content %}
+{% with money=patrimonio.patrimoine %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.3.2/dist/chart.min.js" integrity="sha256-qoN08nWXsFH+S9CtIq99e5yzYHioRHtNB9t2qy1MSmc=" crossorigin="anonymous"></script>
+
+<div class="row">
+    {% block FirstCta %}
+    <div class="col-12">
+        {% block FirstCtaContent %}
+        {% endblock FirstCtaContent %}
+    </div>
+    {% endblock FirstCta %}
+
+    {% block FirstContent %}
+    <div class="col-lg-7 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <!-- Title -->
+                <h5 class="h3 mb-0">Patrimonio</h5>
+             </div>
+          <div class="card-body">
+            <div class="chart-canvas">
+                <canvas id="Ingresos"></canvas>
+            </div>            
+          </div>                                                
+        </div>
+    </div>
+    <div class="col-lg-5 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <!-- Title -->
+                <h5 class="h3 mb-0">Cashflow</h5>
+             </div>
+            <div class="table-responsive ">
+                <table class="table table-borderless">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Canditad</th>
+                            <th scope="col">Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in money.incomes_and_spends %}
+                        <tr>
+                            <td>{{data.name}}</td>
+                            <td>{{data.amount|floatformat:2}} {{data.currency}}</td>
+                            <td>{{data.date}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>                                     
+        </div>
+    </div>
+    {% endblock FirstContent%}
+
+    {% block ListContent %}
+    <div class="col-lg-9 col-sm-12">
+        {% block LeftSide %}
+        {% endblock LeftSide %}
+    </div>
+    <div class="col-lg-3 col-sm-12">
+        <div class="position-sticky" style="top: 6rem;">
+            {% block RightSide %}
+            {% endblock RightSide %}
+        </div>
+    </div>
+    {% endblock ListContent%}
+
+    {% block MiddleCta %}
+    <div class="col-12">
+        {% block MiddleCtaContent %}
+        {% endblock MiddleCtaContent %}
+    </div>
+    {% endblock MiddleCta%}
+
+    {% block ListContinuation %}
+    {% endblock ListContinuation %}
+
+    {% block LastCta %}
+    {% endblock LastCta %}
+</div>
+
+<script>
+    var ctx = document.getElementById('Ingresos').getContext('2d');
+    var Ingresos = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Ingresos', 'Gastos', 'Ahorros', 'Invertido'],
+            datasets: [{
+                
+                data: [ {{money.income_earned}}, 
+                {{money.income_spend}}, 
+                {{money.income_saved}}, 
+                {{money.income_invested}}],
+
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+          plugins:{
+   legend: {
+    display: false
+   }
+  },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+</script>
+{% include "cartera/modals/cashflowmoves.html" %}
+{% endwith %}
+{% endblock content %}
