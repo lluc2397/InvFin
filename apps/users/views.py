@@ -1,22 +1,17 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import (
-    DetailView, 
-    RedirectView, 
-    UpdateView, 
+    DetailView,
     TemplateView)
 
 from apps.public_blog.forms import WritterProfileForm
-from apps.public_blog.models import WritterProfile
 
 from .forms import UserForm, UserProfileForm
-from .models import Profile
+
 User = get_user_model()
 
 
@@ -26,7 +21,6 @@ class UserDetailView(LoginRequiredMixin, TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.request.user
         context["meta_desc"] = 'Todo lo que necesitas para invertir'
         context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir'
         context["meta_title"] = 'Dashboard'

@@ -95,7 +95,6 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "apps.users",
     "apps.general",
-    "apps.emailing",
     "apps.seo",
     "apps.escritos",
     "apps.web",

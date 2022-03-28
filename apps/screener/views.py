@@ -43,11 +43,10 @@ class CompanyScreenerInicioView(ListView):
 
     def get_queryset(self, **kwargs):
        query = super().get_queryset(**kwargs)
-       the_org = ExchangeOrganisation.objects.get(name = self.kwargs['name'])
-       return query.filter(exchange__in = [exch for exch in Exchange.objects.filter(main_org = the_org)],
-        no_incs = False,
-        no_bs = False,
-        no_cfs = False,)[:50]
+       return query.filter(exchange__main_org__name = self.kwargs['name'],
+            no_incs = False,
+            no_bs = False,
+            no_cfs = False,)[:50]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
