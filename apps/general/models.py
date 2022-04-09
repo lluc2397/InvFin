@@ -35,8 +35,8 @@ from .mixins import CommonMixin, BaseEscritosMixins
 
 
 class EscritosClassification(Model):
-    name = CharField(max_length=99999,null = True, blank=True, unique = True)
-    slug = CharField(max_length=99999,null = True, blank=True, unique = True)
+    name = CharField(max_length=500,null = True, blank=True, unique = True)
+    slug = CharField(max_length=500,null = True, blank=True, unique = True)
 
     class Meta:
         abstract = True
@@ -63,8 +63,8 @@ class Tag(EscritosClassification):
 
 
 class BasicWrittenContent(CommonMixin):
-    title = CharField(max_length=99999,null = True, blank=True)
-    slug = CharField(max_length=99999,null = True, blank=True)
+    title = CharField(max_length=500,null = True, blank=True)
+    slug = CharField(max_length=500,null = True, blank=True)
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
     total_votes = IntegerField(default=0)
@@ -117,7 +117,7 @@ class BaseEscrito(BasicWrittenContent, BaseEscritosMixins):
     status = IntegerField(null=True, blank=True,choices=STATUS)
     # thumbnail = CloudinaryField('image', null=True, width_field='image_width', height_field='image_height')
     thumbnail = ImageField('image',blank=True, null=True, width_field='image_width', height_field='image_height')
-    non_thumbnail_url = CharField(max_length=99999,null=True, blank=True)
+    non_thumbnail_url = CharField(max_length=500,null=True, blank=True)
     in_text_image = BooleanField(default=False)
     meta_information = ForeignKey(MetaParametersHistorial, on_delete=SET_NULL, blank=True, null=True)
 
@@ -154,8 +154,8 @@ class BaseComment(Model):
 
 
 class Industry(Model):
-    industry = CharField(max_length=60000, null=True, blank=True)
-    industry_spanish = CharField(max_length=60000, null=True, blank=True)
+    industry = CharField(max_length=500, null=True, blank=True)
+    industry_spanish = CharField(max_length=500, null=True, blank=True)
 
     class Meta:
         verbose_name = "Industry"
@@ -167,8 +167,8 @@ class Industry(Model):
 
 
 class Sector(Model):
-    sector = CharField(max_length=6000000 , null=True, blank=True)
-    sector_spanish = CharField(max_length=6000000 , null=True, blank=True)
+    sector = CharField(max_length=500 , null=True, blank=True)
+    sector_spanish = CharField(max_length=500 , null=True, blank=True)
 
     class Meta:
         verbose_name = "Sector"
@@ -180,7 +180,7 @@ class Sector(Model):
 
 
 class Currency(Model):
-    currency = CharField(max_length=6000000 , null=True, blank=True)
+    currency = CharField(max_length=500 , null=True, blank=True)
 
     class Meta:
         verbose_name = "Currency"
@@ -192,7 +192,7 @@ class Currency(Model):
 
 
 class Country(Model):
-    country = CharField(max_length=6000000 , null=True, blank=True)
+    country = CharField(max_length=500 , null=True, blank=True)
 
     class Meta:
         verbose_name = "Country"
@@ -269,7 +269,7 @@ class FavoritesHistorial(Model):
 
 
 class Newsletter(Model):
-    title = CharField(max_length=99999)
+    title = CharField(max_length=500)
     content = RichTextField(config_name='simple')
     sent = BooleanField(default=False)
     date_to_send = DateTimeField(null=True, blank=True)

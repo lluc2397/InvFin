@@ -37,7 +37,6 @@ class CompanyExtended(Model):
 
     def generate_json(self, comparing_json, items=None):
         labels = comparing_json['labels']
-        # labels.reverse()
         chartData = {
             'labels': labels,
             'fields': []

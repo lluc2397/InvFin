@@ -23,14 +23,14 @@ from apps.general.models import BaseEscrito, BaseComment, BaseContentShared, New
 class WritterProfile(Model):
     user = OneToOneField(User, on_delete=SET_NULL, null=True, related_name="writter_profile")
     created_at = DateTimeField(auto_now_add=True)
-    host_name = CharField(max_length=100000, null=True, blank=True, unique=True)
+    host_name = CharField(max_length=500, null=True, blank=True, unique=True)
     long_description = RichTextField(default='', config_name='writter')
-    facebook = CharField(max_length=100000, null=True, blank=True)
-    twitter = CharField(max_length=100000, null=True, blank=True)
-    insta = CharField(max_length=100000, null=True, blank=True)
-    youtube = CharField(max_length=100000, null=True, blank=True)
-    linkedin = CharField(max_length=100000, null=True, blank=True)
-    tiktok = CharField(max_length=100000, null=True, blank=True)
+    facebook = CharField(max_length=500, null=True, blank=True)
+    twitter = CharField(max_length=500, null=True, blank=True)
+    insta = CharField(max_length=500, null=True, blank=True)
+    youtube = CharField(max_length=500, null=True, blank=True)
+    linkedin = CharField(max_length=500, null=True, blank=True)
+    tiktok = CharField(max_length=500, null=True, blank=True)
 
     class Meta:
         verbose_name = "User writter profile"
