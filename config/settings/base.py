@@ -105,6 +105,7 @@ LOCAL_APPS = [
     "apps.etfs",
     "apps.screener",
     "apps.cartera",
+    "apps.roboadvisor"
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

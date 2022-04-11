@@ -1,7 +1,4 @@
 # InvFin
-New website following good practise.
-I used cookiecutter to start the project to see how to structure it "correctly"
-
 The main purpose of the webapp is to centralise information about investing, in spanish.
 
 # CURRENT PARTS
@@ -22,5 +19,13 @@ I'm still finishing the portfolio part. Where users can keep track of their fina
 The other part is a roboadvisor. Users will have a investor profile and based on that they can ask to analyse some company and see if it would match their profile and investement approach.
 
 # SIDE NOTES
-The website is deployed on a single core CPU so multithreading is limited. For everything related to sending emails or scraping for information Celery with Redis handle that. Why Redis? Well, Django Cookiecutter came with that so I wanted to give it a try. Before this refactorisation I used RabbitMQ as it is focused on being a message broker I thought that it was more appropriate. Now I'm using Redis to test it and because I can use it to cache.
+I used cookiecutter to start the project to see how to structure it "correctly".
+The website is deployed on a single core CPU so multithreading is limited. For everything related to sending emails or scraping for information Celery with Redis handle that. Why Redis? Well, Django Cookiecutter came with that so I wanted to give it a try. Before I used RabbitMQ as it is focused on being a message broker I thought that it was more appropriate. Now I'm using Redis to test it and because I can use it to cache.
 
+# TODO
+- Add better ckeditor config
+- Finish templates and views of roboadvisor
+- Update README
+- Improve roboadvisor brain
+- Add ETFs
+- Add superinvestors
