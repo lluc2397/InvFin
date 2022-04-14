@@ -11,9 +11,11 @@ services:
       dockerfile: ./compose/local/django/Dockerfile
     image: invfin_local_django
     container_name: invfin_local_django
+    platform: linux/x86_64
     depends_on:
       - postgres
       - redis
+      - mailhog
     volumes:
       - .:/app:z
     env_file:
@@ -22,7 +24,9 @@ services:
     ports:
       - "8000:8000"
     command: /start
-
+    networks:
+      - invfin_network
+      
   postgres:
     build:
       context: .
@@ -34,18 +38,52 @@ services:
       - invfin_local_postgres_data_backups:/backups:z
     env_file:
       - ./.envs/.local/.postgres
+    networks:
+      - invfin_network
+  
+  docs:
+    image: invfin_local_docs
+    container_name: invfin_local_docs
+    platform: linux/x86_64
+    build:
+      context: .
+      dockerfile: ./compose/local/docs/Dockerfile
+    env_file:
+      - ./.envs/.local/.django
+    volumes:
+      - ./docs:/docs:z
+      - ./config:/app/config:z
+      - ./invfin:/app/invfin:z
+    ports:
+      - "9000:9000"
+    command: /start-docs
+    networks:
+      - invfin_network
+  
+  mailhog:
+    image: mailhog/mailhog:v1.0.0
+    container_name: invfin_local_mailhog
+    ports:
+      - "8025:8025"
+    networks:
+      - invfin_network
 
   redis:
     image: redis:6
     container_name: invfin_local_redis
+    networks:
+      - invfin_network
 
   celeryworker:
     <<: *django
     image: invfin_local_celeryworker
     container_name: invfin_local_celeryworker
+    networks:
+      - invfin_network
     depends_on:
       - redis
       - postgres
+      - mailhog
     ports: []
     command: /start-celeryworker
 
@@ -56,6 +94,7 @@ services:
     depends_on:
       - redis
       - postgres
+      - mailhog
     ports: []
     command: /start-celerybeat
 
@@ -63,6 +102,11 @@ services:
     <<: *django
     image: invfin_local_flower
     container_name: invfin_local_flower
+    networks:
+      - invfin_network
     ports:
       - "5555:5555"
     command: /start-flower
+
+networks:
+  invfin_network:

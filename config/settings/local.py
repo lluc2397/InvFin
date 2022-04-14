@@ -22,27 +22,32 @@ CACHES = {
         "LOCATION": "",
     }
 }
-
 # EMAIL
 # ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-host
+# EMAIL_HOST = env("EMAIL_HOST", default="mailhog")
+EMAIL_HOST = "mailhog"
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-port
+EMAIL_PORT = 1025
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-USE_GMAIL = env.bool("USE_GMAIL", False)
-if USE_GMAIL == True:
-    EMAIL_CONTACT = env("EMAIL_CONTACT")
-    EMAIL_SUBJECT_PREFIX = env("EMAIL_SUBJECT_PREFIX")
-    DEFAULT_EMAIL = env("DEFAULT_EMAIL")
-    EMAIL_HOST = env("EMAIL_HOST")
-    EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-    EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
-    EMAIL_PORT = env("EMAIL_PORT")
-    EMAIL_USE_TLS = env("EMAIL_USE_TLS")
-    EMAIL_NEWSLETTER = env("EMAIL_NEWSLETTER")
-    MAIN_EMAIL = env("MAIN_EMAIL")
-    EMAIL_ACCOUNTS = env("EMAIL_ACCOUNTS")
-    EMAIL_DEFAULT = env("EMAIL_DEFAULT")
-    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" 
+EMAIL_HOST_USER = None
+EMAIL_HOST_PASSWORD = None
+EMAIL_USE_TLS = False
+
+EMAIL_CONTACT = env("EMAIL_CONTACT")
+EMAIL_SUBJECT_PREFIX = env("EMAIL_SUBJECT_PREFIX")
+DEFAULT_EMAIL = env("DEFAULT_EMAIL")
+EMAIL_NEWSLETTER = env("EMAIL_NEWSLETTER")
+MAIN_EMAIL = env("MAIN_EMAIL")
+EMAIL_ACCOUNTS = env("EMAIL_ACCOUNTS")
+EMAIL_DEFAULT = env("EMAIL_DEFAULT") #To delete
+
+# WhiteNoise
+# ------------------------------------------------------------------------------
+# http://whitenoise.evans.io/en/latest/django.html#using-whitenoise-in-development
+INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS  # noqa F405
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------

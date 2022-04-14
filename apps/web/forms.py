@@ -8,6 +8,8 @@ from django.forms import (
     DateTimeField
 )
 
+from ckeditor.widgets import CKEditorWidget
+
 from .tasks import send_website_email_task
 from apps.general.utils import EmailingSystem
 from .models import WebsiteEmail
@@ -28,6 +30,7 @@ class ContactForm(Form):
 
 
 class WebEmailForm(ModelForm):
+    # content = CharField(widget=CKEditorWidget(config_name='default'))
     date_to_send = DateTimeField(
         input_formats=['%d/%m/%Y %H:%M'],
         widget=DateTimeInput(attrs={

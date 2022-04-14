@@ -1,4 +1,5 @@
 -r base.txt
+
 django-model-utils==4.2.0  # https://github.com/jazzband/django-model-utils
 # DRF-spectacular for api documentation
 drf-spectacular==0.21.2
