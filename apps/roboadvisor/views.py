@@ -19,5 +19,20 @@ from .models import (
 
 
 class RoboAdvisorServicesListView(ListView):
-    model = RoboAdvisorService
-    template_name = "TEMPLATE_NAME"
+	model = RoboAdvisorService
+	template_name = "roboadvisor/inicio.html"
+	context_object_name = "services"
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context["meta_desc"] = 'IA para mejorar las inversiones'
+		context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir, roboadvisor'
+		context["meta_title"] = 'Tu consejero inteligente'
+		context["meta_url"] = '/roboadvisor/'
+		return context
+
+
+class RoboAdvisorServiceOptionView(DetailView):
+	model = RoboAdvisorService
+	template_name = "roboadvisor/details.html"
+

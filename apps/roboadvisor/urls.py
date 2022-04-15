@@ -1,12 +1,14 @@
 from django.urls import path
 from .views import (
-    RoboAdvisorServicesListView
+    RoboAdvisorServicesListView,
+    RoboAdvisorServiceOptionView
 )
 
 app_name = "roboadvisor"
 urlpatterns =[
     path('roboadvisor/', RoboAdvisorServicesListView.as_view(), name="roboadvisor"),
-    # path('robo-options/<slug>/', ROBO_OPTIONS_REDIRECT, name="robo-options"),
+    path('robo-options/<slug>/', RoboAdvisorServiceOptionView.as_view(), name="robo-option"),
+
     # path('robo-vote/<id>', TEST_IS_USEFUL, name="robo-vote"),
     # path('favorite-stock/', STOCK_FAVORITE, name="favorite-stock"),
     # path('favorite-etf/', ETF_FAVORITE, name="favorite-etf"),

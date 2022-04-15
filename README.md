@@ -23,9 +23,25 @@ I used cookiecutter to start the project to see how to structure it "correctly".
 The website is deployed on a single core CPU so multithreading is limited. For everything related to sending emails or scraping for information Celery with Redis handle that. Why Redis? Well, Django Cookiecutter came with that so I wanted to give it a try. Before I used RabbitMQ as it is focused on being a message broker I thought that it was more appropriate. Now I'm using Redis to test it and because I can use it to cache.
 
 # TODO
-- Add better ckeditor config
 - Finish templates and views of roboadvisor
-- Update README
+- Send and save images on cloudinary
+- Create recommendation sys for dashboard companies, terms, writters, etc...
 - Improve roboadvisor brain
 - Add ETFs
 - Add superinvestors
+
+# How to start locally
+
+Make sure that you have make installed.
+
+Run the following command to build the images
+- make build
+
+Then run this to have the containers running.
+- make up
+
+Run the different tests.
+- make test
+
+Make sure that the styles is correct.
+- make isort_pep

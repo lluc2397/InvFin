@@ -1,42 +1,49 @@
 {% extends "general/bases/base_content.html" %}
 {% load static %}
-{% block header %}{% include "public_blog/header/inicio.html" %}{% endblock header%}
+{% block header %}{% include "roboadvisor/header/inicio.html" %}{% endblock header%}
 
 {% block FirstCtaContent %}
-{% comment %} {% include "public_blog/cta/inicio.html" %} {% endcomment %}
+{% include "roboadvisor/complements/inicio.html" %}
 {% endblock FirstCtaContent %}
 
 {% block FirstContent %}
-{% comment %} {% include "public_blog/complements/first_content.html" %} {% endcomment %}
+{% comment %} {% include "roboadvisor/complements/first_content.html" %} {% endcomment %}
 {% endblock FirstContent%}
 
 {% block ListContent %}
-{% for blog in blogs %}
-<div class="card-translucent bg-transparent">
+{% for service in services %}
+<div class="card card-lift--hover">
     <div class="card-body p-3">
         <div class="row">
             <div class="col-lg-9">
                 <div class="d-flex flex-column h-100">
-                    <a href="{{blog.get_absolute_url}}">
-                        <p class="h1 mb-1 pt-2 text-bold">
-                            {{blog.title}}
-                        </p>
-                    </a>
+                        <a href="{{service.get_absolute_url}}">
+                            <span class="h1 mb-1 pt-2 text-bold">
+                                {{service.title}}
+                            </span>
+                        </a>
+                    
+                        <!-- <span class="badge badge-info text-center mr-2">
+                            <span class="font-weight-bolder">{{service.price}}</span>
+                        </span> -->
                     <h5 class="font-weight-bolder">
-                        <div class="d-flex">
-                            {% for tag in blog.tags.all %}
-                            <a href="#" class="badge badge-info text-center mr-2">
-                                <span class="font-weight-bolder">{{tag.name}}</span>
-                            </a>
-                            {% endfor %}
-                        </div>
+                        <!-- Reemplazar por el precio -->
+                        {% if service.available %}
+                        <span class="badge badge-success text-center mr-2">
+                            <span class="font-weight-bolder">Disponible</span>
+                        </span>
+                        {% else %}
+                        <span class="badge badge-danger text-center mr-2">
+                            <span class="font-weight-bolder">Mejorando</span>
+                        </span>
+                        {% endif %}
                     </h5>
-                    <p class="mb-5">
-                        <a href="{{blog.get_absolute_url}}">
-                        {{blog.resume}}
+                    <p>
+                        <a href="{{service.get_absolute_url}}">
+                        {{service.description}}
                         </a>
                     </p>
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="clearfix">
                             <div class="float-start">
                                 <img class="avatar" src="{{blog.author.foto}}">
@@ -48,7 +55,7 @@
                                
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="col-lg-3 ms-auto text-center mt-5 mt-lg-0">
