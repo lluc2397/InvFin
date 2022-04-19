@@ -71,6 +71,8 @@
     {% url step.url as the_url %}
     {% with order=step.order|slugify %}
     {% with fieldclass="form-step-"|add:order|add:" form-control" %}
+    {% with fieldclassrange="form-step-"|add:order|add:" form-range" %}
+    {% with fieldclasscheck="form-step-"|add:order|add:" form-check-input" %}
     
     <div class="card"
         style="position: absolute; display:{% if not forloop.first %}none{% else %}inline{% endif %};"
@@ -111,7 +113,8 @@
             </div>
         </div>
     </div>
-    
+    {% endwith %}
+    {% endwith %}
     {% endwith %}
     {% endwith %}
     {% endwith %}

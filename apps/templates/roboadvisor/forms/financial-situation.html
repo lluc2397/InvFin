@@ -1,12 +1,68 @@
 {% load widget_tweaks %}
 {% load static %}
+<script src="{% static 'general/assets/vendor/select2/dist/js/select2.full.min.js' %}"></script>
+<link href="{% static 'general/assets/vendor/select2/dist/css/select2.min.css' %}"rel="stylesheet" />
 
-{% render_field financial_situation_form.average_income class=fieldclass %}
-{% render_field financial_situation_form.average_expense class=fieldclass %}
-{% render_field financial_situation_form.debt class=fieldclass %}
-{% render_field financial_situation_form.recurrent_savings class=fieldclass %}
-{% render_field financial_situation_form.recurrent_debts class=fieldclass %}
-{% render_field financial_situation_form.savings class=fieldclass %}
-{% render_field financial_situation_form.debt_percentage class=fieldclass %}
-{% render_field financial_situation_form.saving_percentage class=fieldclass %}
-{% render_field financial_situation_form.number_sources_income class=fieldclass %}
+<div class="row">
+    <div class="row mb-4">
+        <div class="col-md-4">  
+            <label class="form-label">¿Cuántas fuentes de ingreso tienes?</label> 
+            {% render_field financial_situation_form.number_sources_income class=fieldclass %}
+        </div>
+        <div class="col-md-3">  
+            <label class="form-label">¿Cuál es tu divisa?</label> 
+            {% render_field financial_situation_form.currency class=fieldclass style="width:75%" %}
+        </div>
+
+        <div class="col-md-5">
+            <div class="form-check">
+                {% render_field financial_situation_form.recurrent_savings class=fieldclasscheck type="checkbox" %}
+                <label class="form-check-label" for="flexCheckDefault">
+                    ¿Ahorras de forma recurrente?
+                </label>
+            </div>
+            <br>
+            <div class="form-check">
+                {% render_field financial_situation_form.recurrent_debts class=fieldclasscheck type="checkbox" %}
+                <label class="form-check-label" for="flexCheckDefault">
+                    ¿Te endeudas de forma repetitiva?
+                </label>
+            </div>    
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <label class="form-label">¿Qué porcentaje ahorras de forma recurrente?</label>
+            {% render_field financial_situation_form.saving_percentage class=fieldclass %}
+        </div>
+        
+        <div class="col-md-4">
+            <label class="form-label">¿Qué porcentaje de tus gastos son deudas?</label>
+            {% render_field financial_situation_form.debt_percentage class=fieldclass %}
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">¿De cuánto son tus ingresos promedio?</label>
+            {% render_field financial_situation_form.average_income class=fieldclass %}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">¿De cuánto son tus gastos promedio?</label>
+        {% render_field financial_situation_form.average_expense class=fieldclass %}
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">¿A cuanto se elevan tus deudas?</label>
+        {% render_field financial_situation_form.debt class=fieldclass %}
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">¿De cuánto es tu fondo de emergencia?</label>
+        {% render_field financial_situation_form.savings class=fieldclass %}
+    </div>
+
+</div>
+
+<script>
+$('#id_currency').select2({
+    width: 'resolve'
+});
+</script>

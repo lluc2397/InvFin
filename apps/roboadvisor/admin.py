@@ -18,14 +18,15 @@ from .models import (
 @admin.register(RoboAdvisorServiceStep)
 class RoboAdvisorServiceStepAdmin(admin.ModelAdmin):
     list_display = [
-        'id',
-        'order',
         'title',
+        'order',
+        'url',
         'template'
     ]
 
     list_editable = [
         'template',
+        'url',
         'order'
     ]
 

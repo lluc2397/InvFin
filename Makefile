@@ -11,8 +11,8 @@ up:
 	sensible-browser 0.0.0.0:8000/admin &
 	sensible-browser 0.0.0.0:8025 &
 	sensible-browser 0.0.0.0:5555 &
-	docker-compose -f local.yml up $(ar) $(ar2) $(ar3)
-
+	docker-compose -f local.yml up $(ar)
+	
 stop:
 	docker-compose -f local.yml stop
 

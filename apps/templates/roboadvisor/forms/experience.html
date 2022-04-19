@@ -1,14 +1,35 @@
 {% load widget_tweaks %}
 {% load static %}
 
-
-{% render_field experience_form.age class=fieldclass %}
-{% render_field experience_form.objectif class=fieldclass %}
-{% render_field experience_form.investor_type_self_definition class=fieldclass %}
-{% render_field experience_form.percentage_invested class=fieldclass %}
-<div class="col-3">
-    Hola {% render_field experience_form.percentage_anualized_revenue class=fieldclass %}
+<div class="row">
+    <div class="row  mb-4">
+        <div class="col-md-3">
+            <label class="form-label">¿Cuál es tu objetivo invirtiendo?</label>
+            {% render_field experience_form.objectif class=fieldclass %}
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">¿Cómo te definirías como inversor?</label>
+            {% render_field experience_form.investor_type_self_definition class=fieldclass %}
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">¿Qué edad tienes?</label>
+            {% render_field experience_form.age class=fieldclass %}
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">¿Cuántos años llevas invirtiendo?</label>
+            {% render_field experience_form.years_investing class=fieldclass %}
+        </div>
+    </div>
+    <hr>
+    <div class="col-12 mb-4">                  
+        <label class="form-label">¿Qué porcentaje de tu patrimonio tienes invertido?</label>
+        {% render_field experience_form.percentage_invested class=fieldclassrange type="range" %}
+        <span id="rangeval6">0<!-- Default value --></span>%
+    </div>
+    <hr>
+    <div class="col-12 mb-4">                  
+        <label class="form-label">¿Cuál es tu retorno anualizado?</label>
+        {% render_field experience_form.percentage_anualized_revenue class=fieldclassrange type="range" %}
+        <span id="rangeval7">0<!-- Default value --></span>%
+    </div>
 </div>
-
-{% render_field experience_form.years_investing class=fieldclass %}
-

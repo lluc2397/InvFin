@@ -1,3 +1,4 @@
+from colorama import Fore
 from django.db.models import (
     Model,
     SET_NULL,
@@ -19,7 +20,7 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.template.defaultfilters import slugify
 
-from apps.general.models import Tag, Category
+from apps.general.models import Tag, Category, Currency
 from apps.empresas.models import Company
 
 from .constants import *
@@ -167,7 +168,8 @@ class RoboAdvisorQuestionFinancialSituation(BaseRoboAdvisorQuestion):
     savings = DecimalField (default = 0, blank=True, max_digits=10, decimal_places=2,validators=[MinValueValidator(0)])
     debt_percentage = DecimalField(default = 0, blank=True, max_digits=10, decimal_places=2,validators=[MinValueValidator(0)])
     saving_percentage = DecimalField(default = 0, blank=True, max_digits=10, decimal_places=2,validators=[MinValueValidator(0)])
-    number_sources_income = IntegerField(default = 1, blank=True) 
+    number_sources_income = IntegerField(default = 1, blank=True)
+    currency = ForeignKey(Currency, null=True, blank=True, on_delete=SET_NULL)
     
     class Meta:
         verbose_name = 'RoboAdvisor Financial Situation'
@@ -178,7 +180,7 @@ class RoboAdvisorQuestionFinancialSituation(BaseRoboAdvisorQuestion):
         pass
 
 
-class BaseRoboAdvisorHorizon(Model):
+class BaseRoboAdvisorHorizon(BaseRoboAdvisorQuestion):
     horizon_time = PositiveIntegerField(default = 0)
     horizon_period = PositiveIntegerField(default = 4, choices=PERIODS)
     comment = TextField(default = '')
@@ -190,8 +192,8 @@ class BaseRoboAdvisorHorizon(Model):
 class BaseRoboAdvisorQuestionAsset(BaseRoboAdvisorHorizon):
     asset = None
     result = None
-    sector_knowledge = IntegerField(null=True, blank=True, choices=KNOWLEDGE)
-    asset_knowledge = IntegerField(null=True, blank=True, choices=KNOWLEDGE)
+    sector_knowledge = IntegerField(null=True, blank=True, choices=KNOWLEDGE, default=4)
+    asset_knowledge = IntegerField(null=True, blank=True, choices=KNOWLEDGE, default=4)
     amount_time_studied = PositiveIntegerField(default = 0)
     period_time_studied = PositiveIntegerField(default = 4, choices=PERIODS)
     number_shares = DecimalField(null=True, default = 0, blank=True, max_digits=10, decimal_places=2,validators=[MinValueValidator(0)])
@@ -203,9 +205,9 @@ class BaseRoboAdvisorQuestionAsset(BaseRoboAdvisorHorizon):
 
 
 class RoboAdvisorQuestionInvestorExperience(BaseRoboAdvisorQuestion):
-    age = PositiveIntegerField(null=True, blank=True)
-    objectif = IntegerField(choices=OBJECTIFS, null=True, blank=True) 
-    investor_type_self_definition = IntegerField(null=True, blank=True,choices=INVESTOR_TYPE)
+    age = PositiveIntegerField(null=True, blank=True, default=18)
+    objectif = IntegerField(choices=OBJECTIFS, null=True, blank=True, default=1) 
+    investor_type_self_definition = IntegerField(null=True, blank=True, choices=INVESTOR_TYPE, default=1)
     percentage_invested = DecimalField(blank=True, default=0, max_digits=10, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(100)])
     percentage_anualized_revenue = DecimalField (null=True, blank=True, default=0, max_digits=10, decimal_places=2)
     years_investing = PositiveIntegerField(null=True,default=0, blank=True)    
@@ -216,7 +218,7 @@ class RoboAdvisorQuestionInvestorExperience(BaseRoboAdvisorQuestion):
         db_table = "roboadvisor_investor experience"
 
 
-class RoboAdvisorQuestionRiskAversion(BaseRoboAdvisorQuestion, BaseRoboAdvisorHorizon):       
+class RoboAdvisorQuestionRiskAversion(BaseRoboAdvisorHorizon):       
     volatilidad = IntegerField(choices=VOLATILIDAD,null=True, blank=True)
     percentage_for_onefive = IntegerField (null=True, blank=True)
     percentage_for_three = IntegerField (null=True, blank=True)
@@ -245,7 +247,7 @@ class RoboAdvisorQuestionPortfolioAssetsWeight(BaseRoboAdvisorQuestion):
         db_table = "roboadvisor_assets_weight"
 
 
-class RoboAdvisorQuestionCompanyAnalysis(BaseRoboAdvisorQuestion, BaseRoboAdvisorQuestionAsset):
+class RoboAdvisorQuestionCompanyAnalysis(BaseRoboAdvisorQuestionAsset):
     asset = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True)
     result = IntegerField(null=True, blank=True, choices=RESULTS)
     number_shares = None

@@ -1,30 +1,17 @@
+{% load widget_tweaks %}
 {% load static %}
 
 
-<label class="form-label">
-
-</label>
-<input class="form-step-{{step.order}}" name="horizon_time" type="text" value=""> 
-<label class="form-label">
-
-</label>
-<input class="form-step-{{step.order}}" name="horizon_period" type="text" value=""> 
-<label class="form-label">
-
-</label>
-<input class="form-step-{{step.order}}" name="comment" type="text" value=""> 
-
-
-<label class="form-label">
-    ¿Cuál es tu horizonte de inversión con esta empresa?
-</label>
-<input name="horizon_simple" type="range" class="form-step-{{step.order}} form-range" 
-    min="0" max="100" step="1" onInput="$('#yearshorizon').html($(this).val())" required>
-<span id="yearshorizon">50<!-- Default value --></span>
-<br>
-<label class="form-label mt-4">
-    ¿Cuál es tu horizonte de inversión con esta empresa?
-</label>
-<textarea name="comment" class="form-step-{{step.order}} form-control"></textarea>
-
-<input name="date_finish" class="form-step-{{step.order}} form-control" value='{% now "SHORT_DATETIME_FORMAT" %}' hidden>
+<div class="row mb-4">
+    <label class="form-label">¿Cuál es tu periodo y horizonte de inversión?</label>
+    <div class="col-md-4">        
+        {% render_field form.horizon_time class=fieldclass %}
+    </div>
+    <div class="col-md-8">
+        {% render_field form.horizon_period class=fieldclass %}
+    </div>
+    <div class="col-md-12 mt-4">
+        <label class="form-label">Añade algún comentario respecto a tu horizonte de inversión</label>
+        {% render_field form.comment class=fieldclass %}
+    </div>
+</div>
