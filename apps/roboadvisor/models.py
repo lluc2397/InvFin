@@ -26,6 +26,7 @@ from .constants import *
 
 User = get_user_model()
 
+# Create a quiz arround sectors and companies to see if the user knows the company and the sector enought to invest in
 
 class BaseInvestorProfile(Model):
     created_at = DateTimeField(auto_now_add=True)
@@ -43,6 +44,7 @@ class InvestorProfile(BaseInvestorProfile):
 
     class Meta:
         verbose_name = "User investor profile"
+        verbose_name_plural = 'Users investor profiles'
         db_table = "user_investor_profile"
     
     def __str__(self) -> str:
@@ -54,6 +56,7 @@ class TemporaryInvestorProfile(BaseInvestorProfile):
 
     class Meta:
         verbose_name = "Temporary investor profile"
+        verbose_name_plural = 'Temporary investor profiles'
         db_table = "temporary_investor_profile"
     
     def __str__(self) -> str:
@@ -72,7 +75,8 @@ class RoboAdvisorService(Model):
 
     class Meta:
         ordering = ['order']
-        verbose_name = "Roboadvisor services"
+        verbose_name = "Roboadvisor service"
+        verbose_name_plural = 'Roboadvisor services'
         db_table = "roboadvisor_services"
     
     def __str__(self) -> str:
@@ -87,21 +91,71 @@ class RoboAdvisorService(Model):
         return reverse("roboadvisor:robo-option", kwargs={"slug": self.slug})
 
 
-class BaseRoboAdvisorQuestion(Model):
-    user = ForeignKey(User, on_delete=SET_NULL, null=True) 
-    service = ForeignKey(RoboAdvisorService, on_delete=SET_NULL, null=True)
-    date_started = DateTimeField(auto_now_add=True)
-    date_finished = DateTimeField(null=True, blank=True)
-    status = IntegerField(null=True, blank=True, choices=SERVICE_STATUS)
-    slug = CharField(max_length=500, null=True, blank=True)
+class RoboAdvisorServiceStep(Model):
+    title = CharField(max_length=500, null=True, blank=True)
+    description = TextField(null=True, blank=True)    
+    order = PositiveIntegerField(null=True, blank=True)
+    url = CharField(max_length=500, null=True, blank=True)
+    template = CharField(max_length=500, null=True, blank=True)
+    service_related = ManyToManyField(RoboAdvisorService, blank=True, related_name="steps")
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = "Roboadvisor service step"
+        verbose_name_plural = 'Roboadvisor service steps'
+        db_table = "roboadvisor_service_steps"
+    
+    def __str__(self) -> str:
+        return self.title
+    
+    def save(self) -> None:
+        if not self.template:
+            self.template = slugify(self.title)
+        return super().save()
+    
+    @property
+    def template_path(self):
+        return f'roboadvisor/steps/{self.template}.html'
+
+
+class BaseRoboAdvisorUserActivity(Model):
+    user = ForeignKey(User, on_delete=SET_NULL, null=True)
+    status = IntegerField(choices=SERVICE_STATUS, default=SERVICE_STATUS[2][0])
 
     class Meta:
         abstract = True
-    
-    def save(self) -> None:
-        if not self.slug:
-            self.slug = slugify(self.user.id)
-        return super().save()
+
+
+class RoboAdvisorUserServiceActivity(BaseRoboAdvisorUserActivity):
+    service = ForeignKey(RoboAdvisorService, on_delete=SET_NULL, null=True)
+    date_started = DateTimeField(auto_now_add=True)
+    date_finished = DateTimeField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'RoboAdvisor Service Activity'
+        verbose_name_plural = 'RoboAdvisor Service Activity'
+        db_table = "roboadvisor_service_activity"
+
+
+class RoboAdvisorUserServiceStepActivity(BaseRoboAdvisorUserActivity):
+    step = ForeignKey(RoboAdvisorServiceStep, on_delete=SET_NULL, null=True)
+    date_started = DateTimeField(null=True, blank=True)
+    date_finished = DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'RoboAdvisor Service Step Activity'
+        verbose_name_plural = 'RoboAdvisor Service Steps Activity'
+        db_table = "roboadvisor_service_step_activity"
+
+
+class BaseRoboAdvisorQuestion(BaseRoboAdvisorUserActivity):
+    date_started = DateTimeField(null=True, blank=True)
+    date_finished = DateTimeField(auto_now_add=True)
+    service_activity = ForeignKey(RoboAdvisorUserServiceActivity, on_delete=SET_NULL, null=True)
+    service_step = ForeignKey(RoboAdvisorUserServiceStepActivity, on_delete=SET_NULL, null=True)
+
+    class Meta:
+        abstract = True
 
 
 class RoboAdvisorQuestionFinancialSituation(BaseRoboAdvisorQuestion):
@@ -124,39 +178,35 @@ class RoboAdvisorQuestionFinancialSituation(BaseRoboAdvisorQuestion):
         pass
 
 
-class BaseRoboAdvisorQuestionAsset(Model):
-    PERIODS = (
-        (1, 'Horas'),
-        (2, 'Días'),
-        (3, 'Semanas'),
-        (4, 'Meses'),
-        (5, 'Años')
-    )
-    HOURS = ((x, f'{x}') for x in range(0,25))
-    DAYS = ((x, f'{x}') for x in range(0,8))
+class BaseRoboAdvisorHorizon(Model):
+    horizon_time = PositiveIntegerField(default = 0)
+    horizon_period = PositiveIntegerField(default = 4, choices=PERIODS)
+    comment = TextField(default = '')
 
+    class Meta:
+        abstract = True
+
+
+class BaseRoboAdvisorQuestionAsset(BaseRoboAdvisorHorizon):
     asset = None
     result = None
     sector_knowledge = IntegerField(null=True, blank=True, choices=KNOWLEDGE)
     asset_knowledge = IntegerField(null=True, blank=True, choices=KNOWLEDGE)
     amount_time_studied = PositiveIntegerField(default = 0)
     period_time_studied = PositiveIntegerField(default = 4, choices=PERIODS)
-    number_shares = DecimalField(default = 0, blank=True, max_digits=10, decimal_places=2,validators=[MinValueValidator(0)])
-    capital_invested = DecimalField(default = 0, blank=True, max_digits=10, decimal_places=2,validators=[MinValueValidator(0)])
+    number_shares = DecimalField(null=True, default = 0, blank=True, max_digits=10, decimal_places=2,validators=[MinValueValidator(0)])
+    capital_invested = DecimalField(null=True, default = 0, blank=True, max_digits=10, decimal_places=2,validators=[MinValueValidator(0)])
     sector_relationship = TextField(default = '')
-    time_studing = IntegerField(null=True, blank=True, choices=HOURS)
-    days_studing = IntegerField(null=True, blank=True, choices=DAYS)  
 
     class Meta:
         abstract = True
 
 
-class RoboAdvisorQuestionInvestorExperience(BaseRoboAdvisorQuestion, BaseRoboAdvisorQuestionAsset):
+class RoboAdvisorQuestionInvestorExperience(BaseRoboAdvisorQuestion):
     age = PositiveIntegerField(null=True, blank=True)
     objectif = IntegerField(choices=OBJECTIFS, null=True, blank=True) 
     investor_type_self_definition = IntegerField(null=True, blank=True,choices=INVESTOR_TYPE)
     percentage_invested = DecimalField(blank=True, default=0, max_digits=10, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    already_investing = BooleanField(default=False)
     percentage_anualized_revenue = DecimalField (null=True, blank=True, default=0, max_digits=10, decimal_places=2)
     years_investing = PositiveIntegerField(null=True,default=0, blank=True)    
 
@@ -166,7 +216,7 @@ class RoboAdvisorQuestionInvestorExperience(BaseRoboAdvisorQuestion, BaseRoboAdv
         db_table = "roboadvisor_investor experience"
 
 
-class RoboAdvisorQuestionRiskAversion(BaseRoboAdvisorQuestion):       
+class RoboAdvisorQuestionRiskAversion(BaseRoboAdvisorQuestion, BaseRoboAdvisorHorizon):       
     volatilidad = IntegerField(choices=VOLATILIDAD,null=True, blank=True)
     percentage_for_onefive = IntegerField (null=True, blank=True)
     percentage_for_three = IntegerField (null=True, blank=True)
@@ -179,16 +229,6 @@ class RoboAdvisorQuestionRiskAversion(BaseRoboAdvisorQuestion):
         verbose_name = "Pregunta: Aversión al riesgo"
         verbose_name_plural = "Pregunta: Aversión al riesgo"
         db_table = "roboadvisor_risk_aversion"
-        
-
-class RoboAdvisorQuestionHorizon(BaseRoboAdvisorQuestion):    
-    horizon_years = PositiveIntegerField(null=True, blank=True)
-    comment = TextField(default = '')
-    
-    class Meta:
-        verbose_name = "Pregunta: Horizote de inversión"
-        verbose_name_plural = "Pregunta: Horizote de inversión"
-        db_table = "roboadvisor_horizon"
         
 
 class RoboAdvisorQuestionPortfolioAssetsWeight(BaseRoboAdvisorQuestion):
@@ -208,6 +248,8 @@ class RoboAdvisorQuestionPortfolioAssetsWeight(BaseRoboAdvisorQuestion):
 class RoboAdvisorQuestionCompanyAnalysis(BaseRoboAdvisorQuestion, BaseRoboAdvisorQuestionAsset):
     asset = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True)
     result = IntegerField(null=True, blank=True, choices=RESULTS)
+    number_shares = None
+    capital_invested = None
 
     class Meta:
         verbose_name = "Pregunta: Decisión compañía"
@@ -224,7 +266,7 @@ class RoboAdvisorQuestionPortfolioComposition(BaseRoboAdvisorQuestionAsset):
         db_table = "roboadvisor_stocks_portfolio_positions"
 
     def __str__(self):
-        return str(f'{self.investor_related.user.username} - {self.id}')
+        return str(f'{self.user.username} - {self.id}')
 
 
 class RoboAdvisorQuestionStocksPortfolio(BaseRoboAdvisorQuestion):

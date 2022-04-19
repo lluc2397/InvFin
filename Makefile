@@ -11,7 +11,7 @@ up:
 	sensible-browser 0.0.0.0:8000/admin &
 	sensible-browser 0.0.0.0:8025 &
 	sensible-browser 0.0.0.0:5555 &
-	docker-compose -f local.yml up
+	docker-compose -f local.yml up $(ar) $(ar2) $(ar3)
 
 stop:
 	docker-compose -f local.yml stop
@@ -39,7 +39,10 @@ manage:
 	docker-compose -f local.yml run --rm django ./manage.py $(ar) --settings=config.settings.local
 
 run:
-	docker-compose -f local.yml run --rm django $(ar) --settings=config.settings.local
+	docker-compose -f local.yml run --rm django $(ar)
+
+pip:
+	docker exec -ti invfin_local_django pip install $(ar)
 
 pdb:
 	docker-compose -f local.yml stop django

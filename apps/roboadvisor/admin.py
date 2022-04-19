@@ -1,14 +1,42 @@
 from django.contrib import admin
 
 from .models import (
+    RoboAdvisorServiceStep,
     RoboAdvisorService,
-    InvestorProfile,
     TemporaryInvestorProfile,
+    InvestorProfile,
+
+    RoboAdvisorQuestionInvestorExperience,
+    RoboAdvisorQuestionCompanyAnalysis,
+    RoboAdvisorQuestionFinancialSituation,
+    RoboAdvisorQuestionRiskAversion,
+    RoboAdvisorQuestionPortfolioAssetsWeight,
+    RoboAdvisorQuestionStocksPortfolio,
+    RoboAdvisorQuestionPortfolioComposition,
 )
+
+@admin.register(RoboAdvisorServiceStep)
+class RoboAdvisorServiceStepAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'order',
+        'title',
+        'template'
+    ]
+
+    list_editable = [
+        'template',
+        'order'
+    ]
+
+# class RoboAdvisorServiceStepInline(admin.StackedInline):
+#     model = RoboAdvisorServiceStep
 
 
 @admin.register(RoboAdvisorService)
 class RoboAdvisorServiceAdmin(admin.ModelAdmin):
+    # inlines = [RoboAdvisorServiceStepInline]
+
     list_display = [
         'id',
         'price',
@@ -45,3 +73,51 @@ class TemporaryInvestorProfileAdmin(admin.ModelAdmin):
         'investor_type',
     ]
 
+
+@admin.register(RoboAdvisorQuestionInvestorExperience)
+class RoboAdvisorQuestionInvestorExperienceAdmin(admin.ModelAdmin):
+    list_display = [
+        'id'
+    ]
+
+
+@admin.register(RoboAdvisorQuestionCompanyAnalysis)
+class RoboAdvisorQuestionCompanyAnalysisAdmin(admin.ModelAdmin):
+    list_display = [
+        'id'
+    ]
+
+
+@admin.register(RoboAdvisorQuestionFinancialSituation)
+class RoboAdvisorQuestionFinancialSituationAdmin(admin.ModelAdmin):
+    list_display = [
+        'id'
+    ]
+
+
+@admin.register(RoboAdvisorQuestionRiskAversion)
+class RoboAdvisorQuestionRiskAversionAdmin(admin.ModelAdmin):
+    list_display = [
+        'id'
+    ]
+
+
+@admin.register(RoboAdvisorQuestionPortfolioAssetsWeight)
+class RoboAdvisorQuestionPortfolioAssetsWeightAdmin(admin.ModelAdmin):
+    list_display = [
+        'id'
+    ]
+
+
+@admin.register(RoboAdvisorQuestionStocksPortfolio)
+class RoboAdvisorQuestionStocksPortfolioAdmin(admin.ModelAdmin):
+    list_display = [
+        'id'
+    ]
+
+
+@admin.register(RoboAdvisorQuestionPortfolioComposition)
+class RoboAdvisorQuestionPortfolioCompositionAdmin(admin.ModelAdmin):
+    list_display = [
+        'id'
+    ]

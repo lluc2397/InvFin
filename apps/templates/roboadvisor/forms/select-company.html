@@ -1,0 +1,18 @@
+{% load static %}
+<div class="col-12">
+    <label class="form-label mt-4">
+      ¿Cuál es tu horizonte de inversión con esta empresa?
+  </label>
+  <input style="height:50px;font-size:14pt;" type="text" class="form-step-{{step.order}} form-control" 
+    name="stock" id="stock" aria-describedby="button-stock" 
+    placeholder="Escribe el nombre o el ticker de la empresa que quieres conocer" required>
+</div>
+
+<script>
+    $(function() {
+      $("#stock").autocomplete({
+        source: "{% url 'empresas:searcher_companies' %}",
+        minLength: 3,
+      });
+    });
+  </script>

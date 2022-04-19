@@ -2,9 +2,29 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+import json
+
+from django.http.response import HttpResponse
+from django.db.models import Q
+
 from .models import Company, IncomeStatement, BalanceSheet, CashflowStatement
 from .api.serializers import IncomeStatementSerializer, BalanceSheetSerializer, CashflowStatementSerializer
 key = 'olLKY2dEO1jgZ4FURM60o7B90NyF05'
+
+def companies_searcher(request):
+    query = request.GET.get("term", "")
+    companies_availables = Company.objects.filter(Q(name__icontains=query) | Q(ticker__icontains=query),
+    no_incs = False,
+    no_bs = False,
+    no_cfs = False,
+        )[:5]
+    
+    results = [f'{company.name} ({company.ticker})' for company in companies_availables]
+    
+    data = json.dumps(results)
+    mimetype = "application/json"
+    return HttpResponse(data, mimetype)
+
 
 class ExcelAPIIncome(APIView):
     def get(self, request, format=None):

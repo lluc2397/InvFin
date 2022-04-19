@@ -39,8 +39,7 @@ RISK_PROFILE = (
 SERVICE_STATUS = (
     (1, 'Finished'), 
     (2, 'Abandoned'), 
-    (3, 'Asked'),
-    (4, 'Skiped')
+    (3, 'Started')
 )
 
 OBJECTIFS = (
@@ -73,4 +72,13 @@ RESULTS = (
     (2, 'Sell'), 
     (3, 'Hold'), 
     (4, 'Error')
+)
+
+PERIODS = (
+    (0, 'Minutos'),
+    (1, 'Horas'),
+    (2, 'Días'),
+    (3, 'Semanas'),
+    (4, 'Meses'),
+    (5, 'Años')
 )

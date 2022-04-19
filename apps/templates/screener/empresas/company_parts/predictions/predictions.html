@@ -74,7 +74,7 @@
         buyback : buyback,
         })
     
-    event.preventDefault(); // <---- Add this line
+    event.preventDefault();
     $.ajax({
         url: "{% url 'screener:simple_valuation_view' %}",
         type: "POST",

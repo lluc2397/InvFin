@@ -9,6 +9,8 @@ ipdb==0.13.9  # https://github.com/gotcha/ipdb
 
 watchgod==0.7  # https://github.com/samuelcolvin/watchgod
 
+django-widget-tweaks
+
 # Testing
 # ------------------------------------------------------------------------------
 mypy==0.931  # https://github.com/python/mypy

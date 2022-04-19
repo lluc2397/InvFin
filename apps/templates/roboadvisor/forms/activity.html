@@ -1,0 +1,4 @@
+{% load static %}
+
+<input name="user" class="{{fieldclass}}" value="{{request.user}}" hidden>
+<input name="date_started" class="{{fieldclass}}" value="{% now 'DATETIME_FORMAT' %}" hidden>

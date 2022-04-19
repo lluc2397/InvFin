@@ -1,0 +1,14 @@
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% render_field experience_form.age class=fieldclass %}
+{% render_field experience_form.objectif class=fieldclass %}
+{% render_field experience_form.investor_type_self_definition class=fieldclass %}
+{% render_field experience_form.percentage_invested class=fieldclass %}
+<div class="col-3">
+    Hola {% render_field experience_form.percentage_anualized_revenue class=fieldclass %}
+</div>
+
+{% render_field experience_form.years_investing class=fieldclass %}
+

@@ -55,6 +55,8 @@ INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS  # noqa F405
 INSTALLED_APPS += [
     "debug_toolbar",
     "drf_spectacular",
+
+    'widget_tweaks',
     ]  # noqa F405
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#middleware
 MIDDLEWARE += [
