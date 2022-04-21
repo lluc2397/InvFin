@@ -13,6 +13,9 @@ from .models import (
     RoboAdvisorQuestionPortfolioAssetsWeight,
     RoboAdvisorQuestionStocksPortfolio,
     RoboAdvisorQuestionPortfolioComposition,
+
+    RoboAdvisorUserServiceActivity,
+    RoboAdvisorUserServiceStepActivity
 )
 
 @admin.register(RoboAdvisorServiceStep)
@@ -21,13 +24,15 @@ class RoboAdvisorServiceStepAdmin(admin.ModelAdmin):
         'title',
         'order',
         'url',
-        'template'
+        'template',
+        'service_related'
     ]
 
     list_editable = [
         'template',
         'url',
-        'order'
+        'order',
+        'service_related'
     ]
 
 # class RoboAdvisorServiceStepInline(admin.StackedInline):
@@ -122,3 +127,18 @@ class RoboAdvisorQuestionPortfolioCompositionAdmin(admin.ModelAdmin):
     list_display = [
         'id'
     ]
+
+
+@admin.register(RoboAdvisorUserServiceActivity)
+class RoboAdvisorUserServiceActivityAdmin(admin.ModelAdmin):
+    list_display = [
+        'id'
+    ]
+
+
+@admin.register(RoboAdvisorUserServiceStepActivity)
+class RoboAdvisorUserServiceStepActivityAdmin(admin.ModelAdmin):
+    list_display = [
+        'id'
+    ]
+

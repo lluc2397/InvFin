@@ -21,13 +21,16 @@ urlpatterns =[
     path('roboadvisor/', RoboAdvisorServicesListView.as_view(), name="roboadvisor"),
     path('robo-options/<slug>/', RoboAdvisorServiceOptionView.as_view(), name="robo-option"),
 
-    path('robo-step-analysis', RoboAdvisorQuestionCompanyAnalysisAPIView.as_view(), name='robo-step-analysis'),
-    path('robo-step-stocks-portfolio', RoboAdvisorQuestionStocksPortfolioAPIView.as_view(), name='robo-step-stocks-portfolio'),
-    path('robo-step-financial', RoboAdvisorQuestionFinancialSituationAPIView.as_view(), name='robo-step-financial'),
-    path('robo-step-experience', RoboAdvisorQuestionInvestorExperienceAPIView.as_view(), name='robo-step-experience'),
-    path('robo-step-weights', RoboAdvisorQuestionPortfolioAssetsWeightAPIView.as_view(), name='robo-step-weights'),
-    path('robo-step-composition', RoboAdvisorQuestionPortfolioCompositionAPIView.as_view(), name='robo-step-composition'),
-    path('robo-step-risk-aversion', RoboAdvisorQuestionRiskAversionAPIView.as_view(), name='robo-step-risk-aversion'),
+    path('robo-step-analysis', RoboAdvisorQuestionCompanyAnalysisAPIView.as_view(), name='analysis'),
+    
+    path('robo-step-financial', RoboAdvisorQuestionFinancialSituationAPIView.as_view(), name='financial'),
+    path('robo-step-experience', RoboAdvisorQuestionInvestorExperienceAPIView.as_view(), name='experience'),
+    path('robo-step-weights', RoboAdvisorQuestionPortfolioAssetsWeightAPIView.as_view(), name='weights'),
+    
+    path('robo-step-risk-aversion', RoboAdvisorQuestionRiskAversionAPIView.as_view(), name='risk-aversion'),
+
+    path('robo-step-composition', RoboAdvisorQuestionPortfolioCompositionAPIView.as_view(), name='composition'),
+    path('robo-step-stocks-portfolio', RoboAdvisorQuestionStocksPortfolioAPIView.as_view(), name='stocks-portfolio'),
 
     # path('robo-vote/<id>', TEST_IS_USEFUL, name="robo-vote"),
     # path('favorite-stock/', STOCK_FAVORITE, name="favorite-stock"),

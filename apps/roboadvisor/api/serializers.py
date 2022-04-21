@@ -20,17 +20,30 @@ from ..models import (
 )
 
 
-# class BaseRoboAdvisorSerializer(ModelSerializer):
-#     def create(self, validated_data: Any) -> _MT:
-#         return super().create(validated_data)
+class BaseRoboAdvisorSerializer(ModelSerializer):
+    def create(self, validated_data):
+        instance = super().create(validated_data)
+        
+
+        instance.service_activity
+        instance.service_step
+        instance.save()
+        return instance
     
-#     def update(self, instance: _MT, validated_data: Any) -> _MT:
-#         return super().update(instance, validated_data)
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
 
 class RoboAdvisorQuestionCompanyAnalysisSerializer(ModelSerializer):
     class Meta:
         model = RoboAdvisorQuestionCompanyAnalysis
         fields = '__all__'
+    
+    def create(self, validated_data):
+        instance = super().create(validated_data)
+        instance.asset
+        instance.result
+        instance.save()
+        return instance
 
 
 class RoboAdvisorQuestionFinancialSituationSerializer(ModelSerializer):

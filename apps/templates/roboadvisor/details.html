@@ -68,7 +68,7 @@
 <div class="col-12">
 {% for step in steps %}
     {% with current_step=forloop.counter0 %}
-    {% url step.url as the_url %}
+    {% url step.url_path as the_url %}
     {% with order=step.order|slugify %}
     {% with fieldclass="form-step-"|add:order|add:" form-control" %}
     {% with fieldclassrange="form-step-"|add:order|add:" form-range" %}
@@ -85,8 +85,8 @@
                 {{ step.description }}
             </div>
         </div>
-        {% include "roboadvisor/forms/activity.html" %}
         <div class="card-body">
+            <input name="date_started" id="start-step-{{step.order}}" class="form-step-{{step.order}} form-control" value="{% now 'c' %}" hidden>
             <div class="card-text">
                 {% include step.template_path %}
             </div>
@@ -105,9 +105,9 @@
                 </div>
                 <div class="float-end">
                     {% if forloop.last %}
-                    <button class="btn btn-primary btn-sm" onclick="FinalizeTest({{current_step}}, '{{the_url}}')">Finalizar</button>                                                    
+                    <button class="btn btn-primary btn-sm" onclick="FinalizeTest({{current_step}}, '{{the_url}}', '{{step.id}}')">Finalizar</button>                                                    
                     {% else %}
-                    <button class="btn btn-primary btn-sm" onclick="ShowNextStep({{current_step}}, '{{the_url}}')">Siguiente</button>
+                    <button class="btn btn-primary btn-sm" onclick="ShowNextStep({{current_step}}, '{{the_url}}', '{{step.id}}')">Siguiente</button>
                     {% endif %}
                 </div>
             </div>
@@ -132,24 +132,32 @@
 
 {% block javascript %}
     {{ block.super }}
-    <!-- 
-        Probar si el csrf token se genera siempre
-        Ver como indicar qué form se ha creado. Quizás poner el id de la repuesta en cookies
-        con un atributo "creado", si js encuentra este atributo hacer un update en la view.
-        Quizás manejarlo desde las sessions.
-        Track el inicio del test y la finalización. Si el test no ha terminado mandar recordatorio
-     -->
     <script>
-        function SendData(step, url){
+        Object.defineProperty(Date.prototype, 'YYYYMMDDHHMMSS', {
+            value: function() {
+                function pad2(n) {  // always returns a string
+                    return (n < 10 ? '0' : '') + n;
+                }
+
+                return this.getFullYear() + "-" +
+                    pad2(this.getMonth() + 1) + "-" +
+                    pad2(this.getDate()) + "T" +
+                    pad2(this.getHours()) + ":" +
+                    pad2(this.getMinutes()) + ":" +
+                    pad2(this.getSeconds());
+            }
+        });
+        function SendData(step, url, stepID){
             var dataFields = document.getElementsByClassName('form-step-' + step.toString())
             
-            var formData = {};
+
+            var formData = {
+                'step__id': stepID
+            }
             for (const s of dataFields){
-                console.log(s.value)
                 formData[s.name] = s.value
             }
             // console.log(Cookies.get('cookie'))
-            console.log(formData)
             event.preventDefault();
             $.ajax({
                 url: url,
@@ -162,6 +170,7 @@
                 
                 },
                 success: (data) => {
+                    console.log(data)
                 },
             
             });
@@ -204,16 +213,20 @@
             return ShowStep(stepsDict)
         }
 
-        function ShowNextStep(step, url){
+        function ShowNextStep(step, url, stepID){
             var validation = ValidateData(step)
             if (validation) {
                 document.getElementById("faltante-" + step.toString()).style.display = 'none';
                 var selStep = step + 1
+
+                var dateTimeField = document.getElementById('start-step-' + selStep.toString()) = new Date().YYYYMMDDHHMMSS();
+                
+
                 var stepsDict = {
                     'current':step,
                     'sel':selStep
                 }
-                SendData(step, url)
+                SendData(step, url, stepID)
                 return ShowStep(stepsDict)
             }            
         }

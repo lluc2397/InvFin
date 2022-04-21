@@ -6,13 +6,16 @@ build:
 up-back:
 	docker-compose -f local.yml up -d
 
-up:
+up-all:
 	sensible-browser 0.0.0.0:8000 &
 	sensible-browser 0.0.0.0:8000/admin &
 	sensible-browser 0.0.0.0:8025 &
 	sensible-browser 0.0.0.0:5555 &
 	docker-compose -f local.yml up $(ar)
-	
+
+up:
+	docker-compose -f local.yml up $(ar)
+
 stop:
 	docker-compose -f local.yml stop
 
@@ -30,6 +33,10 @@ migrations:
 	docker-compose -f local.yml run --rm django python -u manage.py makemigrations $(ar) --settings=config.settings.local
 
 migrate:
+	docker-compose -f local.yml run --rm django python -u manage.py migrate $(ar) --settings=config.settings.local
+
+allmig:
+	docker-compose -f local.yml run --rm django python -u manage.py makemigrations $(ar) --settings=config.settings.local
 	docker-compose -f local.yml run --rm django python -u manage.py migrate $(ar) --settings=config.settings.local
 
 shell_plus:

@@ -1,3 +1,5 @@
+import datetime
+
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import (
     CreateModelMixin,
@@ -5,6 +7,8 @@ from rest_framework.mixins import (
 )
 from rest_framework.response import Response
 from rest_framework import status
+
+from apps.empresas.models import Company
 
 from .serializers import (
     RoboAdvisorQuestionCompanyAnalysisSerializer,
@@ -16,15 +20,50 @@ from .serializers import (
     RoboAdvisorQuestionStocksPortfolioSerializer
 )
 
+from ..models import (
+    RoboAdvisorUserServiceStepActivity
+)
+
+
 class BaseRoboAdvisorAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin):
+
     def post(self, request, ses):
-        if request.session[ses]:
-            response = self.update(request)
+        client_side_data = request.data
+        session = self.request.session
+        # if 'first-step' in session and session['first-step']['used'] == False:
+        #     service_step = RoboAdvisorUserServiceStepActivity.objects.get(id = session['first-step']['id'])
+        #     service_step.date_finished = datetime.datetime.now()
+        #     service_step.save()
+        #     session['first-step']['used'] = True
+        # else:
+        service_step = RoboAdvisorUserServiceStepActivity.objects.create(
+            user = self.request.user,
+            step__id = client_side_data['step__id'],
+            date_started = client_side_data['date_started'],
+            status = 1,
+        )
+            
+
+        user_activity = {
+            'service_activity__id': session['test-activity'],
+            'service_step': service_step
+        }
+        
+
+        if ses == 'company-analysis':
+            asset = Company.objects.get(ticker = client_side_data['stock'].split(' (')[1][:-1])
+            result = ''
+            client_side_data['asset'] = asset
+
+
+        client_side_data.update(user_activity)
+        if ses in session:
+            response = self.update(client_side_data)
             response(status=status.HTTP_200_OK)
 
         else:
-            response = self.create(request)
-            request.session[ses] = 'created'
+            response = self.create(client_side_data)
+            session[ses] = 'created'
             
         return response
 

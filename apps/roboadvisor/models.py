@@ -1,4 +1,3 @@
-from colorama import Fore
 from django.db.models import (
     Model,
     SET_NULL,
@@ -73,6 +72,7 @@ class RoboAdvisorService(Model):
     slug = CharField(max_length=500, null=True, blank=True)
     category = ForeignKey(Category, on_delete=SET_NULL, blank=True, null=True)
     tags = ManyToManyField(Tag, blank=True)
+    thumbnail = CharField(max_length=500, null=True, blank=True)
 
     class Meta:
         ordering = ['order']
@@ -98,7 +98,7 @@ class RoboAdvisorServiceStep(Model):
     order = PositiveIntegerField(null=True, blank=True)
     url = CharField(max_length=500, null=True, blank=True)
     template = CharField(max_length=500, null=True, blank=True)
-    service_related = ManyToManyField(RoboAdvisorService, blank=True, related_name="steps")
+    service_related = ForeignKey(RoboAdvisorService, on_delete=SET_NULL, null=True, blank=True, related_name="steps")
 
     class Meta:
         ordering = ['order']
@@ -117,20 +117,18 @@ class RoboAdvisorServiceStep(Model):
     @property
     def template_path(self):
         return f'roboadvisor/steps/{self.template}.html'
+    
+    @property
+    def url_path(self):
+        return f'roboadvisor:{self.url}'
 
 
-class BaseRoboAdvisorUserActivity(Model):
+class RoboAdvisorUserServiceActivity(Model):
     user = ForeignKey(User, on_delete=SET_NULL, null=True)
-    status = IntegerField(choices=SERVICE_STATUS, default=SERVICE_STATUS[2][0])
-
-    class Meta:
-        abstract = True
-
-
-class RoboAdvisorUserServiceActivity(BaseRoboAdvisorUserActivity):
     service = ForeignKey(RoboAdvisorService, on_delete=SET_NULL, null=True)
     date_started = DateTimeField(auto_now_add=True)
     date_finished = DateTimeField(null=True, blank=True)
+    status = IntegerField(choices=SERVICE_STATUS, default=SERVICE_STATUS[2][0])
 
     class Meta:
         verbose_name = 'RoboAdvisor Service Activity'
@@ -138,10 +136,12 @@ class RoboAdvisorUserServiceActivity(BaseRoboAdvisorUserActivity):
         db_table = "roboadvisor_service_activity"
 
 
-class RoboAdvisorUserServiceStepActivity(BaseRoboAdvisorUserActivity):
+class RoboAdvisorUserServiceStepActivity(Model):
+    user = ForeignKey(User, on_delete=SET_NULL, null=True)
     step = ForeignKey(RoboAdvisorServiceStep, on_delete=SET_NULL, null=True)
     date_started = DateTimeField(null=True, blank=True)
     date_finished = DateTimeField(auto_now_add=True)
+    status = IntegerField(choices=SERVICE_STATUS, default=SERVICE_STATUS[2][0])
 
     class Meta:
         verbose_name = 'RoboAdvisor Service Step Activity'
@@ -149,9 +149,8 @@ class RoboAdvisorUserServiceStepActivity(BaseRoboAdvisorUserActivity):
         db_table = "roboadvisor_service_step_activity"
 
 
-class BaseRoboAdvisorQuestion(BaseRoboAdvisorUserActivity):
-    date_started = DateTimeField(null=True, blank=True)
-    date_finished = DateTimeField(auto_now_add=True)
+class BaseRoboAdvisorQuestion(Model):
+    user = ForeignKey(User, on_delete=SET_NULL, null=True)
     service_activity = ForeignKey(RoboAdvisorUserServiceActivity, on_delete=SET_NULL, null=True)
     service_step = ForeignKey(RoboAdvisorUserServiceStepActivity, on_delete=SET_NULL, null=True)
 
@@ -213,9 +212,9 @@ class RoboAdvisorQuestionInvestorExperience(BaseRoboAdvisorQuestion):
     years_investing = PositiveIntegerField(null=True,default=0, blank=True)    
 
     class Meta:
-        verbose_name = "Pregunta: Historial del inversor"
-        verbose_name_plural = "Pregunta: Historial del inversor"
-        db_table = "roboadvisor_investor experience"
+        verbose_name = "Pregunta: Experiencia como inversor"
+        verbose_name_plural = "Pregunta: Experiencia como inversor"
+        db_table = "roboadvisor_investor_experience"
 
 
 class RoboAdvisorQuestionRiskAversion(BaseRoboAdvisorHorizon):       
