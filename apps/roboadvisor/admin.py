@@ -35,13 +35,14 @@ class RoboAdvisorServiceStepAdmin(admin.ModelAdmin):
         'service_related'
     ]
 
-# class RoboAdvisorServiceStepInline(admin.StackedInline):
-#     model = RoboAdvisorServiceStep
+
+class RoboAdvisorServiceStepInline(admin.StackedInline):
+    model = RoboAdvisorServiceStep
 
 
 @admin.register(RoboAdvisorService)
 class RoboAdvisorServiceAdmin(admin.ModelAdmin):
-    # inlines = [RoboAdvisorServiceStepInline]
+    inlines = [RoboAdvisorServiceStepInline]
 
     list_display = [
         'id',
@@ -83,62 +84,137 @@ class TemporaryInvestorProfileAdmin(admin.ModelAdmin):
 @admin.register(RoboAdvisorQuestionInvestorExperience)
 class RoboAdvisorQuestionInvestorExperienceAdmin(admin.ModelAdmin):
     list_display = [
-        'id'
+        'id',
+        'user',
+        'service_activity',
+        'service_step',
+        'age',
+        'objectif',
+        'investor_type_self_definition',
+        'percentage_invested',
+        'percentage_anualized_revenue',
+        'time_investing_exp',
+        'period_investing_exp',
     ]
 
 
 @admin.register(RoboAdvisorQuestionCompanyAnalysis)
 class RoboAdvisorQuestionCompanyAnalysisAdmin(admin.ModelAdmin):
     list_display = [
-        'id'
+        'id',
+        'user',
+        'service_activity',
+        'service_step',
+        'asset',
+        'result',
+        'sector_knowledge',
+        'asset_knowledge',
+        'amount_time_studied',
+        'period_time_studied',
     ]
 
 
 @admin.register(RoboAdvisorQuestionFinancialSituation)
 class RoboAdvisorQuestionFinancialSituationAdmin(admin.ModelAdmin):
     list_display = [
-        'id'
+        'id',
+        'user',
+        'service_activity',
+        'service_step',
+        'average_income',
+        'average_expense',
+        'debt',
+        'recurrent_savings',
+        'recurrent_debts',
+        'savings',
+        'debt_percentage',
+        'saving_percentage',
+        'number_sources_income',
+        'currency',
     ]
 
 
 @admin.register(RoboAdvisorQuestionRiskAversion)
 class RoboAdvisorQuestionRiskAversionAdmin(admin.ModelAdmin):
     list_display = [
-        'id'
+        'id',
+        'user',
+        'service_activity',
+        'service_step',
+        'volatilidad',
+        'percentage_for_onefive',
+        'percentage_for_three',
+        'percentage_for_fourfive',
+        'percentage_for_zerofive',
+        'percentage_in_one_stock',
+        'number_stocks',
     ]
 
 
 @admin.register(RoboAdvisorQuestionPortfolioAssetsWeight)
 class RoboAdvisorQuestionPortfolioAssetsWeightAdmin(admin.ModelAdmin):
     list_display = [
-        'id'
+        'id',
+        'user',
+        'service_activity',
+        'service_step',
+        'etfs_percentage',
+        'stocks_percentage',
+        'bonds_percentage',
+        'real_estate_percentage',
+        'sofipos_percentage',
+        'cryptos_percentage',
     ]
 
 
 @admin.register(RoboAdvisorQuestionStocksPortfolio)
 class RoboAdvisorQuestionStocksPortfolioAdmin(admin.ModelAdmin):
     list_display = [
-        'id'
+        'id',
+        'user',
+        'service_activity',
+        'service_step',
     ]
 
 
 @admin.register(RoboAdvisorQuestionPortfolioComposition)
 class RoboAdvisorQuestionPortfolioCompositionAdmin(admin.ModelAdmin):
     list_display = [
-        'id'
+        'id',
+        'user',
+        'service_activity',
+        'service_step',
+        'asset',
+        'sector_knowledge',
+        'asset_knowledge',
+        'amount_time_studied',
+        'period_time_studied',
+        'number_shares',
+        'capital_invested',
+        'sector_relationship',
     ]
 
 
 @admin.register(RoboAdvisorUserServiceActivity)
 class RoboAdvisorUserServiceActivityAdmin(admin.ModelAdmin):
     list_display = [
-        'id'
+        'id',
+        'user',
+        'service',
+        'date_started',
+        'date_finished',
+        'status',
     ]
 
 
 @admin.register(RoboAdvisorUserServiceStepActivity)
 class RoboAdvisorUserServiceStepActivityAdmin(admin.ModelAdmin):
     list_display = [
-        'id'
+        'id',
+        'user',
+        'step',
+        'date_started',
+        'date_finished',
+        'status',
     ]
 

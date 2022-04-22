@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import (
     RoboAdvisorServicesListView,
-    RoboAdvisorServiceOptionView    
+    RoboAdvisorServiceOptionView,
+    RoboAdvisorResultView
 )
 
 from apps.roboadvisor.api.views import (
@@ -32,9 +33,7 @@ urlpatterns =[
     path('robo-step-composition', RoboAdvisorQuestionPortfolioCompositionAPIView.as_view(), name='composition'),
     path('robo-step-stocks-portfolio', RoboAdvisorQuestionStocksPortfolioAPIView.as_view(), name='stocks-portfolio'),
 
-    # path('robo-vote/<id>', TEST_IS_USEFUL, name="robo-vote"),
-    # path('favorite-stock/', STOCK_FAVORITE, name="favorite-stock"),
-    # path('favorite-etf/', ETF_FAVORITE, name="favorite-etf"),
+    path('robo-result/', RoboAdvisorResultView.as_view(), name="result"),
 
 
 

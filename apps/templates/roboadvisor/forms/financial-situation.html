@@ -5,16 +5,16 @@
 
 <div class="row">
     <div class="row mb-4">
-        <div class="col-md-4">  
+        <div class="col-md-4 mt-sm-4">  
             <label class="form-label">¿Cuántas fuentes de ingreso tienes?</label> 
             {% render_field financial_situation_form.number_sources_income class=fieldclass %}
         </div>
-        <div class="col-md-3">  
+        <div class="col-md-3 mt-sm-4">  
             <label class="form-label">¿Cuál es tu divisa?</label> 
             {% render_field financial_situation_form.currency class=fieldclass style="width:75%" %}
         </div>
 
-        <div class="col-md-5">
+        <div class="col-md-5 mt-sm-4">
             <div class="form-check">
                 {% render_field financial_situation_form.recurrent_savings class=fieldclasscheck type="checkbox" %}
                 <label class="form-check-label" for="flexCheckDefault">
@@ -31,30 +31,30 @@
         </div>
     </div>
     <div class="row mb-4">
-        <div class="col-md-4">
+        <div class="col-md-4 mt-sm-4">
             <label class="form-label">¿Qué porcentaje ahorras de forma recurrente?</label>
             {% render_field financial_situation_form.saving_percentage class=fieldclass %}
         </div>
         
-        <div class="col-md-4">
+        <div class="col-md-4 mt-sm-4">
             <label class="form-label">¿Qué porcentaje de tus gastos son deudas?</label>
             {% render_field financial_situation_form.debt_percentage class=fieldclass %}
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 mt-sm-4">
             <label class="form-label">¿De cuánto son tus ingresos promedio?</label>
             {% render_field financial_situation_form.average_income class=fieldclass %}
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 mt-sm-4">
         <label class="form-label">¿De cuánto son tus gastos promedio?</label>
         {% render_field financial_situation_form.average_expense class=fieldclass %}
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 mt-sm-4">
         <label class="form-label">¿A cuanto se elevan tus deudas?</label>
         {% render_field financial_situation_form.debt class=fieldclass %}
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 mt-sm-4">
         <label class="form-label">¿De cuánto es tu fondo de emergencia?</label>
         {% render_field financial_situation_form.savings class=fieldclass %}
     </div>

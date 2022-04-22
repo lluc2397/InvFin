@@ -5,8 +5,6 @@
 <script src="https://unpkg.com/htmx.org@1.7.0" 
     integrity="sha384-EzBXYPt0/T6gxNp0nuPtLkmRpmDBbjg6WmCUZRLXBBwYYmwAUxzlSGej0ARHX0Bo" 
     crossorigin="anonymous" defer></script>
-
-  <!-- static/general/assets/vendor/js-cookie -->
 {% endblock header%}
 
 {% block FirstCtaContent %}
@@ -152,7 +150,9 @@
             
 
             var formData = {
-                'step__id': stepID
+                'step': stepID,
+                'user': '{{request.user.id}}',
+                'service_activity': '{{service_activity}}'
             }
             for (const s of dataFields){
                 formData[s.name] = s.value
@@ -170,18 +170,22 @@
                 
                 },
                 success: (data) => {
-                    console.log(data)
+                    // console.log(data)
                 },
             
             });
         }
 
-        function FinalizeTest(step, url){
+        function FinalizeTest(step, url, stepID){
             var validation = ValidateData(step)
             if (validation) {
                 document.getElementById('fondo-wait').classList.add('activo');
                 document.getElementById('loader').classList.add('activo');
-                return SendData(step, url)
+                // Cookies.set('final', true)
+                SendData(step, url, stepID)
+                setTimeout(function(){ 
+                    return window.location.replace("{% url 'roboadvisor:result' %}");
+                }, 6000);
             }
         }
 
@@ -219,8 +223,7 @@
                 document.getElementById("faltante-" + step.toString()).style.display = 'none';
                 var selStep = step + 1
 
-                var dateTimeField = document.getElementById('start-step-' + selStep.toString()) = new Date().YYYYMMDDHHMMSS();
-                
+                document.getElementById('start-step-' + selStep.toString()).value = new Date().YYYYMMDDHHMMSS();
 
                 var stepsDict = {
                     'current':step,

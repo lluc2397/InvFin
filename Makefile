@@ -4,7 +4,7 @@ build:
 	docker-compose -f local.yml build
 
 up-back:
-	docker-compose -f local.yml up -d
+	docker-compose -f local.yml up $(ar) -d
 
 up-all:
 	sensible-browser 0.0.0.0:8000 &

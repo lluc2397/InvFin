@@ -57,15 +57,6 @@ class RoboAdvisorServiceOptionView(DetailView):
 
 		return context_forms
 
-	def start_activity(self, default_data):
-		test_activity = RoboAdvisorUserServiceActivity.objects.create(**default_data)
-		self.request.session['test-activity'] = test_activity.id
-		# service_step = RoboAdvisorUserServiceStepActivity.objects.create(
-        #     user = default_data['user'],
-        #     step = default_data['service'].steps.filter(order = 0)[0],
-        #     date_started = datetime.datetime.now(),
-        # )
-		# self.request.session['first-step'] = {'id':service_step.id, 'used':False}
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
@@ -81,7 +72,10 @@ class RoboAdvisorServiceOptionView(DetailView):
 			'user': user,
 			'service': service
 		}
-		self.start_activity(default_data)
+
+		service_activity = RoboAdvisorUserServiceActivity.objects.create(**default_data)
+		self.request.session['service_activity'] = service_activity.id
+		context['service_activity'] = service_activity.id
 
 		return context
 
@@ -90,13 +84,14 @@ class RoboAdvisorResultView(TemplateView):
 	template_name = "roboadvisor/steps/result.html"
 
 	def finish_service_activity(self):
-		service_activity = RoboAdvisorUserServiceActivity.objects.get(id = self.request.session['test-activity'])
-		service_activity.date_finished = datetime.datetime.now()
-		service_activity.status = 1
-		service_activity.save()
+		service_activity = RoboAdvisorUserServiceActivity.objects.get(id = self.request.session['service_activity'])
+		# service_activity.date_finished = datetime.datetime.now()
+		# service_activity.status = 1
+		# service_activity.save(update_fields = ['date_finished', 'status'])
+		return service_activity
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		self.finish_service_activity()
+		context['service_activity'] = self.finish_service_activity()
 
 		return context

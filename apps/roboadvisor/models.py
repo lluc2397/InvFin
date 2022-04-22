@@ -209,7 +209,8 @@ class RoboAdvisorQuestionInvestorExperience(BaseRoboAdvisorQuestion):
     investor_type_self_definition = IntegerField(null=True, blank=True, choices=INVESTOR_TYPE, default=1)
     percentage_invested = DecimalField(blank=True, default=0, max_digits=10, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(100)])
     percentage_anualized_revenue = DecimalField (null=True, blank=True, default=0, max_digits=10, decimal_places=2)
-    years_investing = PositiveIntegerField(null=True,default=0, blank=True)    
+    time_investing_exp = PositiveIntegerField(default = 0)
+    period_investing_exp = PositiveIntegerField(default = 4, choices=PERIODS)  
 
     class Meta:
         verbose_name = "Pregunta: Experiencia como inversor"
