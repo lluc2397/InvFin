@@ -28,14 +28,6 @@ CURRENCY = (
     (6, 'PEN')
 )
 
-RISK_PROFILE = (
-    (1, 'PROFILE VERY AGRESIVE'), 
-    (2, 'PROFILE AGRESIVE'), 
-    (3, 'PROFILE CONSERVATIVE'), 
-    (4, 'PROFILE VERY CONSERVATIVE'), 
-    (5, 'PROFILE REGULAR')
-)
-
 SERVICE_STATUS = (
     (1, 'Finished'), 
     (2, 'Abandoned'), 
@@ -108,6 +100,14 @@ Los inversores con actitudes de riesgo muy conservadoras normalmente utilizarán
 Si bien el riesgo de perder dinero debido a un desempeño deficiente del mercado podría reducirse con un enfoque muy conservador, este tipo de inversión conlleva otros riesgos,\
 como no poder generar suficiente riqueza para cumplir con los objetivos financieros o incluso no poder mantener ritmo con la inflación para mantener el poder adquisitivo de sus inversiones.\
 Si bien tienen el beneficio de experimentar potencialmente menos altibajos en el mercado, los inversores con actitudes de riesgo muy conservadoras probablemente necesiten ahorrar más para alcanzar los mismos niveles de riqueza y cumplir los mismos objetivos financieros que aquellos que se sienten cómodos asumiendo más riesgos.'
+
+RISK_PROFILE = (
+    (1, PROFILE_VERY_CONSERVATIVE),
+    (2, PROFILE_CONSERVATIVE),
+    (3, PROFILE_REGULAR),
+    (4, PROFILE_AGRESIVE), 
+    (5, PROFILE_VERY_AGRESIVE),
+)
 
 INVESTOR_PROFILES = (
     ('PROFILE_VERY_CONSERVATIVE' ,PROFILE_VERY_CONSERVATIVE),

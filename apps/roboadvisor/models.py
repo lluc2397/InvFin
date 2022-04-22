@@ -134,6 +134,9 @@ class RoboAdvisorUserServiceActivity(Model):
         verbose_name = 'RoboAdvisor Service Activity'
         verbose_name_plural = 'RoboAdvisor Service Activity'
         db_table = "roboadvisor_service_activity"
+    
+    def __str__(self) -> str:
+        return self.service.title
 
 
 class RoboAdvisorUserServiceStepActivity(Model):
@@ -147,6 +150,9 @@ class RoboAdvisorUserServiceStepActivity(Model):
         verbose_name = 'RoboAdvisor Service Step Activity'
         verbose_name_plural = 'RoboAdvisor Service Steps Activity'
         db_table = "roboadvisor_service_step_activity"
+    
+    def __str__(self) -> str:
+        return self.step.title
 
 
 class BaseRoboAdvisorQuestion(Model):
@@ -156,6 +162,9 @@ class BaseRoboAdvisorQuestion(Model):
 
     class Meta:
         abstract = True
+    
+    def __str__(self) -> str:
+        return f'{self.user.username} - {self.service_activity.service.title} - {self.service_step.step.title}'
 
 
 class RoboAdvisorQuestionFinancialSituation(BaseRoboAdvisorQuestion):
@@ -174,9 +183,6 @@ class RoboAdvisorQuestionFinancialSituation(BaseRoboAdvisorQuestion):
         verbose_name = 'RoboAdvisor Financial Situation'
         verbose_name_plural = 'RoboAdvisor Financial Situations'
         db_table = "roboadvisor_financial_situation"
-
-    def __str__(self):
-        pass
 
 
 class BaseRoboAdvisorHorizon(BaseRoboAdvisorQuestion):
@@ -266,9 +272,6 @@ class RoboAdvisorQuestionPortfolioComposition(BaseRoboAdvisorQuestionAsset):
         verbose_name = "Pregunta: Composición portfolio empresas"
         verbose_name_plural = "Pregunta: Composición portfolio empresas"
         db_table = "roboadvisor_stocks_portfolio_positions"
-
-    def __str__(self):
-        return str(f'{self.user.username} - {self.id}')
 
 
 class RoboAdvisorQuestionStocksPortfolio(BaseRoboAdvisorQuestion):

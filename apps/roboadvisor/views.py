@@ -1,8 +1,10 @@
 import datetime
 
+from django.urls import reverse
 from django.views.generic import (
 	ListView,
 	TemplateView,
+	RedirectView,
 	DetailView)
 
 from .models import (
@@ -80,18 +82,28 @@ class RoboAdvisorServiceOptionView(DetailView):
 		return context
 
 
+class RoboAdvisorRedirectResult(RedirectView):
+
+	permanent = False
+
+	def get_redirect_url(self):
+		return reverse("roboadvisor:result")
+
+
 class RoboAdvisorResultView(TemplateView):
 	template_name = "roboadvisor/steps/result.html"
 
 	def finish_service_activity(self):
 		service_activity = RoboAdvisorUserServiceActivity.objects.get(id = self.request.session['service_activity'])
-		# service_activity.date_finished = datetime.datetime.now()
-		# service_activity.status = 1
-		# service_activity.save(update_fields = ['date_finished', 'status'])
+		service_activity.date_finished = datetime.datetime.now()
+		service_activity.status = 1
+		service_activity.save(update_fields = ['date_finished', 'status'])
 		return service_activity
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		context['service_activity'] = self.finish_service_activity()
 
+		context['result'] = self.request.session['robo-company-result']
+		
 		return context

@@ -3,56 +3,65 @@ from ..models import Company
 import yfinance as yf
 
 
-def STOCK_ANALYSIS_HELP(empresa):
+def simple_stock_analysis(empresa):
     
     empresa_info = yf.Ticker(empresa.ticker)
     inf = empresa_info.info
-    recommendationKey = inf['recommendationKey']
-    targetMeanPrice = inf['targetMeanPrice']
-    currentPrice = inf['currentPrice']
-    result1 = {
+    
+    recommendationKey = None
+    targetMeanPrice = None
+    currentPrice = None
+
+    result_buy = {
                 'num': 1,
                 'expl': 'Comprar',
             }
     
-    result2 = {
+    result_sell = {
                 'num': 2,
-                'expl': 'Mantener',
-            }
-
-    result3 = {
-                'num': 3,
                 'expl': 'Vender',
             }
 
-    if recommendationKey != 'none':
-        if recommendationKey == 'buy':
-            result = result1
-        elif recommendationKey == 'hold':
-            result = result2
-        elif recommendationKey == 'sell':
-            result = result3
-    else:
-        if targetMeanPrice != None:
-            if targetMeanPrice < currentPrice:
-                result = result3
-            elif targetMeanPrice > currentPrice:
-                result = result1
-            elif targetMeanPrice == currentPrice:
-                result = result2
-        else:
-            try:
-                per = (PER_SHARE_VALUE.objects.filter(company = empresa).first().eps) / currentPrice
-                if per < 10:
-                    result = result1
-                elif per > 20:
-                    result = result3
-                elif per > 10 and per < 20:
-                    result = result2
-            except:
-                result = {
-                'num': 4,
+    result_hold = {
+                'num': 3,
                 'expl': 'Mantener',
             }
 
+    if 'recommendationKey' in inf:
+        recommendationKey = inf['recommendationKey']
+        if recommendationKey == 'buy':
+            result = result_buy
+        elif recommendationKey == 'hold':
+            result = result_hold
+        elif recommendationKey == 'sell':
+            result = result_sell
+
+    else:
+        if 'targetMeanPrice' in inf:
+            targetMeanPrice = inf['targetMeanPrice']
+            if targetMeanPrice < currentPrice:
+                result = result_sell
+            elif targetMeanPrice > currentPrice:
+                result = result_buy
+            elif targetMeanPrice == currentPrice:
+                result = result_hold
+
+        else:
+            if 'currentPrice' in inf:
+                currentPrice = inf['currentPrice']
+                try:
+                    per = empresa.per_share_values.latest().eps / currentPrice
+                    if per < 10:
+                        result = result_buy
+                    elif per > 20:
+                        result = result_sell
+                    elif per > 10 and per < 20:
+                        result = result_hold
+                except:
+                    result = {
+                    'num': 4,
+                    'expl': 'Mantener',
+                }
+
+    result['company'] = empresa
     return result

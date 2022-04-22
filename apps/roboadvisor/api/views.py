@@ -9,6 +9,8 @@ from rest_framework.mixins import (
 from rest_framework.response import Response
 from rest_framework import status
 
+from apps.empresas.brain.analysis import simple_stock_analysis
+
 from apps.empresas.models import Company
 
 from .serializers import (
@@ -66,8 +68,12 @@ class BaseRoboAdvisorAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin)
 
         if ses == 'company-analysis':
             asset = Company.objects.get(ticker = client_side_data['stock'].split(' (')[1][:-1])
-            result = ''
+            result = simple_stock_analysis(asset)
+
+            client_side_data['result'] = result['num']
             client_side_data['asset'] = asset.pk
+
+            self.request.session['robo-company-result'] = result
 
 
         client_side_data.update(user_activity)
