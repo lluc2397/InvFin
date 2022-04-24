@@ -73,6 +73,7 @@ class RoboAdvisorService(Model):
     category = ForeignKey(Category, on_delete=SET_NULL, blank=True, null=True)
     tags = ManyToManyField(Tag, blank=True)
     thumbnail = CharField(max_length=500, null=True, blank=True)
+    template_result = CharField(max_length=500, null=True, blank=True)
 
     class Meta:
         ordering = ['order']
@@ -90,13 +91,18 @@ class RoboAdvisorService(Model):
     
     def get_absolute_url(self):
         return reverse("roboadvisor:robo-option", kwargs={"slug": self.slug})
+    
+    @property
+    def template_path(self):
+        return f'roboadvisor/results/{self.template_result}.html'
 
 
 class RoboAdvisorServiceStep(Model):
     title = CharField(max_length=500, null=True, blank=True)
+    slug = CharField(max_length=500, null=True, blank=True)
     description = TextField(null=True, blank=True)    
     order = PositiveIntegerField(null=True, blank=True)
-    url = CharField(max_length=500, null=True, blank=True)
+    url = CharField(max_length=500, null=True, blank=True, choices=ROBO_STEPS)
     template = CharField(max_length=500, null=True, blank=True)
     service_related = ForeignKey(RoboAdvisorService, on_delete=SET_NULL, null=True, blank=True, related_name="steps")
 
@@ -110,8 +116,10 @@ class RoboAdvisorServiceStep(Model):
         return self.title
     
     def save(self) -> None:
+        if not self.slug:
+            self.slug = slugify(f'{self.title}-{self.service_related.title}')
         if not self.template:
-            self.template = slugify(self.title)
+            self.template = self.url
         return super().save()
     
     @property

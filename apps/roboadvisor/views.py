@@ -10,7 +10,7 @@ from django.views.generic import (
 from .models import (
     RoboAdvisorService,
 	RoboAdvisorUserServiceActivity,
-	RoboAdvisorUserServiceStepActivity
+	RoboAdvisorQuestionCompanyAnalysis
 )
 
 from .forms import (
@@ -23,6 +23,7 @@ from .forms import (
 	RoboAdvisorQuestionStocksPortfolioForm
 )
 
+from .brain.investor import get_investor_type
 # If user ask for a company recom and it doesn't have profile, recommend to tkae the test
 
 class RoboAdvisorServicesListView(ListView):
@@ -83,15 +84,19 @@ class RoboAdvisorServiceOptionView(DetailView):
 
 
 class RoboAdvisorRedirectResult(RedirectView):
-
 	permanent = False
+	pattern_name = "roboadvisor:result"
 
 	def get_redirect_url(self):
-		return reverse("roboadvisor:result")
+		slug = self.request.GET['slug']
+		url = reverse(self.pattern_name, args=[slug])
+		return url
+       
 
-
-class RoboAdvisorResultView(TemplateView):
+class RoboAdvisorResultView(DetailView):
+	model = RoboAdvisorService
 	template_name = "roboadvisor/steps/result.html"
+	context_object_name = "service"
 
 	def finish_service_activity(self):
 		service_activity = RoboAdvisorUserServiceActivity.objects.get(id = self.request.session['service_activity'])
@@ -99,11 +104,21 @@ class RoboAdvisorResultView(TemplateView):
 		service_activity.status = 1
 		service_activity.save(update_fields = ['date_finished', 'status'])
 		return service_activity
+	
+	def return_results(self, service_activity):
+		user = self.request.user
+		if service_activity.service.slug == 'test1':
+			result = get_investor_type(user, service_activity)
+		else:
+			# result = RoboAdvisorQuestionCompanyAnalysis.objects.get(service_activity = service_activity).asset
+			result = self.request.session['company-analysis-result']
+		return result
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		context['service_activity'] = self.finish_service_activity()
+		service_activity = self.finish_service_activity()
+		result = self.return_results(service_activity)
 
-		context['result'] = self.request.session['robo-company-result']
-		
+		context['result'] = result
+		context["meta_title"] = 'Tu consejero inteligente'
 		return context

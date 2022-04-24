@@ -120,12 +120,6 @@ class RoboAdvisorQuestionPortfolioCompositionForm(BaseRoboAdvisorForm):
 #RoboAdvisorQuestionCompanyAnalysis
 
 
-# class UserInvestorProfile
-#RoboAdvisorQuestionFinancialSituation
-#RoboAdvisorQuestionInvestorExperience
-#RoboAdvisorQuestionRiskAversion
-#RoboAdvisorQuestionPortfolioAssetsWeight
-
 
 # class OptimizePortfolioAccordingToProfile
 #RoboAdvisorQuestionInvestorExperience

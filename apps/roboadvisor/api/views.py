@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 
 from rest_framework.generics import GenericAPIView
-from rest_framework.views import APIView
+
 from rest_framework.mixins import (
     CreateModelMixin,
     UpdateModelMixin
@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from apps.empresas.brain.analysis import simple_stock_analysis
-
+from apps.roboadvisor.brain.investor import get_investor_type 
 from apps.empresas.models import Company
 
 from .serializers import (
@@ -37,6 +37,7 @@ from ..models import (
 
 )
 
+from ..constants import *
 
 User = get_user_model()
 
@@ -51,7 +52,7 @@ class BaseRoboAdvisorAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin)
 
     def post(self, request, ses):
         client_side_data = request.data.dict()
-        session = request.session
+        session = self.request.session
         user = User.objects.get(id = client_side_data['user'])
         service_step = RoboAdvisorUserServiceStepActivity.objects.create(
             user = user,
@@ -73,7 +74,7 @@ class BaseRoboAdvisorAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin)
             client_side_data['result'] = result['num']
             client_side_data['asset'] = asset.pk
 
-            self.request.session['robo-company-result'] = result
+            session['company-analysis-result'] = result
 
 
         client_side_data.update(user_activity)

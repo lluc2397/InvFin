@@ -75,6 +75,16 @@ PERIODS = (
     (5, 'Años')
 )
 
+ROBO_STEPS = (
+    ('stocks-portfolio', 'stocks-portfolio'),
+    ('composition', 'composition'),
+    ('risk-aversion', 'risk-aversion'),
+    ('weights', 'weights'),
+    ('experience', 'experience'),
+    ('financial', 'financial'),
+    ('analysis', 'analysis')
+)
+
 PROFILE_VERY_AGRESIVE = 'Las personas con actitudes de riesgo muy agresivas buscan maximizar sus ganancias a largo plazo y están dispuestas a aceptar un riesgo sustancial para lograrlo.\
 A cambio de ese rendimiento esperado más alto, esta actitud de riesgo asume la mayor parte del riesgo de la cartera con potencialmente mucha más volatilidad y un mayor potencial de pérdidas de inversión,\
 así como una gama más amplia de resultados potenciales en el futuro, buenos o malos. Las carteras muy agresivas suelen invertir mucho más en acciones que en bonos o efectivo en relación con los inversores con actitudes menos riesgosas en un esfuerzo por tener el mayor potencial de rendimiento posible.'
@@ -102,17 +112,9 @@ como no poder generar suficiente riqueza para cumplir con los objetivos financie
 Si bien tienen el beneficio de experimentar potencialmente menos altibajos en el mercado, los inversores con actitudes de riesgo muy conservadoras probablemente necesiten ahorrar más para alcanzar los mismos niveles de riqueza y cumplir los mismos objetivos financieros que aquellos que se sienten cómodos asumiendo más riesgos.'
 
 RISK_PROFILE = (
-    (1, PROFILE_VERY_CONSERVATIVE),
-    (2, PROFILE_CONSERVATIVE),
-    (3, PROFILE_REGULAR),
-    (4, PROFILE_AGRESIVE), 
-    (5, PROFILE_VERY_AGRESIVE),
-)
-
-INVESTOR_PROFILES = (
-    ('PROFILE_VERY_CONSERVATIVE' ,PROFILE_VERY_CONSERVATIVE),
-    ('PROFILE_CONSERVATIVE' ,PROFILE_CONSERVATIVE),
-    ('PROFILE_REGULAR' ,PROFILE_REGULAR),
-    ('PROFILE_AGRESIVE' ,PROFILE_AGRESIVE),
-    ('PROFILE_VERY_AGRESIVE' ,PROFILE_VERY_AGRESIVE)
+    (1, 'PROFILE VERY AGRESIVE'), 
+    (2, 'PROFILE AGRESIVE'), 
+    (3, 'PROFILE CONSERVATIVE'), 
+    (4, 'PROFILE VERY CONSERVATIVE'), 
+    (5, 'PROFILE REGULAR')
 )

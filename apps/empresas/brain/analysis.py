@@ -14,17 +14,17 @@ def simple_stock_analysis(empresa):
 
     result_buy = {
                 'num': 1,
-                'expl': 'Comprar',
+                'result': 'Comprar',
             }
     
     result_sell = {
                 'num': 2,
-                'expl': 'Vender',
+                'result': 'Vender',
             }
 
     result_hold = {
                 'num': 3,
-                'expl': 'Mantener',
+                'result': 'Mantener',
             }
 
     if 'recommendationKey' in inf:
@@ -60,7 +60,7 @@ def simple_stock_analysis(empresa):
                 except:
                     result = {
                     'num': 4,
-                    'expl': 'Mantener',
+                    'result': 'Mantener',
                 }
 
     result['company'] = empresa

@@ -25,8 +25,8 @@ from .manager import ProfileManager, UserExtraManager
 
 
 class User(AbstractUser):
-    first_name = CharField(_("Nombre"), blank=True, max_length=2550)
-    last_name = CharField(_("Apellidos"), blank=True, max_length=2550)
+    first_name = CharField(_("Nombre"), blank=True, max_length=255)
+    last_name = CharField(_("Apellidos"), blank=True, max_length=255)
     is_writter = BooleanField(default=False)
     just_newsletter = BooleanField(default=False)
     just_correction = BooleanField(default=False)
@@ -50,6 +50,11 @@ class User(AbstractUser):
             domain = Site.objects.get_current().domain
             url = f'https://{host_name}.{domain}'
         return url
+    
+    @property
+    def has_investor_profile(self):
+        from apps.roboadvisor.models import InvestorProfile
+        return InvestorProfile.objects.filter(user = self).exists()
     
     @property
     def foto(self):

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.forms import model_to_dict
 
 from .models import (
     RoboAdvisorServiceStep,
@@ -18,9 +19,20 @@ from .models import (
     RoboAdvisorUserServiceStepActivity
 )
 
+
+@admin.action(description='Create duplicate')
+def create_duplicate(modeladmin, request, queryset):
+    for query in queryset:
+        kwargs = model_to_dict(query, exclude=['id', 'service_related'])
+        RoboAdvisorServiceStep.objects.create(**kwargs)
+
+
 @admin.register(RoboAdvisorServiceStep)
 class RoboAdvisorServiceStepAdmin(admin.ModelAdmin):
+    actions = [create_duplicate]
+
     list_display = [
+        'id',
         'title',
         'order',
         'url',
@@ -50,9 +62,19 @@ class RoboAdvisorServiceAdmin(admin.ModelAdmin):
         'order',
         'available',
         'title',
-        'description',
         'slug',
-        'category'
+        'category',
+        'template_result',
+    ]
+
+    list_editable = [
+        'price',
+        'order',
+        'available',
+        'title',
+        'slug',
+        'category',
+        'template_result',
     ]
 
 

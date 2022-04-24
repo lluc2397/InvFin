@@ -8,33 +8,36 @@
 {% endblock header%}
 
 {% block FirstCtaContent %}
+{% if no_profile %}
 {% include "roboadvisor/complements/result.html" %}
+{% endif %}
 {% endblock FirstCtaContent %}
 
 {% block ListContent %}
 <div class="col-12">        
     <div class="card">
-        <div class="card-header">
-        
-        </div>
-        <div class="card-body">
-            <div class="card-text">
-                
-            </div>
-        </div>
-        <div class="card-body">
-            
-        </div>
-        <div class="card-footer">
-            <div class="clearfix">
-                <div class="float-start">
-                    
-                </div>
-                <div class="float-end">
-                    
-                </div>
-            </div>
-        </div>
+        {% include service.template_path %}
     </div>
+
+
+    <!-- <div class="card mt-4">
+        <div hx-target="this" hx-swap="outerHTML">
+            <div class="card-header">
+                <div style="text-align: center;">
+                    Coméntanos si este resultado te es de ayuda
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-4"></div>
+                    <div class="col-4 clearfix">                                            
+                        <a aria-hidden="true" aria-label="upvote" href="#" hx-get="?op=1" class="btn btn-success float-start" ><i class="fas fa-thumbs-up"></i></a>
+                        <a aria-hidden="true" aria-label="downvote" href="#" hx-get="?op=2" class="btn btn-danger float-end"><i class="fas fa-thumbs-down"></i></a>
+                    </div>
+                    <div class="col-4"></div>
+                </div>                                   
+            </div>
+        </div>                            
+    </div> -->
 </div>
 {% endblock ListContent %}

@@ -1,63 +1,85 @@
-from ..constants import INVESTOR_PROFILES
+from ..constants import *
+from ..models import (
+    InvestorProfile, 
+    TemporaryInvestorProfile,
+    RoboAdvisorQuestionInvestorExperience,
+    RoboAdvisorQuestionRiskAversion)
 
 
-def INVESTOR_SCORE(investor_story,
-    view_on_volatility,
-    onefive,
-    zerofive,
-    investor):
+def get_investor_type(user, service_activity):
 
-    INVESTOR_TYPE = ((1, 'Activo'), (2, 'Intermedio'), (3, 'Pasivo'), (4, 'Especulador'))
+    experience = RoboAdvisorQuestionInvestorExperience.objects.get(
+        user=user, service_activity=service_activity
+        )
+    risk_aversion = RoboAdvisorQuestionRiskAversion.objects.get(
+        user=user, service_activity=service_activity
+        )
 
-    INVESTOR_RISK_PROFILE = ((1, 'PROFILE VERY AGRESIVE'), (2, 'PROFILE AGRESIVE'), (3, 'PROFILE CONSERVATIVE'), (4, 'PROFILE VERY CONSERVATIVE'), (5, 'PROFILE REGULAR'))
+    view_on_volatility = risk_aversion.volatilidad
+    objectif = experience.objectif
+    zero_five = risk_aversion.percentage_for_zerofive
+    one_five = risk_aversion.percentage_for_onefive
+    time_investing_exp = experience.time_investing_exp
+    period_investing_exp = experience.period_investing_exp
 
-    if int(view_on_volatility) == 1:
-        number = 2
-        investor_is = 3
-        if investor_story.objectif == 2 or investor_story.objectif == 3:
+    investor_type = 4
+    horizon = 3
+    if period_investing_exp == 5:
+        horizon = 1
+        if time_investing_exp < 10:
+            horizon = 2
+    
+
+    if view_on_volatility == 1:
+        investor_type = 3
+        if objectif == 3:
             result = "Muy conservador"
-            risk_aversion = 4
+            risk_profile = 4
             profile_explanation = PROFILE_VERY_CONSERVATIVE
 
         else:
             result = "Conservador"
-            risk_aversion =3
+            risk_profile = 3
             profile_explanation = PROFILE_CONSERVATIVE
        
     else:
-        if int(zerofive) > 0:
-            investor_is = 4
-            number = 1
+        if zero_five > 0:
+            
             result = "Muy agresivo"
-            risk_aversion =1
+            risk_profile = 1
             profile_explanation = PROFILE_VERY_AGRESIVE
+
         else:
-            if int(onefive) >= 50:
-                investor_is = 1
-                number = 1
+            if one_five >= 50:
+                investor_type = 1
                 result = "Agresivo"
-                risk_aversion =2
+                risk_profile =2
                 profile_explanation = PROFILE_AGRESIVE
+
             else:
-                investor_is = 2
-                number = 3
+                investor_type = 2
                 result = "Moderado"
-                risk_aversion =5
+                risk_profile =5
                 profile_explanation = PROFILE_REGULAR            
-
-    
-
-    CURRENT_INVESTORS_TYPE.objects.create(
-        investor_related = investor,
-        investors_type = investor_is,
-        risk_aversion = risk_aversion,
-    )
 
 
     type_profile_investor = {
-        'explanation': profile_explanation,
-        'number' : number,
-        'result': result
+        'horizon': horizon,
+        'risk_profile': risk_profile,
+        'investor_type': investor_type
     }
 
-    return type_profile_investor
+    if user.has_investor_profile:
+        investor_profile = user.user_investor_profile
+    else:
+        type_profile_investor['user'] = user
+        investor_profile = InvestorProfile.objects.create(**type_profile_investor)
+        type_profile_investor.pop('user')
+    
+    type_profile_investor['profile_related'] = investor_profile
+    TemporaryInvestorProfile.objects.create(**type_profile_investor)
+
+    return {
+        'explanation': profile_explanation,
+        'result': result
+    }
