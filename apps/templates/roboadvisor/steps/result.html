@@ -16,7 +16,11 @@
 {% block ListContent %}
 <div class="col-12">        
     <div class="card">
+        {% if difference %}
+        {% include "roboadvisor/results/no-money.html" %}
+        {% else %}
         {% include service.template_path %}
+        {% endif %}
     </div>
 
 

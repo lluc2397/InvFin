@@ -10,7 +10,6 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from apps.empresas.brain.analysis import simple_stock_analysis
-from apps.roboadvisor.brain.investor import get_investor_type 
 from apps.empresas.models import Company
 
 from .serializers import (
@@ -52,7 +51,7 @@ class BaseRoboAdvisorAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin)
 
     def post(self, request, ses):
         client_side_data = request.data.dict()
-        session = self.request.session
+
         user = User.objects.get(id = client_side_data['user'])
         service_step = RoboAdvisorUserServiceStepActivity.objects.create(
             user = user,
@@ -74,8 +73,8 @@ class BaseRoboAdvisorAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin)
             client_side_data['result'] = result['num']
             client_side_data['asset'] = asset.pk
 
-            session['company-analysis-result'] = result
-
+            # session['company-analysis-result'] = result
+            # session.modified = True
 
         client_side_data.update(user_activity)
         # if ses in session:
@@ -125,19 +124,19 @@ class RoboAdvisorQuestionPortfolioAssetsWeightAPIView(BaseRoboAdvisorAPIView):
         return super().post(request, ses)
 
 
-class RoboAdvisorQuestionPortfolioCompositionAPIView(BaseRoboAdvisorAPIView):
-    serializer_class = RoboAdvisorQuestionPortfolioCompositionSerializer
-    queryset = RoboAdvisorQuestionPortfolioComposition.objects.all()
-
-    def post(self, request, ses='portfolio-composition'):
-        return super().post(request, ses)
-
-
 class RoboAdvisorQuestionRiskAversionAPIView(BaseRoboAdvisorAPIView):
     serializer_class = RoboAdvisorQuestionRiskAversionSerializer
     queryset = RoboAdvisorQuestionRiskAversion.objects.all()
 
     def post(self, request, ses='risk-aversion'):
+        return super().post(request, ses)
+
+
+class RoboAdvisorQuestionPortfolioCompositionAPIView(BaseRoboAdvisorAPIView):
+    serializer_class = RoboAdvisorQuestionPortfolioCompositionSerializer
+    queryset = RoboAdvisorQuestionPortfolioComposition.objects.all()
+
+    def post(self, request, ses='portfolio-composition'):
         return super().post(request, ses)
 
 

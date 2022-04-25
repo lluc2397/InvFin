@@ -1,10 +1,11 @@
 import datetime
 
+from django.shortcuts import redirect
+
 from django.urls import reverse
 from django.views.generic import (
 	ListView,
 	TemplateView,
-	RedirectView,
 	DetailView)
 
 from .models import (
@@ -19,8 +20,7 @@ from .forms import (
 	RoboAdvisorQuestionFinancialSituationForm,
 	RoboAdvisorQuestionPortfolioAssetsWeightForm,
 	RoboAdvisorQuestionPortfolioCompositionForm,
-	RoboAdvisorQuestionRiskAversionForm,
-	RoboAdvisorQuestionStocksPortfolioForm
+	RoboAdvisorQuestionRiskAversionForm
 )
 
 from .brain.investor import get_investor_type
@@ -81,16 +81,6 @@ class RoboAdvisorServiceOptionView(DetailView):
 		context['service_activity'] = service_activity.id
 
 		return context
-
-
-class RoboAdvisorRedirectResult(RedirectView):
-	permanent = False
-	pattern_name = "roboadvisor:result"
-
-	def get_redirect_url(self):
-		slug = self.request.GET['slug']
-		url = reverse(self.pattern_name, args=[slug])
-		return url
        
 
 class RoboAdvisorResultView(DetailView):
@@ -98,27 +88,42 @@ class RoboAdvisorResultView(DetailView):
 	template_name = "roboadvisor/steps/result.html"
 	context_object_name = "service"
 
-	def finish_service_activity(self):
+	def manage_service_activity(self, status):
 		service_activity = RoboAdvisorUserServiceActivity.objects.get(id = self.request.session['service_activity'])
 		service_activity.date_finished = datetime.datetime.now()
-		service_activity.status = 1
+		service_activity.status = status
 		service_activity.save(update_fields = ['date_finished', 'status'])
 		return service_activity
-	
+
+	def service_payment(self):
+		user = self.request.user
+		service = self.object
+		user_credits = user.user_profile.creditos
+
+		if user_credits >= service.price:
+			user.update_credits(-service.price)
+			return self.manage_service_activity(1), True
+		else:
+			self.manage_service_activity(4)
+			difference = service.price - user_credits			
+			return difference, False
+
 	def return_results(self, service_activity):
 		user = self.request.user
 		if service_activity.service.slug == 'test1':
 			result = get_investor_type(user, service_activity)
 		else:
-			# result = RoboAdvisorQuestionCompanyAnalysis.objects.get(service_activity = service_activity).asset
-			result = self.request.session['company-analysis-result']
+			result = RoboAdvisorQuestionCompanyAnalysis.objects.get(service_activity = service_activity).asset
 		return result
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		service_activity = self.finish_service_activity()
-		result = self.return_results(service_activity)
-
-		context['result'] = result
+		service_activity, validation = self.service_payment()
+		context['difference'] = service_activity
 		context["meta_title"] = 'Tu consejero inteligente'
+		if validation:
+			result = self.return_results(service_activity)
+			context['result'] = result
+			context['difference'] = None
+		
 		return context

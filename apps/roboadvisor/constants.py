@@ -31,7 +31,8 @@ CURRENCY = (
 SERVICE_STATUS = (
     (1, 'Finished'), 
     (2, 'Abandoned'), 
-    (3, 'Started')
+    (3, 'Started'),
+    (4, 'Not payed')
 )
 
 OBJECTIFS = (

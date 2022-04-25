@@ -63,5 +63,5 @@ def simple_stock_analysis(empresa):
                     'result': 'Mantener',
                 }
 
-    result['company'] = empresa
+    # result['company'] = empresa
     return result
