@@ -106,6 +106,7 @@ LOCAL_APPS = [
     "apps.screener",
     "apps.cartera",
     "apps.roboadvisor"
+
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
