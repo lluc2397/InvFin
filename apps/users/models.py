@@ -1,26 +1,26 @@
+from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import AbstractUser
+from django.contrib.sites.models import Site
 from django.db.models import (
-    CharField,
-    Model,
-    OneToOneField,
-    BooleanField,
-    SET_NULL,
     CASCADE,
+    SET_NULL,
+    BooleanField,
+    CharField,
+    DateField,
+    DateTimeField,
     ForeignKey,
     ImageField,
     IntegerField,
-    DateTimeField,
-    DateField,
-    TextField
-    
-    )
+    Model,
+    OneToOneField,
+    TextField,
+)
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from django.contrib.sites.models import Site
 from django_countries.fields import CountryField
-from cloudinary.models import CloudinaryField
 
 from apps.general.mixins import ResizeImageMixin
+
 from .manager import ProfileManager, UserExtraManager
 
 
@@ -124,7 +124,7 @@ class User(AbstractUser):
             return [writter.user for writter in fav_writters]
         return []
     
-    def add_credits(self, number_of_credits):
+    def update_credits(self, number_of_credits):
         self.user_profile.creditos += number_of_credits
         self.user_profile.save()
 
@@ -156,8 +156,9 @@ class User(AbstractUser):
 
 
     def create_meta_profile(self, request):
-        from .models import MetaProfile
         from apps.seo.utils import SeoInformation
+
+        from .models import MetaProfile
         seo = SeoInformation().meta_information(request)
         meta_profile = MetaProfile.objects.create(
             ip = seo['ip'],
