@@ -22,7 +22,20 @@ from django.template.defaultfilters import slugify
 from apps.general.models import Tag, Category, Currency
 from apps.empresas.models import Company
 
-from .constants import *
+from .constants import (
+    HORIZON,
+    RISK_PROFILE,
+    INVESTOR_TYPE,
+    ROBO_RESULTS,
+    ROBO_STEPS,
+    PERIODS,
+    KNOWLEDGE,
+    OBJECTIFS,
+    NUMBER_STOCKS,
+    SERVICE_STATUS,
+    VOLATILIDAD,
+    RESULTS
+)
 
 User = get_user_model()
 
@@ -30,9 +43,9 @@ User = get_user_model()
 
 class BaseInvestorProfile(Model):
     created_at = DateTimeField(auto_now_add=True)
-    horizon = IntegerField(null=True, blank=True, choices=HORIZON)
-    risk_profile = IntegerField(null=True, blank=True, choices=RISK_PROFILE)
-    investor_type = IntegerField(null=True, blank=True, choices=INVESTOR_TYPE)
+    horizon = CharField(max_length=500, null=True, blank=True, choices=HORIZON)
+    risk_profile = TextField(null=True, blank=True, choices=RISK_PROFILE)
+    investor_type = CharField(max_length=500, null=True, blank=True, choices=INVESTOR_TYPE)
 
     class Meta:
         abstract = True
@@ -51,25 +64,13 @@ class InvestorProfile(BaseInvestorProfile):
         return self.user.username
 
 
-class TemporaryInvestorProfile(BaseInvestorProfile):
-    profile_related = ForeignKey(InvestorProfile, on_delete=SET_NULL, null=True, related_name='temporary_investor')
-
-    class Meta:
-        verbose_name = "Temporary investor profile"
-        verbose_name_plural = 'Temporary investor profiles'
-        db_table = "temporary_investor_profile"
-    
-    def __str__(self) -> str:
-        return self.profile_related.user.username
-
-
 class RoboAdvisorService(Model):
     price = PositiveBigIntegerField(null=True, blank=True)
     order = PositiveIntegerField(null=True, blank=True)
     available = BooleanField(default=True)
     title = CharField(max_length=500, null=True, blank=True)
     description = TextField(null=True, blank=True)
-    slug = CharField(max_length=500, null=True, blank=True)
+    slug = CharField(max_length=500, null=True, blank=True, choices=ROBO_RESULTS)
     category = ForeignKey(Category, on_delete=SET_NULL, blank=True, null=True)
     tags = ManyToManyField(Tag, blank=True)
     thumbnail = CharField(max_length=500, null=True, blank=True)
@@ -85,8 +86,7 @@ class RoboAdvisorService(Model):
         return self.title
     
     def save(self) -> None:
-        if not self.slug:
-            self.slug = slugify(self.title)
+        self.template_result = self.slug            
         return super().save()
     
     def get_absolute_url(self):
@@ -136,7 +136,7 @@ class RoboAdvisorUserServiceActivity(Model):
     service = ForeignKey(RoboAdvisorService, on_delete=SET_NULL, null=True)
     date_started = DateTimeField(auto_now_add=True)
     date_finished = DateTimeField(null=True, blank=True)
-    status = IntegerField(choices=SERVICE_STATUS, default=SERVICE_STATUS[2][0])
+    status = CharField(max_length=500, choices=SERVICE_STATUS, default=SERVICE_STATUS[2])
 
     class Meta:
         verbose_name = 'RoboAdvisor Service Activity'
@@ -144,7 +144,60 @@ class RoboAdvisorUserServiceActivity(Model):
         db_table = "roboadvisor_service_activity"
     
     def __str__(self) -> str:
-        return self.service.title
+        return f'{self.service.title} - {self.id}' 
+    
+    @property
+    def company_related(self):
+        if self.service.slug == 'company-match' and self.roboadvisorquestioncompanyanalysis:
+            return True
+        return False
+    
+    @property
+    def service_result(self):
+        if self.company_related:
+            service_question = self.roboadvisorquestioncompanyanalysis
+            asset = service_question.asset
+            title = f'{asset.name} {asset.ticker} parece estar en un momento para'
+            result = service_question.result
+            explanation = asset.short_introduction
+        else:
+            service_question = self.temporaryinvestorprofile
+            title = f'Parece que tienes un perfil de inversor'
+            result = service_question.investor_type[1]
+            explanation = service_question.investor_type
+
+        return {
+            'title': title,
+            'result': result,
+            'explanation': explanation,
+        }
+
+    @property
+    def metadata(self):
+        thumbnail = self.service.thumbnail
+        title = self.service.title
+        if self.company_related:
+            thumbnail = self.roboadvisorquestioncompanyanalysis.asset.image
+            title = f'{title} - {self.roboadvisorquestioncompanyanalysis.asset.ticker}'
+        metadata = {
+            'title':title,
+            'thumbnail':thumbnail
+        }
+        return metadata
+
+
+class TemporaryInvestorProfile(BaseInvestorProfile):
+    profile_related = ForeignKey(InvestorProfile, on_delete=SET_NULL, null=True, related_name='temporary_investor')
+    service_activity = OneToOneField(RoboAdvisorUserServiceActivity, on_delete=SET_NULL, null=True)
+
+    class Meta:
+        verbose_name = "Temporary investor profile"
+        verbose_name_plural = 'Temporary investor profiles'
+        db_table = "temporary_investor_profile"
+    
+    def __str__(self) -> str:
+        return self.profile_related.user.username
+
 
 
 class RoboAdvisorUserServiceStepActivity(Model):
@@ -152,7 +205,7 @@ class RoboAdvisorUserServiceStepActivity(Model):
     step = ForeignKey(RoboAdvisorServiceStep, on_delete=SET_NULL, null=True)
     date_started = DateTimeField(null=True, blank=True)
     date_finished = DateTimeField(auto_now_add=True)
-    status = IntegerField(choices=SERVICE_STATUS, default=SERVICE_STATUS[2][0])
+    status = CharField(max_length=500, choices=SERVICE_STATUS, default=SERVICE_STATUS[2])
 
     class Meta:
         verbose_name = 'RoboAdvisor Service Step Activity'
@@ -165,8 +218,8 @@ class RoboAdvisorUserServiceStepActivity(Model):
 
 class BaseRoboAdvisorQuestion(Model):
     user = ForeignKey(User, on_delete=SET_NULL, null=True)
-    service_activity = ForeignKey(RoboAdvisorUserServiceActivity, on_delete=SET_NULL, null=True)
-    service_step = ForeignKey(RoboAdvisorUserServiceStepActivity, on_delete=SET_NULL, null=True)
+    service_activity = OneToOneField(RoboAdvisorUserServiceActivity, on_delete=SET_NULL, null=True)
+    service_step = OneToOneField(RoboAdvisorUserServiceStepActivity, on_delete=SET_NULL, null=True)
 
     class Meta:
         abstract = True
@@ -195,7 +248,7 @@ class RoboAdvisorQuestionFinancialSituation(BaseRoboAdvisorQuestion):
 
 class BaseRoboAdvisorHorizon(BaseRoboAdvisorQuestion):
     horizon_time = PositiveIntegerField(default = 0)
-    horizon_period = PositiveIntegerField(default = 4, choices=PERIODS)
+    horizon_period = CharField(max_length=500, default=PERIODS[4], choices=PERIODS)
     comment = TextField(default = '')
 
     class Meta:
@@ -205,10 +258,10 @@ class BaseRoboAdvisorHorizon(BaseRoboAdvisorQuestion):
 class BaseRoboAdvisorQuestionAsset(BaseRoboAdvisorHorizon):
     asset = None
     result = None
-    sector_knowledge = IntegerField(null=True, blank=True, choices=KNOWLEDGE, default=4)
-    asset_knowledge = IntegerField(null=True, blank=True, choices=KNOWLEDGE, default=4)
+    sector_knowledge = CharField(max_length=500, null=True, blank=True, choices=KNOWLEDGE, default=4)
+    asset_knowledge = CharField(max_length=500, null=True, blank=True, choices=KNOWLEDGE, default=4)
     amount_time_studied = PositiveIntegerField(default = 0)
-    period_time_studied = PositiveIntegerField(default = 4, choices=PERIODS)
+    period_time_studied = CharField(max_length=500, default=PERIODS[4], choices=PERIODS)
     number_shares = DecimalField(null=True, default = 0, blank=True, max_digits=10, decimal_places=2,validators=[MinValueValidator(0)])
     capital_invested = DecimalField(null=True, default = 0, blank=True, max_digits=10, decimal_places=2,validators=[MinValueValidator(0)])
     sector_relationship = TextField(default = '')
@@ -219,12 +272,12 @@ class BaseRoboAdvisorQuestionAsset(BaseRoboAdvisorHorizon):
 
 class RoboAdvisorQuestionInvestorExperience(BaseRoboAdvisorQuestion):
     age = PositiveIntegerField(null=True, blank=True, default=18)
-    objectif = IntegerField(choices=OBJECTIFS, null=True, blank=True, default=1) 
-    investor_type_self_definition = IntegerField(null=True, blank=True, choices=INVESTOR_TYPE, default=1)
+    objectif = CharField(max_length=500, choices=OBJECTIFS, null=True, blank=True, default=1) 
+    investor_type_self_definition = CharField(max_length=500, null=True, blank=True, choices=INVESTOR_TYPE, default=INVESTOR_TYPE[1])
     percentage_invested = DecimalField(blank=True, default=0, max_digits=10, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(100)])
     percentage_anualized_revenue = DecimalField (null=True, blank=True, default=0, max_digits=10, decimal_places=2)
     time_investing_exp = PositiveIntegerField(default = 0)
-    period_investing_exp = PositiveIntegerField(default = 4, choices=PERIODS)  
+    period_investing_exp = CharField(max_length=500, default=PERIODS[4], choices=PERIODS)  
 
     class Meta:
         verbose_name = "Pregunta: Experiencia como inversor"
@@ -263,7 +316,7 @@ class RoboAdvisorQuestionPortfolioAssetsWeight(BaseRoboAdvisorQuestion):
 
 class RoboAdvisorQuestionCompanyAnalysis(BaseRoboAdvisorQuestionAsset):
     asset = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True)
-    result = IntegerField(null=True, blank=True, choices=RESULTS)
+    result = CharField(max_length=500, null=True, blank=True, choices=RESULTS)
     number_shares = None
     capital_invested = None
 

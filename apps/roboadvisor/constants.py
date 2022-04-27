@@ -1,23 +1,31 @@
+LONG_TERM, MEDIUM_TERM, SHORT_TERM = "long-term", "medium-term", "short-term"
+
 HORIZON = (
-    (1, 'Long Term'), 
-    (2, 'Medium Term'), 
-    (3, 'Short Term')
+    (LONG_TERM, 'Long Term'), 
+    (MEDIUM_TERM, 'Medium Term'), 
+    (SHORT_TERM, 'Short Term')
 )
+
+
+ACTIVE, INTER, PASIVE, GAMBLER = "active", "intermediate", "pasive", "gambler"
 
 INVESTOR_TYPE = (
-    (1, 'Activo'), 
-    (2, 'Intermedio'), 
-    (3, 'Pasivo'), 
-    (4, 'Especulador')
+    (ACTIVE, 'Activo'), 
+    (INTER, 'Intermedio'), 
+    (PASIVE, 'Pasivo'), 
+    (GAMBLER, 'Especulador')
 )
 
+EXPERT, PRO, INTER, BASIC, NULL = "expert", "pro", "intermediate", "basic", "null"
+
 KNOWLEDGE = (
-    (1, 'Experto'), 
-    (2, 'Profesional'), 
-    (3, 'Intermedio'), 
-    (4, 'Básico'), 
-    (5, 'Nulo')
+    (EXPERT, 'Experto'), 
+    (PRO, 'Profesional'), 
+    (INTER, 'Intermedio'), 
+    (BASIC, 'Básico'), 
+    (NULL, 'Nulo')
 )
+
 
 CURRENCY = (
     (1, 'USD'), 
@@ -28,12 +36,16 @@ CURRENCY = (
     (6, 'PEN')
 )
 
+
+FINISED, ABANDONED, STARTED, NOT_PAYED = "finished", "abandoned", "started", "not-payed" 
+
 SERVICE_STATUS = (
-    (1, 'Finished'), 
-    (2, 'Abandoned'), 
-    (3, 'Started'),
-    (4, 'Not payed')
+    (FINISED, 'Finished'), 
+    (ABANDONED, 'Abandoned'), 
+    (STARTED, 'Started'),
+    (NOT_PAYED, 'Not payed')
 )
+
 
 OBJECTIFS = (
     (1, 'Generar ingresos pasivos'), 
@@ -42,11 +54,13 @@ OBJECTIFS = (
     (4, 'Ganar dinero rápido')
 )
 
+
 VOLATILIDAD = (
     (1, 'Riesgo'), 
     (2, 'Oportunidad'), 
     (3, 'No le presto atención')
 )
+
 
 NUMBER_STOCKS = (
     (0, 'Ninguna'), 
@@ -60,21 +74,28 @@ NUMBER_STOCKS = (
     (8, 'Más de 20')
 )
 
+
+BUY, SELL, HOLD, ERROR = "Buy", "Sell", "Hold", "Error"
+
 RESULTS = (
-    (1, 'Buy'), 
-    (2, 'Sell'), 
-    (3, 'Hold'), 
-    (4, 'Error')
+    (BUY, 'Comprar'), 
+    (SELL, 'Vender'), 
+    (HOLD, 'Mantener'), 
+    (ERROR, 'Mantener')
 )
 
+
+MINUTES, HOURS, DAYS, WEEKS, MONTHS, YEARS = "minutes", "hours", "days", "weeks", "months", "years"
+
 PERIODS = (
-    (0, 'Minutos'),
-    (1, 'Horas'),
-    (2, 'Días'),
-    (3, 'Semanas'),
-    (4, 'Meses'),
-    (5, 'Años')
+    (MINUTES, 'Minutos'),
+    (HOURS, 'Horas'),
+    (DAYS, 'Días'),
+    (WEEKS, 'Semanas'),
+    (MONTHS, 'Meses'),
+    (YEARS, 'Años')
 )
+
 
 ROBO_STEPS = (
     ('stocks-portfolio', 'stocks-portfolio'),
@@ -85,6 +106,14 @@ ROBO_STEPS = (
     ('financial', 'financial'),
     ('analysis', 'analysis')
 )
+
+
+ROBO_RESULTS = (
+    ('company-match', 'company-match'),
+    ('investor-profile', 'investor-profile'),
+    ('optimize-my-portfolio', 'optimize-my-portfolio')
+)
+
 
 PROFILE_VERY_AGRESIVE = 'Las personas con actitudes de riesgo muy agresivas buscan maximizar sus ganancias a largo plazo y están dispuestas a aceptar un riesgo sustancial para lograrlo.\
 A cambio de ese rendimiento esperado más alto, esta actitud de riesgo asume la mayor parte del riesgo de la cartera con potencialmente mucha más volatilidad y un mayor potencial de pérdidas de inversión,\
@@ -113,9 +142,9 @@ como no poder generar suficiente riqueza para cumplir con los objetivos financie
 Si bien tienen el beneficio de experimentar potencialmente menos altibajos en el mercado, los inversores con actitudes de riesgo muy conservadoras probablemente necesiten ahorrar más para alcanzar los mismos niveles de riqueza y cumplir los mismos objetivos financieros que aquellos que se sienten cómodos asumiendo más riesgos.'
 
 RISK_PROFILE = (
-    (1, 'PROFILE VERY AGRESIVE'), 
-    (2, 'PROFILE AGRESIVE'), 
-    (3, 'PROFILE CONSERVATIVE'), 
-    (4, 'PROFILE VERY CONSERVATIVE'), 
-    (5, 'PROFILE REGULAR')
+    (PROFILE_VERY_AGRESIVE, 'PROFILE VERY AGRESIVE'), 
+    (PROFILE_AGRESIVE, 'PROFILE AGRESIVE'), 
+    (PROFILE_CONSERVATIVE, 'PROFILE CONSERVATIVE'), 
+    (PROFILE_VERY_CONSERVATIVE, 'PROFILE VERY CONSERVATIVE'), 
+    (PROFILE_REGULAR, 'PROFILE REGULAR')
 )

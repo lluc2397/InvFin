@@ -121,6 +121,10 @@ class Company(CompanyExtended):
     @property
     def most_recent_year(self):
         return self.inc_statements.latest().date
+    
+    @property
+    def short_introduction(self):
+        return
 
 
 class CompanyStockPrice(Model):
