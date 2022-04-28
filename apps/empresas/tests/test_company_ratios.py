@@ -11,6 +11,9 @@ class CompanyTest(TestCase):
         self.company = CompanyFactory()
         self.company_update = UpdateCompany(self.company)
         self.company.inc_statements.create(date = 2018)
+        self.company2 = CompanyFactory()
+        self.company2_update = UpdateCompany(self.company2)
+        self.company2.inc_statements.create(date = 2021)
     
     def generate_data(self):
         inc = INCOME_STATEMENT[0]
@@ -43,7 +46,10 @@ class CompanyTest(TestCase):
     
     def test_need_update(self):
         need_update = self.company_update.check_last_filing()
-        print(need_update)
+        self.assertEqual(need_update, 'need update')
+        
+        need_update2 = self.company2_update.check_last_filing()
+        self.assertEqual(need_update2, 'updated')
 
     def test_all_data(self):
         data = self.generate_data()
@@ -96,16 +102,16 @@ class CompanyTest(TestCase):
         self.company_update.create_eficiency_ratio(eficiency_ratio)
         self.company_update.create_company_growth(company_growth)
         
-        print(rentability_ratios)
-        print(liquidity_ratio)
-        print(margin_ratio)
-        print(fcf_ratio)
-        print(ps_value)
-        print(non_gaap)
-        print(operation_risk_ratio)
-        print(price_to_ratio)
-        print(enterprise_value_ratio)
-        print(eficiency_ratio)
-        print(company_growth)
+        # print(rentability_ratios)
+        # print(liquidity_ratio)
+        # print(margin_ratio)
+        # print(fcf_ratio)
+        # print(ps_value)
+        # print(non_gaap)
+        # print(operation_risk_ratio)
+        # print(price_to_ratio)
+        # print(enterprise_value_ratio)
+        # print(eficiency_ratio)
+        # print(company_growth)
     
         

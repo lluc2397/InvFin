@@ -35,7 +35,6 @@ class UpdateCompany(CompanyFinancials):
     def check_last_filing(self):
         least_recent_date = self.yq_company.balance_sheet()['asOfDate'].max().value // 10**9 # normalize time
         least_recent_year = datetime.fromtimestamp(least_recent_date).year
-
         if least_recent_year != self.company.most_recent_year:
             return 'need update'
         return 'updated'

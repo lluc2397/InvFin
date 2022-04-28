@@ -12,20 +12,11 @@ def simple_stock_analysis(empresa):
     targetMeanPrice = None
     currentPrice = None
 
-    result_buy = {
-                'num': 1,
-                'result': 'Comprar',
-            }
+    result_buy = {'result': 'buy'}
     
-    result_sell = {
-                'num': 2,
-                'result': 'Vender',
-            }
+    result_sell = {'result': 'sell'}
 
-    result_hold = {
-                'num': 3,
-                'result': 'Mantener',
-            }
+    result_hold = {'result': 'hold'}
 
     if 'recommendationKey' in inf:
         recommendationKey = inf['recommendationKey']
@@ -58,10 +49,5 @@ def simple_stock_analysis(empresa):
                     elif per > 10 and per < 20:
                         result = result_hold
                 except:
-                    result = {
-                    'num': 4,
-                    'result': 'Mantener',
-                }
-
-    # result['company'] = empresa
+                    result = {'result': 'error'}
     return result

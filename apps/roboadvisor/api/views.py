@@ -70,7 +70,7 @@ class BaseRoboAdvisorAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin)
             asset = Company.objects.get(ticker = client_side_data['stock'].split(' (')[1][:-1])
             result = simple_stock_analysis(asset)
 
-            client_side_data['result'] = result['num']
+            client_side_data['result'] = result['result']
             client_side_data['asset'] = asset.pk
 
             # session['company-analysis-result'] = result
