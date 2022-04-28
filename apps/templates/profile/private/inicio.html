@@ -3,10 +3,7 @@
 {% block header %}{% include "profile/header/private.html" %}{% endblock header%}
 {% with request.user as user %}
 {% block FirstCta %}
-<div class="col-12">
-    {% block FirstCtaContent %}
-    {% endblock FirstCtaContent %}
-</div>
+{% include "profile/complements/private-cta.html" %}
 {% endblock FirstCta %}
 
 {% block FirstContent %}
@@ -154,3 +151,11 @@
 {% block LastCta %}
 {% endblock LastCta %}
 {% endwith %}
+{% block modal %}
+{{block.super}}
+{% with object=request.user %}
+{% with content="private-profile" %}
+{% include "general/modals/share_content.html" %}
+{% endwith %}
+{% endwith %}
+{% endblock %}

@@ -34,7 +34,12 @@ from .constants import (
     NUMBER_STOCKS,
     SERVICE_STATUS,
     VOLATILIDAD,
-    RESULTS
+    RESULTS,
+    PROFILE_VERY_AGRESIVE,
+    PROFILE_AGRESIVE,
+    PROFILE_CONSERVATIVE,
+    PROFILE_REGULAR,
+    PROFILE_VERY_CONSERVATIVE
 )
 
 User = get_user_model()
@@ -49,6 +54,18 @@ class BaseInvestorProfile(Model):
 
     class Meta:
         abstract = True
+    
+    @property
+    def explanation(self):
+        if self.risk_profile == 'very-agressive':
+            return PROFILE_VERY_AGRESIVE
+        elif self.risk_profile == 'agressive':
+            return PROFILE_AGRESIVE
+        elif self.risk_profile == 'regular':
+            return PROFILE_REGULAR
+        elif self.risk_profile == 'conservative':
+            return PROFILE_CONSERVATIVE
+        return PROFILE_VERY_CONSERVATIVE
 
 
 class InvestorProfile(BaseInvestorProfile):
@@ -157,19 +174,21 @@ class RoboAdvisorUserServiceActivity(Model):
         if self.company_related:
             service_question = self.roboadvisorquestioncompanyanalysis
             asset = service_question.asset
-            title = f'{asset.name} {asset.ticker} parece estar en un momento para'
+            title = f'{asset.name} ({asset.ticker}) parece estar en un momento para'
             result = service_question.result
             explanation = asset.short_introduction
+            extra = asset
         else:
             service_question = self.temporaryinvestorprofile
             title = f'Parece que tienes un perfil de inversor'
-            result = service_question.investor_type[1]
-            explanation = service_question.investor_type
+            result = service_question.risk_profile
+            explanation = service_question.explanation
 
         return {
             'title': title,
             'result': result,
             'explanation': explanation,
+            'extra':extra
         }
 
     @property
@@ -225,7 +244,8 @@ class BaseRoboAdvisorQuestion(Model):
         abstract = True
     
     def __str__(self) -> str:
-        return f'{self.user.username} - {self.service_activity.service.title} - {self.service_step.step.title}'
+        # return f'{self.user.username} - {self.service_activity.service.title} - {self.service_step.step.title}'
+        return f'{self.id}'
 
 
 class RoboAdvisorQuestionFinancialSituation(BaseRoboAdvisorQuestion):

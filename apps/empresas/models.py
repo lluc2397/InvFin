@@ -124,7 +124,16 @@ class Company(CompanyExtended):
     
     @property
     def short_introduction(self):
-        return
+        current_ratios = self.current_price_ratios
+        last_income_statement = current_ratios['last_income_statement']
+        currency = last_income_statement.reported_currency
+        intro = f"{self.ticker} ha tenido un crecimiento en sus ingresos del \
+            {current_ratios['cagr']} % en los últimos 10 años.\
+            Actualmente la empresa genera {last_income_statement.revenue} {currency}\
+            con gastos elevándose a {last_income_statement.cost_of_revenue} {currency}\
+            {current_ratios['current_price']}{current_ratios['current_currency']} y {current_ratios['average_shares_out']}\
+            acciones en circulación la empresa tiene una capitalización bursátil de {current_ratios['marketcap']} {current_ratios['current_price']}"
+        return intro
 
 
 class CompanyStockPrice(Model):

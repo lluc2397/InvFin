@@ -141,10 +141,11 @@ Si bien el riesgo de perder dinero debido a un desempeño deficiente del mercado
 como no poder generar suficiente riqueza para cumplir con los objetivos financieros o incluso no poder mantener ritmo con la inflación para mantener el poder adquisitivo de sus inversiones.\
 Si bien tienen el beneficio de experimentar potencialmente menos altibajos en el mercado, los inversores con actitudes de riesgo muy conservadoras probablemente necesiten ahorrar más para alcanzar los mismos niveles de riqueza y cumplir los mismos objetivos financieros que aquellos que se sienten cómodos asumiendo más riesgos.'
 
-RISK_PROFILE = (
-    (PROFILE_VERY_AGRESIVE, 'PROFILE VERY AGRESIVE'), 
-    (PROFILE_AGRESIVE, 'PROFILE AGRESIVE'), 
-    (PROFILE_CONSERVATIVE, 'PROFILE CONSERVATIVE'), 
-    (PROFILE_VERY_CONSERVATIVE, 'PROFILE VERY CONSERVATIVE'), 
-    (PROFILE_REGULAR, 'PROFILE REGULAR')
+
+RISK_PROFILE = (    
+    ('very-agressive', 'Perfil muy agresivo'), 
+    ('agressive', 'Perfil agresivo'),
+    ('regular', 'Perfil regular'),
+    ('conservative', 'Perfil conservador'), 
+    ('very-conservative', 'Perfil muy conservador')    
 )

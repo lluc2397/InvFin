@@ -1518,10 +1518,8 @@ class CompanyExtended(Model):
         inc_statement = self.inc_statements.all()
 
         last_balance_sheet = self.balance_sheets.latest()
-
         last_per_share = self.per_share_values.latest()
         last_margins = self.margins.latest()
-
         last_income_statement = self.most_recent_inc_statement
         last_revenue = last_income_statement.revenue
         average_shares_out = last_income_statement.weighted_average_shares_outstanding
@@ -1716,6 +1714,10 @@ class CompanyExtended(Model):
             'current_currency':current_currency,
             'last_revenue':last_revenue,
             'average_shares_out':average_shares_out,
+            'last_balance_sheet':last_balance_sheet,
+            'last_per_share':last_per_share,
+            'last_margins':last_margins,
+            'last_income_statement':last_income_statement,
             # 'average_per':average_per,
             # 'average_margin':average_margin,
             # 'average_fcf_margin':average_fcf_margin

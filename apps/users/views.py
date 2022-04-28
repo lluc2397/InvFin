@@ -11,6 +11,7 @@ from django.views.generic import (
 from apps.public_blog.forms import WritterProfileForm
 
 from .forms import UserForm, UserProfileForm
+from .models import Profile
 
 User = get_user_model()
 
@@ -42,6 +43,18 @@ class UserPublicProfileDetailView(DetailView):
         context["meta_title"] = self.request.user.username
         context["meta_url"] = f'perfil/{self.request.user.username}/'
         return context
+
+
+def invitation_view(request, invitation_code):
+    perfil = Profile.objects.get(ref_code = invitation_code)        
+    request.session['recommender'] = perfil.id
+    context = {
+        'meta_desc': 'Todo lo que necesitas para invertir',
+        'meta_tags': 'finanzas, blog financiero, blog el financiera, invertir',
+        'meta_title': 'Dashboard',
+        'meta_url': '/inicio/',
+    }
+    return redirect('account_signup') 
 
 
 @login_required

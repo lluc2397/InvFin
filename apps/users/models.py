@@ -52,6 +52,10 @@ class User(AbstractUser):
         return url
     
     @property
+    def shareable_link(self):
+        return f'https://inversionesyfinanzas.xyz/invitacion/{self.user_profile.ref_code}'
+    
+    @property
     def has_investor_profile(self):
         from apps.roboadvisor.models import InvestorProfile
         return InvestorProfile.objects.filter(user = self).exists()
@@ -128,7 +132,6 @@ class User(AbstractUser):
         self.user_profile.creditos += number_of_credits
         self.user_profile.save()
 
-
     def update_followers(self, user, action):
         from apps.public_blog.models import FollowingHistorial
         if self.is_writter:
@@ -147,13 +150,11 @@ class User(AbstractUser):
             following_historial.save()
             writter_followers.save()
             
-            return True
-            
+            return True       
     
     def update_reputation(self, points):
         self.user_profile.reputation_score += points
         self.user_profile.save()
-
 
     def create_meta_profile(self, request):
         from apps.seo.utils import SeoInformation
@@ -182,7 +183,6 @@ class User(AbstractUser):
         )
         return True
 
-
     def create_profile(self, request):
         from .models import Profile
         user_profile = Profile.objects.create(user = self)
@@ -193,7 +193,6 @@ class User(AbstractUser):
             user_profile.save()
         return True
 
-
     def add_fav_lists(self):
         from apps.escritos.models import FavoritesTermsList
         from apps.screener.models import FavoritesStocksList
@@ -201,7 +200,6 @@ class User(AbstractUser):
         FavoritesTermsList.objects.create(user = self)
         FavoritesStocksList.objects.create(user = self)
 
-        
     def create_new_user(self, request):
         from allauth.account.utils import sync_user_email_addresses
 
