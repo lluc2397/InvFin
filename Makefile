@@ -13,6 +13,9 @@ up-all:
 	sensible-browser 0.0.0.0:5555 &
 	docker-compose -f local.yml up $(ar)
 
+up-d:
+	docker-compose -f local.yml up django
+
 up:
 	docker-compose -f local.yml up $(ar)
 

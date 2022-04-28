@@ -1,0 +1,42 @@
+{% load widget_tweaks %}
+{% load static %}
+
+<div class="row">
+    <div class="row  mb-4">
+        <div class="col-md-4 mt-sm-4">
+            <label class="form-label">¿Cuál es tu objetivo invirtiendo?</label>
+            {% render_field experience_form.objectif class=fieldclass %}
+        </div>
+        <div class="col-md-4 mt-sm-4">
+            <label class="form-label">¿Cómo te definirías como inversor?</label>
+            {% render_field experience_form.investor_type_self_definition class=fieldclass %}
+        </div>
+        <div class="col-md-4 mt-sm-4">
+            <label class="form-label">¿Qué edad tienes?</label>
+            {% render_field experience_form.age class=fieldclass %}
+        </div>
+        <div class="col-md-12 mt-sm-4">
+            <label class="form-label">¿Cuánto tiempo llevas invirtiendo?</label>
+            <div class="row">
+                <div class="col-md-6 mb-sm-4">
+                    {% render_field experience_form.time_investing_exp class=fieldclass %}
+                </div>
+                <div class="col-md-6 mb-sm-4">
+                    {% render_field experience_form.period_investing_exp class=fieldclass %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="col-12 mb-4 mt-sm-4">                  
+        <label class="form-label">¿Qué porcentaje de tu patrimonio tienes invertido?</label>
+        {% render_field experience_form.percentage_invested class=fieldclassrange type="range" %}
+        <span id="rangeval6">0<!-- Default value --></span>%
+    </div>
+    <hr>
+    <div class="col-12 mb-4 mt-sm-4">                  
+        <label class="form-label">¿Cuál es tu retorno anualizado?</label>
+        {% render_field experience_form.percentage_anualized_revenue class=fieldclassrange type="range" %}
+        <span id="rangeval7">0<!-- Default value --></span>%
+    </div>
+</div>

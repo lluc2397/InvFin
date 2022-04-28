@@ -1,0 +1,36 @@
+{% load widget_tweaks %}
+{% load static %}
+
+<div class="row mt-4 mb-4">
+    <div class="row">
+        <div class="col-md-4 mt-sm-4">
+            <label class="form-label">¿Qué porcentage de tu patrimonio en ETFs?</label>
+            {% render_field assets_weight_form.etfs_percentage class=fieldclass %}
+        </div>
+        <div class="col-md-4 mt-sm-4">
+            <label class="form-label">¿Qué porcentage de tu patrimonio en empresas?</label>
+            {% render_field assets_weight_form.stocks_percentage class=fieldclass %}
+        </div>
+        <div class="col-md-4 mt-sm-4">
+            <label class="form-label">¿Qué porcentage de tu patrimonio en bonos?</label>
+            {% render_field assets_weight_form.bonds_percentage class=fieldclass %}
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-4 mt-sm-4">
+            <label class="form-label">¿Qué porcentage de tu patrimonio en bienes y raíces?</label>
+            {% render_field assets_weight_form.real_estate_percentage class=fieldclass %}
+        </div>
+        <div class="col-md-4 mt-sm-4">
+            <label class="form-label">¿Qué porcentage de tu patrimonio en sofipos?</label>
+            {% render_field assets_weight_form.sofipos_percentage class=fieldclass %}
+        </div>
+        <div class="col-md-4 mt-sm-4">
+            <label class="form-label">¿Qué porcentage de tu patrimonio en activos digitales?</label>
+            {% render_field assets_weight_form.cryptos_percentage class=fieldclass %}
+        </div>
+    </div>
+</div>
+
+
+

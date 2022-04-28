@@ -1,0 +1,55 @@
+{% load widget_tweaks %}
+{% load static %}
+
+{% with form=risk_aversion_form %}
+{% include "roboadvisor/forms/horizon.html" %}
+{% endwith %}
+
+<div class="row">
+    <div class="row mt-4">
+        <div class="col-md-3 mt-sm-4">
+            <label class="form-label">¿Cómo ves la volatilidad?</label>
+            {% render_field risk_aversion_form.volatilidad class=fieldclass %}
+        </div>
+        <div class="col-md-9 mt-sm-4">
+            <label class="form-label">¿Con cuántas empresas te sentirías cómodo en tu portfolio si no pudieses venderlas?</label>
+            {% render_field risk_aversion_form.number_stocks class=fieldclass %}
+        </div>        
+    </div>
+    
+    <div class="row mt-4">
+        <hr>
+        <div class="col-12 mb-4">                  
+            <label  class="form-label">Pudiendo ganar x1.5 y pudiendo perder x1 ¿Qué porcentaje de tu patrimonio invertirías?</label>
+            {% render_field risk_aversion_form.percentage_for_onefive class=fieldclassrange type="range"%}
+            <span id="rangeval">50<!-- Default value --></span>%
+        </div>
+        <hr>
+        <div class="col-12 mb-4">                  
+            <label  class="form-label">Pudiendo ganar x3 y pudiendo perder x1 ¿Qué porcentaje de tu patrimonio invertirías?</label>
+            {% render_field risk_aversion_form.percentage_for_three class=fieldclassrange type="range" %}
+            <span id="rangeval2">50<!-- Default value --></span>%
+        </div>
+        <hr>
+        <div class="col-12 mb-4">                  
+            <label  class="form-label">Pudiendo ganar x4.5 y pudiendo perder x1 ¿Qué porcentaje de tu patrimonio invertirías?</label>
+            {% render_field risk_aversion_form.percentage_for_fourfive class=fieldclassrange type="range" %}
+            <span id="rangeval3">50<!-- Default value --></span>%
+        </div>
+        <hr>
+        <div class="col-12 mb-4">                  
+            <label  class="form-label">Pudiendo ganar x0.5 y pudiendo perder x1 ¿Qué porcentaje de tu patrimonio invertirías?</label>
+            {% render_field risk_aversion_form.percentage_for_zerofive class=fieldclassrange type="range" %}
+            <span id="rangeval4">50<!-- Default value --></span>%
+        </div>
+        <hr>
+        <div class="col-12 mb-4">
+            <label class="form-label">
+                Habiendo econtrado una muy buena empresa que cumple con todos tus requisitos para invertir en ella.
+                ¿Qué porcentaje de tu patrimonio invertirías en una sola empresa?
+            </label>
+            {% render_field risk_aversion_form.percentage_in_one_stock class=fieldclassrange type="range" %}
+            <span id="rangeval5">50<!-- Default value --></span>%
+        </div>
+    </div>
+</div>

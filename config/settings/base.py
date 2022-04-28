@@ -105,6 +105,8 @@ LOCAL_APPS = [
     "apps.etfs",
     "apps.screener",
     "apps.cartera",
+    "apps.roboadvisor"
+
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -153,6 +155,7 @@ AUTH_PASSWORD_VALIDATORS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "corsheaders.middleware.CorsMiddleware",
+    # "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -297,9 +300,9 @@ if USE_TZ:
     # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-timezone
     CELERY_TIMEZONE = TIME_ZONE
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-broker_url
-# CELERY_BROKER_URL = env("CELERY_BROKER_URL")
+CELERY_BROKER_URL = env("CELERY_BROKER_URL")
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
-# CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-accept_content
 CELERY_ACCEPT_CONTENT = ["json"]
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-task_serializer
@@ -381,10 +384,54 @@ GEOIP_PATH = str(ROOT_DIR / "geoip")
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
 CKEDITOR_CONFIGS ={
-    'default' : {
-        'toolbar' : 'full',
-        'width': 'auto',
-        "removePlugins": "exportpdf",
+    'default': {
+        'toolbar': 'Full',
+        'toolbar_Full':
+            [
+                {
+                    'name': 'clipboard',
+                    'items': [
+                        'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo',
+                    ]
+                },
+                {
+                    'name': 'editing',
+                    'items': [
+                        'Find', 'Replace', '-', 'SelectAll', '-', 'SpellChecker', 'Scayt',
+                    ]
+                },
+                {
+                    'name': 'basics',
+                    'items': [
+                        'Bold', 'Italic', 'Underline', 'NumberedList', 'BulletedList', 'Link',
+                        'Unlink', 'Anchor', 'Table',
+                    ]
+                },
+                {
+                    'name': 'tools',
+                    'items': [
+                        'Maximize',
+                    ],
+                },
+                {
+                    'name': 'insert',
+                    'items': [
+                        'Image', 'Source',
+                    ],
+                },
+            ],
+        'startupFocus': False,
+        'pasteFromWordPromptCleanup': True,
+        'pasteFromWordRemoveFontStyles': True,
+        'disableNativeSpellChecker': False,
+        'extraPlugins': 'scayt',
+        'scayt_autoStartup': True,
+        'removePlugins': 'elementspath',
+        'resize_enabled': False,
+        'forcePasteAsPlainText': True,
+        'ignoreEmptyParagraph': True,
+        'removeFormatAttributes': True,
+        'allowedContent': True
     },
     'simple' : {
         'toolbar' : [

@@ -6,7 +6,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.apps import apps
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
-from django.views.generic import TemplateView, ListView, DeleteView
+from django.views.generic import TemplateView, ListView
 from django.http.response import JsonResponse, HttpResponse
 from django.db.models import Q
 

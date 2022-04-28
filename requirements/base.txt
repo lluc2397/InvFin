@@ -1,11 +1,14 @@
-
-Pillow==9.0.0  # https://github.com/python-pillow/Pillow
+pytz==2022.1  # https://github.com/stub42/pytz
+python-slugify==6.1.1  # https://github.com/un33k/python-slugify
+Pillow==9.1.0  # https://github.com/python-pillow/Pillow
 argon2-cffi==21.3.0  # https://github.com/hynek/argon2_cffi
-redis==4.1.1  # https://github.com/redis/redis-py
+whitenoise==6.0.0  # https://github.com/evansd/whitenoise
+redis==4.2.2  # https://github.com/redis/redis-py
 hiredis==2.0.0  # https://github.com/redis/hiredis-py
-celery==5.2.3  # pyup: < 6.0  # https://github.com/celery/celery
+celery==5.2.6  # pyup: < 6.0  # https://github.com/celery/celery
 django-celery-beat==2.2.1  # https://github.com/celery/django-celery-beat
 flower==1.0.0  # https://github.com/mher/flower
+
 
 cloudinary
 geoip2==4.5.0

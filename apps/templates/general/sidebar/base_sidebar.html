@@ -41,23 +41,28 @@
                 <span class="nav-link-text">Explorar</span>
               </a>
             </li> -->
-
+            <hr class="my-3">
             <h6 class="navbar-heading pl-4 text-muted">
               <span class="docs-normal">Favoritos</span>
             </h6>
             {% block favorites %}
             {% endblock favorites %}
-            <!-- <hr class="my-3"> -->
-            <!-- <h6 class="navbar-heading pl-4 text-muted">
-              <span class="docs-normal">Documentation</span>
+            <hr class="my-3">
+            <h6 class="navbar-heading pl-4 text-muted">
+              <span class="docs-normal">Extras</span>
             </h6>
 
             <li class="nav-item">
-              <a class="nav-link" href="https://demos.creative-tim.com/impact-design-system-pro/docs/getting-started/quick-start/">
-                <i class="fas fa-chart-area"></i>
-                <span class="nav-link-text">Getting started</span>
+              <a class="nav-link" 
+              {% if request.user.is_authenticated %}
+              href="{% url 'roboadvisor:user-robo-results' %}"
+              {% else %}
+              href="{% url 'roboadvisor:roboadvisor' %}?roborequest=s"
+              {% endif %}>
+                <i class="fas fa-robot"></i>
+                <span class="nav-link-text">Roboadvisor</span>
               </a>
-            </li> -->
+            </li>
 
           </ul>
         </div>

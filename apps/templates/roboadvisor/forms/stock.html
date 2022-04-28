@@ -1,0 +1,48 @@
+{% load widget_tweaks %}
+{% load static %}
+
+{% with form=company_analysis_form %}
+{% include "roboadvisor/forms/horizon.html" %}
+{% endwith %}
+ 
+<div class="row mb-4">
+    <div class="row mb-4">
+        <div class="col-md-6 mt-sm-4">
+            <label class="form-label">
+                ¿Cuál es tu nivel de conocimiento del sector?
+            </label>
+            {% render_field company_analysis_form.sector_knowledge class=fieldclass %}
+        </div>
+        <div class="col-md-6 mt-sm-4">
+            <label class="form-label">
+                ¿Cuál es tu nivel de conocimiento de la empresa?
+            </label>
+            {% render_field company_analysis_form.asset_knowledge class=fieldclass %}
+        </div>
+        <div class="col-md-12 mt-sm-4 mt-4">
+            <label class="form-label">¿Qué te interesa en el sector?</label>
+            {% render_field company_analysis_form.sector_relationship class=fieldclass %}
+        </div>
+    </div>
+    <div class="row mb-4">
+        <label class="form-label">¿Cuánto tiempo has dedicado al estudio de esta inversión?</label>
+        <div class="col-md-4 mt-sm-4">        
+            {% render_field company_analysis_form.amount_time_studied class=fieldclass %}
+        </div>
+        <div class="col-md-8 mt-sm-4">
+            {% render_field company_analysis_form.period_time_studied class=fieldclass %}
+        </div>
+    </div>
+    {% if company_analysis_form.number_shares %}
+    <div class="col-md-6 mt-sm-4">
+        <label class="form-label">¿Cuantas participaciones tienes (acciones)?</label>
+        {% render_field company_analysis_form.number_shares class=fieldclass %}
+    </div>
+    {% endif %}
+    {% if company_analysis_form.capital_invested %}
+    <div class="col-md-6 mt-sm-4">
+        <label class="form-label">¿Cuánto has invertido en esta posición?</label>
+        {% render_field company_analysis_form.capital_invested class=fieldclass %}
+    </div>
+    {% endif %}
+</div>

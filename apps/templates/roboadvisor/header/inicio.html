@@ -1,0 +1,13 @@
+<!-- <meta name="robots" content="noindex,nofollow"> -->
+<div class="row align-items-center py-4">
+    <div class="col-lg-6 col-7">
+      <h6 class="h2 d-inline-block mb-0">Tu consejero inteligente</h6>
+    </div>
+    <div class="col-lg-6 col-5 text-right">
+      <button data-bs-toggle="modal" 
+        data-bs-target="#CreditsExplanationModal" 
+        class="btn btn-sm btn-neutral">
+        Tus créditos {% if request.user.is_authenticated %}{{request.user.user_profile.creditos}}{% else %}0{% endif %}
+      </button>
+    </div>
+</div>

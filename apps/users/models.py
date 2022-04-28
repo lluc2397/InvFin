@@ -1,32 +1,32 @@
+from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import AbstractUser
+from django.contrib.sites.models import Site
 from django.db.models import (
-    CharField,
-    Model,
-    OneToOneField,
-    BooleanField,
-    SET_NULL,
     CASCADE,
+    SET_NULL,
+    BooleanField,
+    CharField,
+    DateField,
+    DateTimeField,
     ForeignKey,
     ImageField,
     IntegerField,
-    DateTimeField,
-    DateField,
-    TextField
-    
-    )
+    Model,
+    OneToOneField,
+    TextField,
+)
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from django.contrib.sites.models import Site
 from django_countries.fields import CountryField
-from cloudinary.models import CloudinaryField
 
 from apps.general.mixins import ResizeImageMixin
+
 from .manager import ProfileManager, UserExtraManager
 
 
 class User(AbstractUser):
-    first_name = CharField(_("Nombre"), blank=True, max_length=2550)
-    last_name = CharField(_("Apellidos"), blank=True, max_length=2550)
+    first_name = CharField(_("Nombre"), blank=True, max_length=255)
+    last_name = CharField(_("Apellidos"), blank=True, max_length=255)
     is_writter = BooleanField(default=False)
     just_newsletter = BooleanField(default=False)
     just_correction = BooleanField(default=False)
@@ -52,6 +52,15 @@ class User(AbstractUser):
         return url
     
     @property
+    def shareable_link(self):
+        return f'https://inversionesyfinanzas.xyz/invitacion/{self.user_profile.ref_code}'
+    
+    @property
+    def has_investor_profile(self):
+        from apps.roboadvisor.models import InvestorProfile
+        return InvestorProfile.objects.filter(user = self).exists()
+    
+    @property
     def foto(self):
         return self.user_profile.foto_perfil.url
     
@@ -64,17 +73,6 @@ class User(AbstractUser):
         else:
             full_name = self.username
         return full_name
-    
-    @property
-    def default_options(self):
-        options = False        
-        if self.is_writter and self.writter_default_options.writter_has_default_options:
-            options = {
-                'title':self.writter_default_options.default_titles.get(in_use = True),
-                'intro':self.writter_default_options.default_introductions.get(in_use = True),
-                'despedida':self.writter_default_options.default_despedidas.get(in_use = True)
-            }
-        return options
     
     @property
     def questions_asked(self):
@@ -130,10 +128,9 @@ class User(AbstractUser):
             return [writter.user for writter in fav_writters]
         return []
     
-    def add_credits(self, number_of_credits):
+    def update_credits(self, number_of_credits):
         self.user_profile.creditos += number_of_credits
         self.user_profile.save()
-
 
     def update_followers(self, user, action):
         from apps.public_blog.models import FollowingHistorial
@@ -153,17 +150,16 @@ class User(AbstractUser):
             following_historial.save()
             writter_followers.save()
             
-            return True
-            
+            return True       
     
     def update_reputation(self, points):
         self.user_profile.reputation_score += points
         self.user_profile.save()
 
-
     def create_meta_profile(self, request):
-        from .models import MetaProfile
         from apps.seo.utils import SeoInformation
+
+        from .models import MetaProfile
         seo = SeoInformation().meta_information(request)
         meta_profile = MetaProfile.objects.create(
             ip = seo['ip'],
@@ -187,7 +183,6 @@ class User(AbstractUser):
         )
         return True
 
-
     def create_profile(self, request):
         from .models import Profile
         user_profile = Profile.objects.create(user = self)
@@ -198,7 +193,6 @@ class User(AbstractUser):
             user_profile.save()
         return True
 
-
     def add_fav_lists(self):
         from apps.escritos.models import FavoritesTermsList
         from apps.screener.models import FavoritesStocksList
@@ -206,7 +200,6 @@ class User(AbstractUser):
         FavoritesTermsList.objects.create(user = self)
         FavoritesStocksList.objects.create(user = self)
 
-        
     def create_new_user(self, request):
         from allauth.account.utils import sync_user_email_addresses
 
