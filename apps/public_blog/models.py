@@ -18,7 +18,7 @@ from django.db.models import Avg, Sum
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from apps.general.models import BaseEscrito, BaseComment, BaseContentShared, Newsletter, BaseEmail
+from apps.general.models import BaseEscrito, BaseComment, Newsletter, BaseEmail
 
 class WritterProfile(Model):
     user = OneToOneField(User, on_delete=SET_NULL, null=True, related_name="writter_profile")

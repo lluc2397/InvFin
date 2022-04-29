@@ -13,7 +13,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from apps.general.models import BasicWrittenContent, BaseComment, BaseContentShared
+from apps.general.models import BasicWrittenContent, BaseComment
 from ckeditor.fields import RichTextField
 
 from apps.general.mixins import CommonMixin

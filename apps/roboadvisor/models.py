@@ -49,7 +49,7 @@ User = get_user_model()
 class BaseInvestorProfile(Model):
     created_at = DateTimeField(auto_now_add=True)
     horizon = CharField(max_length=500, null=True, blank=True, choices=HORIZON)
-    risk_profile = TextField(null=True, blank=True, choices=RISK_PROFILE)
+    risk_profile = CharField(max_length=500, blank=True, choices=RISK_PROFILE)
     investor_type = CharField(max_length=500, null=True, blank=True, choices=INVESTOR_TYPE)
 
     class Meta:
@@ -278,8 +278,8 @@ class BaseRoboAdvisorHorizon(BaseRoboAdvisorQuestion):
 class BaseRoboAdvisorQuestionAsset(BaseRoboAdvisorHorizon):
     asset = None
     result = None
-    sector_knowledge = CharField(max_length=500, null=True, blank=True, choices=KNOWLEDGE, default=4)
-    asset_knowledge = CharField(max_length=500, null=True, blank=True, choices=KNOWLEDGE, default=4)
+    sector_knowledge = CharField(max_length=500, null=True, blank=True, choices=KNOWLEDGE, default=KNOWLEDGE[4])
+    asset_knowledge = CharField(max_length=500, null=True, blank=True, choices=KNOWLEDGE, default=KNOWLEDGE[4])
     amount_time_studied = PositiveIntegerField(default = 0)
     period_time_studied = CharField(max_length=500, default=PERIODS[4], choices=PERIODS)
     number_shares = DecimalField(null=True, default = 0, blank=True, max_digits=10, decimal_places=2,validators=[MinValueValidator(0)])
@@ -292,7 +292,7 @@ class BaseRoboAdvisorQuestionAsset(BaseRoboAdvisorHorizon):
 
 class RoboAdvisorQuestionInvestorExperience(BaseRoboAdvisorQuestion):
     age = PositiveIntegerField(null=True, blank=True, default=18)
-    objectif = CharField(max_length=500, choices=OBJECTIFS, null=True, blank=True, default=1) 
+    objectif = IntegerField(choices=OBJECTIFS, null=True, blank=True, default=1) 
     investor_type_self_definition = CharField(max_length=500, null=True, blank=True, choices=INVESTOR_TYPE, default=INVESTOR_TYPE[1])
     percentage_invested = DecimalField(blank=True, default=0, max_digits=10, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(100)])
     percentage_anualized_revenue = DecimalField (null=True, blank=True, default=0, max_digits=10, decimal_places=2)

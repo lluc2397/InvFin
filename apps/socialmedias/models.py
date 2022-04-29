@@ -30,10 +30,14 @@ User = get_user_model()
 
 class Hashtag(Model):        
     name = RichTextField(default='')
-    platform_ = CharField(max_length=500, choices=SOCIAL_MEDIAS)
+    platform = CharField(max_length=500, choices=SOCIAL_MEDIAS)
     is_trending = BooleanField(default=False)
     objects = HashtagsManager()
 
+    class Meta:
+        verbose_name = "Default hashtags"
+        db_table = 'socialmedia_hashtags'
+    
     def __str__(self) -> str:
         return str(self.name)
 
@@ -42,6 +46,10 @@ class Emoji(Model):
     emoji = CharField(max_length=500)
     objects = EmojisManager()
 
+    class Meta:
+        verbose_name = "Default emojis"
+        db_table = 'socialmedia_emojis'
+    
     def __str__(self) -> str:
         return str(self.emoji)
 
@@ -50,8 +58,13 @@ class DefaultTilte(Model):
     title = RichTextField(default='')
     objects = TitlesManager()
 
+    class Meta:
+        verbose_name = "Default titles"
+        db_table = 'socialmedia_titles'
+    
     def __str__(self) -> str:
         return str(self.title)  
+
 
 class BaseContentShared(Model):
     user = ForeignKey(User, on_delete=SET_NULL, null=True, blank=True)

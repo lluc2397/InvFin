@@ -18,7 +18,7 @@ from ckeditor.fields import RichTextField
 from django.urls import reverse
 from django.utils import timezone
 
-from apps.general.models import BaseEscrito, BaseComment, BaseContentShared, FavoritesHistorial
+from apps.general.models import BaseEscrito, BaseComment, FavoritesHistorial
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
