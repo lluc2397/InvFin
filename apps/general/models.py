@@ -10,9 +10,7 @@ from django.db.models import (
     PositiveIntegerField,
     ImageField,
     IntegerField,
-    ManyToManyField,
-    PositiveBigIntegerField,
-    DateField
+    ManyToManyField
 )
 
 from django.contrib.sitemaps import ping_google
@@ -214,6 +212,14 @@ class GenericModelsBase(Model):
     
     def __str__(self, *args, **kwargs):
         return str(self.id)
+    
+    @property
+    def app_label(self):
+        return self._meta.app_label
+    
+    @property
+    def object_name(self):
+        return self._meta.object_name
 
 
 class NotificationsType(Model):
@@ -235,27 +241,6 @@ class Notification(GenericModelsBase):
     class Meta:
         verbose_name = "Notification"
         db_table = "notifications"
-    
-    @property
-    def app_label(self):
-        return self._meta.app_label
-    
-    @property
-    def object_name(self):
-        return self._meta.object_name
-
-
-class BaseContentShared(Model):
-    SHARED_IN = ((1, 'Facebook'), (2, 'Twitter'), (3, 'Reddit'), (4, 'Whatsapp'), 
-    (5, 'Linkedin'), (6, 'Pinterest'), (7, 'Tumblr'))
-
-    user = ForeignKey(User, on_delete=SET_NULL, null=True, blank=True)
-    date_shared = DateTimeField(auto_now_add=True)
-    number_of_visits = PositiveBigIntegerField(default=0)
-    platform_shared = IntegerField(choices=SHARED_IN)
-
-    class Meta:
-        abstract = True
 
 
 class FavoritesHistorial(Model):

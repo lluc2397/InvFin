@@ -156,32 +156,6 @@ class PublicBlogComment(BaseComment):
         db_table = "blog_comments"
 
 
-class BlogSharedHistorial(BaseContentShared):
-    content_shared = ForeignKey(
-        PublicBlog,
-        on_delete=CASCADE,
-        null=True,
-        blank=True,
-        related_name = 'blogs_shared')
-
-    class Meta:
-        verbose_name = "Blog shared"
-        db_table = "shared_blogs"
-
-
-class ProfileSharedHistorial(BaseContentShared):
-    content_shared = ForeignKey(
-        WritterProfile,
-        on_delete=CASCADE,
-        null=True,
-        blank=True,
-        related_name = 'profiles_shared')
-    
-    class Meta:
-        verbose_name = "Proflie shared"
-        db_table = "shared_profiles"
-
-
 class EmailPublicBlog(BaseEmail):
     email_related = ForeignKey(PublicBlogAsNewsletter,null = True, blank=True, on_delete=SET_NULL, related_name = 'email_related')
 

@@ -72,7 +72,7 @@ DJANGO_APPS = [
     "django.contrib.humanize",
     "django.contrib.admin",
     "django.forms",
-    'django.contrib.sitemaps',
+    "django.contrib.sitemaps",
 ]
 
 THIRD_PARTY_APPS = [
@@ -88,8 +88,8 @@ THIRD_PARTY_APPS = [
     "ckeditor",
     "django_cleanup.apps.CleanupConfig",
     "django_countries",
-    'import_export',
-    'admin_honeypot',
+    "import_export",
+    "admin_honeypot",
 ]
 
 LOCAL_APPS = [
@@ -105,9 +105,8 @@ LOCAL_APPS = [
     "apps.etfs",
     "apps.screener",
     "apps.cartera",
-    "apps.roboadvisor"
-
-]
+    "apps.roboadvisor",
+    "apps.socialmedias"]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -529,3 +528,19 @@ GOOGLE_RECAPTCHA_PUBLIC_KEY = env.str('GOOGLE_RECAPTCHA_PUBLIC_KEY')
 #         re.compile(r'^SiteSucker.*'),
 #         re.compile(r'^sohu-search'),
 #     ]
+
+#FACEBOOK KEYS
+OLD_FB_PAGE_ACCESS_TOKEN = env.str('OLD_FB_PAGE_ACCESS_TOKEN')
+NEW_FB_PAGE_ACCESS_TOKEN = env.str('NEW_FB_PAGE_ACCESS_TOKEN')
+FACEBOOK_APP_SECRET = env.str('FACEBOOK_APP_SECRET')
+OLD_FACEBOOK_ID = env.str('OLD_FACEBOOK_ID')
+NEW_FACEBOOK_ID = env.str('NEW_FACEBOOK_ID')
+FB_USER_ACCESS_TOKEN = env.str('FB_USER_ACCESS_TOKEN')
+#INSTAGRAM KEYS
+INSTAGRAM_ID = env.str('INSTAGRAM_ID')
+
+#TWITTER KEYS
+TWITTER_CONSUMER_KEY = env.str('TWITTER_CONSUMER_KEY')
+TWITTER_CONSUMER_SECRET = env.str('TWITTER_CONSUMER_SECRET')
+TWITTER_ACCESS_TOKEN = env.str('TWITTER_ACCESS_TOKEN')
+TWITTER_ACCESS_TOKEN_SECRET = env.str('TWITTER_ACCESS_TOKEN_SECRET')

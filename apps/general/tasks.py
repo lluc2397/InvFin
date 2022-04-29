@@ -25,3 +25,10 @@ def check_programmed_newsletters_task():
     for blog_newsletter in PublicBlogAsNewsletter.objects.filter(sent = False):
         if blog_newsletter.date_to_send <= timezone.now():
             return enviar_email_task.delay()
+
+
+@celery_app.task()
+def share_social_media_content_task():
+    for blog_newsletter in PublicBlogAsNewsletter.objects.filter(sent = False):
+        if blog_newsletter.date_to_send <= timezone.now():
+            return enviar_email_task.delay()

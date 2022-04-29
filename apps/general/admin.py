@@ -11,6 +11,9 @@ from .models import (
     EmailNotification
 )
 
+
+
+
 @admin.register(EmailNotification)    
 class EmailNotificationAdmin(admin.ModelAdmin):
     list_display = [

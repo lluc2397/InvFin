@@ -161,16 +161,3 @@ class AnswerComment(BaseComment):
     
     def __str__(self):
         return str(self.id)
-
-
-class QuestionSharedHistorial(BaseContentShared):
-    content_shared = ForeignKey(
-        Question,
-        on_delete=CASCADE,
-        null=True,
-        blank=True,
-        related_name = 'questions_shared')
-
-    class Meta:
-        verbose_name = "Question shared"
-        db_table = "shared_questions"

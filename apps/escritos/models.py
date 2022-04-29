@@ -126,19 +126,6 @@ class TermsRelatedToResume(Model):
         db_table = "terms_to_resume"
 
 
-class TermSharedHistorial(BaseContentShared):
-    content_shared = ForeignKey(
-        Term,
-        on_delete=CASCADE,
-        null=True,
-        blank=True,
-        related_name = 'terms_shared')
-
-    class Meta:
-        verbose_name = "Term shared"
-        db_table = "shared_terms"
-
-
 class FavoritesTermsHistorial(FavoritesHistorial):
     term = ForeignKey(Term, on_delete=SET_NULL, null=True, blank=True)
 
