@@ -58,7 +58,6 @@ class Twitter:
 
     def tweet(
         self,
-        local_content = None,
         caption= "", 
         hashtags=Hashtag.objects.random_tw_hashtags,
         has_default_title = True,
@@ -90,11 +89,11 @@ class Twitter:
             else:
                 if post_type == 1 or post_type == 5:
                     content_type = 'video'
-                    media_url = local_content.local_vertical_short_path
+                    # media_url = local_content.local_vertical_short_path
                     
                 elif post_type == 2 or post_type == 6:
                     content_type = 'image'
-                    media_url =  local_content.local_resized_image_path
+                    # media_url =  local_content.local_resized_image_path
 
                 post_response = self.tweet_with_media(media_url, caption)
             

@@ -7,7 +7,6 @@ from django.db.models import Manager
 
 
 class TitlesManager(Manager):
-
     @property
     def random_title(self):
         titles = [al_title for al_title in self.all()]
@@ -15,7 +14,6 @@ class TitlesManager(Manager):
 
 
 class EmojisManager(Manager):
-
     def random_emojis(self, num):        
         emojis = []
         for i in range(num):
@@ -23,23 +21,6 @@ class EmojisManager(Manager):
         return emojis
 
 class HashtagsManager(Manager):
-
-    @property
-    def random_ig_hashtags(self):
-        hashtags = [hashtag for hashtag in self.filter(for_ig = True)]
-        return hashtags
-    
-    @property
-    def random_tw_hashtags(self):
-        hashtags = [hashtag for hashtag in self.filter(for_tw = True)]
-        return hashtags
-    
-    @property
-    def random_fb_hashtags(self):
-        hashtags = [hashtag for hashtag in self.filter(for_fb = True)]
-        return hashtags
-    
-    @property
-    def random_yb_hashtags(self):
-        hashtags = [hashtag for hashtag in self.filter(for_yb = True)]
+    def random_hashtags(self, platform):
+        hashtags = [hashtag for hashtag in self.filter(platform = platform)]
         return hashtags

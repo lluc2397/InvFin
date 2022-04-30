@@ -165,24 +165,22 @@ class Facebook():
 
     def post_on_facebook(
         self,
-        local_content = None,
         post_type = 1,
-        is_original = False,
         num_emojis = 1,
         hashtags = Hashtag.objects.random_fb_hashtags,
         has_default_title = True,
         default_title = DefaultTilte.objects.random_title,
-        custom_title = '',
-        caption = '',
+        custom_title = None,
+        caption = None,
         link='',
         ):
 
         emojis = Emoji.objects.random_emojis(num_emojis)
 
-        if custom_title == '' and has_default_title is True:
+        if not custom_title and has_default_title is True:
             custom_title = f'{emojis[0].emoji}{default_title}'
 
-        if caption == '':
+        if not caption:
             caption = self.create_fb_description([hashtag.name for hashtag in hashtags])
         
         if post_type == 1 or post_type == 5 or post_type == 7:
@@ -199,20 +197,19 @@ class Facebook():
             post_response = self.post_text(text= caption, link=link)
 
         if post_response['result'] == 'success':
-            facebook_post = FacebookPostRecord.general_manager.save_record(
-                local_content = local_content ,
-                post_type = post_type ,
-                is_original = is_original ,
-                social_id = post_response['extra'] ,
-                emojis = emojis ,
-                hashtags = hashtags ,
-                has_default_title = has_default_title ,
-                default_title = default_title ,
-                custom_title = custom_title ,
-                caption = caption
-            )
+            facebook_post = {
+                'post_type': post_type ,
+                'social_id': post_response['extra'] ,
+                'emojis': emojis ,
+                'hashtags': hashtags ,
+                'has_default_title': has_default_title ,
+                'default_title': default_title ,
+                'custom_title': custom_title ,
+                'caption': caption
+            }
+            
 
-        return post_response
+        return facebook_post
     
 
     def share_facebook_post(self, post_id, yb_title):

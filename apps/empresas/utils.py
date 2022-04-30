@@ -1,11 +1,11 @@
 from apps.general.models import Currency
 from apps.translate.google_trans_new import google_translator
 
-from .company_calculations import CompanyFinancials
+from .company_calculations import CalculateCompanyFinancialRatios
 
 from datetime import datetime
 
-class UpdateCompany(CompanyFinancials):
+class UpdateCompany(CalculateCompanyFinancialRatios):
     def __init__(self, company) -> None:
         self.company = company
         super().__init__()
@@ -20,7 +20,7 @@ class UpdateCompany(CompanyFinancials):
 
     def add_description(self):
         try:
-            self.company.description = google_translator().translate(self.company.description,lang_src='en', lang_tgt='es')
+            self.company.description = google_translator().translate(self.company.description, lang_src='en', lang_tgt='es')
             self.company.description_translated = True
             self.company.save()
         except Exception as e:
@@ -31,6 +31,59 @@ class UpdateCompany(CompanyFinancials):
             self.add_logo()
         if self.company.description_translated is False:
             self.add_description()
+    
+    def financial_update(self):
+        if self.check_last_filing() == 'need update':
+            
+            income_statements = self.request_income_statements_finprep()
+            balance_sheets = self.request_balance_sheets_finprep()
+            cashflow_statements = self.request_cashflow_statements_finprep()
+
+            current_data = self.generate_current_data(income_statements, balance_sheets, cashflow_statements)
+            ly_data = self.generate_last_year_data(income_statements, balance_sheets, cashflow_statements)
+
+            all_data = current_data
+            all_data.update(ly_data)
+
+            main_ratios = self.calculate_main_ratios(all_data)
+            all_data.update(main_ratios)
+
+            fcf_ratio = self.calculate_fcf_ratio(current_data)
+            all_data.update(fcf_ratio)
+
+            ps_value = self.calculate_ps_value(all_data)
+            all_data.update(ps_value)
+
+            company_growth = self.calculate_company_growth(all_data)        
+            all_data.update(company_growth)
+
+            non_gaap = self.calculate_non_gaap(all_data)
+            all_data.update(non_gaap)
+
+            price_to_ratio = self.calculate_price_to_ratio(all_data)
+            eficiency_ratio = self.calculate_eficiency_ratio(all_data)
+            enterprise_value_ratio = self.calculate_enterprise_value_ratio(all_data)
+            liquidity_ratio = self.calculate_liquidity_ratio(all_data)
+            margin_ratio = self.calculate_margin_ratio(all_data)
+            operation_risk_ratio = self.calculate_operation_risk_ratio(all_data)
+            rentability_ratios = self.calculate_rentability_ratios(all_data)
+
+            self.create_current_stock_price(price = current_data['currentPrice'])
+            self.create_rentability_ratios(rentability_ratios)
+            self.create_liquidity_ratio(liquidity_ratio)
+            self.create_margin_ratio(margin_ratio)
+            self.create_fcf_ratio(fcf_ratio)
+            self.create_ps_value(ps_value)
+            self.create_non_gaap(non_gaap)
+            self.create_operation_risk_ratio(operation_risk_ratio)
+            self.create_price_to_ratio(price_to_ratio)
+            self.create_enterprise_value_ratio(enterprise_value_ratio)
+            self.create_eficiency_ratio(eficiency_ratio)
+            self.create_company_growth(company_growth)
+
+            self.updated = True
+            self.last_update = datetime.now()
+            self.company.save()
 
     def check_last_filing(self):
         least_recent_date = self.yq_company.balance_sheet()['asOfDate'].max().value // 10**9 # normalize time
@@ -39,13 +92,51 @@ class UpdateCompany(CompanyFinancials):
             return 'need update'
         return 'updated'
     
-    def generate_current_data(self, data:dict):
+    def generate_current_data(
+        self,
+        income_statements: list,
+        balance_sheets: list,
+        cashflow_statements: list
+    )-> dict:
+
+        current_data = {}
         current_price = self.get_most_recent_price()
-        data.update(current_price)
-        return data
+        current_income_statements = income_statements[0]
+        current_balance_sheets = balance_sheets[0]
+        current_cashflow_statements = cashflow_statements[0]
+        current_fecha = {
+            'date': current_income_statements['calendarYear'],
+            'year': current_income_statements['date'],
+        }
+        current_data.update(current_price)
+        current_data.update(current_income_statements)
+        current_data.update(current_balance_sheets)
+        current_data.update(current_cashflow_statements)
+        current_data.update(current_fecha)
+
+        return current_data
     
-    def generate_last_year_data(self, data:dict):
-        self.last_year_data(**data)
+    def generate_last_year_data(
+        self,
+        income_statements: list,
+        balance_sheets: list,
+        cashflow_statements: list
+    )-> dict:
+
+        ly_data = {}
+        ly_income_statements = income_statements[1]
+        ly_balance_sheets = balance_sheets[1]
+        ly_cashflow_statements = cashflow_statements[1]
+        ly_fecha = {
+        'date': ly_income_statements['calendarYear'],
+        'year': ly_income_statements['date'],
+        }
+        ly_data.update(ly_income_statements)
+        ly_data.update(ly_balance_sheets)
+        ly_data.update(ly_cashflow_statements)
+        ly_data.update(ly_fecha)
+
+        return self.last_year_data(ly_data)
 
     def create_income_statement(self, inc_stt:dict):
         income_statement = self.company.inc_statements.create(
@@ -160,8 +251,8 @@ class UpdateCompany(CompanyFinancials):
         
         return cashflow_statement
     
-    def create_current_stock_price(self, data:dict):
-        stock_prices = self.company.stock_prices.create(**data)
+    def create_current_stock_price(self, price):
+        stock_prices = self.company.stock_prices.create(price=price)
         return stock_prices
 
     def create_rentability_ratios(self, data:dict):

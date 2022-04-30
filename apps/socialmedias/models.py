@@ -9,7 +9,6 @@ from django.db.models import (
     BooleanField
 )
 from django.contrib.auth import get_user_model
-from django.urls import reverse
 
 from ckeditor.fields import RichTextField
 

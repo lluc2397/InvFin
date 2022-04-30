@@ -7,10 +7,6 @@ def simple_stock_analysis(empresa):
     
     empresa_info = yf.Ticker(empresa.ticker)
     inf = empresa_info.info
-    
-    recommendationKey = None
-    targetMeanPrice = None
-    currentPrice = None
 
     result_buy = {'result': 'buy'}
     

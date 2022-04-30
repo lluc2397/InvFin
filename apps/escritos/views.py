@@ -7,6 +7,7 @@ from django.views.generic import (
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import get_user_model
+
 User = get_user_model()
 
 

@@ -78,6 +78,7 @@ class CompanyAdmin(admin.ModelAdmin):
         'no_cfs',
         'description_translated',
         'has_logo',
+        'exchange__main_org',
     ]
     list_editable = [
         'no_incs',

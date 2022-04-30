@@ -9,7 +9,7 @@ HEADERS = {
     'Accept-Encoding': 'gzip, deflate'
 }
 
-class CompanyFinancials():
+class CalculateCompanyFinancialRatios():
     def __init__(self) -> None:
         self.ticker = self.company.ticker
         self.finprep_key = settings.FINPREP_KEY
@@ -32,7 +32,11 @@ class CompanyFinancials():
         return csf_stt
     
     def get_most_recent_price(self) -> float:
-        return {'currentPrice':self.yf_company.info['currentPrice']}
+        if 'currentPrice' in self.yf_company.info:
+            current_price = self.yf_company.info['currentPrice']
+        else:
+            current_price = self.yq_company.financial_data['currentPrice']
+        return {'currentPrice':current_price}
         
     def last_year_data(self, data:dict) -> dict:
         last_year_inventory = data['inventory']
