@@ -8,7 +8,7 @@ Werkzeug[watchdog]==2.0.3 # https://github.com/pallets/werkzeug
 ipdb==0.13.9  # https://github.com/gotcha/ipdb
 
 watchgod==0.7  # https://github.com/samuelcolvin/watchgod
-
+Collectfast==2.2.0
 django-widget-tweaks
 
 # Testing

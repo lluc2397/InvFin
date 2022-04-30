@@ -21,7 +21,7 @@ django-admin-honeypot
 django-import-export
 beautifulsoup4
 yahooquery
-
+tweepy==4.4.0
 
 # Django
 # ------------------------------------------------------------------------------

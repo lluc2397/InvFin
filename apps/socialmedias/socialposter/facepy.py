@@ -167,7 +167,7 @@ class Facebook():
         self,
         post_type = 1,
         num_emojis = 1,
-        hashtags = Hashtag.objects.random_fb_hashtags,
+        hashtags = Hashtag.objects.random_hashtags('facebook'),
         has_default_title = True,
         default_title = DefaultTilte.objects.random_title,
         custom_title = None,

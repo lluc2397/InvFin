@@ -59,7 +59,7 @@ class Twitter:
     def tweet(
         self,
         caption= "", 
-        hashtags=Hashtag.objects.random_tw_hashtags,
+        hashtags=Hashtag.objects.random_hashtags('twitter'),
         has_default_title = True,
         default_title = DefaultTilte.objects.random_title,
         num_emojis = 1,

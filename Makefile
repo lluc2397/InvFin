@@ -1,7 +1,7 @@
 .PHONY: requirements
 
 build:
-	docker-compose -f local.yml build
+	docker-compose -f local.yml build $(ar)
 
 up-back:
 	docker-compose -f local.yml up $(ar) -d
