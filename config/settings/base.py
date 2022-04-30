@@ -90,6 +90,7 @@ THIRD_PARTY_APPS = [
     "django_countries",
     "import_export",
     "admin_honeypot",
+    'widget_tweaks',
 ]
 
 LOCAL_APPS = [
