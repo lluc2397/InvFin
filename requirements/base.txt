@@ -22,6 +22,7 @@ django-import-export
 beautifulsoup4
 yahooquery
 tweepy==4.4.0
+django-widget-tweaks
 
 # Django
 # ------------------------------------------------------------------------------
