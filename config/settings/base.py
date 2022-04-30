@@ -261,6 +261,14 @@ EMAIL_BACKEND = env(
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
+EMAIL_CONTACT = env("EMAIL_CONTACT")
+EMAIL_SUBJECT_PREFIX = env("EMAIL_SUBJECT_PREFIX")
+DEFAULT_EMAIL = env("DEFAULT_EMAIL")
+EMAIL_NEWSLETTER = env("EMAIL_NEWSLETTER")
+MAIN_EMAIL = env("MAIN_EMAIL")
+EMAIL_ACCOUNTS = env("EMAIL_ACCOUNTS")
+EMAIL_DEFAULT = env("EMAIL_DEFAULT") #To delete
+
 # ADMIN
 # ------------------------------------------------------------------------------
 # Django Admin URL.

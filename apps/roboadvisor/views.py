@@ -67,7 +67,8 @@ class RoboAdvisorServiceOptionView(DetailView):
 
 		default_data = {
 			'user': user,
-			'service': service
+			'service': service,
+			'status': 'started'
 		}
 
 		service_activity = RoboAdvisorUserServiceActivity.objects.create(**default_data)

@@ -10,13 +10,12 @@ from django.views.generic import (
 import json
 import urllib
 
-from apps.web.models import WebsiteLegalPage, WebsiteEmailsType, WebsiteEmail
+from apps.web.models import WebsiteLegalPage
 from apps.public_blog.models import WritterProfile
 from apps.public_blog.views import writter_profile_view
 from apps.general.utils import HostChecker
 
 from .forms import ContactForm, WebEmailForm
-from .tasks import send_website_email_task
 
 
 class HomePage(TemplateView):
@@ -56,8 +55,12 @@ class LegalPages(DetailView):
         return context
 
 
-def soporte_view(request):    
-    form = ContactForm()
+def soporte_view(request):
+    initial = {}
+    if request.user.is_authenticated:
+        initial['name'] = request.user.username
+        initial['email'] = request.user.email
+    form = ContactForm(initial=initial)
     public_key = settings.GOOGLE_RECAPTCHA_PUBLIC_KEY
     context = {
         'form':form, 
@@ -79,7 +82,6 @@ def soporte_view(request):
             response = urllib.request.urlopen(req)
             result = json.loads(response.read().decode())
 
-            
             if result['success']:
                 messages.success(request, 'Gracias por tu mensaje, te responderemos lo antes posible.')
                 form.send_email()

@@ -153,7 +153,7 @@ class RoboAdvisorUserServiceActivity(Model):
     service = ForeignKey(RoboAdvisorService, on_delete=SET_NULL, null=True)
     date_started = DateTimeField(auto_now_add=True)
     date_finished = DateTimeField(null=True, blank=True)
-    status = CharField(max_length=500, choices=SERVICE_STATUS, default=SERVICE_STATUS[2])
+    status = CharField(max_length=500, choices=SERVICE_STATUS, default='started')
 
     class Meta:
         verbose_name = 'RoboAdvisor Service Activity'
@@ -165,7 +165,13 @@ class RoboAdvisorUserServiceActivity(Model):
     
     @property
     def company_related(self):
-        if self.service.slug == 'company-match' and self.roboadvisorquestioncompanyanalysis:
+        if self.service.slug == 'company-match' and RoboAdvisorQuestionCompanyAnalysis.objects.filter(service_activity = self).exists():
+            return True
+        return False
+    
+    @property
+    def temp_profile_related(self):
+        if self.service.slug == 'investor-profile' and TemporaryInvestorProfile.objects.filter(service_activity = self).exists():
             return True
         return False
     
@@ -178,7 +184,7 @@ class RoboAdvisorUserServiceActivity(Model):
             result = service_question.result
             explanation = asset.short_introduction
             extra = asset
-        else:
+        if self.temp_profile_related:
             service_question = self.temporaryinvestorprofile
             title = f'Parece que tienes un perfil de inversor'
             result = service_question.risk_profile
@@ -224,7 +230,7 @@ class RoboAdvisorUserServiceStepActivity(Model):
     step = ForeignKey(RoboAdvisorServiceStep, on_delete=SET_NULL, null=True)
     date_started = DateTimeField(null=True, blank=True)
     date_finished = DateTimeField(auto_now_add=True)
-    status = CharField(max_length=500, choices=SERVICE_STATUS, default=SERVICE_STATUS[2])
+    status = CharField(max_length=500, choices=SERVICE_STATUS, default='started')
 
     class Meta:
         verbose_name = 'RoboAdvisor Service Step Activity'

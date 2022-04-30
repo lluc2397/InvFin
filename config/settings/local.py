@@ -41,14 +41,6 @@ EMAIL_HOST_USER = None
 EMAIL_HOST_PASSWORD = None
 EMAIL_USE_TLS = False
 
-EMAIL_CONTACT = env("EMAIL_CONTACT")
-EMAIL_SUBJECT_PREFIX = env("EMAIL_SUBJECT_PREFIX")
-DEFAULT_EMAIL = env("DEFAULT_EMAIL")
-EMAIL_NEWSLETTER = env("EMAIL_NEWSLETTER")
-MAIN_EMAIL = env("MAIN_EMAIL")
-EMAIL_ACCOUNTS = env("EMAIL_ACCOUNTS")
-EMAIL_DEFAULT = env("EMAIL_DEFAULT") #To delete
-
 # WhiteNoise
 # ------------------------------------------------------------------------------
 # http://whitenoise.evans.io/en/latest/django.html#using-whitenoise-in-development

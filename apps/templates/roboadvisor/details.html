@@ -184,7 +184,7 @@
                 // Cookies.set('final', true)
                 SendData(step, url, stepID)
                 setTimeout(function(){ 
-                    return window.location.replace("{% url 'roboadvisor:result' service.slug %}?before_service_activity={{service_activity.id}}");
+                    return window.location.replace("{% url 'roboadvisor:result' service.slug %}?before_service_activity={{service_activity}}");
                 }, 6000);
             }
         }

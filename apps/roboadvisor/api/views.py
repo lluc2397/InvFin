@@ -57,7 +57,7 @@ class BaseRoboAdvisorAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin)
             user = user,
             step = RoboAdvisorServiceStep.objects.get(id = client_side_data['step']),
             date_started = client_side_data['date_started'],
-            status = 1,
+            status = "finished",
         )
 
         user_activity = {
@@ -87,8 +87,9 @@ class BaseRoboAdvisorAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin)
         
         # if 'final' in request.COOKIES and request.COOKIES['final'] == True:
         #     request.session.clear()
-
+        print(client_side_data)
         response = self.create(client_side_data)
+        print(response.data)
         return response
 
 
