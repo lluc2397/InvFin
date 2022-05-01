@@ -342,7 +342,7 @@ class RoboAdvisorQuestionPortfolioAssetsWeight(BaseRoboAdvisorQuestion):
 
 class RoboAdvisorQuestionCompanyAnalysis(BaseRoboAdvisorQuestionAsset):
     asset = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True)
-    result = CharField(max_length=500, null=True, blank=True, choices=RESULTS)
+    result = IntegerField(null=True, blank=True, choices=RESULTS)
     number_shares = None
     capital_invested = None
 

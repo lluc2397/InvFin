@@ -75,13 +75,11 @@ NUMBER_STOCKS = (
 )
 
 
-BUY, SELL, HOLD, ERROR = "buy", "sell", "hold", "error"
-
 RESULTS = (
-    ('Comprar', BUY), 
-    ('Vender', SELL), 
-    ('Mantener', HOLD), 
-    ('Mantener la', ERROR)
+    (1, 'Comprar'), 
+    (2, 'Vender'), 
+    (3, 'Mantener'), 
+    (4, 'Error')
 )
 
 

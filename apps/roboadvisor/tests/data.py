@@ -1,17 +1,17 @@
 COMPANY_ANALYSIS = {
-    'step': '5', 
-    'user': '1', 
-    'service_activity': '226', 
-    'date_started': '2022-05-01T13:22:06.323833+00:00', 
-    'stock': 'Alibaba Group Holding Limited (BABA)', 
-    'horizon_time': '0', 
-    'horizon_period': 'months', 
-    'comment': 'test', 
-    'sector_knowledge': 'pro', 
-    'asset_knowledge': 'pro', 
-    'sector_relationship': 'test', 
-    'amount_time_studied': '0', 
-    'period_time_studied': 'months'
+    "step": "5", 
+    "user": "1", 
+    "service_activity": "226", 
+    "date_started": "2022-05-01T13:22:06.323833+00:00", 
+    "stock": "Alibaba Group Holding Limited (BABA)", 
+    "horizon_time": "0", 
+    "horizon_period": "months", 
+    "comment": "test", 
+    "sector_knowledge": "pro", 
+    "asset_knowledge": "pro", 
+    "sector_relationship": "test", 
+    "amount_time_studied": "0", 
+    "period_time_studied": "months"
 }
 
 INVESTOR_EXPERIENCE = {

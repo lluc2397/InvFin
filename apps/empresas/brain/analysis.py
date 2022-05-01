@@ -8,11 +8,11 @@ def simple_stock_analysis(empresa):
     empresa_info = yf.Ticker(empresa.ticker)
     inf = empresa_info.info
 
-    result_buy = {'result': 'buy'}
+    result_buy = {'result': 1}
     
-    result_sell = {'result': 'sell'}
+    result_sell = {'result': 2}
 
-    result_hold = {'result': 'hold'}
+    result_hold = {'result': 3}
 
     if 'recommendationKey' in inf:
         recommendationKey = inf['recommendationKey']
@@ -45,5 +45,5 @@ def simple_stock_analysis(empresa):
                     elif per > 10 and per < 20:
                         result = result_hold
                 except:
-                    result = {'result': 'error'}
+                    result = {'result': 4}
     return result
