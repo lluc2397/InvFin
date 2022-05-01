@@ -10,7 +10,7 @@ class TitlesManager(Manager):
     @property
     def random_title(self):
         pass
-        # titles = [al_title for al_title in self.all()]
+        # titles = [title for title in self.all()]
         # return random.choice(titles)
 
 

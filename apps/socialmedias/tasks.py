@@ -1,5 +1,10 @@
 from config import celery_app
 
+from apps.escritos.models import Term
+from apps.preguntas_respuestas.models import Question
+from apps.public_blog.models import PublicBlog, WritterProfile
+from apps.empresas.models import Company
+
 from .poster import SocialPosting
 from .models import (
     CompanySharedHistorial,
@@ -12,25 +17,25 @@ from .models import (
 
 @celery_app.task()
 def socialmedia_share_company():
-    SocialPosting(CompanySharedHistorial).share_content()
+    SocialPosting(CompanySharedHistorial, Company).share_content()
 
 
 @celery_app.task()
 def socialmedia_share_news():
-    SocialPosting(NewsSharedHistorial).share_content()
+    SocialPosting(NewsSharedHistorial, Company).share_content()
 
 
 @celery_app.task()
 def socialmedia_share_term():
-    SocialPosting(TermSharedHistorial).share_content()
+    SocialPosting(TermSharedHistorial, Term).share_content()
 
 
 @celery_app.task()
 def socialmedia_share_blog():
-    SocialPosting(BlogSharedHistorial).share_content()
+    SocialPosting(BlogSharedHistorial, PublicBlog).share_content()
 
 
 @celery_app.task()
 def socialmedia_share_question():
-    SocialPosting(QuestionSharedHistorial).share_content(post_type=2)
+    SocialPosting(QuestionSharedHistorial, Question).share_content(post_type=2)
 

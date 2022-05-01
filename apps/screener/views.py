@@ -40,13 +40,14 @@ class CompanyScreenerInicioView(ListView):
     model = Company
     template_name = 'screener/empresas/inicio.html'
     context_object_name = "empresas"
+    paginate_by = 50
 
     def get_queryset(self, **kwargs):
        query = super().get_queryset(**kwargs)
        return query.filter(exchange__main_org__name = self.kwargs['name'],
             no_incs = False,
             no_bs = False,
-            no_cfs = False,)[:50]
+            no_cfs = False)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
