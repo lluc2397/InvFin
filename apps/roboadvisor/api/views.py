@@ -44,10 +44,12 @@ User = get_user_model()
 class BaseRoboAdvisorAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin):
     def create(self, data):
         serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+        if serializer.is_valid(raise_exception=True):
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST, headers=headers)
 
     def post(self, request, ses):
         client_side_data = request.data.dict()
@@ -87,9 +89,9 @@ class BaseRoboAdvisorAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin)
         
         # if 'final' in request.COOKIES and request.COOKIES['final'] == True:
         #     request.session.clear()
-        print(client_side_data)
+        # print(client_side_data)
         response = self.create(client_side_data)
-        print(response.data)
+        
         return response
 
 

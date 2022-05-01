@@ -81,7 +81,7 @@ RESULTS = (
     ('Comprar', BUY), 
     ('Vender', SELL), 
     ('Mantener', HOLD), 
-    ('Mantener', ERROR)
+    ('Mantener la', ERROR)
 )
 
 
