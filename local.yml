@@ -108,6 +108,37 @@ services:
     ports:
       - "5555:5555"
     command: /start-flower
+  
+  # nginx:
+  #   <<: *django
+  #   image: nginx:latest
+  #   build:
+  #     context: .
+  #     dockerfile: ./compose/local/nginx/Dockerfile
+  #   ports:
+  #     - 80:80
+  #   volumes:
+  #     - ./nginx/conf.d/:/etc/nginx/conf.d/
+  #     - static_files:./staticfiles
+  #     - media_files:./apps/media
+  #   networks:
+  #     - invfin_network
+
+  # dns:
+  #   <<: *django
+  #   build:
+  #     context: .
+  #     dockerfile: ./compose/local/dns/Dockerfile
+  #   restart: always
+  #   ports:
+  #     - 53:53
+  #     - 53:53/udp
+  #   volumes:
+  #     - ./dns/named.conf:/etc/bind/named.conf
+  #     - ./dns/zone/:/etc/bind/zone/
+  #   command: named -c /etc/bind/named.conf -g -u named
+  #   networks:
+  #     - invfin_network
 
 networks:
   invfin_network:
