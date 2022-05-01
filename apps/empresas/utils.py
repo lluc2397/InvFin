@@ -12,7 +12,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
 
     def add_logo(self):        
         try:
-            self.company.image = self.yho_company.info['logo_url']
+            self.company.image = self.yf_company.info['logo_url']
             self.company.has_logo = True
             self.company.save()
         except Exception as e:
