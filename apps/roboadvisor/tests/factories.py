@@ -6,7 +6,6 @@ from ..models import (
     RoboAdvisorService,
     TemporaryInvestorProfile,
     InvestorProfile,
-
     RoboAdvisorQuestionInvestorExperience,
     RoboAdvisorQuestionCompanyAnalysis,
     RoboAdvisorQuestionFinancialSituation,
@@ -14,7 +13,20 @@ from ..models import (
     RoboAdvisorQuestionPortfolioAssetsWeight,
     RoboAdvisorQuestionStocksPortfolio,
     RoboAdvisorQuestionPortfolioComposition,
-
     RoboAdvisorUserServiceActivity,
     RoboAdvisorUserServiceStepActivity
 )
+
+
+class RoboAdvisorServiceFactory(DjangoModelFactory):
+
+    class Meta:
+        model = RoboAdvisorService
+        django_get_or_create = ["id"]
+
+
+class RoboAdvisorServiceStepFactory(DjangoModelFactory):
+
+    class Meta:
+        model = RoboAdvisorServiceStep
+        django_get_or_create = ["id"]

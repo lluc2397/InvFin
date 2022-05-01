@@ -53,7 +53,7 @@ class BaseRoboAdvisorAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin)
 
     def post(self, request, ses):
         client_side_data = request.data.dict()
-
+        print(client_side_data)
         user = User.objects.get(id = client_side_data['user'])
         service_step = RoboAdvisorUserServiceStepActivity.objects.create(
             user = user,

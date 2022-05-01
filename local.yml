@@ -3,6 +3,8 @@ version: '3'
 volumes:
   invfin_local_postgres_data: {}
   invfin_local_postgres_data_backups: {}
+  invfin_local_static_files : {}
+  invfin_local_media_files : {}
 
 services:
   django: &django
@@ -109,29 +111,28 @@ services:
       - "5555:5555"
     command: /start-flower
   
-  # nginx:
-  #   <<: *django
-  #   image: nginx:latest
-  #   build:
-  #     context: .
-  #     dockerfile: ./compose/local/nginx/Dockerfile
-  #   ports:
-  #     - 80:80
-  #   volumes:
-  #     - ./nginx/conf.d/:/etc/nginx/conf.d/
-  #     - static_files:./staticfiles
-  #     - media_files:./apps/media
-  #   networks:
-  #     - invfin_network
+  nginx:
+    image: nginx:latest
+    container_name: invfin_local_nginx
+    build:
+      context: .
+      dockerfile: ./compose/local/nginx/Dockerfile
+    ports:
+      - "80:8000"
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - invfin_local_static_files:/staticfiles/
+      - invfin_local_media_files:/apps/media/
+    networks:
+      - invfin_network
 
   # dns:
-  #   <<: *django
+  #   container_name: invfin_local_dns
   #   build:
   #     context: .
   #     dockerfile: ./compose/local/dns/Dockerfile
   #   restart: always
   #   ports:
-  #     - 53:53
   #     - 53:53/udp
   #   volumes:
   #     - ./dns/named.conf:/etc/bind/named.conf

@@ -16,7 +16,10 @@ from ..api.views import (
 
 from ..views import RoboAdvisorResultView
 
-from .factories import 
+from .factories import (
+    RoboAdvisorServiceFactory,
+    RoboAdvisorServiceStepFactory
+)
 
 class InvoicesAllAPITest(APITestCase):
     def setUp(self):

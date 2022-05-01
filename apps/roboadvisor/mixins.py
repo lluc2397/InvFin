@@ -18,10 +18,10 @@ class ServicePaymentMixin:
 
         return RoboAdvisorUserServiceActivity.objects.get(id = service_activity_id), moment
 
-        # elif service_activity.status == 'abandoned':# Abandoned
+        # elif service_activity.status == 'abandoned':
         #     return self.service_payment(service_activity)
 
-        # elif service_activity.status == 'started':# Started
+        # elif service_activity.status == 'started':
         #     return self.service_payment(service_activity)
 
     def manage_service_activity(self, service_activity, status):
@@ -29,7 +29,6 @@ class ServicePaymentMixin:
         service_activity.date_finished = datetime.datetime.now()
         service_activity.status = status
         service_activity.save(update_fields = ['date_finished', 'status'])
-        return service_activity.service_result
 
     def service_payment(self, user, service_activity):
         service = self.get_object()
@@ -37,7 +36,8 @@ class ServicePaymentMixin:
 
         if user_credits >= service.price:
             user.update_credits(-service.price)
-            return self.manage_service_activity(service_activity, 'finished'), True
+            self.manage_service_activity(service_activity, 'finished')
+            return service_activity.service_result, True
         else:
             self.manage_service_activity(service_activity, 'not-payed')
             difference = service.price - user_credits			
