@@ -111,20 +111,20 @@ services:
       - "5555:5555"
     command: /start-flower
   
-  nginx:
-    image: nginx:latest
-    container_name: invfin_local_nginx
-    build:
-      context: .
-      dockerfile: ./compose/local/nginx/Dockerfile
-    ports:
-      - "80:8000"
-    volumes:
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
-      - invfin_local_static_files:/staticfiles/
-      - invfin_local_media_files:/apps/media/
-    networks:
-      - invfin_network
+  # nginx:
+  #   image: nginx:latest
+  #   container_name: invfin_local_nginx
+  #   build:
+  #     context: .
+  #     dockerfile: ./compose/local/nginx/Dockerfile
+  #   ports:
+  #     - "8000:80"
+  #   volumes:
+  #     - ./nginx/conf.d/:/etc/nginx/conf.d/
+  #     - invfin_local_static_files:/staticfiles/
+  #     - invfin_local_media_files:/apps/media/
+  #   networks:
+  #     - invfin_network
 
   # dns:
   #   container_name: invfin_local_dns

@@ -17,10 +17,88 @@ import datetime
 from .models import (
     Income,
     Spend,
-    PositionMovement
+    PositionMovement,
+    CashflowMovementCategory,
+    FinancialObjectif,
+    Asset
 )
 
 from apps.general.models import Currency
+
+
+
+# class AddAssetForm(ModelForm):
+
+#     class Meta:
+#         model = Asset
+#         fields = [
+#             'name',
+#             'date_to_achieve',
+#             'observation',
+#             'percentage',
+#             'amount',
+#         ]
+    
+#     def save(self, request):
+#         model = super().save()
+#         model.user = request.user
+#         model.save()
+#         request.user.user_patrimoine.objectives.add(model)
+#         request.user.user_patrimoine.save()
+#         return model
+
+class FinancialObjectifForm(ModelForm):
+
+    class Meta:
+        model = FinancialObjectif
+        fields = [
+            'name',
+            'date_to_achieve',
+            'observation',
+            'percentage',
+            'amount',
+        ]
+    
+    def save(self, request):
+        model = super().save()
+        model.user = request.user
+        model.save()
+        request.user.user_patrimoine.requirements.add(model)
+        request.user.user_patrimoine.save()
+        return model
+
+
+class DefaultCurrencyForm(Form):
+    currency = ChoiceField(label='Divisa', choices=[(currency.id, currency.currency) for currency in Currency.objects.all()])
+
+    def save_currency(self, user):
+        currency = Currency.objects.get(id = self.cleaned_data['currency'])
+        user.user_patrimoine.default_currency = currency
+        user.user_patrimoine.save()
+
+
+class AddCategoriesForm(ModelForm):
+    name = CharField(label='Nombre')
+
+    class Meta:
+        model = CashflowMovementCategory
+        fields = ['name']
+    
+    def save(self, request):
+        model = super().save()
+        model.user = request.user
+        model.save()
+        return model
+
+
+class DefaultCurrencyForm(Form):
+    currency = ChoiceField(label='Divisa', choices=[(currency.id, currency.currency) for currency in Currency.objects.all()])
+
+    def save_currency(self, user):
+        currency = Currency.objects.get(id = self.cleaned_data['currency'])
+        user.user_patrimoine.default_currency = currency
+        user.user_patrimoine.save()
+
 
 class CashflowMoveForm(Form):
     move_type = ChoiceField(choices=[(0, 'Ingreso'), (1, 'Gasto')], label='Moviemiento')

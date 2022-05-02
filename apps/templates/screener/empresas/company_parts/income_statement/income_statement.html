@@ -12,9 +12,38 @@
               </div>
         </div>
     </div>
-  </div>
-  
-  <div class="col-12">
+</div>
+
+<div class="col-lg-6 mb-3">
+    <div class="card">
+        <div class="text-center">
+            <div class="spinner-border" id="rev-incomeLoader" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <div class="card-body">
+              <div class="chart-canvas">
+                  <canvas id="rev-incomeChart"></canvas>
+              </div>
+        </div>
+    </div>
+</div>
+<!-- <div class="col-lg-6 mb-3">
+    <div class="card">
+        <div class="text-center">
+            <div class="spinner-border" id="incomeChartLoader" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <div class="card-body">
+              <div class="chart-canvas">
+                  <canvas id="incomeChartID"></canvas>
+              </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="col-12">
     <div class="card">
         <div class="card-body">
             <div class="card-header">Estado de resultados</div>
@@ -27,9 +56,9 @@
             </div>
         </div>
     </div>
-  </div>
-  
-  <script>
+</div>
+
+<script>
     var incomeTable = document.getElementById('incomeTableID');
     var incomeLoader = document.getElementById('incomeLoader');
   
@@ -41,4 +70,14 @@
     var income = {{the_company.comparing_income_json|safe}};
   
     createContent(income, incomeTable, incomeLoader, chartTitle, incomeChartID, incomeChartLoader)
+    createSoloChart(
+        income.revenueVSnetIncome, 
+        'Ingresos vs ', 
+        $('#rev-incomeChart')[0], 
+        $('#rev-incomeLoader')[0], 
+        'bar',
+        false,
+        true,
+        true
+    )
   </script>

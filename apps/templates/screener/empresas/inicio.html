@@ -5,20 +5,8 @@
 {% block FirstCta %}{% include "screener/cta/empresa_inicio.html" %}{% endblock FirstCta %}
 
 {% block FirstContent %}
-<script src="https://unpkg.com/htmx.org@1.7.0" 
-    integrity="sha384-EzBXYPt0/T6gxNp0nuPtLkmRpmDBbjg6WmCUZRLXBBwYYmwAUxzlSGej0ARHX0Bo" 
-    crossorigin="anonymous" defer></script>
 {% for empresa in empresas %}
-{% if forloop.last %}
-<div class="col-lg-4 col-md-6 col-sm-12" 
-   hx-get="{% url 'film-list' %}?page={{ page_obj.number|add:1 }}" 
-   hx-trigger="revealed" 
-   hx-swap="afterend" 
-   hx-target="this">
-
-{% else %} 
 <div class="col-lg-4 col-md-6 col-sm-12">
-{% endif %}
     <div class="card">
         <!-- Card body -->
         <div class="card-body">

@@ -11,11 +11,17 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 
+from apps.general.models import Currency
+
 from .models import (
 	Patrimonio
 )
-
-from .forms import CashflowMoveForm
+from .forms import (
+    CashflowMoveForm,
+    DefaultCurrencyForm,
+    AddCategoriesForm,
+    FinancialObjectifForm
+)
 
 User = get_user_model()
 
@@ -27,7 +33,26 @@ class InicioCarteraView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context["patrimonio"] = Patrimonio.objects.get_or_create(user = self.request.user)[0]
         context["cashflowform"] = CashflowMoveForm()
+        context["defcurrencyform"] = DefaultCurrencyForm()
+
+        context["asset_movement_form"] = DefaultCurrencyForm()
+        context["new_asset_form"] = DefaultCurrencyForm()
+        
+        context["add_categories_form"] = AddCategoriesForm()
+        context["add_financial_objective_form"] = FinancialObjectifForm()
+        context["meta_title"] = 'Tu gestor patrimonial'
         return context
+
+
+@login_required(login_url='login')
+def save_default_currency(request):
+    if request.POST:
+        form = CashflowMoveForm(request.POST)
+        if form.is_valid():
+            form.save_currency(request.user)
+        messages.success(request, f'Guardado correctamente')            
+        return redirect(request.META.get('HTTP_REFERER'))
+        
 
 @login_required(login_url='login')
 def save_cashflow_movement(request):
@@ -35,7 +60,27 @@ def save_cashflow_movement(request):
         form = CashflowMoveForm(request.POST)
         if form.is_valid():
             form.create_cashflow(request.user)
-        messages.success(request, f'Guardado correctamente')            
+        messages.success(request, f'Guardado correctamente')
+        return redirect(request.META.get('HTTP_REFERER')) 
+
+
+@login_required(login_url='login')
+def save_asset_movement(request):
+    if request.POST:
+        form = CashflowMoveForm(request.POST)
+        if form.is_valid():
+            form.create_cashflow(request.user)
+        messages.success(request, f'Guardado correctamente')
+        return redirect(request.META.get('HTTP_REFERER')) 
+
+
+@login_required(login_url='login')
+def save_new_asset_movement(request):
+    if request.POST:
+        form = CashflowMoveForm(request.POST)
+        if form.is_valid():
+            form.create_cashflow(request.user)
+        messages.success(request, f'Guardado correctamente')
         return redirect(request.META.get('HTTP_REFERER')) 
 
 

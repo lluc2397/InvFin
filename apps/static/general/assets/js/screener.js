@@ -68,54 +68,53 @@ function colorize() {
 
 function generateChart(chartDatasets, chartTitle, chartID, chartLoaderID){
 
-    let datasets = chartDatasets['fields']
-    datasets.forEach((data, index) => {
-        if (index > 0){
-            let pastOrder = datasets[index - 1].order;
-            data['order'] = pastOrder + 1;
-        }
-        data['backgroundColor'] = colorize()
-        data['borderColor'] = colorize();
-    });
-    
-    let info = {
-        labels: chartDatasets.labels,
-        datasets: datasets
-        };
+  let datasets = chartDatasets['fields']
+  datasets.forEach((data, index) => {
+    if (index > 0){
+        let pastOrder = datasets[index - 1].order;
+        data['order'] = pastOrder + 1;
+    }
+    data['backgroundColor'] = colorize()
+    data['borderColor'] = colorize();
+  });
+  
+  let info = {
+    labels: chartDatasets.labels,
+    datasets: datasets
+  };
         
-        chartLoaderID.remove();
+  chartLoaderID.remove();
 
-        new Chart(chartID, {
-            
-        data: info,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                position: 'top',
-              },
-              title: {
-                display: true,
-                text: chartTitle
-              },
-              zoom: {
-                  pan:{
-                    enabled:false
-                  },
-                  zoom: {
-                    wheel: {
-                      enabled: true,
-                    },
-                    pinch: {
-                      enabled: true
-                    },
-                    mode: 'x',
-                  }
-              }
-            }
-          },      
-        });
+  new Chart(chartID, {
+    data: info,
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: chartTitle
+        },
+        zoom: {
+          pan:{
+            enabled:false
+          },
+          zoom: {
+            wheel: {
+              enabled: true,
+            },
+            pinch: {
+              enabled: true
+            },
+            mode: 'x',
+          }
+        }
+        }
+      },      
+  });
 }
 
 function displayTable(tableDatasets, tableID, loaderID){
@@ -239,5 +238,66 @@ function createGauge(chartID, minValue, medValue, maxValue, needleValue){
         animateScale: true
       }
     }
+  });
+}
+
+function createSoloChart(
+  chartDatasets, 
+  chartTitle, 
+  chartID, 
+  chartLoaderID, 
+  chartType,
+  usePan,
+  useWheel,
+  usePinch
+  ){
+
+  let datasets = chartDatasets['fields']
+  datasets.forEach((data, index) => {
+    if (index > 0){
+        let pastOrder = datasets[index - 1].order;
+        data['order'] = pastOrder + 1;
+    }
+    data['backgroundColor'] = colorize()
+    data['borderColor'] = colorize();
+  });
+  
+  let info = {
+    labels: chartDatasets.labels,
+    datasets: datasets
+  };
+        
+  chartLoaderID.remove();
+
+  new Chart(chartID, {
+    data: info,
+    type: chartType,
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: chartTitle
+        },
+        zoom: {
+          pan:{
+            enabled:usePan
+          },
+          zoom: {
+            wheel: {
+              enabled:useWheel,
+            },
+            pinch: {
+              enabled:usePinch
+            },
+            mode: 'x',
+          }
+        }
+        }
+      },      
   });
 }

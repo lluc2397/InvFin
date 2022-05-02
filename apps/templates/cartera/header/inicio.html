@@ -1,13 +1,19 @@
 {% load static %}
 <div class="row align-items-center py-4">
-  <div class="col-lg-6 col-7">
-    <h6 class="h2 d-inline-block mb-0 mr-5">Patrimonio</h6>
-    <button data-bs-toggle="modal" data-bs-target="#CashflowMovementModal" class="btn btn-sm btn-neutral">Modificar cashflow</button>
-    {% comment %} <button data-bs-toggle="modal" data-bs-target="#" class="btn btn-sm btn-neutral">Añadir activo</button> 
-    <button data-bs-toggle="modal" data-bs-target="#" class="btn btn-sm btn-neutral">Modificar cartera</button> {% endcomment %}
-  </div>
+   <div class="col-lg-6 col-7">
+      <h6 class="h2 d-inline-block mb-0 mr-5">Patrimonio</h6>
+      <div class="btn-group btn-neutral" role="group" aria-label="Basic example">
+         <button data-bs-toggle="modal" data-bs-target="#ObjectivesModal" class="btn btn-sm btn-slack">Objetivos</button>
+         <button data-bs-toggle="modal" data-bs-target="#CategoriesModal" class="btn btn-sm btn-neutral">Categorías</button>
+         <button data-bs-toggle="modal" data-bs-target="#DefaultCurrencyModal" class="btn btn-sm btn-slack">Divisa</button>
+      </div>
+   </div>
   <div class="col-lg-6 col-5 text-right">
-    {% comment %} <a href="{% url 'preguntas_respuestas:create_question' %}" class="btn btn-md btn-slack">Preguntar</a> {% endcomment %}
+   <div class="btn-group btn-neutral" role="group" aria-label="Basic example">
+      <button data-bs-toggle="modal" data-bs-target="#CashflowMovementModal" class="btn btn-sm btn-info">Cashflow</button>
+      <button data-bs-toggle="modal" data-bs-target="#AssetsMovementsModal" class="btn btn-sm btn-neutral">Cartera</button>
+      <button data-bs-toggle="modal" data-bs-target="#NewAssetModal" class="btn btn-sm btn-info">Activos</button>
+   </div>
   </div>
 </div>
 <!-- Card stats -->

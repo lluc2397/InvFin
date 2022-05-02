@@ -10,7 +10,7 @@ from django.db.models import (
     PositiveIntegerField,
     IntegerField,
     ManyToManyField,
-    FloatField,
+    JSONField,
     DateField,
     DecimalField
 )
@@ -82,7 +82,21 @@ class PositionMovement(Model):
         if self.move_type == 2:
             total = total * (-1)
         return total
+
+
+class CashflowMovementCategory(Model):
+    user = ForeignKey(User,  on_delete=SET_NULL, null=True, blank=True)
+    name = CharField("Nombre",max_length=1000)
+    date_created = DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Cashflow category"
+        verbose_name_plural = "Cashflow categories"
+        db_table = "cartera_cashflow_category"
     
+    def __str__(self):
+        return self.name
+
 
 class CashflowMovement(Model):
     user = ForeignKey(User,  on_delete=SET_NULL, null=True, blank=True)
@@ -92,6 +106,7 @@ class CashflowMovement(Model):
     date = DateField("Fecha del movimiento", null=True, blank=True)
     currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)
     is_recurrent = BooleanField(default=False)
+    category = ForeignKey(CashflowMovementCategory,  on_delete=SET_NULL, null=True, blank=True)
 
     class Meta:
         abstract = True      
@@ -117,7 +132,7 @@ class Spend(CashflowMovement):
 
 class FinancialObjectif(Model):
     user = ForeignKey(User, on_delete=SET_NULL, null=True, blank=True)
-    name = CharField(max_length=50000)
+    name = CharField("Nombre",max_length=1000)
     date_created = DateTimeField(auto_now_add=True)
     date_to_achieve = DateTimeField(null=True, blank=True)
     date_achived = DateTimeField(null=True, blank=True)
@@ -126,6 +141,11 @@ class FinancialObjectif(Model):
     abandoned = BooleanField(default=False)
     percentage = DecimalField ("Porcentaje", max_digits=100, decimal_places=2, default=0)
     amount = DecimalField ("Monto", max_digits=100, decimal_places=2, default=0)
+    is_rule = BooleanField(default=False)
+    rule_ends = BooleanField(default=False)
+    requirement = JSONField(default=dict)
+    start_date = DateTimeField(null=True, blank=True)
+    end_date = DateTimeField(null=True, blank=True)
 
     class Meta:        
         ordering = ['date_created']
@@ -135,7 +155,7 @@ class FinancialObjectif(Model):
 
 
 class Patrimonio(Model):
-    user = OneToOneField(User, on_delete=SET_NULL, null=True, blank=True)
+    user = OneToOneField(User, on_delete=SET_NULL, null=True, blank=True, related_name='user_patrimoine')
     assets = ManyToManyField(Asset, blank=True)
     objectives = ManyToManyField(FinancialObjectif, blank=True)
     default_currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)
@@ -147,7 +167,13 @@ class Patrimonio(Model):
 
     def __str__(self):
         return self.user.username
-    
+
+    @property
+    def has_default_currency(self):
+        result = True
+        if not self.default_currency:
+            result = False
+        return result
 
     @property
     def patrimoine(self):
