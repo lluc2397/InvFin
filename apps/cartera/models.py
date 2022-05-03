@@ -131,7 +131,10 @@ class Spend(CashflowMovement):
 
 
 class FinancialObjectif(Model):
-    user = ForeignKey(User, on_delete=SET_NULL, null=True, blank=True)
+    user = ForeignKey(User, 
+        on_delete=SET_NULL, 
+        null=True, blank=True
+    )
     name = CharField("Nombre",max_length=1000)
     date_created = DateTimeField(auto_now_add=True)
     date_to_achieve = DateTimeField(null=True, blank=True)
@@ -139,8 +142,14 @@ class FinancialObjectif(Model):
     observation = TextField("Observaciones", default='')
     accomplished = BooleanField(default=False)
     abandoned = BooleanField(default=False)
-    percentage = DecimalField ("Porcentaje", max_digits=100, decimal_places=2, default=0)
-    amount = DecimalField ("Monto", max_digits=100, decimal_places=2, default=0)
+    percentage = DecimalField ("Porcentaje", 
+        max_digits=100, decimal_places=2, 
+        default=0
+    )
+    amount = DecimalField ("Monto", 
+        max_digits=100, decimal_places=2, 
+        default=0
+    )
     is_rule = BooleanField(default=False)
     rule_ends = BooleanField(default=False)
     requirement = JSONField(default=dict)
@@ -155,10 +164,18 @@ class FinancialObjectif(Model):
 
 
 class Patrimonio(Model):
-    user = OneToOneField(User, on_delete=SET_NULL, null=True, blank=True, related_name='user_patrimoine')
+    user = OneToOneField(User, 
+        on_delete=SET_NULL, 
+        null=True, blank=True, 
+        related_name='user_patrimoine'
+    )
     assets = ManyToManyField(Asset, blank=True)
     objectives = ManyToManyField(FinancialObjectif, blank=True)
-    default_currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)
+    default_currency = ForeignKey(Currency, 
+        on_delete=SET_NULL, 
+        null=True, blank=True, 
+        default=Currency.objects.get(currency='USD')
+    )
 
     class Meta:        
         verbose_name = "Patrimonio"
@@ -167,13 +184,6 @@ class Patrimonio(Model):
 
     def __str__(self):
         return self.user.username
-
-    @property
-    def has_default_currency(self):
-        result = True
-        if not self.default_currency:
-            result = False
-        return result
 
     @property
     def patrimoine(self):
