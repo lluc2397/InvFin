@@ -31,11 +31,12 @@ from apps.general.models import Currency
 class BaseAssetMoveForm(Form):
     price = DecimalField(label='Precio unitario')
     date = DateField(label='Fecha', initial=datetime.date.today,
-    widget = DateInput(attrs={'id':'datepicker'}))
+    widget = DateInput(attrs={'class':'datepicker'}))
     quantity = IntegerField(label='Cantidad')
     currency = ModelChoiceField(label='Divisa', queryset=Currency.objects.all())
     observacion = CharField(widget=Textarea, required=False, label='Descripción')
     fee = DecimalField(label='Tarifa')
+
 
 class AddNewAssetForm(BaseAssetMoveForm):    
     def save(self, request, company):
@@ -73,7 +74,7 @@ class PositionMovementForm(ModelForm, BaseAssetMoveForm):
 
 class FinancialObjectifForm(ModelForm):
     date_to_achieve = DateField(label='Fecha', initial=datetime.date.today,
-    widget = DateInput(attrs={'id':'datepicker'}))
+    widget = DateInput(attrs={'class':'datepicker'}))
 
     class Meta:
         model = FinancialObjectif
@@ -111,9 +112,9 @@ class AddCategoriesForm(ModelForm):
 class DefaultCurrencyForm(Form):
     currency = ModelChoiceField(label='Divisa', queryset=Currency.objects.all())
 
-    def save(self, user):
-        user.user_patrimoine.default_currency = self.cleaned_data['currency']
-        user.user_patrimoine.save()
+    def save(self, request):
+        request.user.user_patrimoine.default_currency = self.cleaned_data['currency']
+        request.user.user_patrimoine.save()
 
 
 class CashflowMoveForm(Form):
@@ -122,7 +123,7 @@ class CashflowMoveForm(Form):
     amount = DecimalField(label='Cantidad')
     description = CharField(widget=Textarea, required=False, label='Descripción')
     date = DateField(label='Fecha', initial=datetime.date.today,
-    widget = DateInput(attrs={'id':'datepicker'}))
+    widget = DateInput(attrs={'class':'datepicker'}))
     currency = ModelChoiceField(label='Divisa', queryset=Currency.objects.all())
     is_recurrent = BooleanField(label='¿Es recurrente?', required=False)
 

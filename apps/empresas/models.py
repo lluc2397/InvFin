@@ -23,6 +23,7 @@ from apps.general.models import (
     Sector
 )
 
+from .managers import CompanyManager
 from .company_extension import CompanyExtended
 
 
@@ -97,6 +98,7 @@ class Company(CompanyExtended):
     updated = BooleanField(default=False)
     last_update = DateTimeField(null=True, blank=True)
     date_updated = BooleanField(default=False)
+    objects = CompanyManager()
 
     class Meta:        
         verbose_name = "Company"

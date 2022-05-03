@@ -17,6 +17,7 @@ from .models import (
 
 @celery_app.task()
 def socialmedia_share_company():
+    
     SocialPosting(CompanySharedHistorial, Company).share_content()
 
 

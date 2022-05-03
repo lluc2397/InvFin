@@ -32,7 +32,7 @@ class InicioCarteraView(LoginRequiredMixin, TemplateView):
         if self.request.user.is_authenticated:
             initial['currency'] = self.request.user.user_patrimoine.default_currency
         context["cashflowform"] = CashflowMoveForm(initial=initial)
-        context["defcurrencyform"] = DefaultCurrencyForm()
+        context["defcurrencyform"] = DefaultCurrencyForm(initial=initial)
 
         context["asset_movement_form"] = PositionMovementForm(initial=initial, user=self.request.user)
         context["new_asset_form"] = AddNewAssetForm(initial=initial)

@@ -85,7 +85,6 @@ class PositionMovement(Model):
 
 
 class CashflowMovementCategory(Model):
-    user = ForeignKey(User,  on_delete=SET_NULL, null=True, blank=True)
     name = CharField("Nombre",max_length=1000)
     date_created = DateTimeField(auto_now_add=True)
 
@@ -174,7 +173,7 @@ class Patrimonio(Model):
     default_currency = ForeignKey(Currency, 
         on_delete=SET_NULL, 
         null=True, blank=True, 
-        default=Currency.objects.get(currency='USD')
+        default='USD'
     )
 
     class Meta:        

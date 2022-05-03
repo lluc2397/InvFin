@@ -3,7 +3,7 @@ import random
 import uuid
 import logging
 
-from django.db.models import Manager 
+from django.db.models import Manager
 
 
 class TitlesManager(Manager):

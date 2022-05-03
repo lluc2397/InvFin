@@ -19,6 +19,7 @@
             </div>
             {% endfor %}
         {% endif %}
+        {% block ForWith %}
         {% block TopHeader %}
         <div class="header pb-6">
             <div class="container-fluid">
@@ -33,5 +34,6 @@
             {% block content %}{% endblock content %}
             </div>
         {% endblock MainContent %}
+        {% endblock ForWith %}
     </div>
 {% endblock body%}

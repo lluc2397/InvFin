@@ -1,0 +1,33 @@
+{% extends "general/bases/main_base.html" %}
+{% load static %}
+
+{% block ForWith %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js" 
+integrity="sha512-UXumZrZNiOwnTcZSHLOfcTs0aos2MzBWHXOHOuB0J/R44QB0dwY5JgfbvljXcklVf65Gc4El6RjZ+lnwd2az2g==" 
+crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/1.2.0/chartjs-plugin-zoom.min.js" 
+integrity="sha512-TT0wAMqqtjXVzpc48sI0G84rBP+oTkBZPgeRYIOVRGUdwJsyS3WPipsNh///ay2LJ+onCM23tipnz6EvEy2/UA==" 
+crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="{% static 'general/assets/js/screener.js' %}"></script>
+{% with money=patrimonio.patrimoine %}
+    {% block TopHeader %}
+    <div class="header pb-6">
+        <div class="container-fluid">
+            <div class="header-body">
+            {% block header %}{% endblock header%}
+            </div>
+        </div>
+    </div>
+    {% endblock TopHeader %}
+    {% block MainContent %}
+        <div class="container-fluid mt--6">
+        {% block content %}{% endblock content %}
+        </div>
+    {% endblock MainContent %}
+    {% endwith %}
+    {% include "cartera/modals/main_modals.html" %}
+{% endblock ForWith %}
