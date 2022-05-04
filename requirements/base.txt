@@ -29,6 +29,8 @@ django-widget-tweaks
 django==3.2.12  # pyup: < 4.0  # https://www.djangoproject.com/
 django-environ==0.8.1  # https://github.com/joke2k/django-environ
 
+gunicorn==20.1.0  # https://github.com/benoitc/gunicorn
+
 django-allauth==0.48.0  # https://github.com/pennersr/django-allauth
 django-crispy-forms==1.14.0  # https://github.com/django-crispy-forms/django-crispy-forms
 crispy-bootstrap5==0.6  # https://github.com/django-crispy-forms/crispy-bootstrap5

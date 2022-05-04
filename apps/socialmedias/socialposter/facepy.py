@@ -150,8 +150,8 @@ class Facebook():
 
     def post_on_facebook(
         self,
-        caption:str=None, 
         title:str=None,
+        caption:str=None,
         num_emojis:int=1,
         post_type:int=3,
         link:str=None

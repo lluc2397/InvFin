@@ -9,3 +9,5 @@ $TTL 86400
 @       IN      NS      example.com.
 @       IN      A       127.0.0.1
 www     IN      A       127.0.0.1
+lucas   IN      A       127.0.0.1
+neri    IN      A       127.0.0.1

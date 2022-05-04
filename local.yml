@@ -20,11 +20,14 @@ services:
       - mailhog
     volumes:
       - .:/app:z
+      - invfin_local_static_files:/app/staticfiles/
+      - invfin_local_media_files:/app/apps/media/
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
     ports:
-      - "8000:8000"
+      # - "8000:8000"
+      - "8000"
     command: /start
     networks:
       - invfin_network
@@ -111,20 +114,20 @@ services:
       - "5555:5555"
     command: /start-flower
   
-  # nginx:
-  #   image: nginx:latest
-  #   container_name: invfin_local_nginx
-  #   build:
-  #     context: .
-  #     dockerfile: ./compose/local/nginx/Dockerfile
-  #   ports:
-  #     - "8000:80"
-  #   volumes:
-  #     - ./nginx/conf.d/:/etc/nginx/conf.d/
-  #     - invfin_local_static_files:/staticfiles/
-  #     - invfin_local_media_files:/apps/media/
-  #   networks:
-  #     - invfin_network
+  nginx:
+    container_name: invfin_local_nginx
+    build:
+      context: .
+      dockerfile: ./compose/local/nginx/Dockerfile
+    ports:
+      # - "8000:80"
+      - "80:80"
+    volumes:
+      - ./compose/local/nginx/conf.d/:/etc/nginx/conf.d/
+      - invfin_local_static_files:/home/app/staticfiles/
+      - invfin_local_media_files:/home/app/media/
+    networks:
+      - invfin_network
 
   # dns:
   #   container_name: invfin_local_dns
@@ -133,10 +136,11 @@ services:
   #     dockerfile: ./compose/local/dns/Dockerfile
   #   restart: always
   #   ports:
+  #     - 53:53
   #     - 53:53/udp
   #   volumes:
-  #     - ./dns/named.conf:/etc/bind/named.conf
-  #     - ./dns/zone/:/etc/bind/zone/
+  #     - ./compose/local/dns/named.conf:/etc/bind/named.conf
+  #     - ./compose/local/dns/zone/:/etc/bind/zone/
   #   command: named -c /etc/bind/named.conf -g -u named
   #   networks:
   #     - invfin_network

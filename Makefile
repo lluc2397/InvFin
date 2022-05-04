@@ -13,18 +13,18 @@ up-all:
 	sensible-browser 0.0.0.0:5555 &
 	docker-compose -f local.yml up $(ar)
 
-up-d:
-	docker-compose -f local.yml up django
-
 up:
 	docker-compose -f local.yml up $(ar)
 
 stop:
 	docker-compose -f local.yml stop
 
-# Django
 shell:
-	docker-compose -f local.yml exec django /bin/sh
+	docker-compose -f local.yml exec -it $(ar) bash
+
+# Django
+up-d:
+	docker-compose -f local.yml up django
 
 dbshell:
 	docker-compose -f local.yml run --rm django python -u manage.py dbshell --settings=config.settings.local

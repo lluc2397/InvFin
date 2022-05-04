@@ -1,12 +1,7 @@
-{% extends "cartera/shared.html" %}
+{% extends "cartera/cartera_base.html" %}
 {% load static %}
 {% load extra %}
-{% block header %}
-{% include "cartera/header/private.html" %}
-{% endblock header%}
 
-{% block content %}
-<div class="row">
     {% block FirstCta %}
     <div class="col-12">
         {% block FirstCtaContent %}
@@ -15,10 +10,9 @@
     {% endblock FirstCta %}
 
     {% block FirstContent %}
-    <div class="col-lg-7 col-sm-12">
+    <div class="col-lg-6 col-sm-12">
         <div class="card">
             <div class="card-header">
-                <!-- Title -->
                 <h5 class="h3 mb-0">Patrimonio</h5>
              </div>
           <div class="card-body">
@@ -26,6 +20,23 @@
                 <canvas id="Ingresos"></canvas>
             </div>            
           </div>                                                
+        </div>
+    </div>
+    <div class="col-lg-6 mb-3">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="h3 mb-0">Patrimonio</h5>
+             </div>
+            <div class="text-center">
+                <div class="spinner-border" id="rev-incomeLoader" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div class="card-body">
+                  <div class="chart-canvas">
+                      <canvas id="rev-incomeChart"></canvas>
+                  </div>
+            </div>
         </div>
     </div>
     <div class="col-lg-5 col-sm-12">
@@ -84,8 +95,19 @@
     {% block LastCta %}
     {% endblock LastCta %}
 </div>
-
+{% block jsCharts %}
 <script>
+    createSoloChart(
+        income.revenueVSnetIncome, 
+        'Ingresos vs ', 
+        $('#rev-incomeChart')[0], 
+        $('#rev-incomeLoader')[0], 
+        'bar',
+        false,
+        true,
+        true
+    )
+    
     var ctx = document.getElementById('Ingresos').getContext('2d');
     var Ingresos = new Chart(ctx, {
         type: 'bar',
@@ -129,5 +151,4 @@
         }
     });
 </script>
-
-{% endblock content %}
+{% endblock jsCharts %}

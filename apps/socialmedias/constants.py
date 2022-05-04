@@ -9,6 +9,14 @@ SOCIAL_MEDIAS = (
     ('instagram', 'Instagram')
 )
 
+FOR_MODEL = (
+    (1, 'Question'),
+    (2, 'News'),
+    (3, 'Term'),
+    (4, 'Blog'),
+    (5, 'Company')
+)
+
 POST_TYPE = (
     (1, 'Video'), 
     (2, 'Image'), 
@@ -19,22 +27,96 @@ POST_TYPE = (
     (7, 'Shorts'))
 
 
-IG_HASHTAGS = """
- #valueinvestor #valueinvesting #invertirenvenezuela #invertirencolombia #invertirenespaña #invertirmejor® 
- #ingresospasivos #inversionista #inversionesinteligente #bolsas #inversión 
-"""
+IG_HASHTAGS = ["valueinvestor", "valueinvesting", "invertirenvenezuela", "invertirencolombia", "invertirenespaña", "invertirmejor®", 
+ "ingresospasivos", "inversionista", "inversionesinteligente", "bolsas", "inversión"]
 
-FB_HASHTAGS = """
- #valueinvesting #InvertirMejorQueAhorrar #invertientufuturo #inversionchallenge #inversionista #inversionesinteligentes 
- #bolsa #invertirenbolsa #invertirmejor 
- #inversiones #invertir #bolsadevalores #invertirbien #inversion #invertironline 
-"""
+FB_HASHTAGS = ["valueinvesting", "InvertirMejorQueAhorrar", "invertientufuturo", "inversionchallenge", "inversionista", "inversionesinteligentes", 
+ "bolsa", "invertirenbolsa", "invertirmejor", 
+ "inversiones", "invertir", "bolsadevalores", "invertirbien", "inversion", "invertironline"]
 
-
-ICONS = """😀 😃 😄 😁 😆 😅 😂 🤣 🥲 ☺️ 😊 😇 🙂 🙃 😉 😌 😍 🥰 😘 😗 😙 😚 😋 😛 😝 
-😜 🤪 🤨 🧐 🤓 😎 🥸 🤩 🥳 😏 😒 😞 😔 😟 😕 🙁 ☹️ 😣 😖 😫 😩 🥺 😢 😭 😤 
-😠 😡 🤬 🤯 😳 🥵 🥶 😱 😨 😰 😥 😓 🤗 🤔 🤭 🤫 🤥 😶 😐 😑
-💸 💵 💴 💶 💷 🪙 💰 💳 💎 ⚖️ 🪜 🧰 🪛"""
+ICONS = ['😀',
+ '😃',
+ '😄',
+ '😁',
+ '😆',
+ '😅',
+ '😂',
+ '🤣',
+ '\U0001f972',
+ '☺️',
+ '😊',
+ '😇',
+ '🙂',
+ '🙃',
+ '😉',
+ '😌',
+ '😍',
+ '🥰',
+ '😘',
+ '😗',
+ '😙',
+ '😚',
+ '😋',
+ '😛',
+ '😝',
+ '😜',
+ '🤪',
+ '🤨',
+ '🧐',
+ '🤓',
+ '😎',
+ '\U0001f978',
+ '🤩',
+ '🥳',
+ '😏',
+ '😒',
+ '😞',
+ '😔',
+ '😟',
+ '😕',
+ '🙁',
+ '☹️',
+ '😣',
+ '😖',
+ '😫',
+ '😩',
+ '🥺',
+ '😢',
+ '😭',
+ '😤',
+ '😠',
+ '😡',
+ '🤬',
+ '🤯',
+ '😳',
+ '🥵',
+ '🥶',
+ '😱',
+ '😨',
+ '😰',
+ '😥',
+ '😓',
+ '🤗',
+ '🤔',
+ '🤭',
+ '🤫',
+ '🤥',
+ '😶',
+ '😐',
+ '😑',
+ '💸',
+ '💵',
+ '💴',
+ '💶',
+ '💷',
+ '\U0001fa99',
+ '💰',
+ '💳',
+ '💎',
+ '⚖️',
+ '\U0001fa9c',
+ '🧰',
+ '\U0001fa9b']
 
 TWITTER_HASHTAGS = ['invertir', 'inversiones', 'valueinvesting', 'invertirenvalor', 'inversionesinteligente',
     'bolsa', 'invertirenbolsa', 'inversorinteligente']

@@ -1,12 +1,7 @@
-{% extends "cartera/shared.html" %}
+{% extends "cartera/cartera_base.html" %}
 {% load static %}
 {% load extra %}
-{% block header %}
-{% include "cartera/header/private.html" %}
-{% endblock header%}
 
-{% block content %}
-<div class="row">
     {% block FirstCta %}
     <div class="col-12">
         {% block FirstCtaContent %}
@@ -83,8 +78,3 @@
 
     {% block LastCta %}
     {% endblock LastCta %}
-</div>
-{% block jsCharts %}
-{% endblock jsCharts %}
-
-{% endblock content %}

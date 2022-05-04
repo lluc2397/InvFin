@@ -5,19 +5,18 @@ from django.db.models import (
     CASCADE,
     ForeignKey,
     DateTimeField,
-    PositiveBigIntegerField,
-    BooleanField
+    PositiveIntegerField,
+    BooleanField,
+    TextField
 )
 from django.contrib.auth import get_user_model
-
-from ckeditor.fields import RichTextField
 
 from apps.escritos.models import Term
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog, WritterProfile
 from apps.empresas.models import Company
 
-from .constants import SOCIAL_MEDIAS, POST_TYPE
+from .constants import SOCIAL_MEDIAS, POST_TYPE, FOR_MODEL
 from .managers import (
     HashtagsManager,
     EmojisManager,
@@ -28,7 +27,7 @@ User = get_user_model()
 
 
 class Hashtag(Model):        
-    name = RichTextField(default='')
+    name = TextField(default='')
     platform = CharField(max_length=500, choices=SOCIAL_MEDIAS)
     is_trending = BooleanField(default=False)
     objects = HashtagsManager()
@@ -54,7 +53,8 @@ class Emoji(Model):
 
 
 class DefaultTilte(Model):
-    title = RichTextField(default='')
+    title = TextField(default='')
+    for_model = PositiveIntegerField(choices=FOR_MODEL)
     objects = TitlesManager()
 
     class Meta:
@@ -68,13 +68,13 @@ class DefaultTilte(Model):
 class BaseContentShared(Model):
     user = ForeignKey(User, on_delete=SET_NULL, null=True, blank=True)
     date_shared = DateTimeField(auto_now_add=True)
-    post_type = PositiveBigIntegerField(choices=POST_TYPE)
+    post_type = PositiveIntegerField(choices=POST_TYPE)
     platform_shared = CharField(max_length=500, choices=SOCIAL_MEDIAS)
     social_id = CharField(max_length=500)
-    title = RichTextField(blank=True)
-    description = RichTextField(blank=True)
-    extra_description = RichTextField(blank=True)
-    inside_information = RichTextField(blank=True)
+    title = TextField(blank=True)
+    description = TextField(blank=True)
+    extra_description = TextField(blank=True)
+    inside_information = TextField(blank=True)
 
     class Meta:
         abstract = True
