@@ -150,7 +150,7 @@ class Facebook():
 
     def post_on_facebook(
         self,
-        title:str=None,
+        title:str,
         caption:str=None,
         num_emojis:int=1,
         post_type:int=3,
@@ -159,8 +159,8 @@ class Facebook():
 
         emojis = Emoji.objects.random_emojis(num_emojis)
         hashtags = Hashtag.objects.random_hashtags('facebook')
-        if not title:
-            title=DefaultTilte.objects.random_title
+
+        title=DefaultTilte.objects.random_title
         
         custom_title = f'{emojis[0].emoji}{title}'
 
@@ -183,9 +183,7 @@ class Facebook():
         if post_response['result'] == 'success':
             facebook_post = {
                 'post_type': post_type ,
-                'social_id': post_response['extra'] ,
-                # 'emojis': emojis,
-                # 'hashtags': hashtags,
+                'social_id': post_response['extra'],
                 'title': custom_title ,
                 'description': caption,
                 'platform_shared': 'facebook'

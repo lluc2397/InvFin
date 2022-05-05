@@ -1,7 +1,26 @@
-{% extends "cartera/cartera_base.html" %}
+{% extends "general/bases/main_base.html" %}
 {% load static %}
 {% load extra %}
+{% block header %}
+{% include "cartera/header/private.html" %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js" 
+integrity="sha512-UXumZrZNiOwnTcZSHLOfcTs0aos2MzBWHXOHOuB0J/R44QB0dwY5JgfbvljXcklVf65Gc4El6RjZ+lnwd2az2g==" 
+crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/1.2.0/chartjs-plugin-zoom.min.js" 
+integrity="sha512-TT0wAMqqtjXVzpc48sI0G84rBP+oTkBZPgeRYIOVRGUdwJsyS3WPipsNh///ay2LJ+onCM23tipnz6EvEy2/UA==" 
+crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="{% static 'general/assets/js/screener.js' %}"></script>
+{% endblock header%}
+
+{% block content %}
+<script>
+    getFromUrl('/get/user/cartera')
+</script>
+<div class="row">
     {% block FirstCta %}
     <div class="col-12">
         {% block FirstCtaContent %}
@@ -22,10 +41,6 @@
           </div>                                                
         </div>
     </div>
-    {{money.income_earned}}, 
-                {{money.income_spend}}, 
-                {{money.income_saved}}, 
-                {{money.income_invested}}
     <div class="col-lg-6 mb-3">
         <div class="card">
             <div class="card-header">
@@ -99,61 +114,4 @@
     {% block LastCta %}
     {% endblock LastCta %}
 </div>
-{% block javascript %}
-{{ block.super }}
-<script>
-    // createSoloChart(
-    //     income.revenueVSnetIncome, 
-    //     'Ingresos vs ', 
-    //     $('#rev-incomeChart')[0], 
-    //     $('#rev-incomeLoader')[0], 
-    //     'bar',
-    //     false,
-    //     true,
-    //     true
-    // )
-    
-    var ctx = document.getElementById('Ingresos').getContext('2d');
-    var Ingresos = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Ingresos', 'Gastos', 'Ahorros', 'Invertido'],
-            datasets: [{
-                
-                data: [ {{money.income_earned}}, 
-                {{money.income_spend}}, 
-                {{money.income_saved}}, 
-                {{money.income_invested}}],
-
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-          plugins:{
-   legend: {
-    display: false
-   }
-  },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            },
-            responsive: true,
-            maintainAspectRatio: false
-        }
-    });
-</script>
-{% endblock javascript %}
+{% endblock content %}

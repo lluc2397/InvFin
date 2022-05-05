@@ -20,8 +20,8 @@ services:
       - mailhog
     volumes:
       - .:/app:z
-      - invfin_local_static_files:/app/staticfiles/
-      - invfin_local_media_files:/app/apps/media/
+      - invfin_local_static_files:/app/staticfiles/:z
+      - invfin_local_media_files:/app/apps/media/:z
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
@@ -39,7 +39,7 @@ services:
     image: invfin_production_postgres
     container_name: invfin_local_postgres
     volumes:
-      - invfin_local_postgres_data:/var/lib/postgresql/data:Z
+      - invfin_local_postgres_data:/var/lib/postgresql/data:z
       - invfin_local_postgres_data_backups:/backups:z
     env_file:
       - ./.envs/.local/.postgres
@@ -58,7 +58,6 @@ services:
     volumes:
       - ./docs:/docs:z
       - ./config:/app/config:z
-      - ./invfin:/app/invfin:z
     ports:
       - "7000:7000"
     command: /start-docs
@@ -115,6 +114,7 @@ services:
     command: /start-flower
   
   nginx:
+    restart: always
     container_name: invfin_local_nginx
     build:
       context: .
@@ -126,8 +126,8 @@ services:
       - "80:80"
     volumes:
       - ./compose/local/nginx/conf.d/:/etc/nginx/conf.d/
-      - invfin_local_static_files:/home/app/staticfiles/
-      - invfin_local_media_files:/home/app/media/
+      - invfin_local_static_files:/home/app/staticfiles/:z
+      - invfin_local_media_files:/home/app/media/:z
     networks:
       - invfin_network
 

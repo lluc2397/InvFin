@@ -48,6 +48,10 @@ shell_plus:
 manage:
 	docker-compose -f local.yml run --rm django ./manage.py $(ar) --settings=config.settings.local
 
+collectstatic:
+	docker-compose -f local.yml run --rm django ./manage.py collectstatic --settings=config.settings.local
+	docker-compose -f local.yml build
+
 run:
 	docker-compose -f local.yml run --rm django $(ar)
 

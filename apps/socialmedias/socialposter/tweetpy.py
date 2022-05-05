@@ -42,8 +42,7 @@ class Twitter:
 
     def tweet(
         self,
-        title:str=None,
-        caption:str=None, 
+        caption:str, 
         num_emojis:int=1,
         post_type:int=2,
         media_url:str=None
@@ -55,17 +54,7 @@ class Twitter:
             hashtag2 = random.choice(hashtags)
             hashtag3 = random.choice(hashtags)
 
-            hashtags_used = [hashtag1, hashtag2, hashtag3]
-
-            if not title:
-                title = DefaultTilte.objects.random_title
-
-            if not caption:                
-                default_caption = f'{emojis[0].emoji}{title}'
-                caption = f'{default_caption} #{hashtag1.name} #{hashtag2.name} #{hashtag3.name}'
-                if len(caption) > 280:
-                    hashtags_used = [hashtag1]
-                    caption = f'{default_caption} #{hashtag1.name}'
+            caption = f'{emojis[0].emoji}{caption} #{hashtag1.name} #{hashtag2.name} #{hashtag3.name}'
                     
             if post_type == 3 or post_type == 4:
                 content_type = 'text'
@@ -84,9 +73,6 @@ class Twitter:
                 twitter_post = {
                 'post_type': post_type ,
                 'social_id': post_response['extra'] ,
-                # 'emojis': emojis,
-                # 'hashtags': hashtags_used,
-                'title': title ,
                 'description': caption,
                 'platform_shared': 'twitter'
             }

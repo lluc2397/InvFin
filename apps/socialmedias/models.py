@@ -11,6 +11,8 @@ from django.db.models import (
 )
 from django.contrib.auth import get_user_model
 
+from ckeditor.fields import RichTextField
+
 from apps.escritos.models import Term
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog, WritterProfile
@@ -71,10 +73,10 @@ class BaseContentShared(Model):
     post_type = PositiveIntegerField(choices=POST_TYPE)
     platform_shared = CharField(max_length=500, choices=SOCIAL_MEDIAS)
     social_id = CharField(max_length=500)
-    title = TextField(blank=True)
-    description = TextField(blank=True)
-    extra_description = TextField(blank=True)
-    inside_information = TextField(blank=True)
+    title = RichTextField(blank=True)
+    description = RichTextField(blank=True)
+    extra_description = RichTextField(blank=True)
+    inside_information = RichTextField(blank=True)
 
     class Meta:
         abstract = True

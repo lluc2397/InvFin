@@ -24,6 +24,9 @@ from apps.general.mixins import ResizeImageMixin
 from .manager import ProfileManager, UserExtraManager
 
 
+DOMAIN = Site.objects.get_current().domain
+
+
 class User(AbstractUser):
     first_name = CharField(_("Nombre"), blank=True, max_length=255)
     last_name = CharField(_("Apellidos"), blank=True, max_length=255)
@@ -47,13 +50,12 @@ class User(AbstractUser):
         url = self.get_absolute_url()
         if self.is_writter:
             host_name = self.writter_profile.host_name
-            domain = Site.objects.get_current().domain
-            url = f'https://{host_name}.{domain}'
+            url = f'https://{host_name}.{DOMAIN}'
         return url
     
     @property
     def shareable_link(self):
-        return f'https://inversionesyfinanzas.xyz/invitacion/{self.user_profile.ref_code}'
+        return f'https://{DOMAIN}/invitacion/{self.user_profile.ref_code}'
     
     @property
     def has_investor_profile(self):

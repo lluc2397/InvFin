@@ -183,25 +183,6 @@ class Patrimonio(Model, ChartSerializer):
 
     def __str__(self):
         return self.user.username
-
-    @property
-    def patrimoine(self):
-        user = self.user
-        incomes = list(Income.objects.filter(user = user))
-        spends = list(Spend.objects.filter(user = user))
-        income_earned = sum(move.amount for move in incomes) 
-        income_spend = sum(move.amount for move in spends)
-        income_saved = income_earned - income_spend
-        income_invested = sum(move.amount_invested for move in Asset.objects.filter(user = user))
-
-        data = {
-            'income_earned':str(income_earned),
-            'income_spend':str(income_spend),
-            'income_saved':str(income_saved),
-            'income_invested':str(income_invested),
-            'incomes_and_spends':incomes+ spends,
-        }
-        return data
     
     # comparaison_dict = {
     #         'label': field['title'],
@@ -225,49 +206,70 @@ class Patrimonio(Model, ChartSerializer):
     #             'values' : [data.revenue for data in inc]},]}
 
     @property
-    def empresass_en_cartera (self):
+    def empresas_en_cartera (self):
         return [empresa.object for empresa in self.assets.filter(is_stock=True)]
     
     @property
     def porcentaje_empresas_en_cartera (self):
         return sum(Decimal(item.percentage_capital_invested) for item in self.empresas_en_cartera)
 
-
+    def gastos_totales(self, ingresos_totales):
+        spends = Spend.objects.filter(user = self.user)
+        gastos_totales = sum(Decimal(item.amount) for item in spends)
+        if gastos_totales == None:
+            gastos_totales = 0
+        return {
+            'total':gastos_totales, 
+            'spends':spends,
+            'percentage': ((gastos_totales / ingresos_totales) * 100) if ingresos_totales != 0 else 0
+            }
+    
     @property
-    def gastos_totales(self):
-        total = sum(Decimal(item.amount) for item in Spend.objects.filter(user = self.user))
+    def ingresos_totales(self):
+        incomes = Income.objects.filter(user = self.user)
+        total = sum(Decimal(item.amount) for item in incomes)
         if total == None:
             total = 0
-        return total
+        return {'total':total, 'incomes':incomes}
     
-    @property
-    def ingresos_totales (self):
-        total = sum(Decimal(item.amount) for item in Income.objects.filter(user = self.user))
-        if total == None:
-            total = 0
-        return total
+    def cantidad_total_invertida(self, ingresos_totales):
+        cantidad_total_invertida = sum(item.amount_invested for item in self.assets.all())
+        if cantidad_total_invertida == None:
+            cantidad_total_invertida = 0
+        return {
+            'total':cantidad_total_invertida,
+            'percentage': ((cantidad_total_invertida / ingresos_totales) * 100) if ingresos_totales != 0 else 0
+        }
     
-    @property
-    def cantidad_total_invertida(self):
-        total_invertido = sum(item.amount_invested for item in self.assets.all())
-        if total_invertido == None:
-            total_invertido = 0
-        return total_invertido
-    
-    @property
-    def ahorros_totales(self):
-        return self.ingresos_totales - self.gastos_totales - self.cantidad_total_invertida
-    
-    @property
-    def porcentaje_ahorros_totales (self):        
-        return (((self.ahorros_totales) / self.ingresos_totales) * 100) if self.ingresos_totales != 0 else 0   
-
-    
-    @property
-    def porcentaje_cantidad_invertida(self):
-        return ((self.cantidad_total_invertida / self.ingresos_totales) * 100) if self.ingresos_totales != 0 else 0
+    def ahorros_totales(self, ingresos_totales, gastos_totales, cantidad_total_invertida):
+        ahorros_totales = ingresos_totales - gastos_totales - cantidad_total_invertida
+        return {
+            'total': ahorros_totales,
+            'percentage': (((ahorros_totales) / ingresos_totales) * 100) if ingresos_totales != 0 else 0
+        }
 
     @property
-    def porcentaje_gastos_totales(self):
-        return ((self.gastos_totales / self.ingresos_totales) * 100) if self.ingresos_totales != 0 else 0
+    def patrimoine(self):
+        total_income_earned = self.ingresos_totales
+        total_income_spend = self.gastos_totales(total_income_earned['total'])
+        income_invested = self.cantidad_total_invertida(total_income_earned['total'])
+        income_saved = self.ahorros_totales(total_income_earned['total'], total_income_spend['total'], income_invested['total'])
 
+        
+        percentage_spend = total_income_spend['percentage']
+        percentage_saved = income_saved['percentage']
+        percentage_invested = income_invested['percentage']
+        percentage_earned = 100 - percentage_spend - percentage_saved - percentage_invested
+        
+        incomes_and_spends = list(total_income_earned['incomes']) + list(total_income_spend['spends'])
+        return {
+            'income_earned':total_income_earned['total'],
+            'income_spend':total_income_spend['total'],
+            'income_saved':income_saved['total'],
+            'income_invested':income_invested['total'],
+            'incomes_and_spends':incomes_and_spends,
+            'percentage_earned': percentage_earned,
+            'percentage_spend': percentage_spend,
+            'percentage_saved': percentage_saved,
+            'percentage_invested': percentage_invested,
+        }
