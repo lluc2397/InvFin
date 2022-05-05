@@ -22,6 +22,10 @@
           </div>                                                
         </div>
     </div>
+    {{money.income_earned}}, 
+                {{money.income_spend}}, 
+                {{money.income_saved}}, 
+                {{money.income_invested}}
     <div class="col-lg-6 mb-3">
         <div class="card">
             <div class="card-header">
@@ -95,18 +99,19 @@
     {% block LastCta %}
     {% endblock LastCta %}
 </div>
-{% block jsCharts %}
+{% block javascript %}
+{{ block.super }}
 <script>
-    createSoloChart(
-        income.revenueVSnetIncome, 
-        'Ingresos vs ', 
-        $('#rev-incomeChart')[0], 
-        $('#rev-incomeLoader')[0], 
-        'bar',
-        false,
-        true,
-        true
-    )
+    // createSoloChart(
+    //     income.revenueVSnetIncome, 
+    //     'Ingresos vs ', 
+    //     $('#rev-incomeChart')[0], 
+    //     $('#rev-incomeLoader')[0], 
+    //     'bar',
+    //     false,
+    //     true,
+    //     true
+    // )
     
     var ctx = document.getElementById('Ingresos').getContext('2d');
     var Ingresos = new Chart(ctx, {
@@ -151,4 +156,4 @@
         }
     });
 </script>
-{% endblock jsCharts %}
+{% endblock javascript %}

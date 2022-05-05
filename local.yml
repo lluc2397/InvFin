@@ -119,6 +119,8 @@ services:
     build:
       context: .
       dockerfile: ./compose/local/nginx/Dockerfile
+    depends_on:
+      - django
     ports:
       # - "8000:80"
       - "80:80"
@@ -128,22 +130,6 @@ services:
       - invfin_local_media_files:/home/app/media/
     networks:
       - invfin_network
-
-  # dns:
-  #   container_name: invfin_local_dns
-  #   build:
-  #     context: .
-  #     dockerfile: ./compose/local/dns/Dockerfile
-  #   restart: always
-  #   ports:
-  #     - 53:53
-  #     - 53:53/udp
-  #   volumes:
-  #     - ./compose/local/dns/named.conf:/etc/bind/named.conf
-  #     - ./compose/local/dns/zone/:/etc/bind/zone/
-  #   command: named -c /etc/bind/named.conf -g -u named
-  #   networks:
-  #     - invfin_network
 
 networks:
   invfin_network:

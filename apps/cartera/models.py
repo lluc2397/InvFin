@@ -19,6 +19,7 @@ from decimal import Decimal
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
+from apps.general.utils import ChartSerializer
 from apps.empresas.models import (
     Currency,
     Company,
@@ -50,8 +51,7 @@ class Asset(Model):
     
     @property
     def amount_invested(self):
-        moves = PositionMovement.objects.filter(asset_related = self)
-        return sum(move.movement_cost for move in moves)
+        return sum(move.movement_cost for move in PositionMovement.objects.filter(asset_related = self))
 
 
 class PositionMovement(Model):
@@ -59,7 +59,7 @@ class PositionMovement(Model):
 
     user = ForeignKey(User, on_delete=SET_NULL, null=True, blank=True)
     move_type = IntegerField(choices=MOVE, null=True, blank=True)
-    asset_related = ForeignKey(Asset, null=True, blank=True ,on_delete=SET_NULL)
+    asset_related = ForeignKey(Asset, null=True, blank=True ,on_delete=SET_NULL, related_name='movements')
     price = DecimalField ("Precio", max_digits=100, decimal_places=2, default=0)
     date = DateField("Fecha del movimiento", null=True, blank=True)
     quantity = IntegerField("Cantidad", default=0)
@@ -162,7 +162,7 @@ class FinancialObjectif(Model):
         db_table = "cartera_objectives"
 
 
-class Patrimonio(Model):
+class Patrimonio(Model, ChartSerializer):
     user = OneToOneField(User, 
         on_delete=SET_NULL, 
         null=True, blank=True, 
@@ -201,7 +201,73 @@ class Patrimonio(Model):
             'income_invested':str(income_invested),
             'incomes_and_spends':incomes+ spends,
         }
-        
-
         return data
+    
+    # comparaison_dict = {
+    #         'label': field['title'],
+    #         'data': field['values'],
+    #         'backgroundColor': '',
+    #             'borderColor': '',
+            
+    #         'yAxisID':"right",
+    #         'order': 0,
+    #         'type': chart_type
+    # }
+    
+    # def serial():
+    #     inc_json = {
+    #         'labels': [data.date for data in inc],
+    #         'fields': [
+    #             {'title':'Ingresos',
+    #             'url':"#!",
+    #             'percent': 'false',
+    #             'short': 'false',
+    #             'values' : [data.revenue for data in inc]},]}
+
+    @property
+    def empresass_en_cartera (self):
+        return [empresa.object for empresa in self.assets.filter(is_stock=True)]
+    
+    @property
+    def porcentaje_empresas_en_cartera (self):
+        return sum(Decimal(item.percentage_capital_invested) for item in self.empresas_en_cartera)
+
+
+    @property
+    def gastos_totales(self):
+        total = sum(Decimal(item.amount) for item in Spend.objects.filter(user = self.user))
+        if total == None:
+            total = 0
+        return total
+    
+    @property
+    def ingresos_totales (self):
+        total = sum(Decimal(item.amount) for item in Income.objects.filter(user = self.user))
+        if total == None:
+            total = 0
+        return total
+    
+    @property
+    def cantidad_total_invertida(self):
+        total_invertido = sum(item.amount_invested for item in self.assets.all())
+        if total_invertido == None:
+            total_invertido = 0
+        return total_invertido
+    
+    @property
+    def ahorros_totales(self):
+        return self.ingresos_totales - self.gastos_totales - self.cantidad_total_invertida
+    
+    @property
+    def porcentaje_ahorros_totales (self):        
+        return (((self.ahorros_totales) / self.ingresos_totales) * 100) if self.ingresos_totales != 0 else 0   
+
+    
+    @property
+    def porcentaje_cantidad_invertida(self):
+        return ((self.cantidad_total_invertida / self.ingresos_totales) * 100) if self.ingresos_totales != 0 else 0
+
+    @property
+    def porcentaje_gastos_totales(self):
+        return ((self.gastos_totales / self.ingresos_totales) * 100) if self.ingresos_totales != 0 else 0
 

@@ -89,7 +89,9 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
         least_recent_date = self.yq_company.balance_sheet()['asOfDate'].max().value // 10**9 # normalize time
         least_recent_year = datetime.fromtimestamp(least_recent_date).year
         if least_recent_year != self.company.most_recent_year:
+            print('need update', self.company)
             return 'need update'
+        print('need update', self.company)
         return 'updated'
     
     def generate_current_data(

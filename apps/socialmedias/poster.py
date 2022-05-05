@@ -13,13 +13,32 @@ class SocialPosting:
         self.content_shared = content_shared
         self.company_related = company_related
     
-    def generate_content(self):
+    def generate_content(self, post_type):
 
-        title = self.content_shared.title
-        link = self.content_shared.slug
-        description = self.content_shared.resumen
-        description = self.content_shared.content
-        media_url = self.content_shared.non_thumbnail_url
+        if self.content_shared:
+            content = self.content_shared
+            
+        if self.company_related:
+            content = self.company_related
+
+        if post_type == 1:# Video
+            pass
+        if post_type == 2:# Image
+            pass
+        if post_type == 3:# Text
+            pass
+        if post_type == 4:# Repost
+            pass
+        if post_type == 5:# Text and video
+            pass
+        if post_type == 6:# Text and image
+            pass
+
+        title = content.title
+        link = content.slug
+        description = content.resumen
+        description = content.content
+        
 
         return title, link, description, description, media_url
     

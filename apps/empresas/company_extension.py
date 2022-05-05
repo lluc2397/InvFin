@@ -9,6 +9,8 @@ import requests
 import math
 from statistics import mean
 
+from apps.general.utils import ChartSerializer
+
 from .valuations import discounted_cashflow
 
 FINHUB_TOKEN = settings.FINHUB_TOKEN
@@ -24,7 +26,7 @@ headers = {
     'Accept-Encoding': 'gzip, deflate'
 }
 
-class CompanyExtended(Model):
+class CompanyExtended(Model, ChartSerializer):
     class Meta:
         abstract = True
 
@@ -32,33 +34,6 @@ class CompanyExtended(Model):
     def show_news(self):
         news = get_news(self.ticker)
         return news
-    
-
-    def generate_json(self, comparing_json:dict, items:list=None, chart_type:str='line')->dict:
-        labels = comparing_json['labels']
-        chartData = {
-            'labels': labels,
-            'fields': []
-        }
-        if not items:
-            items = [i for i in range(len(comparing_json['fields']))]
-
-        fields_for_chart = [comparing_json['fields'][num] for num in items]
-
-        for field in fields_for_chart:
-            comparaison_dict = {
-                    'label': field['title'],
-                    'data': field['values'],
-                    'backgroundColor': '',
-                        'borderColor': '',
-                    
-                    'yAxisID':"right",
-                    'order': 0,
-                    'type': chart_type
-            }
-            chartData['fields'].append(comparaison_dict)
-        
-        return chartData
 
 
     def income_json(self, limit = 10):
