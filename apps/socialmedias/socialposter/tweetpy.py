@@ -45,7 +45,8 @@ class Twitter:
         caption:str, 
         num_emojis:int=1,
         post_type:int=2,
-        media_url:str=None
+        media_url:str=None,
+        link:str=None
         ):
             emojis = Emoji.objects.random_emojis(num_emojis)
 
@@ -54,7 +55,7 @@ class Twitter:
             hashtag2 = random.choice(hashtags)
             hashtag3 = random.choice(hashtags)
 
-            caption = f'{emojis[0].emoji}{caption} #{hashtag1.name} #{hashtag2.name} #{hashtag3.name}'
+            caption = f'{emojis[0].emoji}{caption} Más en {link}#{hashtag1.name} #{hashtag2.name} #{hashtag3.name}'
                     
             if post_type == 3 or post_type == 4:
                 content_type = 'text'

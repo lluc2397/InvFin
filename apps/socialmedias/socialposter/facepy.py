@@ -164,8 +164,7 @@ class Facebook():
         
         custom_title = f'{emojis[0].emoji}{title}'
 
-        if not caption:
-            caption = self.create_fb_description([hashtag.name for hashtag in hashtags])
+        caption = self.create_fb_description(caption, [hashtag.name for hashtag in hashtags])
         
         if post_type == 1 or post_type == 5 or post_type == 7:
             content_type = 'video'
@@ -203,9 +202,11 @@ class Facebook():
             link = url_to_share)  
 
 
-    def create_fb_description(self, hashtags):
+    def create_fb_description(self, caption:str, link:str, hashtags:list):
         hashtags = '#'.join(hashtags)
         face_description = f"""
+        {caption}
+        Más en {link}
         Prueba las herramientas que todo inversor inteligente necesita: https://inversionesyfinanzas.xyz
 
         Visita nuestras redes sociales:

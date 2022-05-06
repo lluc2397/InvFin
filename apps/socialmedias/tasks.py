@@ -19,35 +19,33 @@ from .models import (
 def socialmedia_share_company():
     post_type = 6
     content_shared = Company
-    SocialPosting(CompanySharedHistorial, 5).share_content(content_shared)
+    SocialPosting(CompanySharedHistorial, content_shared=content_shared).share_content(post_type)
 
 
 @celery_app.task()
 def socialmedia_share_news():
     post_type = 6
     company_related = Company
-    SocialPosting(NewsSharedHistorial, 2).share_content(company_related)
+    SocialPosting(NewsSharedHistorial, company_related=company_related).share_content(post_type)
 
 
 @celery_app.task()
 def socialmedia_share_term():
-    post_type = 3
     post_type = 6
     content_shared = Term
-    SocialPosting(TermSharedHistorial, 3).share_content(content_shared)
+    SocialPosting(TermSharedHistorial, content_shared=content_shared).share_content(post_type)
 
 
 @celery_app.task()
 def socialmedia_share_blog():
-    post_type = 3
     post_type = 6
     content_shared = PublicBlog
-    SocialPosting(BlogSharedHistorial, 4).share_content(content_shared)
+    SocialPosting(BlogSharedHistorial, content_shared=content_shared).share_content(post_type)
 
 
 @celery_app.task()
 def socialmedia_share_question():
     post_type = 3
     content_shared = Question
-    SocialPosting(QuestionSharedHistorial, 1).share_content(content_shared)
+    SocialPosting(QuestionSharedHistorial, content_shared=content_shared).share_content(post_type)
 

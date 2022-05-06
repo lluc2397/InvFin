@@ -56,7 +56,7 @@ class Emoji(Model):
 
 class DefaultTilte(Model):
     title = TextField(default='')
-    for_model = PositiveIntegerField(choices=FOR_MODEL)
+    for_model = PositiveIntegerField(choices=FOR_MODEL, blank=True, default=0)
     objects = TitlesManager()
 
     class Meta:
