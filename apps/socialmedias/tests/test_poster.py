@@ -33,6 +33,7 @@ class PosterTest(TestCase):
         )
         self.company = Company.objects.create(
             name='Apple',
+            ticker='AAPL'
         )
         self.term2 = Term.objects.create(
             title='term 2',
@@ -49,6 +50,7 @@ class PosterTest(TestCase):
         )
         self.company2 = Company.objects.create(
             name='Intel',
+            ticker='INTC'
         )
 
     def test_random_content(self):
@@ -85,7 +87,7 @@ class PosterTest(TestCase):
         publicBlog = PublicBlog.objects.get_random()
         company = Company.objects.get_random()
         company_poster = SocialPosting(CompanySharedHistorial, company).generate_content()
-        company_new_poster = SocialPosting(NewsSharedHistorial, company).generate_content()
+        company_new_poster = SocialPosting(NewsSharedHistorial, company_related=company).generate_content()
         term_poster = SocialPosting(TermSharedHistorial, term).generate_content()
         blog_poster = SocialPosting(BlogSharedHistorial, publicBlog).generate_content()
         question_poster = SocialPosting(QuestionSharedHistorial, question).generate_content()

@@ -16,35 +16,39 @@ class SocialPosting:
         self.content_shared = content_shared
         self.company_related = company_related
     
-    def generate_content(self, model_type):
-
+    def generate_content(self):
+        
         if self.content_shared:
             content = self.content_shared
-
-            if content.__class__._meta == 'preguntas_respuestas.question':# Quesiton
+            model_type = str(content.__class__._meta)
+            
+            if model_type == 'preguntas_respuestas.question':# Quesiton
                 description = content.content
                 media_url = None
+                title = content.title
             
-            else:
+            elif model_type == 'empresas.company':# Company:
+                title = content.name
                 description = content.resume
-            
                 media_url = content.image
 
-            if content.__class__._meta == 'empresas.company':# Company
-                title = content.name
-                description = content.presentation
-            else:
+            elif model_type == 'public_blog.publicblog':# Company:
                 title = content.title
+                description = content.resume
+                media_url = content.image
 
-            
+            elif model_type == 'escritos.term':# Company:
+                title = content.title
+                description = content.resume
+                media_url = content.image
         
         if self.company_related:# News
             content = self.company_related
             news = content.show_news[0]
-            title = content.headline
-            description = content.summary
+            title = news['headline']
+            description = news['summary']
             description = google_translator().translate(description, lang_src='en', lang_tgt='es')
-            media_url = news.image
+            media_url = news['image']
 
         link = content.get_absolute_url()
 
