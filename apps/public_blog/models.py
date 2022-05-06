@@ -20,6 +20,8 @@ User = get_user_model()
 
 from apps.general.models import BaseEscrito, BaseComment, Newsletter, BaseEmail
 
+from .managers import PublicBlogManager
+
 class WritterProfile(Model):
     user = OneToOneField(User, on_delete=SET_NULL, null=True, related_name="writter_profile")
     created_at = DateTimeField(auto_now_add=True)
@@ -102,6 +104,7 @@ class PublicBlog(BaseEscrito):
     downvotes = ManyToManyField(User, blank=True, related_name="user_downvote_blog")
     published_correctly = BooleanField(default=False)
     date_to_publish = DateTimeField(null=True, blank=True)
+    objects = PublicBlogManager()
 
     class Meta:
         ordering = ['total_views']

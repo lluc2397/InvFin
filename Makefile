@@ -90,8 +90,11 @@ docs_check:
 	docker-compose -f local.yml run --rm django ./manage.py generate_swagger --settings=config.settings.local
 
 # Testing
-test:
+new-test:
 	docker-compose -f local.yml run --rm django python -u manage.py test $(ar) --noinput --settings=config.settings.test
+
+test:
+	docker-compose -f local.yml run --rm django python -u manage.py test $(ar) --noinput --keepdb --settings=config.settings.test
 
 pytest:
 	docker-compose -f local.yml run --rm django pytest

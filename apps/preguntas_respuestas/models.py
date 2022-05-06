@@ -20,12 +20,15 @@ from apps.general.mixins import CommonMixin
 
 from itertools import chain
 
+from .managers import QuestionManager
+
 class Question(BasicWrittenContent):
     content = RichTextField(config_name='writter')
     is_answered = BooleanField(default=False)
     has_accepted_answer = BooleanField(default=False)
     upvotes = ManyToManyField(User, blank=True, related_name="user_upvote_question")
     downvotes = ManyToManyField(User, blank=True, related_name="user_downvote_question")
+    objects = QuestionManager()
 
     class Meta:
         ordering = ['-created_at']

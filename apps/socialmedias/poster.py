@@ -21,16 +21,16 @@ class SocialPosting:
         if self.content_shared:
             content = self.content_shared
 
-            if model_type == 1:# Quesiton
+            if content.__class__._meta == 'preguntas_respuestas.question':# Quesiton
                 description = content.content
                 media_url = None
             
             else:
-                description = content.resumen
+                description = content.resume
             
                 media_url = content.image
 
-            if model_type == 5:# Company
+            if content.__class__._meta == 'empresas.company':# Company
                 title = content.name
                 description = content.presentation
             else:

@@ -12,21 +12,23 @@ from django.db.models import (
     IntegerField,
     ManyToManyField
 )
-
-from ckeditor.fields import RichTextField
-
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils import timezone
 
+from ckeditor.fields import RichTextField
+
 from apps.general.models import BaseEscrito, BaseComment, FavoritesHistorial
 
-from django.contrib.auth import get_user_model
+from .managers import TermManager
+
 User = get_user_model()
 
 class Term(BaseEscrito):
     upvotes = ManyToManyField(User, blank=True, related_name="user_upvote_term")
     downvotes = ManyToManyField(User, blank=True, related_name="user_downvote_term")
     # contributors = ManyToManyField(User, blank=True, related_name="contributors")
+    objects = TermManager()
 
     class Meta:
         verbose_name = "Término del glosario"

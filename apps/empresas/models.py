@@ -113,6 +113,10 @@ class Company(CompanyExtended):
         return reverse("screener:company", kwargs={"ticker": self.ticker})
 
     @property
+    def resume(self):
+        return self.description
+
+    @property
     def most_recent_inc_statement(self):
         return self.inc_statements.latest()
     
