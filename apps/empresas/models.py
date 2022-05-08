@@ -24,7 +24,7 @@ from apps.general.models import (
 )
 
 from .managers import CompanyManager
-from .company_extension import CompanyExtended
+from apps.empresas.company.extension import CompanyExtended
 
 
 class ExchangeOrganisation(Model):

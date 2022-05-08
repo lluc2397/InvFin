@@ -3,7 +3,7 @@ from django.test import TestCase
 from .factories import CompanyFactory
 from .constants import *
 
-from apps.empresas.utils import UpdateCompany
+from apps.empresas.company.update import UpdateCompany
 
 class CompanyTest(TestCase):
     def setUp(self) -> None:

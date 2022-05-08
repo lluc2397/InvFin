@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.core.mail import send_mail
 
 from .models import Company
-from .utils import UpdateCompany
+from .company.update import UpdateCompany
 
 
 @celery_app.task()

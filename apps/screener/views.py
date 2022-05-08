@@ -5,7 +5,7 @@ from django.db.models import Q
 
 from apps.empresas.models import Company, ExchangeOrganisation, Exchange
 from apps.etfs.models import Etf
-from apps.empresas.utils import UpdateCompany
+from apps.empresas.company.update import UpdateCompany
 from apps.empresas.valuations import discounted_cashflow
 
 

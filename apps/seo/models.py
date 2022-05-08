@@ -7,14 +7,16 @@ from django.db.models import (
     TextField,
     DateTimeField,
     BooleanField,
-    IntegerField,
+    ManyToManyField,
     PositiveBigIntegerField,
-    JSONField
+    JSONField,
+    SlugField
 )
-
 from django.utils import timezone
-
 from django.contrib.auth import get_user_model
+
+from ckeditor.fields import RichTextField
+
 User = get_user_model()
 
 
@@ -100,6 +102,43 @@ class UsersJourney(Journey):
     class Meta:
         verbose_name = "Historial visitas usuarios"
         db_table = "visits_historial_users"
-    
 
-# class CompaniesSearchHistorial()
+
+# class PromotionCampaign(Model):
+#     name = CharField(max_length=600, blank=True)
+#     slug = SlugField(blank=True)
+#     categories = ManyToManyField('general.Category', blank=True)
+#     tags = ManyToManyField('general.Tag', blank=True)
+#     start_date = DateTimeField(blank=True)
+#     end_date = DateTimeField(blank=True)
+
+#     class Meta:
+#         verbose_name = "Promotions campaigns"
+#         db_table = "promotion_campaign"
+
+
+# class PromotionPost(Model):
+#     MEDIUMS = (
+#         ('ads', 'Ads'), 
+#         ('email', 'Email'), 
+#         ('web', 'Web'), 
+#         ('social-media-posts', 'Social media posts'))
+
+#     title = CharField(max_length=600, blank=True)
+#     content = RichTextField()
+#     prize = PositiveBigIntegerField(default=0)
+#     has_prize = BooleanField(default=False)
+#     slug = CharField(max_length=600, blank=True)
+#     full_url = CharField(max_length=600, blank=True)
+#     medium = CharField(max_length=250, choices=MEDIUMS, blank=True)
+#     clicks_by_user = PositiveBigIntegerField(default=0)
+#     clicks_by_not_user = PositiveBigIntegerField(default=0)
+#     identification = CharField(max_length=600, blank=True, unique=True)
+#     redirect_to = CharField(max_length=600, blank=True, null=True)
+#     start_date = DateTimeField(blank=True)
+#     end_date = DateTimeField(blank=True)
+#     campaign_related = ForeignKey(PromotionCampaign, on_delete=SET_NULL, null=True, blank=True)
+
+#     class Meta:
+#         verbose_name = "Promociones"
+#         db_table = "promotion"

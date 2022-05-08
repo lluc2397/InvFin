@@ -1,43 +1,5 @@
-from django.conf import settings
-
-import requests
-import yfinance as yf
-import yahooquery as yq
-
-HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36',
-    'Accept-Encoding': 'gzip, deflate'
-}
-
 class CalculateCompanyFinancialRatios():
-    def __init__(self) -> None:
-        self.ticker = self.company.ticker
-        self.finprep_key = settings.FINPREP_KEY
-        self.yf_company = yf.Ticker(self.ticker)
-        self.yq_company = yq.Ticker(self.ticker)
 
-    def request_income_statements_finprep(self) -> list:
-        url_income_st = f'https://financialmodelingprep.com/api/v3/income-statement/{self.ticker}?limit=120&apikey={self.finprep_key}'
-        inc_stt = requests.get(url_income_st,headers=HEADERS).json()
-        return inc_stt
-
-    def request_balance_sheets_finprep(self) -> list:
-        url_balance_sheet = f'https://financialmodelingprep.com/api/v3/balance-sheet-statement/{self.ticker}?limit=120&apikey={self.finprep_key}'
-        bal_sht = requests.get(url_balance_sheet,headers=HEADERS).json()
-        return bal_sht
-
-    def request_cashflow_statements_finprep(self) -> list:
-        url_cashflow_st = f'https://financialmodelingprep.com/api/v3/cash-flow-statement/{self.ticker}?limit=120&apikey={self.finprep_key}'
-        csf_stt = requests.get(url_cashflow_st,headers=HEADERS).json()
-        return csf_stt
-    
-    def get_most_recent_price(self) -> float:
-        if 'currentPrice' in self.yf_company.info:
-            current_price = self.yf_company.info['currentPrice']
-        else:
-            current_price = self.yq_company.financial_data['currentPrice']
-        return {'currentPrice':current_price}
-        
     def last_year_data(self, data:dict) -> dict:
         last_year_inventory = data['inventory']
         last_year_accounts_payable = data['accountPayables']

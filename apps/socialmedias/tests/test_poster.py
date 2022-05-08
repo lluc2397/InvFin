@@ -86,8 +86,21 @@ class PosterTest(TestCase):
         question = Question.objects.get_random()
         publicBlog = PublicBlog.objects.get_random()
         company = Company.objects.get_random()
-        company_poster = SocialPosting(CompanySharedHistorial, company).generate_content()
-        company_new_poster = SocialPosting(NewsSharedHistorial, company_related=company).generate_content()
+
         term_poster = SocialPosting(TermSharedHistorial, term).generate_content()
         blog_poster = SocialPosting(BlogSharedHistorial, publicBlog).generate_content()
         question_poster = SocialPosting(QuestionSharedHistorial, question).generate_content()
+        company_poster = SocialPosting(CompanySharedHistorial, company).generate_content()
+        company_news_poster = SocialPosting(NewsSharedHistorial, company_related=company).generate_content()
+        
+        term_poster_json = term.title, term.get_absolute_url(), term.resume, term.image
+        blog_poster_json = question.title, question.get_absolute_url(), question.content, None
+        question_poster_json = publicBlog.title, publicBlog.get_absolute_url(), publicBlog.resume, publicBlog.image
+        company_poster_json = company.name, company.get_absolute_url(), company.resume, company.image
+        # company_new_poster_json = {}
+        
+        self.assertEqual(term_poster, term_poster_json)
+        self.assertEqual(blog_poster, blog_poster_json)
+        self.assertEqual(question_poster, question_poster_json)
+        self.assertEqual(company_poster, company_poster_json)
+        # self.assertEqual(company_news_poster, company_new_poster_json)
