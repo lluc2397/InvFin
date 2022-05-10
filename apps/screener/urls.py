@@ -6,7 +6,8 @@ from .views import (
     EtfScreenerInicioView,
     CompanyDetailsView,
     EtfDetailsView,
-    CreateCompanyObservationView,
+    create_company_observation,
+    CompanyFODAListView,
     suggest_list_search_companies,
     simple_valuation_view,
     medium_valuation_view
@@ -30,7 +31,8 @@ urlpatterns = [
     path('analisis-de/<ticker>/', CompanyDetailsView.as_view(), name="company"),
     path('analisis-etf/<ticker>/', EtfDetailsView.as_view(), name="etf"),
 
-    path('add-observation/', CreateCompanyObservationView.as_view(), name="create_company_observation"),
+    path('list-foda/<id>', CompanyFODAListView.as_view(), name="list_foda"),
+    path('add-observation/', create_company_observation, name="create_company_observation"),
 
     path('user-search-company/', suggest_list_search_companies, name="suggest_list_search_companies"),
 

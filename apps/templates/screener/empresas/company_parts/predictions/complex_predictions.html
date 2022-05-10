@@ -10,15 +10,15 @@
                 <tbody>
                     <tr>
                         <th>Ingresos CAGR</th>
-                        <td>{{the_company_price_related.cagr|floatformat:2}} %</td>
+                        <td>{{the_company_financials.cagr|floatformat:2}} %</td>
                         <th>Margen beneficio promedio</th>
-                        <td>{{the_company_price_related.average_margin|floatformat:2}} %</td>
+                        <td>{{the_company_financials.average_margin|floatformat:2}} %</td>
                         <th>Margen free cash flow promedio</th>
-                        <td>{{the_company_price_related.average_fcf_margin|floatformat:2}} %</td>
+                        <td>{{the_company_financials.average_fcf_margin|floatformat:2}} %</td>
                         <th>Recompara de acciones promedio</th>
-                        <td>{{the_company_price_related.sharesbuyback|floatformat:2}} %</td>
+                        <td>{{the_company_financials.sharesbuyback|floatformat:2}} %</td>
                         <th>PER promedio</th>
-                        <td>{{the_company_price_related.average_per|floatformat:2}}</td>
+                        <td>{{the_company_financials.average_per|floatformat:2}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -142,7 +142,7 @@
         var complex_neu_fcf_margin = document.querySelector("#complex_neu_fcf_margin").value
         var complex_pes_fcf_margin = document.querySelector("#complex_pes_fcf_margin").value
         var company_id = "{{the_company.id}}"
-        var current_per = "{{the_company_price_related.per}}"
+        var current_per = "{{the_company_financials.per}}"
 
         formData = JSON.stringify({
             complex_opt_growth :complex_opt_growth,

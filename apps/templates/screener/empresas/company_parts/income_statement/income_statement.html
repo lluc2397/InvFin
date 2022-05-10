@@ -67,17 +67,17 @@
   
     var chartTitle = 'Estado de resultados'
   
-    var income = {{the_company.comparing_income_json|safe}};
+    var income = {{the_company_financials.comparing_income_json|safe}};
   
     createContent(income, incomeTable, incomeLoader, chartTitle, incomeChartID, incomeChartLoader)
-    createSoloChart(
-        income.revenueVSnetIncome, 
-        'Ingresos vs ', 
-        $('#rev-incomeChart')[0], 
-        $('#rev-incomeLoader')[0], 
-        'bar',
-        false,
-        true,
-        true
-    )
+    // createSoloChart(
+    //     income.revenueVSnetIncome, 
+    //     'Ingresos vs ', 
+    //     $('#rev-incomeChart')[0], 
+    //     $('#rev-incomeLoader')[0], 
+    //     'bar',
+    //     false,
+    //     true,
+    //     true
+    // )
   </script>

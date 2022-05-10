@@ -1521,11 +1521,11 @@ class CompanyExtended(Model, ChartSerializer):
     @property
     def complete_info(self):
         
-        comparing_income_json, all_inc_statements = self.comparing_income_json()
-        comparing_balance_json, all_balance_sheets = self.comparing_balance_json()
-        comparing_cashflows, all_cashflow_statements = self.comparing_cashflows()
-        important_ratios, all_important_ratios = self.important_ratios()
-        secondary_ratios, all_secondary_ratios = self.secondary_ratios()
+        comparing_income_json, all_inc_statements = self.comparing_income_json
+        comparing_balance_json, all_balance_sheets = self.comparing_balance_json
+        comparing_cashflows, all_cashflow_statements = self.comparing_cashflows
+        important_ratios, all_important_ratios = self.important_ratios
+        secondary_ratios, all_secondary_ratios = self.secondary_ratios
         
         all_rentability_ratios = all_important_ratios['rentability_ratios']
         all_liquidity_ratios = all_important_ratios['liquidity_ratios']
@@ -1537,12 +1537,12 @@ class CompanyExtended(Model, ChartSerializer):
         all_per_share = all_secondary_ratios['per_share']
         all_fcf_ratios = all_secondary_ratios['fcf_ratios']
 
-        current_price = self.get_current_price()['current_price']
+        current_price = self.get_current_price['current_price']
 
-        last_balance_sheet = all_balance_sheets.latest()
-        last_per_share = all_per_share.latest()
-        last_margins = all_margins.latest()
-        last_income_statement = all_inc_statements.latest()
+        last_balance_sheet = all_balance_sheets.first()
+        last_per_share = all_per_share.first()
+        last_margins = all_margins.first()
+        last_income_statement = all_inc_statements.first()
         last_revenue = last_income_statement.revenue
         average_shares_out = last_income_statement.weighted_average_shares_outstanding
 

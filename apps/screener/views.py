@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView
 from django.http.response import JsonResponse, HttpResponse
 from django.db.models import Q
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from apps.empresas.models import Company, ExchangeOrganisation, Exchange
 from apps.etfs.models import Etf
@@ -84,12 +85,11 @@ class CompanyDetailsView(DetailView):
         context = super().get_context_data(**kwargs)
         empresa = self.object
         UpdateCompany(empresa).general_update()
+        self.request.session['screener'] = empresa.id
         context["meta_desc"] = f'Estudia a fondo la empresa {empresa.name}. Más de 30 años de información, noticias, pros, contras y mucho más'
         context["meta_tags"] = f'finanzas, blog financiero, blog el financiera, invertir, {empresa.name}, {empresa.ticker}'
         context["meta_title"] = f'Análisis completo de {empresa.name}'
         context["meta_url"] = f'/screener/analisis-de/{empresa.ticker}/'
-
-        context['observation_form'] = UserCompanyObservationForm()
         context['company_is_fav'] = False
         if self.request.user.is_authenticated and empresa.ticker in self.request.user.fav_stocks.only('ticker'):
             context['company_is_fav'] = True
@@ -107,16 +107,34 @@ class EtfDetailsView(DetailView):
         return get_object_or_404(Etf, ticker=ticker)
 
 
-class CreateCompanyObservationView(CreateView):
+class CompanyFODAListView(ListView):
     model = UserCompanyObservation
-    fields = ['observation', 'observation_type']
+    template_name = 'screener/empresas/company_parts/foda/foda_parts.html'
+    context_object_name = "foda_analysis"
 
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        company = Company.objects.get(ticker = self.request.POST['company'])
-        form.instance.company = company
-        form.save()	
-        return super(CreateCompanyObservationView, self).form_valid(form)
+    def get_queryset(self):
+        return UserCompanyObservation.objects.filter(company__id = self.kwargs['id'])
+
+
+def create_company_observation(request):
+    if request.method == 'POST':
+        company_id = request.session['screener']
+        form = UserCompanyObservationForm(request.POST)
+        if form.is_valid():
+            model = form.save()
+            model.user = request.user
+            company = Company.objects.get(id = company_id)
+            model.company = company
+            model.save(update_fields=['user', 'company'])
+            return HttpResponse(status=204, headers={'HX-Trigger': 'refreshObservationsCompany'})
+        else:
+            print(form.errors)
+            return HttpResponse(status=500)
+    else:
+        form = UserCompanyObservationForm()
+    return render(request, 'screener/empresas/company_parts/foda/foda_modal.html', {
+        'form': form,
+    })
 
 
 def suggest_list_search_companies(request):

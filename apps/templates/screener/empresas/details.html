@@ -2,12 +2,13 @@
 {% load static %}
 
 {% block TopHeader %}
-{% with the_company_price_related=the_company.current_price_ratios %}
+<link rel="stylesheet" href="{% static 'general/assets/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'general/assets/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'general/assets/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css' %}">
 {% include "screener/headers/empresa_header.html" %}
-{% endwith %}
 {% endblock TopHeader%}
 {% block MainContent %}
-{% with the_company_price_related=the_company.current_price_ratios %}
+{% with the_company_financials=the_company.complete_info %}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -58,7 +59,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
       </div>
       <!-- foda tab -->
       <div class="tab-pane fade" id="pills-foda" role="tabpanel" aria-labelledby="pills-foda-tab">             
-      {% include "screener/empresas/company_parts/valuations/foda.html" %}
+      {% include "screener/empresas/company_parts/foda/foda.html" %}
       </div>
         <!-- valuations tab -->
       <div class="tab-pane fade" id="pills-valuations" role="tabpanel" aria-labelledby="pills-valuations-tab">             
@@ -80,3 +81,42 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </div>
 {% endwith %}
 {% endblock MainContent %}
+{% block javascript %}
+{{ block.super }}
+<script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.min.js"></script>
+<script>
+;(function () {
+  const modal = new bootstrap.Modal(document.getElementById("CompanyObservationModal"))
+
+  htmx.on("htmx:afterSwap", (e) => {
+    // Response targeting #dialog => show the modal
+    if (e.detail.target.id == "dialog") {
+      modal.show()
+    }
+  })
+
+  htmx.on("htmx:beforeSwap", (e) => {
+    // Empty response targeting #dialog => hide the modal
+    if (e.detail.target.id == "dialog" && !e.detail.xhr.response) {
+      modal.hide()
+      e.detail.shouldSwap = false
+    }
+  })
+
+  // Remove dialog content after hiding
+  htmx.on("hidden.bs.modal", () => {
+    document.getElementById("dialog").innerHTML = ""
+  })
+})()
+</script>
+{% endblock javascript %}
+{% block extra_javascript %}
+<script src="{% static 'general/assets/vendor/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'general/assets/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'general/assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'general/assets/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js' %}"></script>
+<script src="{% static 'general/assets/vendor/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'general/assets/vendor/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
+<script src="{% static 'general/assets/vendor/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+<script src="{% static 'general/assets/vendor/datatables.net-select/js/dataTables.select.min.js' %}" ></script>
+{% endblock extra_javascript %}

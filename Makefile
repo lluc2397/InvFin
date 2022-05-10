@@ -9,6 +9,9 @@ up-back:
 up:
 	docker-compose -f local.yml up $(ar)
 
+upsemi:
+	docker-compose -f semiprod.yml up $(ar)
+
 stop:
 	docker-compose -f local.yml stop
 
@@ -42,7 +45,10 @@ manage:
 	docker-compose -f local.yml run --rm django ./manage.py $(ar) --settings=config.settings.local
 
 collectstatic:
-	docker-compose -f local.yml run --rm django ./manage.py collectstatic --settings=config.settings.local
+	docker-compose -f local.yml run --rm django ./manage.py collectstatic --noinput --settings=config.settings.local
+
+col-share-static:
+	docker-compose -f local.yml run --rm django ./manage.py collectstatic --noinput --settings=config.settings.local
 	docker-compose -f local.yml build
 
 run:

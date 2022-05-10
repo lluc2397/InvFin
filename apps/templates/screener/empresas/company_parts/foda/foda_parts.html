@@ -1,0 +1,45 @@
+{% load static %}
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+            Análisis cualitativo de la empresa
+        </div>
+        <div class="card-body">            
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                          <th scope="col">Inversor</th>
+                          <th scope="col">Clasificación</th>
+                          <th scope="col">Observación</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for analysis in foda_analysis %}
+                        <tr>
+                          <th scope="row">
+                            <div class="media align-items-center">
+                                <a href="{{analysis.user.custom_url}}" class="avatar rounded-circle mr-3">
+                                    <img alt="Image placeholder" src="{{analysis.user.user_profile.foto_perfil.url}}">
+                                </a>
+                                <div class="media-body">
+                                    <span class="name mb-0 text-sm">{{analysis.user}} - {{analysis.user.user_profile.reputation_score}}</span>
+                                    <br>
+                                    <span class="name mb-0 text-xsm">{{analysis.date| date:"d.m.y"}}</span>
+                                </div>
+                            </div>
+                          </th>
+                          <td class="text-center">
+                              <span class="badge bg-{{analysis.observation_info.color}}">{{analysis.observation_info.status}}</span>
+                          </td>
+                          <td>{{analysis.observation|safe}}</td>
+                        </tr>
+                        {% empty %}
+                        Sé el primero en añadir una observación sobre la empresa
+                        {% endfor %}
+                      </tbody>
+                </table>
+              </div>
+        </div>
+    </div>
+</div>

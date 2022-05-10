@@ -26,7 +26,7 @@ services:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
     ports:
-      - "8000:8000"
+      - "8000"
     command: /start
     networks:
       - invfin_network
@@ -111,6 +111,23 @@ services:
     ports:
       - "5555:5555"
     command: /start-flower
+  
+  nginx:
+    restart: always
+    container_name: invfin_local_nginx
+    build:
+      context: .
+      dockerfile: ./compose/local/nginx/Dockerfile
+    depends_on:
+      - django
+    ports:
+      - "80:80"
+    volumes:
+      - ./compose/local/nginx/conf.d/:/etc/nginx/conf.d/
+      - invfin_local_static_files:/home/app/staticfiles/:z
+      - invfin_local_media_files:/home/app/media/:z
+    networks:
+      - invfin_network
 
 networks:
   invfin_network:

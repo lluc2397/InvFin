@@ -10,10 +10,6 @@
 {% include "general/modals/credits_explanation.html" %}
 {% include "general/modals/user_required.html" %}
 {% endblock modal %}
-<!-- {% block inline_javascript %}    
-<script>
-  window.addEventListener('DOMContentLoaded', () => {/* Run whatever you want */});
-</script>
-{% endblock inline_javascript %} -->
 {% block javascript %}{% include "general/complements/scripts.html" %}{% endblock javascript %}
+{% block extra_javascript %}{% endblock extra_javascript %}
 {% endblock MasterBody %}

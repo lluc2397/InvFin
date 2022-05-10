@@ -4,11 +4,17 @@ from .models import (
 )
 
 class UserCompanyObservationForm(forms.ModelForm):
+    observation = forms.CharField(
+        label="Describe tu observación",
+        widget=forms.Textarea(attrs={'id':'observation'})
+        )
 
     class Meta:
         model = UserCompanyObservation
-        exclude = [
-            'user',
-            'company',
-            'date',
+        fields = [
+            'observation',
+            'observation_type'
         ]
+        labels = {
+            "observation_type": ("Elige la categoría")
+        }

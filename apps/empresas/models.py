@@ -64,6 +64,7 @@ class Exchange(Model):
 
 
 class Company(CompanyExtended):
+    # ticker = CharField(max_length=30, db_index=True)
     ticker = CharField(max_length=30)
     name = CharField(max_length=700, null=True, blank=True)
     currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)
@@ -115,14 +116,6 @@ class Company(CompanyExtended):
     @property
     def resume(self):
         return self.description
-
-    @property
-    def most_recent_inc_statement(self):
-        return self.inc_statements.latest()
-    
-    @property
-    def most_recent_margins(self):
-        return self.margins.latest()
     
     @property
     def most_recent_year(self):

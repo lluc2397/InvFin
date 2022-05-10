@@ -119,15 +119,32 @@ class UserCompanyObservation(Model):
     user = ForeignKey(User, on_delete=SET_NULL, null=True, blank=True)
     company = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True, related_name="company_foda")
     date = DateTimeField(auto_now_add=True)
-    observation = RichTextField(default='', config_name='simple')
-    observation_type = IntegerField(null=True, blank=True,choices=STATUS)
+    observation = RichTextField(config_name='simple')
+    observation_type = IntegerField(choices=STATUS)
 
     class Meta:
         verbose_name = "Observaciones sobre la empresa"
         db_table = "users_screener_companies_observations"
 
-    def __str__(self):
-        return self.user.username + ' ' +self.company.ticker + ' ' + str(self.date)
+    # def __str__(self):
+    #     return self.user.username + ' ' +self.company.ticker + ' ' + str(self.date)
     
     def get_absolute_url(self):
         return reverse("screener:company", kwargs={"ticker": self.company.ticker})
+    
+    @property
+    def observation_info(self):
+        data = {}
+        if self.observation_type == 1:
+            data['status'] = 'Fuerza'
+            data['color'] = 'info'
+        elif self.observation_type == 2:
+            data['status'] = 'Oportunidad'
+            data['color'] = 'success'
+        elif self.observation_type == 3:
+            data['status'] = 'Debilidad'
+            data['color'] = 'warning'
+        else:
+            data['status'] = 'Amenaza'
+            data['color'] = 'danger'
+        return data
