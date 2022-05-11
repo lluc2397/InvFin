@@ -1,24 +1,20 @@
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView
 from django.http.response import JsonResponse, HttpResponse
 from django.db.models import Q
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
-from apps.empresas.models import Company, ExchangeOrganisation, Exchange
+from apps.empresas.models import Company, ExchangeOrganisation
 from apps.etfs.models import Etf
 from apps.empresas.company.update import UpdateCompany
+from apps.empresas.company.extension import get_news
 from apps.empresas.valuations import discounted_cashflow
-
 
 from .models import (
     UserCompanyObservation,
-    FavoritesStocksHistorial,
-    FavoritesStocksList,
     UserScreenerMediumPrediction,
-    UserScreenerSimplePrediction)
-
+    UserScreenerSimplePrediction
+)
 from .forms import UserCompanyObservationForm
-
 
 import json
 
@@ -114,6 +110,13 @@ class CompanyFODAListView(ListView):
 
     def get_queryset(self):
         return UserCompanyObservation.objects.filter(company__id = self.kwargs['id'])
+
+
+def return_company_news(request, ticker):
+    news = get_news(ticker)
+    return render(request, 'screener/empresas/company_parts/resume/news.html', {
+        'show_news': news,
+    })
 
 
 def create_company_observation(request):
@@ -262,7 +265,7 @@ def simple_valuation_view(request):
             buyback = buyback
 
             UserScreenerSimplePrediction.objects.create(
-                user = user, 
+                user = user,
                 company = the_company,
                 optimistic_growth = opt_growth,
                 neutral_growth = neu_growth,

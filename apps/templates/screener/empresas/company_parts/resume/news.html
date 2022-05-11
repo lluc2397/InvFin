@@ -1,0 +1,32 @@
+
+{% for new in show_news %}
+<div class="card-body p-4">
+    <div class="d-flex flex-start">
+        <img
+            class="rounded-circle shadow-1-strong me-3"
+            src="{{new.image}}"
+            alt="avatar"
+            width="60"
+            height="60"/>
+        <div>
+            <h6 class="fw-bold mb-1">{{new.headline}}</h6>
+            <div class="d-flex align-items-center mb-3">
+            <p class="mb-0">
+            {{new.datetime}}
+            </p>
+            <span class="me-2 ms-2">
+            {{new.source}}
+            </span>
+            <span class="me-2">
+            
+            </span>
+            </div>
+            <p class="mb-0" style="text-align: justify;">
+            <a href="{{new.url}}" target="_blank">{{new.summary}}</a>
+            </p>
+        </div>
+    </div>
+</div>
+{%empty%}
+No parece haber noticias para esta empresa actualmente.
+{%endfor%}

@@ -1,5 +1,7 @@
 from django.urls import path
 
+
+from .api.urls import urlpatterns
 from .views import (
     InicioCarteraView,
     save_cashflow_movement,
@@ -19,4 +21,4 @@ urlpatterns = [
     path('save-new-asset/', save_new_asset_movement, name='save_new_asset_movement'),
     path('save-new-category/', save_new_category, name='save_new_category'),
     path('save-new-objectif/', save_new_objectif, name='save_new_objectif'),
-]
+] + urlpatterns

@@ -1,10 +1,13 @@
-from django.shortcuts import render,redirect
-
+from django.shortcuts import redirect
+from django.views.generic import RedirectView
 from django.db.models import Q
+from django.http import HttpResponseRedirect
 
 from apps.escritos.models import Term, TermsRelatedToResume
 from apps.public_blog.models import PublicBlog
 from apps.preguntas_respuestas.models import Question
+
+from .models import Promotion
 
 
 def redirect_old_urls(request, ques_slug=False, term_slug=False, publs_slug=False):
@@ -35,3 +38,16 @@ def redirect_old_urls(request, ques_slug=False, term_slug=False, publs_slug=Fals
                 redirect_to = 'general:escritos'
     return redirect(redirect_to)
         
+
+class PromotionRedirectView(RedirectView):
+
+    permanent = False
+
+    def save_promotion_data(self, slug):
+        model = Promotion.objects.get(slug = slug)
+        return model.full_url
+
+    def get(self, request, *args, **kwargs):
+        slug = request.GET.kwargs['slug']
+        url = self.save_promotion_data(slug)
+        return HttpResponseRedirect(url)

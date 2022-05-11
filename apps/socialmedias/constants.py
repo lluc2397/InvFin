@@ -1,4 +1,4 @@
-SOCIAL_MEDIAS = (
+SOCIAL_MEDIAS = [
     ('facebook', 'Facebook'), 
     ('twitter', 'Twitter'), 
     ('reddit', 'Reddit'), 
@@ -7,7 +7,7 @@ SOCIAL_MEDIAS = (
     ('pinterest', 'Pinterest'), 
     ('tumblr', 'Tumblr'),
     ('instagram', 'Instagram')
-)
+]
 
 FOR_MODEL = (
     (1, 'Question'),

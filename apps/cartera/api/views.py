@@ -15,7 +15,7 @@ class RetreiveUserCarteraAPIView(GenericAPIView):
     def get(self, request):
         user = request.user
         data = {
-            'suer': request.user
+            'suer': request.user.username
         }
         if status.is_success:
             return Response(data, status=status.HTTP_200_OK)

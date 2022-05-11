@@ -6,8 +6,9 @@ from .views import (
     EtfScreenerInicioView,
     CompanyDetailsView,
     EtfDetailsView,
-    create_company_observation,
     CompanyFODAListView,
+    create_company_observation,
+    return_company_news,
     suggest_list_search_companies,
     simple_valuation_view,
     medium_valuation_view
@@ -33,7 +34,7 @@ urlpatterns = [
 
     path('list-foda/<id>', CompanyFODAListView.as_view(), name="list_foda"),
     path('add-observation/', create_company_observation, name="create_company_observation"),
-
+    path('get-company-news/<ticker>', return_company_news, name="return_company_news"),
     path('user-search-company/', suggest_list_search_companies, name="suggest_list_search_companies"),
 
     path('screener-simple-valuation/', simple_valuation_view, name="simple_valuation_view"),

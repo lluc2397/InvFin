@@ -17,6 +17,9 @@ from django.contrib.auth import get_user_model
 
 from ckeditor.fields import RichTextField
 
+from apps.socialmedias.constants import SOCIAL_MEDIAS
+from . import constants 
+
 User = get_user_model()
 
 
@@ -104,41 +107,61 @@ class UsersJourney(Journey):
         db_table = "visits_historial_users"
 
 
-# class PromotionCampaign(Model):
-#     name = CharField(max_length=600, blank=True)
-#     slug = SlugField(blank=True)
-#     categories = ManyToManyField('general.Category', blank=True)
-#     tags = ManyToManyField('general.Tag', blank=True)
-#     start_date = DateTimeField(blank=True)
-#     end_date = DateTimeField(blank=True)
+class PromotionCampaign(Model):
+    title = CharField(max_length=600, blank=True)
+    slug = SlugField(blank=True)
+    categories = ManyToManyField('general.Category', blank=True)
+    tags = ManyToManyField('general.Tag', blank=True)
+    start_date = DateTimeField(blank=True)
+    end_date = DateTimeField(blank=True)
 
-#     class Meta:
-#         verbose_name = "Promotions campaigns"
-#         db_table = "promotion_campaign"
+    class Meta:
+        verbose_name = "Promotions campaigns"
+        db_table = "promotions_campaigns"
 
 
-# class PromotionPost(Model):
-#     MEDIUMS = (
-#         ('ads', 'Ads'), 
-#         ('email', 'Email'), 
-#         ('web', 'Web'), 
-#         ('social-media-posts', 'Social media posts'))
+class Promotion(Model):
+    MEDIUMS = [
+        ('ads', 'Ads'), 
+        ('email', 'Email'), 
+        ('invfin', 'Web'), 
+        ('social-media-posts', 'Social media posts')]
 
-#     title = CharField(max_length=600, blank=True)
-#     content = RichTextField()
-#     prize = PositiveBigIntegerField(default=0)
-#     has_prize = BooleanField(default=False)
-#     slug = CharField(max_length=600, blank=True)
-#     full_url = CharField(max_length=600, blank=True)
-#     medium = CharField(max_length=250, choices=MEDIUMS, blank=True)
-#     clicks_by_user = PositiveBigIntegerField(default=0)
-#     clicks_by_not_user = PositiveBigIntegerField(default=0)
-#     identification = CharField(max_length=600, blank=True, unique=True)
-#     redirect_to = CharField(max_length=600, blank=True, null=True)
-#     start_date = DateTimeField(blank=True)
-#     end_date = DateTimeField(blank=True)
-#     campaign_related = ForeignKey(PromotionCampaign, on_delete=SET_NULL, null=True, blank=True)
+    title = CharField(max_length=600, blank=True)
+    content = RichTextField()
+    thumbnail = CharField(max_length=600, blank=True)
+    slug = SlugField()
+    prize = PositiveBigIntegerField(default=0)
+    has_prize = BooleanField(default=False)
+    shareable_url = CharField(max_length=600, blank=True)
+    redirect_to = CharField(max_length=600, blank=True)
+    medium = CharField(max_length=250, choices=MEDIUMS, blank=True)
+    web_promotion_type = CharField(max_length=250, choices=constants.WEP_PROMOTION_TYPE, blank=True)
+    web_location = CharField(max_length=250, choices=constants.WEP_PROMOTION_LOCATION, blank=True)
+    social_media = CharField(max_length=250, blank=True, choices=SOCIAL_MEDIAS)
+    publication_date = DateTimeField(blank=True)
+    campaign_related = ForeignKey(PromotionCampaign, on_delete=SET_NULL, null=True, blank=True)
+    reuse = BooleanField(default=False)
+    times_to_reuse = PositiveBigIntegerField(default=0)
+    users_clicked = ManyToManyField(User, blank=True)
+    visiteurs_clicked = ManyToManyField(Visiteur, blank=True)
+    clicks_by_user = PositiveBigIntegerField(default=0)
+    clicks_by_not_user = PositiveBigIntegerField(default=0)
 
-#     class Meta:
-#         verbose_name = "Promociones"
-#         db_table = "promotion"
+    class Meta:
+        verbose_name = "Promociones"
+        db_table = "promotions"
+    
+    def __str__(self) -> str:
+        return super().__str__()
+    
+    @property
+    def full_url(self):
+        source = 'invfin'
+        if self.medium != source:            
+            source = self.social_media
+        utm_source = f'utm_source={source}'
+        utm_medium = f'utm_medium={self.medium}'
+        utm_campaign = f'utm_campaign={self.campaign_related.title}'
+        utm_term = f'utm_term={self.title}'
+        return f'{self.redirect_to}?{utm_source}&{utm_medium}&{utm_campaign}&{utm_term}'

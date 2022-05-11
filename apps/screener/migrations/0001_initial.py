@@ -70,7 +70,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('date', models.DateTimeField(auto_now_add=True)),
                 ('observation', ckeditor.fields.RichTextField(default='')),
-                ('observation_type', models.IntegerField(blank=True, choices=[(1, 'Fuerza'), (2, 'Oportunidad'), (3, 'Debilidad'), (4, 'Amenaza')], null=True)),
+                ('observation_type', models.IntegerField(default=0, choices=[(1, 'Fuerza'), (2, 'Oportunidad'), (3, 'Debilidad'), (4, 'Amenaza')])),
             ],
             options={
                 'verbose_name': 'Observaciones sobre la empresa',

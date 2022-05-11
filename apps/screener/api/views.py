@@ -39,4 +39,3 @@ class CompanyBaseAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_503_SERVICE_UNAVAILABLE)
-

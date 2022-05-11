@@ -76,37 +76,12 @@
             <div class="card-header">
                 <h4 class="ms-2">Noticias </h4>
             </div>
-            <!-- {% for new in the_company.show_news %}
-            <div class="card-body p-4">
-                <div class="d-flex flex-start">
-                    <img
-                        class="rounded-circle shadow-1-strong me-3"
-                        src="{{new.image}}"
-                        alt="avatar"
-                        width="60"
-                        height="60"/>
-                    <div>
-                        <h6 class="fw-bold mb-1">{{new.headline}}</h6>
-                        <div class="d-flex align-items-center mb-3">
-                        <p class="mb-0">
-                        {{new.datetime}}
-                        </p>
-                        <span class="me-2 ms-2">
-                        {{new.source}}
-                        </span>
-                        <span class="me-2">
-                        
-                        </span>
-                        </div>
-                        <p class="mb-0" style="text-align: justify;">
-                        <a href="{{new.url}}" target="_blank">{{new.summary}}</a>
-                        </p>
-                    </div>
+            <div class="card-body" hx-trigger="load" hx-get="{% url 'screener:return_company_news' the_company.ticker %}" hx-target="this">
+                <div class="text-center">
+                    <div class="spinner-border" role="status"></div>
+                    Cargando...
                 </div>
             </div>
-            {%empty%}
-            No parece haber noticias para esta empresa actualmente.
-            {%endfor%} -->
         </div>
     </div>    
 </div>

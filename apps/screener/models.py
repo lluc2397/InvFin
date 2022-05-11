@@ -119,15 +119,15 @@ class UserCompanyObservation(Model):
     user = ForeignKey(User, on_delete=SET_NULL, null=True, blank=True)
     company = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True, related_name="company_foda")
     date = DateTimeField(auto_now_add=True)
-    observation = RichTextField(config_name='simple')
-    observation_type = IntegerField(choices=STATUS)
+    observation = RichTextField(default='', config_name='simple')
+    observation_type = IntegerField(default=0, choices=STATUS)
 
     class Meta:
         verbose_name = "Observaciones sobre la empresa"
         db_table = "users_screener_companies_observations"
 
-    # def __str__(self):
-    #     return self.user.username + ' ' +self.company.ticker + ' ' + str(self.date)
+    def __str__(self):
+        return self.user.username + ' ' +self.company.ticker + ' ' + str(self.date)
     
     def get_absolute_url(self):
         return reverse("screener:company", kwargs={"ticker": self.company.ticker})
