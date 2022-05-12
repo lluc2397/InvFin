@@ -57,22 +57,25 @@ class TermDetailsView(DetailView):
 
 
 class TermCorrectionView(SuccessMessageMixin, CreateView):
-	model = TermContent
 	form_class = CreateCorrectionForm
 	template_name = 'glosario/correction.html'
 	success_message = 'Gracias por tu aporte'
-	slug_field = 'pk'
+
+	def get_object(self):
+		return TermContent.objects.get(id = self.kwargs['pk'])
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		context['public_key'] = settings.GOOGLE_RECAPTCHA_PUBLIC_KEY
+		context['object'] = self.get_object()
 		return context
 
 	def get_initial(self, *args, **kwargs):
 		initial = super(TermCorrectionView, self).get_initial(**kwargs)
-		object = self.get_object()		
+		object = self.get_object()
 		initial['title'] = object.title
 		initial['content'] = object.content
+		initial['term_content_related'] = object
 		return initial
 	
 	def post(self, request, *args: str, **kwargs):
@@ -102,6 +105,6 @@ class TermCorrectionView(SuccessMessageMixin, CreateView):
 		return self.form_valid(form, user)
 
 	def form_valid(self, form, user):
-		form.instance.author = user
+		form.instance.reviwed_by = user
 		return super().form_valid(form)
 

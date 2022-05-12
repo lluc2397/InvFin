@@ -262,12 +262,19 @@ class Patrimonio(Model, ChartSerializer):
         percentage_earned = 100 - percentage_spend - percentage_saved - percentage_invested
         
         incomes_and_spends = list(total_income_earned['incomes']) + list(total_income_spend['spends'])
+        income_earned = total_income_earned['total']
+        income_spend = total_income_spend['total']
+        income_saved = income_saved['total']
+        income_invested = income_invested['total']
+        
         return {
-            'income_earned':total_income_earned['total'],
-            'income_spend':total_income_spend['total'],
-            'income_saved':income_saved['total'],
-            'income_invested':income_invested['total'],
+            'income_earned': f'{income_earned}',
+            'income_spend': f'{income_spend}',
+            'income_saved': f'{income_saved}',
+            'income_invested': f'{income_invested}',
+            
             'incomes_and_spends':incomes_and_spends,
+
             'percentage_earned': percentage_earned,
             'percentage_spend': percentage_spend,
             'percentage_saved': percentage_saved,

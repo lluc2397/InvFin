@@ -55,18 +55,18 @@ class TermContent(Model):
         db_table = "term_content"
 
     def __str__(self):
-        return self.title
+        return f'{self.title}'
     
     def get_absolute_url(self):
-        return reverse("escritos:correction_term", kwargs={"id": self.id})
+        return self.term_related.get_absolute_url()
 
 
 class TermCorrection(Model):
-    term_content_related = ForeignKey(TermContent,null = True, blank=True, on_delete=CASCADE)
+    term_content_related = ForeignKey(TermContent,null = True, blank=True, on_delete=SET_NULL)
     title = CharField(max_length=3000,null = True, blank=True)
     date_suggested = DateTimeField(default=timezone.now)
     is_approved = BooleanField(default=False)
-    date_approved = DateTimeField(default=timezone.now)
+    date_approved = DateTimeField(blank=True, null=True)
     content = RichTextField(config_name='writter')
     reviwed_by = ForeignKey(
         User,
@@ -88,7 +88,7 @@ class TermCorrection(Model):
         db_table = "term_content_correction"
 
     def __str__(self):
-        return self.term_content_related.title
+        return f'{self.term_content_related.title} corregido por {self.reviwed_by.username}'
     
     def save(self, *args, **kwargs): # new
         if self.is_approved is True:
@@ -96,6 +96,9 @@ class TermCorrection(Model):
             #enviar email de agradecimiento
             pass
         return super().save(*args, **kwargs)
+    
+    def get_absolute_url(self):
+        return self.term_content_related.get_absolute_url()
 
 
 class TermsComment(BaseComment):

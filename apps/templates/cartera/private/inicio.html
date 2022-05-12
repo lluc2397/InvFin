@@ -1,25 +1,14 @@
-{% extends "general/bases/main_base.html" %}
+{% extends "cartera/private/base.html" %}
 {% load static %}
 {% load extra %}
 {% block header %}
+{% with patrimonio.patrimoine as money %}
 {% include "cartera/header/private.html" %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js" 
-integrity="sha512-UXumZrZNiOwnTcZSHLOfcTs0aos2MzBWHXOHOuB0J/R44QB0dwY5JgfbvljXcklVf65Gc4El6RjZ+lnwd2az2g==" 
-crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/1.2.0/chartjs-plugin-zoom.min.js" 
-integrity="sha512-TT0wAMqqtjXVzpc48sI0G84rBP+oTkBZPgeRYIOVRGUdwJsyS3WPipsNh///ay2LJ+onCM23tipnz6EvEy2/UA==" 
-crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script src="{% static 'general/assets/js/screener.js' %}"></script>
+{% endwith %}
 {% endblock header%}
 
 {% block content %}
-<script>
-    getFromUrl('/get/user/cartera')
-</script>
+{% with patrimonio.patrimoine as money %}
 <div class="row">
     {% block FirstCta %}
     <div class="col-12">
@@ -32,11 +21,11 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <div class="col-lg-6 col-sm-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="h3 mb-0">Patrimonio</h5>
+                <h5 class="h3 mb-0">Cantidades</h5>
              </div>
           <div class="card-body">
             <div class="chart-canvas">
-                <canvas id="Ingresos"></canvas>
+                <canvas id="bar-incomes"></canvas>
             </div>            
           </div>                                                
         </div>
@@ -44,21 +33,16 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <div class="col-lg-6 mb-3">
         <div class="card">
             <div class="card-header">
-                <h5 class="h3 mb-0">Patrimonio</h5>
+                <h5 class="h3 mb-0">Repartición</h5>
              </div>
-            <div class="text-center">
-                <div class="spinner-border" id="rev-incomeLoader" style="width: 3rem; height: 3rem;" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            </div>
             <div class="card-body">
                   <div class="chart-canvas">
-                      <canvas id="rev-incomeChart"></canvas>
+                      <canvas id="pie-incomes"></canvas>
                   </div>
             </div>
         </div>
     </div>
-    <div class="col-lg-5 col-sm-12">
+    <div class="col-12">
         <div class="card">
             <div class="card-header">
                 <!-- Title -->
@@ -114,4 +98,125 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     {% block LastCta %}
     {% endblock LastCta %}
 </div>
+
+<script>
+
+    new Chart(document.querySelector('#bar-incomes'), {
+        type: 'bar',
+        data: {
+            labels: [
+                'Ingresos', 
+                'Gastos', 
+                'Ahorros', 
+                'Inversiones'
+            ],
+            datasets: [{
+            
+            data: [
+                {{money.income_earned}}, 
+                {{money.income_spend}}, 
+                {{money.income_saved}}, 
+                {{money.income_invested}}
+            ],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(255, 205, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+            ],
+            borderWidth: 1
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    // stepSize: 50
+                }
+            }]
+            },
+        
+            title: {
+                display: false
+            },
+                    
+            
+            legend: {
+            display: false
+        },
+        tooltips: {
+            callbacks: {
+                label: function(tooltipItem) {
+                        return tooltipItem.yLabel;
+                }
+            }
+        }
+        }
+    });
+    new Chart(document.querySelector('#pie-incomes'), {
+        type: 'pie',
+        data: {
+            labels: [
+                'Gastos', 
+                'Ahorros', 
+                'Inversiones'
+            ],
+            datasets: [{
+            
+            data: [
+                {{money.percentage_spend}}, 
+                {{money.percentage_saved}}, 
+                {{money.percentage_invested}}
+            ],
+            backgroundColor: [
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 159, 64, 1)',
+                'rgba(255, 205, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+            ],
+            borderWidth: 1
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    // stepSize: 50
+                }
+            }]
+            },
+        
+            title: {
+                display: false
+            },
+                    
+            
+            legend: {
+            display: false
+        },
+        tooltips: {
+            callbacks: {
+                label: function(tooltipItem) {
+                        return tooltipItem.yLabel;
+                }
+            }
+        }
+        }
+    });
+</script>
+{% endwith %}
 {% endblock content %}

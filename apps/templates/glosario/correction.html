@@ -13,7 +13,7 @@
   </div>
   <div class="col-lg-8 col-12-md">
     <div class="card">
-      <form method="POST" action="{% url 'preguntas_respuestas:create_question' %}">
+      <form method="POST" action="{% url 'escritos:correction_term' object.pk %}">
         {% csrf_token %}
         {{ form.media }}
         {% for field in form %}
@@ -24,6 +24,7 @@
         {% endif %}
         {% endfor %}
         <div class="card-body">
+          {{ form.term_content_related.as_hidden }}
             {{form.title|as_crispy_field}}
           <h2 class="card-title">Contenido</h2>
           <p class="card-text">Aporta las correcciones que consideres necesarias.</p>

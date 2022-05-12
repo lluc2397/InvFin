@@ -14,6 +14,7 @@ class CreateCorrectionForm(ModelForm):
         model = TermCorrection
         fields = [
             'title',
-            'content'
+            'content',
+            'term_content_related'
             ]
 

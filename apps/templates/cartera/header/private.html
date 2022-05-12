@@ -1,33 +1,4 @@
-{% load static %}
-<div class="row align-items-center py-4">
-   <div class="col-lg-3 col-4">
-      <h6 class="h2 d-inline-block mb-0 mr-5">{{meta_title}}</h6>
-   </div>
-  <div class="col-lg-9 col-8 text-right">
-   <div class="btn-group btn-neutral" role="group" aria-label="Button group with nested dropdown">
-      <button data-bs-toggle="modal" data-bs-target="#DefaultCurrencyModal" class="btn btn-sm btn-slack">Divisa</button>
-      <button data-bs-toggle="modal" data-bs-target="#ObjectivesModal" class="btn btn-sm btn-slack">Objetivos</button>
-      <!-- <button data-bs-toggle="modal" data-bs-target="#CategoriesModal" class="btn btn-sm btn-neutral">Categorías</button>     -->
-      <div class="btn-group" role="group">
-        <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          Dropdown
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-          <li>
-            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#CashflowMovementModal" href="#!">+/- Cashflow</a>
-         </li>
-         <li>
-            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#AssetsMovementsModal" href="#!">+/- Posición</a>
-         </li>
-         <li>
-            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#NewAssetModal" href="#!">+ Activo</a>
-         </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Card stats -->
+<!-- {% include "cartera/header/top-headers.html" %} -->
 <div class="row">
   <div class="col-xl-3 col-md-6">
     <div class="card bg-gradient-info">
