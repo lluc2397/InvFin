@@ -16,13 +16,12 @@
                                 <tr>                                    
                                     <th colspan="2" scope="row"><h4>{{the_company.name}} ({{the_company.ticker}})</h4></th>
                                     <th>Capitalización bursátil</th>
-                                    <td>{{the_company.marketcap}}</td>
+                                    <th id="marketcap">{{the_company_financials.marketcap}}</th>
                                     {% if the_company.exchange.main_org.id == 1 %}
                                     <th><a class="btn btn-secondary" href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&ticker={{the_company.ticker}}&type=10-k&dateb=&owner=exclude&count=40&search_text=" target="_blank">Ver 10-K</a></th>
                                     <th><a class="btn btn-secondary" href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&ticker={{the_company.ticker}}&type=10-q&dateb=&owner=exclude&count=40&search_text=" target="_blank">Ver 10-Q</a></th>
                                     {%else%}
                                     <th><a class="btn btn-secondary" href="{{the_company.website}}" target="_blank">Web</a></th>
-                                    <!-- <th><a class="btn btn-secondary"></a>WEB</th> -->
                                     {%endif%}
                                 </tr>
                                 </thead>                          
@@ -76,7 +75,8 @@
             <div class="card-header">
                 <h4 class="ms-2">Noticias </h4>
             </div>
-            <div class="card-body" hx-trigger="load" hx-get="{% url 'screener:return_company_news' the_company.ticker %}" hx-target="this">
+            <div class="card-body" hx-trigger="load" 
+                hx-get="{% url 'screener:return_company_news' the_company.ticker %}" hx-target="this">
                 <div class="text-center">
                     <div class="spinner-border" role="status"></div>
                     Cargando...

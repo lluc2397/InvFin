@@ -21,7 +21,11 @@
       <div class="float-start">
         <strong>{{the_company.name}} - ({{the_company.ticker}})</strong>
         <br>
-        Precio actual: {{the_company.get_current_price.current_price}} {{the_company.get_current_price.current_currency}}
+        Precio actual:
+        <span hx-trigger="load" hx-get="{% url 'screener:get_company_price' the_company.ticker %}" hx-target="this">
+          <div class="spinner-border" role="status"></div>
+        </span>
+         
       </div>
       <div class="float-end">
         {% if request.user.is_authenticated %}

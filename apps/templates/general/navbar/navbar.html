@@ -7,7 +7,7 @@
         <div class="form-group mb-0">
           <div class="input-group input-group-alternative input-group-merge input-group ui-widgets">
             <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fas fa-search"></i></span>
+              <button type="submit" class="input-group-text"><i class="fas fa-search"></i></button>
             </div>
             <input class="form-control" id="buscador" name="term" placeholder="Buscar" type="search">
           </div>
@@ -180,7 +180,7 @@
   $(function() {
     $("#buscador").autocomplete({
       source: "{% url 'general:searcher_suggestions' %}",
-      minLength: 3,
+      minLength: 1,
       appendTo: "#navbar-search-main"
     });
   });

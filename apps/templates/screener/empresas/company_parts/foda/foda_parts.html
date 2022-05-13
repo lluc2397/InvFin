@@ -23,13 +23,13 @@
                                     <img alt="Image placeholder" src="{{analysis.user.user_profile.foto_perfil.url}}">
                                 </a>
                                 <div class="media-body">
-                                    <span class="name mb-0 text-sm">{{analysis.user}} - {{analysis.user.user_profile.reputation_score}}</span>
+                                    <a href="{{analysis.user.custom_url}}" class="name mb-0 text-sm">{{analysis.user}} - {{analysis.user.user_profile.reputation_score}}</a>
                                     <br>
                                     <span class="name mb-0 text-xsm">{{analysis.date| date:"d.m.y"}}</span>
                                 </div>
                             </div>
                           </th>
-                          <td class="text-center">
+                          <td class="align-items-center">
                               <span class="badge bg-{{analysis.observation_info.color}}">{{analysis.observation_info.status}}</span>
                           </td>
                           <td>{{analysis.observation|safe}}</td>

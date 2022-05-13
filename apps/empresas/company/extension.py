@@ -1,78 +1,26 @@
 from django.db.models import Model
-from django.apps import apps
-from django.conf import settings
 
-import yfinance as yf
-import yahooquery as yq
-
-from datetime import datetime
-import json
-import requests
 import math
 from statistics import mean
 
 from apps.general.utils import ChartSerializer
-
 from apps.empresas.valuations import discounted_cashflow
 
-FINHUB_TOKEN = settings.FINHUB_TOKEN
+from .retreive_data import RetreiveCompanyData
 
-def get_news(ticker):
-    day = str(int(datetime.now().strftime("%Y-%m-%d")[-2:])-2)
-    final_date = (datetime.now().strftime(f"%Y-%m-{day}"))
-    return requests.get(f'https://finnhub.io/api/v1/company-news?symbol={ticker}&from={final_date}&to={datetime.now().strftime("%Y-%m-%d")}&token={FINHUB_TOKEN}').json()
-
-
-headers = {
-    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36',
-    'Accept-Encoding': 'gzip, deflate'
-}
 
 class CompanyExtended(Model, ChartSerializer):
     class Meta:
         abstract = True
     
-    def scrap_price_yahoo(self):
-        url_current_price = f'https://query1.finance.yahoo.com/v8/finance/chart/{self.ticker}'
-        current_price_jsn = requests.get(url_current_price, headers=headers).json()['chart']['result']
-        current_price = [infos['meta']['regularMarketPrice'] for infos in current_price_jsn][0]
-        current_currency = [infos['meta']['currency'] for infos in current_price_jsn][0]
-
-        return current_price, current_currency
-    
-    @property
-    def get_current_price(self):
-        current_price = 0
-        current_currency = 'None'
-
-        try:
-            company_info = yf.Ticker(self.ticker).info
-            if 'currentPrice' in company_info:
-                current_price = company_info['currentPrice']
-                current_currency = company_info['currency']
-            else:
-                company_info = yq.Ticker(self.ticker).financial_data
-                if 'currentPrice' in company_info:
-                    current_price = company_info['currentPrice']
-                    current_currency = company_info['financialCurrency']
-
-        except Exception as e:
-            current_price, current_currency = self.scrap_price_yahoo()
-        
-        return {
-            'current_price': current_price,
-            'current_currency': current_currency,
-        }
-
-    @property
-    def show_news(self):
-        news = get_news(self.ticker)
-        return news
-
-    def income_json(self, limit = 10):
+    def all_income_statements(self, limit = 10) ->list:
         inc = self.inc_statements.all()
         if limit != 0:
             inc = inc[:limit]
+        return inc
+
+    def income_json(self):
+        inc = self.all_income_statements()
         if not self.currency:
             self.currency = inc[0].reported_currency
         inc_json = {
@@ -195,12 +143,14 @@ class CompanyExtended(Model, ChartSerializer):
         }
         return data, inc
 
-    
-    def balance_json(self, limit = 10):
+    def all_balance_sheets(self, limit = 10) -> list:
         bls = self.balance_sheets.all()
         if limit != 0:
             bls = bls[:limit]
-        
+        return bls
+
+    def balance_json(self):
+        bls = self.all_balance_sheets()        
         bls_json = {
             'currency': self.currency.currency,
             'labels': [data.date for data in bls],
@@ -415,13 +365,14 @@ class CompanyExtended(Model, ChartSerializer):
         }
         return data, bls
 	
-
-    
-    def cashflow_json(self, limit = 10):
+    def all_cashflow_statements(self, limit = 10) -> list:
         cf = self.cf_statements.all()
         if limit != 0:
             cf = cf[:limit]
-        
+        return cf
+    
+    def cashflow_json(self):
+        cf = self.all_cashflow_statements()
         cf_json = {
             'currency': self.currency.currency,
             'labels': [data.date for data in cf],
@@ -590,12 +541,14 @@ class CompanyExtended(Model, ChartSerializer):
         }
         return data, cf
 
-
-    def rentability_ratios_json(self, limit = 10):
+    def all_rentablity_ratios(self, limit = 10) -> list:
         rr = self.rentability_ratios.all()
         if limit != 0:
             rr = rr[:limit]
-        
+        return rr
+
+    def rentability_ratios_json(self):
+        rr = self.all_rentablity_ratios()        
         rr_json = {
             'labels': [data.date for data in rr],
             'fields': [
@@ -660,13 +613,15 @@ class CompanyExtended(Model, ChartSerializer):
             'chart':chartData
         }
         return data, rr
-        
-
-    def liquidity_ratios_json(self, limit = 10):
+    
+    def all_liquidity_ratios(self, limit = 10) -> list:
         lr = self.liquidity_ratios.all()
         if limit != 0:
             lr = lr[:limit]
-        
+        return lr
+
+    def liquidity_ratios_json(self):
+        lr = self.all_liquidity_ratios()        
         lr_json = {
             'labels': [data.date for data in lr],
             'fields': [
@@ -713,13 +668,15 @@ class CompanyExtended(Model, ChartSerializer):
             'chart':chartData
         }
         return data, lr
-        
-
-    def margins_json(self, limit = 10):
-        cf = self.margins.all()
+    
+    def all_margins(self, limit = 10) -> list:
+        margins = self.margins.all()
         if limit != 0:
-            cf = cf[:limit]
-        
+            margins = margins[:limit]
+        return margins
+
+    def margins_json(self):
+        cf = self.all_margins()
         cf_json = {
             'labels': [data.date for data in cf],
             'fields': [
@@ -773,9 +730,6 @@ class CompanyExtended(Model, ChartSerializer):
                 'values': [data.fcf_margin for data in cf]},
             ]}
         return cf_json, cf
-
-
-
     
     @property
     def comparing_margins_json(self):
@@ -787,12 +741,14 @@ class CompanyExtended(Model, ChartSerializer):
         }
         return data, cf
 
-
-    def fcf_ratios_json(self, limit = 10):
-        cf = self.fcf_ratios.all()
+    def all_fcf_ratios(self, limit = 10) -> list:
+        fcf_ratios = self.fcf_ratios.all()
         if limit != 0:
-            cf = cf[:limit]
-        
+            fcf_ratios = fcf_ratios[:limit]
+        return fcf_ratios
+
+    def fcf_ratios_json(self):
+        cf = self.all_fcf_ratios()        
         cf_json = {
             'labels': [data.date for data in cf],
             'fields': [{
@@ -833,12 +789,14 @@ class CompanyExtended(Model, ChartSerializer):
         }
         return data, cf
     
-
-    def per_share_values_json(self, limit = 10):
-        cf = self.per_share_values.all()
+    def all_per_share_values(self, limit = 10) -> list:
+        per_share_values = self.per_share_values.all()
         if limit != 0:
-            cf = cf[:limit]
-        
+            per_share_values = per_share_values[:limit]
+        return per_share_values
+
+    def per_share_values_json(self):
+        cf = self.all_per_share_values()        
         cf_json = {
             'labels': [data.date for data in cf],
             'fields': [
@@ -910,12 +868,14 @@ class CompanyExtended(Model, ChartSerializer):
         }
         return data, cf
 
-    
-    def non_gaap_json(self, limit = 10):
+    def all_non_gaap(self, limit = 10) -> list:
         nongaap = self.non_gaap_figures.all()
         if limit != 0:
             nongaap = nongaap[:limit]
-        
+        return nongaap
+    
+    def non_gaap_json(self):
+        nongaap = self.all_non_gaap()        
         nongaap_json = {
             'labels': [data.date for data in nongaap],
             'fields': [
@@ -1029,12 +989,14 @@ class CompanyExtended(Model, ChartSerializer):
         }
         return data, nongaap
     
-
-    def operation_risks_ratios_json(self, limit = 10):
-        cf = self.operation_risks_ratios.all()
+    def all_operation_risks_ratios(self, limit = 10) -> list:
+        operation_risks_ratios = self.operation_risks_ratios.all()
         if limit != 0:
-            cf = cf[:limit]
-        
+            operation_risks_ratios = operation_risks_ratios[:limit]
+        return operation_risks_ratios
+
+    def operation_risks_ratios_json(self):
+        cf = self.all_operation_risks_ratios()        
         or_json = {
             'labels': [data.date for data in cf],
             'fields': [
@@ -1095,7 +1057,6 @@ class CompanyExtended(Model, ChartSerializer):
             ]}
         return or_json, cf
     
-
     @property
     def comparing_operation_risks_ratios_json(self):
         comparing_json, cf = self.operation_risks_ratios_json()
@@ -1106,12 +1067,14 @@ class CompanyExtended(Model, ChartSerializer):
         }
         return data, cf
     
-
-    def ev_ratios_json(self, limit = 10):
-        cf = self.ev_ratios.all()
+    def all_ev_ratios(self, limit = 10) -> list:
+        ev_ratios = self.ev_ratios.all()
         if limit != 0:
-            cf = cf[:limit]
-        
+            ev_ratios = ev_ratios[:limit]
+        return ev_ratios
+
+    def ev_ratios_json(self):
+        cf = self.all_ev_ratios()        
         cf_json = {
             'labels': [data.date for data in cf],
             'fields': [
@@ -1160,23 +1123,24 @@ class CompanyExtended(Model, ChartSerializer):
             ]}
         return cf_json, cf
     
-
     @property
     def comparing_ev_ratios_json(self):
-        comparing_json, cf = self.ev_ratios_json()
+        comparing_json, ev_ratios = self.ev_ratios_json()
         chartData = self.generate_json(comparing_json)
         data = {
             'table':comparing_json,
             'chart':chartData
         }
-        return data, cf
+        return data, ev_ratios
     
-
-    def growth_rates_json(self, limit = 10):
-        cf = self.growth_rates.all()
+    def all_growth_rates(self, limit = 10) -> list:
+        growth_rates = self.growth_rates.all()
         if limit != 0:
-            cf = cf[:limit]
-        
+            growth_rates = growth_rates[:limit]
+        return growth_rates
+
+    def growth_rates_json(self):
+        cf = self.all_growth_rates()        
         cf_json = {
             'labels': [data.date for data in cf],
             'fields': [
@@ -1243,7 +1207,6 @@ class CompanyExtended(Model, ChartSerializer):
             ]}
         return cf_json, cf
     
-
     @property
     def comparing_growth_rates_json(self):
         comparing_json, cf = self.growth_rates_json()
@@ -1254,12 +1217,14 @@ class CompanyExtended(Model, ChartSerializer):
         }
         return data, cf
     
-
-    def efficiency_ratios_json(self, limit = 10):
-        cf = self.efficiency_ratios.all()
+    def all_efficiency_ratios(self, limit = 10) -> list:
+        efficiency_ratios = self.efficiency_ratios.all()
         if limit != 0:
-            cf = cf[:limit]
-        
+            efficiency_ratios = efficiency_ratios[:limit]
+        return efficiency_ratios
+
+    def efficiency_ratios_json(self):
+        cf = self.all_efficiency_ratios()        
         er_json = {
             'labels': [data.date for data in cf],
             'fields': [
@@ -1337,12 +1302,14 @@ class CompanyExtended(Model, ChartSerializer):
         }
         return data, cf
 
-
-    def price_to_ratios_json(self, limit = 10):
-        cf = self.price_to_ratios.all()
+    def all_price_to_ratios(self, limit = 10) -> list:
+        price_to_ratios = self.price_to_ratios.all()
         if limit != 0:
-            cf = cf[:limit]
-        
+            price_to_ratios = price_to_ratios[:limit]
+        return price_to_ratios
+
+    def price_to_ratios_json(self):
+        cf = self.all_price_to_ratios()        
         cf_json = {
             'labels': [data.date for data in cf],
             'fields': [
@@ -1497,56 +1464,30 @@ class CompanyExtended(Model, ChartSerializer):
             'fcf_ratios': fcf_ratios,
         }
         return ratios, query_ratios
-
-
-    @property
-    def foda_analysis(self):
-        foda = []
-
-        obj_to_split = str(self.company_foda).split('.')
-        app_label, object_name = obj_to_split[0], obj_to_split[1] 
-        modelo = apps.get_model(app_label, object_name, require_ready=True)
-        
-        for status in modelo.STATUS:            
-            analysis = self.company_foda.filter(observation_type = status[0])            
-            fodic = {
-                'status_num': status[0],
-                'status': status[1],
-                'values': analysis
-            }
-            foda.append(fodic)
-        return foda
     
+    
+    def calculate_current_ratios(
+            self,
+            all_balance_sheets: list = None,
+            all_per_share: list = None,
+            all_margins: list = None,
+            all_inc_statements: list = None
+        ) -> dict:
+        current_price = RetreiveCompanyData(self.ticker).get_current_price()['current_price']
 
-    @property
-    def complete_info(self):
-        
-        comparing_income_json, all_inc_statements = self.comparing_income_json
-        comparing_balance_json, all_balance_sheets = self.comparing_balance_json
-        comparing_cashflows, all_cashflow_statements = self.comparing_cashflows
-        important_ratios, all_important_ratios = self.important_ratios
-        secondary_ratios, all_secondary_ratios = self.secondary_ratios
-        
-        all_rentability_ratios = all_important_ratios['rentability_ratios']
-        all_liquidity_ratios = all_important_ratios['liquidity_ratios']
-        all_margins = all_important_ratios['margins']
+        all_balance_sheets = all_balance_sheets if all_balance_sheets else self.all_balance_sheets() 
+        all_per_share = all_per_share if all_per_share else self.all_per_share_values() 
+        all_margins = all_margins if all_margins else self.all_margins() 
+        all_inc_statements = all_inc_statements if all_inc_statements else self.all_income_statements() 
 
-        all_efficiency_ratios = all_secondary_ratios['efficiency_ratios']
-        all_op_risk_ratios = all_secondary_ratios['op_risk_ratios']
-        all_non_gaap = all_secondary_ratios['non_gaap']
-        all_per_share = all_secondary_ratios['per_share']
-        all_fcf_ratios = all_secondary_ratios['fcf_ratios']
-
-        current_price = self.get_current_price['current_price']
-
-        last_balance_sheet = all_balance_sheets.first()
-        last_per_share = all_per_share.first()
-        last_margins = all_margins.first()
-        last_income_statement = all_inc_statements.first()
+        last_balance_sheet = all_balance_sheets[0]
+        last_per_share = all_per_share[0]
+        last_margins = all_margins[0]
+        last_income_statement = all_inc_statements[0]
         last_revenue = last_income_statement.revenue
         average_shares_out = last_income_statement.weighted_average_shares_outstanding
 
-        num_ics = 10 if all_inc_statements.count() >= 10 else all_inc_statements.count() 
+        num_ics = 10 if len(all_inc_statements) >= 10 else len(all_inc_statements)
         number = num_ics - 1
 
         try:
@@ -1709,8 +1650,7 @@ class CompanyExtended(Model, ChartSerializer):
         else: 
             evsales_lvl = 3
 
-
-        valuations = {
+        return {
             'pfcf':pfcf, 'pfcf_lvl':pfcf_lvl,
             'pas':pas, 'pas_lvl':pas_lvl,
             'pta':pta, 'pta_lvl':pta_lvl,
@@ -1743,12 +1683,35 @@ class CompanyExtended(Model, ChartSerializer):
             # 'average_margin':average_margin,
             # 'average_fcf_margin':average_fcf_margin
         }
-        context = {
+
+    @property
+    def complete_info(self):
+        
+        comparing_income_json, all_inc_statements = self.comparing_income_json
+        comparing_balance_json, all_balance_sheets = self.comparing_balance_json
+        comparing_cashflows, all_cashflow_statements = self.comparing_cashflows
+        important_ratios, all_important_ratios = self.important_ratios
+        secondary_ratios, all_secondary_ratios = self.secondary_ratios
+        
+        all_rentability_ratios = all_important_ratios['rentability_ratios']
+        all_liquidity_ratios = all_important_ratios['liquidity_ratios']
+        all_margins = all_important_ratios['margins']
+
+        all_efficiency_ratios = all_secondary_ratios['efficiency_ratios']
+        all_op_risk_ratios = all_secondary_ratios['op_risk_ratios']
+        all_non_gaap = all_secondary_ratios['non_gaap']
+        all_per_share = all_secondary_ratios['per_share']
+        all_fcf_ratios = all_secondary_ratios['fcf_ratios']
+
+        comparing_ev_ratios_json, all_ev_ratios = self.comparing_ev_ratios_json
+        comparing_growth_rates_json, all_growth_rates = self.comparing_growth_rates_json
+
+        marketcap = all_ev_ratios[0].market_cap
+        return {
             'comparing_income_json': comparing_income_json,
             'comparing_balance_json': comparing_balance_json,
             'comparing_cashflows': comparing_cashflows,
             'important_ratios': important_ratios,
             'secondary_ratios': secondary_ratios,
-            'valuations': valuations
+            'marketcap': marketcap
         }
-        return context

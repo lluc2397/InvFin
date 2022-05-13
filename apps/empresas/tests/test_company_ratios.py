@@ -1,5 +1,7 @@
 from django.test import TestCase
 
+import time
+
 from .factories import CompanyFactory
 from .constants import *
 
@@ -10,15 +12,17 @@ class CompanyTest(TestCase):
         self.company = CompanyFactory()
         self.company_update = UpdateCompany(self.company)
         self.company.inc_statements.create(date = 2018)
-        self.company2 = CompanyFactory()
-        self.company2_update = UpdateCompany(self.company2)
-        self.company2.inc_statements.create(date = 2021)
+        self.zinga = CompanyFactory(
+            ticker='ZNGA'
+        )
     
     def test_need_update(self):
         need_update = self.company_update.check_last_filing()
         self.assertEqual(need_update, 'need update')
         
-        need_update2 = self.company2_update.check_last_filing()
+        company2_update = UpdateCompany(self.company)
+        self.company.inc_statements.create(date = 2021)
+        need_update2 = company2_update.check_last_filing()
         self.assertEqual(need_update2, 'updated')
 
     def test_all_data(self):
@@ -112,16 +116,13 @@ class CompanyTest(TestCase):
         self.assertEqual(self.company.efficiency_ratios.count(), 1)
         self.assertEqual(self.company.growth_rates.count(), 1)
 
-        # print(rentability_ratios)
-        # print(liquidity_ratio)
-        # print(margin_ratio)
-        # print(fcf_ratio)
-        # print(ps_value)
-        # print(non_gaap)
-        # print(operation_risk_ratio)
-        # print(price_to_ratio)
-        # print(enterprise_value_ratio)
-        # print(eficiency_ratio)
-        # print(company_growth)
-    
-        
+    def test_requests(self):
+        up_comp = UpdateCompany(self.zinga)
+        inc = up_comp.request_income_statements_finprep()
+        time.sleep(5)
+        bls = up_comp.request_balance_sheets_finprep()
+        time.sleep(5)
+        cfs = up_comp.request_cashflow_statements_finprep()
+        print(inc)
+        print(bls)
+        print(cfs)

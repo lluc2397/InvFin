@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.conf import settings
 from django.views.generic import (
 	ListView,
@@ -56,7 +56,10 @@ class TermDetailsView(DetailView):
 		return context
 
 
-class TermCorrectionView(SuccessMessageMixin, CreateView):
+# class CreateTermCorrectionView(SuccessMessageMixin, CreateView):
+
+
+class TermCorrectionView(CreateView):
 	form_class = CreateCorrectionForm
 	template_name = 'glosario/correction.html'
 	success_message = 'Gracias por tu aporte'
@@ -67,19 +70,18 @@ class TermCorrectionView(SuccessMessageMixin, CreateView):
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		context['public_key'] = settings.GOOGLE_RECAPTCHA_PUBLIC_KEY
-		context['object'] = self.get_object()
+		object = self.get_object()
+		context['object'] = object
+		initial = {
+			'title': object.title,
+			'content': object.content,
+			'term_content_related': object
+		}
+		context['form'] = CreateCorrectionForm(initial)
 		return context
 
-	def get_initial(self, *args, **kwargs):
-		initial = super(TermCorrectionView, self).get_initial(**kwargs)
-		object = self.get_object()
-		initial['title'] = object.title
-		initial['content'] = object.content
-		initial['term_content_related'] = object
-		return initial
-	
-	def post(self, request, *args: str, **kwargs):
-		form = self.get_form(self.get_form_class())
+	def post(self, request, *args, **kwargs):
+		form = CreateCorrectionForm(request.POST)
         
 		if self.request.user.is_anonymous:
 			recaptcha_response = self.request.POST.get('g-recaptcha-response')
@@ -94,17 +96,21 @@ class TermCorrectionView(SuccessMessageMixin, CreateView):
 			result = json.loads(response.read().decode())
 
 			if result['success']:
-				email = self.request.POST.get('email')
+				email = request.POST.get('email')
 				user = User.objects.get_or_create_quick_user(email, self.request, just_correction = True)
 			else:
 				messages.error(self.request, 'Hay un error con el captcha')
 				return self.form_invalid(form)
 		else:
 			user = self.request.user
-
-		return self.form_valid(form, user)
-
+		
+		if form.is_valid():
+			return self.form_valid(form, user)
+		return self.form_invalid(form)
+	
 	def form_valid(self, form, user):
 		form.instance.reviwed_by = user
-		return super().form_valid(form)
+		model = form.save()
+		messages.success(self.request, self.success_message)
+		return redirect(model.get_absolute_url())
 

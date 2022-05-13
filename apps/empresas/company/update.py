@@ -1,3 +1,6 @@
+import random
+import time
+
 from django.conf import settings
 
 from apps.general.models import Currency
@@ -70,56 +73,68 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
     
     def financial_update(self):
         if self.check_last_filing() == 'need update':
-            
-            income_statements = self.request_income_statements_finprep()
-            balance_sheets = self.request_balance_sheets_finprep()
-            cashflow_statements = self.request_cashflow_statements_finprep()
+            try:
+                random_int = random.randint(5,10)
+                income_statements = self.request_income_statements_finprep()
+                time.sleep(random_int)
+                balance_sheets = self.request_balance_sheets_finprep()
+                time.sleep(random_int)
+                cashflow_statements = self.request_cashflow_statements_finprep()
 
-            current_data = self.generate_current_data(income_statements, balance_sheets, cashflow_statements)
-            ly_data = self.generate_last_year_data(income_statements, balance_sheets, cashflow_statements)
+                current_data = self.generate_current_data(income_statements, balance_sheets, cashflow_statements)
+                ly_data = self.generate_last_year_data(income_statements, balance_sheets, cashflow_statements)
 
-            all_data = current_data
-            all_data.update(ly_data)
+                all_data = current_data
+                all_data.update(ly_data)
 
-            main_ratios = self.calculate_main_ratios(all_data)
-            all_data.update(main_ratios)
+                main_ratios = self.calculate_main_ratios(all_data)
+                all_data.update(main_ratios)
 
-            fcf_ratio = self.calculate_fcf_ratio(current_data)
-            all_data.update(fcf_ratio)
+                fcf_ratio = self.calculate_fcf_ratio(current_data)
+                all_data.update(fcf_ratio)
 
-            ps_value = self.calculate_ps_value(all_data)
-            all_data.update(ps_value)
+                ps_value = self.calculate_ps_value(all_data)
+                all_data.update(ps_value)
 
-            company_growth = self.calculate_company_growth(all_data)        
-            all_data.update(company_growth)
+                company_growth = self.calculate_company_growth(all_data)        
+                all_data.update(company_growth)
 
-            non_gaap = self.calculate_non_gaap(all_data)
-            all_data.update(non_gaap)
+                non_gaap = self.calculate_non_gaap(all_data)
+                all_data.update(non_gaap)
 
-            price_to_ratio = self.calculate_price_to_ratio(all_data)
-            eficiency_ratio = self.calculate_eficiency_ratio(all_data)
-            enterprise_value_ratio = self.calculate_enterprise_value_ratio(all_data)
-            liquidity_ratio = self.calculate_liquidity_ratio(all_data)
-            margin_ratio = self.calculate_margin_ratio(all_data)
-            operation_risk_ratio = self.calculate_operation_risk_ratio(all_data)
-            rentability_ratios = self.calculate_rentability_ratios(all_data)
+                price_to_ratio = self.calculate_price_to_ratio(all_data)
+                eficiency_ratio = self.calculate_eficiency_ratio(all_data)
+                enterprise_value_ratio = self.calculate_enterprise_value_ratio(all_data)
+                liquidity_ratio = self.calculate_liquidity_ratio(all_data)
+                margin_ratio = self.calculate_margin_ratio(all_data)
+                operation_risk_ratio = self.calculate_operation_risk_ratio(all_data)
+                rentability_ratios = self.calculate_rentability_ratios(all_data)
+            except Exception as e:
+                self.company.has_error = True
+                self.company.error_message = e
+                self.company.save()
+            else:
+                try:
+                    self.create_current_stock_price(price = current_data['currentPrice'])
+                    self.create_rentability_ratios(rentability_ratios)
+                    self.create_liquidity_ratio(liquidity_ratio)
+                    self.create_margin_ratio(margin_ratio)
+                    self.create_fcf_ratio(fcf_ratio)
+                    self.create_ps_value(ps_value)
+                    self.create_non_gaap(non_gaap)
+                    self.create_operation_risk_ratio(operation_risk_ratio)
+                    self.create_price_to_ratio(price_to_ratio)
+                    self.create_enterprise_value_ratio(enterprise_value_ratio)
+                    self.create_eficiency_ratio(eficiency_ratio)
+                    self.create_company_growth(company_growth)
 
-            self.create_current_stock_price(price = current_data['currentPrice'])
-            self.create_rentability_ratios(rentability_ratios)
-            self.create_liquidity_ratio(liquidity_ratio)
-            self.create_margin_ratio(margin_ratio)
-            self.create_fcf_ratio(fcf_ratio)
-            self.create_ps_value(ps_value)
-            self.create_non_gaap(non_gaap)
-            self.create_operation_risk_ratio(operation_risk_ratio)
-            self.create_price_to_ratio(price_to_ratio)
-            self.create_enterprise_value_ratio(enterprise_value_ratio)
-            self.create_eficiency_ratio(eficiency_ratio)
-            self.create_company_growth(company_growth)
-
-            self.updated = True
-            self.last_update = datetime.now()
-            self.company.save()
+                    self.company.updated = True
+                    self.company.last_update = datetime.now()
+                    self.company.save()
+                except Exception as e:
+                    self.company.has_error = True
+                    self.company.error_message = e
+                    self.company.save()
 
     def check_last_filing(self):
         least_recent_date = self.yq_company.balance_sheet()['asOfDate'].max().value // 10**9 # normalize time
@@ -127,7 +142,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
         if least_recent_year != self.company.most_recent_year:
             print('need update', self.company)
             return 'need update'
-        print('need update', self.company)
+        print('already updated', self.company)
         return 'updated'
     
     def generate_current_data(

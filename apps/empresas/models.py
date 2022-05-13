@@ -64,8 +64,7 @@ class Exchange(Model):
 
 
 class Company(CompanyExtended):
-    # ticker = CharField(max_length=30, db_index=True)
-    ticker = CharField(max_length=30)
+    ticker = CharField(max_length=30, unique=True, db_index=True)
     name = CharField(max_length=700, null=True, blank=True)
     currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)
     industry = ForeignKey(Industry, on_delete=SET_NULL, null=True, blank=True)
@@ -99,13 +98,15 @@ class Company(CompanyExtended):
     updated = BooleanField(default=False)
     last_update = DateTimeField(null=True, blank=True)
     date_updated = BooleanField(default=False)
+    has_error = BooleanField(default=False)
+    error_message = TextField( null=True, blank=True)
     objects = CompanyManager()
 
     class Meta:        
         verbose_name = "Company"
         verbose_name_plural = "Companies"
         db_table = "assets_companies"
-        ordering = ['-name']
+        ordering = ['ticker']
     
     def __str__(self):
         return str(self.ticker)

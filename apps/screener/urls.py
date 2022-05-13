@@ -5,14 +5,10 @@ from .views import (
     CompanyScreenerInicioView,
     EtfScreenerInicioView,
     CompanyDetailsView,
-    EtfDetailsView,
-    CompanyFODAListView,
-    create_company_observation,
-    return_company_news,
-    suggest_list_search_companies,
-    simple_valuation_view,
-    medium_valuation_view
+    EtfDetailsView
 )
+
+from .api.urls import urlpatterns
 
 # from apps.screener.api.views import CompanyBaseAPIView
 
@@ -31,15 +27,7 @@ urlpatterns = [
 
     path('analisis-de/<ticker>/', CompanyDetailsView.as_view(), name="company"),
     path('analisis-etf/<ticker>/', EtfDetailsView.as_view(), name="etf"),
-
-    path('list-foda/<id>', CompanyFODAListView.as_view(), name="list_foda"),
-    path('add-observation/', create_company_observation, name="create_company_observation"),
-    path('get-company-news/<ticker>', return_company_news, name="return_company_news"),
-    path('user-search-company/', suggest_list_search_companies, name="suggest_list_search_companies"),
-
-    path('screener-simple-valuation/', simple_valuation_view, name="simple_valuation_view"),
-    path('screener-medium-valuation/', medium_valuation_view, name="medium_valuation_view"),
-]
+] + urlpatterns
 
 # for serializer in list_of_serializers:
 #     serial_name = serializer[0][:-10]

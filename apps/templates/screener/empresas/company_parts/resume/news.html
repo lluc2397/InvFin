@@ -1,4 +1,4 @@
-
+{% load extra %}
 {% for new in show_news %}
 <div class="card-body p-4">
     <div class="d-flex flex-start">
@@ -12,7 +12,7 @@
             <h6 class="fw-bold mb-1">{{new.headline}}</h6>
             <div class="d-flex align-items-center mb-3">
             <p class="mb-0">
-            {{new.datetime}}
+            {{new.datetime|readable_date}}
             </p>
             <span class="me-2 ms-2">
             {{new.source}}

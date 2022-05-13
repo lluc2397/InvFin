@@ -67,11 +67,11 @@ def suggest_list_search(request):
 		
 		results = []
 		for company in companies_availables:
-			result = f'empresa: {company.name} ({company.ticker})'
+			result = f'Empresa: {company.name} [{company.ticker}]'
 			results.append(result)
 		
 		for term in terms_availables:
-			result = f'termino: {term.title}'			
+			result = f'Término: {term.title}'			
 			results.append(result)
 
 		data = json.dumps(results)
@@ -82,9 +82,9 @@ def suggest_list_search(request):
 def search_results(request):
 	if request.POST:
 		term = request.POST['term']
-		query = term.split(':')[0]
-		if query == 'empresa':
-			empresa_ticker = term.split(' (')[1]
+		query = term[:7]
+		if query == 'Empresa':
+			empresa_ticker = term.split(' [')[1]
 			ticker = empresa_ticker[:-1]
 			empresa_busqueda = Company.objects.get(ticker = ticker)
 			redirect_to = empresa_busqueda.get_absolute_url()

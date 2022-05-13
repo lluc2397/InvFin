@@ -20,7 +20,7 @@ class UserExtraManager(BaseUserManager):
             just_correction = just_correction)
             
             user.create_new_user(request)
-            user.session['F-E'] = email
+            request.session['F-E'] = email
 
         return user
 
