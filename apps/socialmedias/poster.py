@@ -50,28 +50,15 @@ class SocialPosting:
             description = google_translator().translate(description, lang_src='en', lang_tgt='es')
             media_url = news['image']
 
-        link = content.get_absolute_url()
-
-        # if post_type == 1:# Video
-        #     pass
-        # if post_type == 2:# Image
-        #     pass
-        # if post_type == 3:# Text
-        #     pass
-        # if post_type == 4:# Repost
-        #     pass
-        # if post_type == 5:# Text and video
-        #     pass
-        # if post_type == 6:# Text and image
-        #     pass
+        link = 'https://inversionesyfinanzas.xyz' + content.get_absolute_url()
 
         return title, link, description, media_url
     
     def share_content(self, post_type):
         title, link, description, media_url = self.generate_content()
-        fb_response = Facebook.post_on_facebook(title=title, caption=description, post_type=3, link=link)
+        fb_response = Facebook().post_on_facebook(title=title, caption=description, post_type=3, link=link)
         self.save_post(fb_response)
-        tw_response = Twitter.tweet(caption=description, post_type=post_type, media_url=media_url, link=link)
+        tw_response = Twitter().tweet(caption=description, post_type=post_type, media_url=media_url, link=link)
         self.save_post(tw_response)
 
     def save_post(self, data:dict):

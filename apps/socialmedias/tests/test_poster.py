@@ -15,9 +15,19 @@ from apps.socialmedias.models import (
 )
 from ..poster import SocialPosting
 
+from .factories import (
+    EmojiFactory,
+    DefaultTilteFactory,
+    HashtagFactory
+)
+
 
 class PosterTest(TestCase):
     def setUp(self) -> None:
+        self.emoji = EmojiFactory()
+        self.def_title = DefaultTilteFactory()
+        self.hashtag = HashtagFactory()
+
         self.term = Term.objects.create(
             title='term',
             resume='resumen',
@@ -93,10 +103,10 @@ class PosterTest(TestCase):
         company_poster = SocialPosting(CompanySharedHistorial, company).generate_content()
         company_news_poster = SocialPosting(NewsSharedHistorial, company_related=company).generate_content()
         
-        term_poster_json = term.title, term.get_absolute_url(), term.resume, term.image
-        blog_poster_json = question.title, question.get_absolute_url(), question.content, None
-        question_poster_json = publicBlog.title, publicBlog.get_absolute_url(), publicBlog.resume, publicBlog.image
-        company_poster_json = company.name, company.get_absolute_url(), company.resume, company.image
+        term_poster_json = term.title, 'https://inversionesyfinanzas.xyz' + term.get_absolute_url(), term.resume, term.image
+        blog_poster_json = question.title, 'https://inversionesyfinanzas.xyz' + question.get_absolute_url(), question.content, None
+        question_poster_json = publicBlog.title, 'https://inversionesyfinanzas.xyz' + publicBlog.get_absolute_url(), publicBlog.resume, publicBlog.image
+        company_poster_json = company.name, 'https://inversionesyfinanzas.xyz' + company.get_absolute_url(), company.resume, company.image
         # company_new_poster_json = {}
         
         self.assertEqual(term_poster, term_poster_json)
@@ -104,3 +114,8 @@ class PosterTest(TestCase):
         self.assertEqual(question_poster, question_poster_json)
         self.assertEqual(company_poster, company_poster_json)
         # self.assertEqual(company_news_poster, company_new_poster_json)
+    
+    def test_posting(self):
+        question = Question.objects.get_random()
+        question_poster = SocialPosting(QuestionSharedHistorial, question).share_content(3)
+        print(question_poster)

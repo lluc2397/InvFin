@@ -18,18 +18,19 @@ INSTAGRAM_ID = settings.INSTAGRAM_ID
 
 
 class Facebook():
-
-    new_page_id = settings.NEW_FACEBOOK_ID
-    old_page_id = settings.OLD_FACEBOOK_ID
-    facebook_page_name = 'InversionesyFinanzas'
-    app_secret = settings.FACEBOOK_APP_SECRET
-    long_lived_user_token = settings.FB_USER_ACCESS_TOKEN
-    new_page_access_token = settings.NEW_FB_PAGE_ACCESS_TOKEN
-    old_page_access_token = settings.OLD_FB_PAGE_ACCESS_TOKEN
-    facebook_url = 'https://graph.facebook.com/'
-    facebook_video_url = "https://graph-video.facebook.com/"
-    post_facebook_url = facebook_url + new_page_id
-    post_facebook_video_url = facebook_video_url + new_page_id
+    def __init__(self) -> None:
+        self.new_page_id = settings.NEW_FACEBOOK_ID
+        self.old_page_id = settings.OLD_FACEBOOK_ID
+        self.facebook_page_name = 'InversionesyFinanzas'
+        self.app_secret = settings.FACEBOOK_APP_SECRET
+        self.long_lived_user_token = settings.FB_USER_ACCESS_TOKEN
+        self.new_page_access_token = settings.NEW_FB_PAGE_ACCESS_TOKEN
+        self.old_page_access_token = settings.OLD_FB_PAGE_ACCESS_TOKEN
+        self.facebook_url = 'https://graph.facebook.com/'
+        self.facebook_video_url = "https://graph-video.facebook.com/"
+        self.post_facebook_url = self.facebook_url + self.new_page_id
+        self.post_facebook_video_url = self.facebook_video_url + self.new_page_id
+    
     
     def get_long_live_user_token(self, app_id, user_token):
         url = f'{self.facebook_url}oauth/access_token'
@@ -164,7 +165,7 @@ class Facebook():
         
         custom_title = f'{emojis[0].emoji}{title}'
 
-        caption = self.create_fb_description(caption, [hashtag.name for hashtag in hashtags])
+        caption = self.create_fb_description(caption=caption, link=link, hashtags=[hashtag.name for hashtag in hashtags])
         
         if post_type == 1 or post_type == 5 or post_type == 7:
             content_type = 'video'

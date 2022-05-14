@@ -16,10 +16,11 @@ from ..models import (
 
 
 class Twitter:
-    consumer_key = settings.TWITTER_CONSUMER_KEY
-    consumer_secret = settings.TWITTER_CONSUMER_SECRET
-    access_token = settings.TWITTER_ACCESS_TOKEN
-    access_token_secret = settings.TWITTER_ACCESS_TOKEN_SECRET
+    def __init__(self) -> None:
+        self.consumer_key = settings.TWITTER_CONSUMER_KEY
+        self.consumer_secret = settings.TWITTER_CONSUMER_SECRET
+        self.access_token = settings.TWITTER_ACCESS_TOKEN
+        self.access_token_secret = settings.TWITTER_ACCESS_TOKEN_SECRET
     
     def do_authenticate(self):
         auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)
@@ -55,7 +56,7 @@ class Twitter:
             hashtag2 = random.choice(hashtags)
             hashtag3 = random.choice(hashtags)
 
-            caption = f'{emojis[0].emoji}{caption} Más en {link}#{hashtag1.name} #{hashtag2.name} #{hashtag3.name}'
+            caption = f'{emojis[0].emoji}{caption} Más en {link} {hashtag1.name} {hashtag2.name} {hashtag3.name}'
                     
             if post_type == 3 or post_type == 4:
                 content_type = 'text'
@@ -70,10 +71,10 @@ class Twitter:
 
                 post_response = self.tweet_with_media(media_url, caption)
             
-            if post_response['result'] == 'success':
-                twitter_post = {
+
+            twitter_post = {
                 'post_type': post_type ,
-                'social_id': post_response['extra'] ,
+                'social_id': post_response,
                 'description': caption,
                 'platform_shared': 'twitter'
             }

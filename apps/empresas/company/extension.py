@@ -13,6 +13,10 @@ class CompanyExtended(Model, ChartSerializer):
     class Meta:
         abstract = True
     
+    @property
+    def show_news(self):
+        return RetreiveCompanyData(self.ticker).get_news()
+
     def all_income_statements(self, limit = 10) ->list:
         inc = self.inc_statements.all()
         if limit != 0:
