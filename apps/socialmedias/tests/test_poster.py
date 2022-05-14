@@ -115,7 +115,7 @@ class PosterTest(TestCase):
         self.assertEqual(company_poster, company_poster_json)
         # self.assertEqual(company_news_poster, company_new_poster_json)
     
-    def test_posting(self):
-        question = Question.objects.get_random()
-        question_poster = SocialPosting(QuestionSharedHistorial, question).share_content(3)
-        print(question_poster)
+    # def test_posting(self):
+    #     question = Question.objects.get_random()
+    #     question_poster = SocialPosting(QuestionSharedHistorial, question).share_content(3)
+    #     print(question_poster)
