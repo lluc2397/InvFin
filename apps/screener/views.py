@@ -28,11 +28,7 @@ class CompanyScreenerInicioView(ListView):
     paginate_by = 50
 
     def get_queryset(self, **kwargs):
-       query = super().get_queryset(**kwargs)
-       return query.filter(exchange__main_org__name = self.kwargs['name'],
-            no_incs = False,
-            no_bs = False,
-            no_cfs = False)
+       return Company.objects.clean_companies_by_main_exchange(self.kwargs['name'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

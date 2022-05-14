@@ -44,9 +44,9 @@ class ExchangeOrganisation(Model):
 
 
 class Exchange(Model):
-    exchange_ticker  = CharField(max_length=30, null=True, blank=True)
-    exchange  = CharField(max_length=250, null=True, blank=True)
-    country =  ForeignKey(Country, on_delete=SET_NULL, null=True, blank=True)
+    exchange_ticker = CharField(max_length=30, null=True, blank=True)
+    exchange = CharField(max_length=250, null=True, blank=True)
+    country = ForeignKey(Country, on_delete=SET_NULL, null=True, blank=True)
     main_org = ForeignKey(ExchangeOrganisation, on_delete=SET_NULL, null=True, blank=True)
 
     class Meta:        

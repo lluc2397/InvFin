@@ -21,7 +21,7 @@ def update_basic_info_company_task():
 @celery_app.task()
 def update_company_financials_task():
     org_name = 'Estados Unidos'
-    companies_without_info = Company.objects.filter(exchange__main_org__name = org_name, updated = False)
+    companies_without_info = Company.objects.clean_companies_to_update(org_name)
     if companies_without_info.exists():
         company = companies_without_info.first()
         return UpdateCompany(company).financial_update()

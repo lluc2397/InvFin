@@ -7,7 +7,7 @@ from .constants import *
 
 from apps.empresas.company.update import UpdateCompany
 
-class CompanyTest(TestCase):
+class ScrapCompanyInfoTest(TestCase):
     def setUp(self) -> None:
         self.company = CompanyFactory()
         self.company_update = UpdateCompany(self.company)
