@@ -47,7 +47,7 @@ class Asset(Model):
         db_table = "cartera_assets"
 
     def __str__(self):       
-        return str(self.name)
+        return str(self.object.name)
     
     @property
     def amount_invested(self):

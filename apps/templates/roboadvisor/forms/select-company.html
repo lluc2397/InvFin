@@ -1,5 +1,5 @@
 {% load static %}
-<div class="col-12 mb-4">
+<div class="col-12 mb-4" id="search-company-form">
   <label class="form-label">
     Selecciona la empresa que quieras
   </label>
@@ -12,7 +12,8 @@
     $(function() {
       $("#stock").autocomplete({
         source: "{% url 'empresas:searcher_companies' %}",
-        minLength: 3,
+        minLength: 1,
+        appendTo: "#search-company-form"
       });
     });
   </script>

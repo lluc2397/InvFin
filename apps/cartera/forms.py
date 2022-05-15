@@ -5,7 +5,6 @@ from django.forms import (
     ChoiceField,
     Textarea,
     ModelChoiceField,
-    ValidationError,
     ModelForm,
     Form,
     CharField,
@@ -13,6 +12,7 @@ from django.forms import (
     DateField,
     IntegerField
 )
+from django.contrib.auth import get_user_model
 
 import datetime
 
@@ -27,6 +27,8 @@ from .models import (
 
 from apps.general.models import Currency
 
+User = get_user_model()
+
 
 class BaseAssetMoveForm(Form):
     price = DecimalField(label='Precio unitario')
@@ -35,30 +37,43 @@ class BaseAssetMoveForm(Form):
     quantity = IntegerField(label='Cantidad')
     currency = ModelChoiceField(label='Divisa', queryset=Currency.objects.all())
     observacion = CharField(widget=Textarea, required=False, label='Descripción')
-    fee = DecimalField(label='Tarifa')
+    fee = DecimalField(label='Comisión', initial=0)
 
 
-class AddNewAssetForm(BaseAssetMoveForm):    
+class AddNewAssetForm(ModelForm, BaseAssetMoveForm):
+    class Meta:
+        model = PositionMovement
+        exclude = [
+            'user',
+            'move_type',
+            'asset_related',
+        ]
+
     def save(self, request, company):
-        model = super().save()
-        model.is_stock = True
-        model.user = request.user
-        model.object = company
-        model.save()
-        request.user.user_patrimoine.assets.add(model)
+        asset = Asset.objects.create(
+            is_stock = True,
+            user = request.user,
+            object = company
+        )
+
+        position = super().save()
+        position.user = request.user
+        position.asset_related = asset
+        position.move_type = 1
+        position.save()
+
+        request.user.user_patrimoine.assets.add(asset)
         request.user.user_patrimoine.save()
-        return model
+        return asset
 
 
 class PositionMovementForm(ModelForm, BaseAssetMoveForm):
-    move_type = ChoiceField(choices=[(1, 'Compra'), (2, 'Venta')], label='Moviemiento')
-    asset_related = ModelChoiceField(queryset=Asset.objects.none())
+    move_type = ChoiceField(choices=[(1, 'Compra'), (2, 'Venta')], label='Movimiento')
 
-    def __init__(self, user, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
         super(PositionMovementForm, self).__init__(*args, **kwargs)
-        if user.is_authenticated:
-            qs = Asset.objects.filter(user=user)
-            self.fields['asset_related'].queryset = qs
+        self.fields['asset_related'].queryset = user.user_patrimoine.assets.all()
         super(BaseAssetMoveForm, self).__init__(*args, **kwargs)
 
     class Meta:

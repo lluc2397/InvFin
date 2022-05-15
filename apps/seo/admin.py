@@ -57,6 +57,7 @@ class VisiteurAdmin(admin.ModelAdmin):
         'first_visit_date',
     ]
     list_filter = ['country_code', 'continent_code',]
+    search_fields = ['id']
 
 
 @admin.register(MetaParameters)

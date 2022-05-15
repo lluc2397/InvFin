@@ -19,18 +19,14 @@ from .models import (
 @celery_app.task()
 def socialmedia_share_company():
     post_type = 6
-    content_shared = Company.objects.get_random()
-    if content_shared.description_translated == False:
-        UpdateCompany(content_shared).general_update()
+    content_shared = Company.objects.random_complete_companies_by_main_exchange('Estados Unidos')
     SocialPosting(CompanySharedHistorial, content_shared=content_shared).share_content(post_type)
 
 
 @celery_app.task()
 def socialmedia_share_news():
     post_type = 6
-    company_related = Company.objects.get_random()
-    if company_related.description_translated == False:
-        UpdateCompany(company_related).general_update()
+    company_related = Company.objects.random_complete_companies_by_main_exchange('Estados Unidos')
     SocialPosting(NewsSharedHistorial, company_related=company_related).share_content(post_type)
 
 

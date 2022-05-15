@@ -28,7 +28,7 @@ class CashflowStatementAdmin(admin.ModelAdmin):
         'company',
         'date'
     ]
-    search_fields = ['company_name']
+    search_fields = ['company_name', 'company_ticker']
 
 
 @admin.register(IncomeStatement)
@@ -38,7 +38,7 @@ class IncomeStatementAdmin(admin.ModelAdmin):
         'company',
         'date'
     ]
-    search_fields = ['company_name']
+    search_fields = ['company_name', 'company_ticker']
 
 
 @admin.register(BalanceSheet)
@@ -48,7 +48,7 @@ class BalanceSheetAdmin(admin.ModelAdmin):
         'company',
         'date'
     ]
-    search_fields = ['company_name']
+    search_fields = ['company_name', 'company_ticker']
 
 
 @admin.register(Company)
@@ -56,6 +56,7 @@ class CompanyAdmin(admin.ModelAdmin):
     list_display = [
         'id',
         'name',
+        'last_update',
         'no_incs',
         'no_bs',
         'no_cfs',
@@ -66,8 +67,10 @@ class CompanyAdmin(admin.ModelAdmin):
         'no_incs',
         'no_bs',
         'no_cfs',
+        'updated',
         'description_translated',
         'has_logo',
+        'has_error',
         'exchange__main_org',
     ]
     list_editable = [
@@ -87,7 +90,7 @@ class CompanyGrowthAdmin(admin.ModelAdmin):
         'company',
         'date'
     ]
-    search_fields = ['company_name']
+    search_fields = ['company_name', 'company_ticker']
 
 
 @admin.register(EficiencyRatio)
@@ -97,7 +100,7 @@ class EficiencyRatioAdmin(admin.ModelAdmin):
         'company',
         'date'
     ]
-    search_fields = ['company_name']
+    search_fields = ['company_name', 'company_ticker']
 
 
 @admin.register(EnterpriseValueRatio)
@@ -107,7 +110,7 @@ class EnterpriseValueRatioAdmin(admin.ModelAdmin):
         'company',
         'date'
     ]
-    search_fields = ['company_name']
+    search_fields = ['company_name', 'company_ticker']
 
 
 @admin.register(Exchange)
@@ -143,7 +146,7 @@ class RentabilityRatioAdmin(admin.ModelAdmin):
         'company',
         'date'
     ]
-    search_fields = ['company_name']
+    search_fields = ['company_name', 'company_ticker']
 
 
 @admin.register(MarginRatio)
@@ -153,7 +156,7 @@ class MarginRatioAdmin(admin.ModelAdmin):
         'company',
         'date'
     ]
-    search_fields = ['company_name']
+    search_fields = ['company_name', 'company_ticker']
 
 
 @admin.register(PriceToRatio)
@@ -163,7 +166,7 @@ class PriceToRatioAdmin(admin.ModelAdmin):
         'company',
         'date'
     ]
-    search_fields = ['company_name']
+    search_fields = ['company_name', 'company_ticker']
 
 
 @admin.register(LiquidityRatio)
@@ -173,7 +176,7 @@ class LiquidityRatioAdmin(admin.ModelAdmin):
         'company',
         'date'
     ]
-    search_fields = ['company_name']
+    search_fields = ['company_name', 'company_ticker']
 
 
 @admin.register(OperationRiskRatio)
@@ -183,7 +186,7 @@ class OperationRiskRatioAdmin(admin.ModelAdmin):
         'company',
         'date'
     ]
-    search_fields = ['company_name']
+    search_fields = ['company_name', 'company_ticker']
 
 
 @admin.register(FreeCashFlowRatio)
@@ -193,7 +196,7 @@ class FreeCashFlowRatioAdmin(admin.ModelAdmin):
         'company',
         'date'
     ]
-    search_fields = ['company_name']
+    search_fields = ['company_name', 'company_ticker']
 
 
 @admin.register(PerShareValue)
@@ -203,7 +206,7 @@ class PerShareValueAdmin(admin.ModelAdmin):
         'company',
         'date'
     ]
-    search_fields = ['company_name']
+    search_fields = ['company_name', 'company_ticker']
 
 
 @admin.register(CompanyStockPrice)
@@ -223,5 +226,5 @@ class NonGaapAdmin(admin.ModelAdmin):
         'company',
         'date'
     ]
-    search_fields = ['company_name']
+    search_fields = ['company_name', 'company_ticker']
 

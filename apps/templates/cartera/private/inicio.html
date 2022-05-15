@@ -9,6 +9,9 @@
 
 {% block content %}
 {% with patrimonio.patrimoine as money %}
+<style>
+    .chart-canvas{height: 450px !important;}
+</style>
 <div class="row">
     {% block FirstCta %}
     <div class="col-12">
@@ -100,6 +103,14 @@
 </div>
 
 <script>
+    var userData = [
+                {{money.income_earned}}, 
+                {{money.income_spend}}, 
+                {{money.income_saved}}, 
+                {{money.income_invested}}
+            ]
+    var maxEl =(Math.max.apply(null, userData) + 1500)
+    var minEl =(Math.min.apply(null, userData) - 1500)
 
     new Chart(document.querySelector('#bar-incomes'), {
         type: 'bar',
@@ -134,32 +145,44 @@
             }]
         },
         options: {
-            maintainAspectRatio: false,
-            scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true,
-                    // stepSize: 50
-                }
-            }]
-            },
-        
-            title: {
-                display: false
-            },
-                    
-            
-            legend: {
-            display: false
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      tooltip: {
+        mode: 'index',
+        intersect: false
+      },
+      title: {
+        display: false,
+        text: 'Chart.js Line Chart'
+      }
+    },
+    hover: {
+      mode: 'index',
+      intersec: false
+    },
+    scales: {
+      x: {
+        title: {
+          display: false,
+          text: 'Types'
+        }
+      },
+      y: {
+        title: {
+          display: false,
+          text: 'Value'
         },
-        tooltips: {
-            callbacks: {
-                label: function(tooltipItem) {
-                        return tooltipItem.yLabel;
-                }
-            }
+        min: minEl,
+        max: maxEl,
+        ticks: {
+          stepSize: 500,
+          beginAtZero: true,
         }
-        }
+      }
+    }
+  },
+
     });
     new Chart(document.querySelector('#pie-incomes'), {
         type: 'pie',

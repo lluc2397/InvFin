@@ -17,9 +17,9 @@ def companies_searcher(request):
     no_incs = False,
     no_bs = False,
     no_cfs = False,
-        )[:5]
+        )[:10]
     
-    results = [f'{company.name} ({company.ticker})' for company in companies_availables]
+    results = [f'{company.name} [{company.ticker}]' for company in companies_availables]
     
     data = json.dumps(results)
     mimetype = "application/json"

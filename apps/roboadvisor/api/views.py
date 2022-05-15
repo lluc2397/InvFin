@@ -70,7 +70,7 @@ class BaseRoboAdvisorAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin)
         
 
         if ses == 'company-analysis':
-            asset = Company.objects.get(ticker = client_side_data['stock'].split(' (')[1][:-1])
+            asset = Company.objects.get(ticker = client_side_data['stock'].split(' [')[1][:-1])
             result = simple_stock_analysis(asset)
 
             client_side_data['result'] = result['result']

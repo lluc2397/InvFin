@@ -88,12 +88,22 @@ def search_results(request):
 			ticker = empresa_ticker[:-1]
 			empresa_busqueda = Company.objects.get(ticker = ticker)
 			redirect_to = empresa_busqueda.get_absolute_url()
-		else:
+		
+		elif query == 'Término':
 			title = term.split(':')[1]
 			title = title[1:]
 			term_busqueda = Term.objects.get(title = title)
 			redirect_to = term_busqueda.get_absolute_url()
-
+		
+		else:
+			if term.isupper():
+				empresa_busqueda = Company.objects.filter(ticker = ticker)
+				if empresa_busqueda.exists():
+					redirect_to = empresa_busqueda[0].get_absolute_url()
+			else:
+				messages.warning(request, 'No hemos entendido tu búsqueda')
+				return redirect(request.META.get('HTTP_REFERER'))
+				
 	return redirect(redirect_to)
 
 
