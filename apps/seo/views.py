@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
 from django.views.generic import RedirectView
 from django.db.models import Q
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 
 from apps.escritos.models import Term, TermsRelatedToResume
 from apps.public_blog.models import PublicBlog
@@ -51,3 +51,12 @@ class PromotionRedirectView(RedirectView):
         slug = request.GET.kwargs['slug']
         url = self.save_promotion_data(slug)
         return HttpResponseRedirect(url)
+
+
+def robots_txt(request):
+    lines = [
+        "User-Agent: *",
+        "Disallow: /private/",
+        "Disallow: /junk/",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")

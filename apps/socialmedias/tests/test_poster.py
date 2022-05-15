@@ -90,32 +90,32 @@ class PosterTest(TestCase):
             self.assertEqual(random_Company_1, random_Company_2)
         else:
             self.assertNotEqual(random_Company_1, random_Company_2)
-
-    def test_content_results(self):
-        term = Term.objects.get_random()
-        question = Question.objects.get_random()
+    
+    def test_blog(self):
         publicBlog = PublicBlog.objects.get_random()
-        company = Company.objects.get_random()
-
-        term_poster = SocialPosting(TermSharedHistorial, term).generate_content()
         blog_poster = SocialPosting(BlogSharedHistorial, publicBlog).generate_content()
+        blog_response = publicBlog.title, 'https://inversionesyfinanzas.xyz' + publicBlog.get_absolute_url(), publicBlog.resume, 'https://inversionesyfinanzas.xyz' + publicBlog.image
+        self.assertEqual(blog_poster, blog_response)
+
+    def test_question(self):
+        question = Question.objects.get_random()
         question_poster = SocialPosting(QuestionSharedHistorial, question).generate_content()
+        question_response= question.title, 'https://inversionesyfinanzas.xyz' + question.get_absolute_url(), question.content, None
+        self.assertEqual(question_poster, question_response)
+
+    def test_term(self):
+        term = Term.objects.get_random()
+        term_poster = SocialPosting(TermSharedHistorial, term).generate_content()
+        term_response = term.title, 'https://inversionesyfinanzas.xyz' + term.get_absolute_url(), term.resume, 'https://inversionesyfinanzas.xyz' + term.image
+        self.assertEqual(term_poster, term_response)
+
+    def test_company(self):
+        company = Company.objects.get_random()
         company_poster = SocialPosting(CompanySharedHistorial, company).generate_content()
+        company_response = company.name, 'https://inversionesyfinanzas.xyz' + company.get_absolute_url(), company.resume, company.image
+        self.assertEqual(company_poster, company_response)
+
+    def test_news(self):
+        company = Company.objects.get_random()
         company_news_poster = SocialPosting(NewsSharedHistorial, company_related=company).generate_content()
         
-        term_poster_json = term.title, 'https://inversionesyfinanzas.xyz' + term.get_absolute_url(), term.resume, term.image
-        blog_poster_json = question.title, 'https://inversionesyfinanzas.xyz' + question.get_absolute_url(), question.content, None
-        question_poster_json = publicBlog.title, 'https://inversionesyfinanzas.xyz' + publicBlog.get_absolute_url(), publicBlog.resume, publicBlog.image
-        company_poster_json = company.name, 'https://inversionesyfinanzas.xyz' + company.get_absolute_url(), company.resume, company.image
-        # company_new_poster_json = {}
-        
-        self.assertEqual(term_poster, term_poster_json)
-        self.assertEqual(blog_poster, blog_poster_json)
-        self.assertEqual(question_poster, question_poster_json)
-        self.assertEqual(company_poster, company_poster_json)
-        # self.assertEqual(company_news_poster, company_new_poster_json)
-    
-    # def test_posting(self):
-    #     question = Question.objects.get_random()
-    #     question_poster = SocialPosting(QuestionSharedHistorial, question).share_content(3)
-    #     print(question_poster)

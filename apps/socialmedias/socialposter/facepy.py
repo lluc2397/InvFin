@@ -78,14 +78,14 @@ class Facebook():
 
         if post_now is True:
             data ={
-                'access_token': self.new_page_access_token,
+                'access_token': self.old_page_access_token,
                 'title':title,
                 'description': description
             }
 
         else:
             data ={
-                'access_token': self.new_page_access_token,
+                'access_token': self.old_page_access_token,
                 'published' : False,
                 'scheduled_publish_time': post_time,
                 'title': title,
@@ -101,7 +101,7 @@ class Facebook():
             pass
         else:
             data ={
-                'access_token': self.new_page_access_token,
+                'access_token': self.old_page_access_token,
                 'message': text
             }
         
@@ -114,7 +114,7 @@ class Facebook():
 
     def post_image(self, description= "", photo_url= "", title= "", post_time=datetime.datetime.now(), post_now = False):
         data ={
-            'access_token': self.new_page_access_token,
+            'access_token': self.old_page_access_token,
             'url': photo_url
         }
         return self._send_content('image', data)
@@ -207,7 +207,9 @@ class Facebook():
         hashtags = '#'.join(hashtags)
         face_description = f"""
         {caption}
+
         Más en {link}
+        
         Prueba las herramientas que todo inversor inteligente necesita: https://inversionesyfinanzas.xyz
 
         Visita nuestras redes sociales:

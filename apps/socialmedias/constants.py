@@ -24,4 +24,5 @@ POST_TYPE = (
     (4, 'Repost'), 
     (5, 'Text and video'), 
     (6, 'Text and image'), 
-    (7, 'Shorts'))
+    (7, 'Shorts'),
+    (8, 'Thread'))

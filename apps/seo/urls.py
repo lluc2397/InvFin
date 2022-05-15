@@ -2,7 +2,8 @@ from django.urls import path
 
 from .views import (
     redirect_old_urls,
-    PromotionRedirectView
+    PromotionRedirectView,
+    robots_txt
 )
 
 app_name = "seo"
@@ -13,4 +14,5 @@ urlpatterns = [
 
     path('aprovecha-la-promocion/<promo_id>/', PromotionRedirectView.as_view(), name="promotion_redirect"),
     
+    path("robots.txt", robots_txt),
 ]

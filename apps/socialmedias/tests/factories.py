@@ -21,7 +21,7 @@ class DefaultTilteFactory(DjangoModelFactory):
 
 
 class HashtagFactory(DjangoModelFactory):
-    name = '#test'
+    name = 'test'
     class Meta:
         model = Hashtag
 

@@ -109,7 +109,7 @@ class CalculateCompanyFinancialRatios():
         gross_margin = data['grossProfit'] / data['revenue'] *100 if data['revenue']  !=0 else 0
         ebitda_margin = data['ebitda'] / data['revenue'] *100 if data['revenue']  !=0 else 0
         net_income_margin = data['netIncome'] / data['revenue'] *100 if data['revenue']  !=0 else 0
-        fcf_margin = data['totalLiabilities'] / data['revenue'] *100 if data['revenue']  !=0 else 0
+        fcf_margin = data['freeCashFlow'] / data['revenue'] *100 if data['revenue']  !=0 else 0
         fcf_equity_to_net_income = data['fcf_equity']  / data['netIncome'] *100 if data['netIncome']  !=0 else 0
         unlevered_fcf_to_net_income = data['unlevered_fcf']  / data['netIncome'] *100 if data['netIncome']  !=0 else 0
         unlevered_fcf_ebit_to_net_income = data['unlevered_fcf_ebit']  / data['netIncome'] *100 if data['netIncome']  !=0 else 0

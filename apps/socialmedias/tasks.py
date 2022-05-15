@@ -4,6 +4,7 @@ from apps.escritos.models import Term
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog, WritterProfile
 from apps.empresas.models import Company
+from apps.empresas.company.update import UpdateCompany
 
 from .poster import SocialPosting
 from .models import (
@@ -19,6 +20,8 @@ from .models import (
 def socialmedia_share_company():
     post_type = 6
     content_shared = Company.objects.get_random()
+    if content_shared.description_translated == False:
+        UpdateCompany(content_shared).general_update()
     SocialPosting(CompanySharedHistorial, content_shared=content_shared).share_content(post_type)
 
 
@@ -26,6 +29,8 @@ def socialmedia_share_company():
 def socialmedia_share_news():
     post_type = 6
     company_related = Company.objects.get_random()
+    if company_related.description_translated == False:
+        UpdateCompany(company_related).general_update()
     SocialPosting(NewsSharedHistorial, company_related=company_related).share_content(post_type)
 
 

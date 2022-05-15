@@ -38,3 +38,12 @@ class CompanyManager(BaseSharedManager):
             updated=False, 
             has_error=False
             )
+    
+    def famous_companies(self):
+        big_names = [
+            'INTC',
+            'AAPL',
+            'GOOGL',
+            'META',
+            ''
+        ]
