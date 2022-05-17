@@ -113,10 +113,6 @@ class Company(CompanyExtended):
     
     def get_absolute_url(self):
         return reverse("screener:company", kwargs={"ticker": self.ticker})
-
-    @property
-    def resume(self):
-        return self.description
     
     @property
     def most_recent_year(self):

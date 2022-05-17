@@ -86,7 +86,7 @@ class PosterTest(TestCase):
     def test_company(self):
         company = Company.objects.get_random()
         company_poster = SocialPosting(CompanySharedHistorial, company).generate_content()
-        company_response = company.name, 'https://inversionesyfinanzas.xyz' + company.get_absolute_url(), company.resume, company.image
+        company_response = company.name, 'https://inversionesyfinanzas.xyz' + company.get_absolute_url(), company.description, company.image
         self.assertEqual(company_poster, company_response)
 
     def test_news(self):

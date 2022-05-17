@@ -26,7 +26,7 @@ class CompanyManager(BaseSharedManager):
             no_incs = False,
             no_bs = False,
             no_cfs = False,
-            description_translated = False,
+            description_translated = True,
             exchange__main_org__name = name
             )        
     

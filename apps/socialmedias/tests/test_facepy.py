@@ -1,10 +1,12 @@
 from django.test import TestCase
+from django.conf import settings
 
 from apps.escritos.models import Term
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog
 from apps.empresas.models import Company
 
+from apps.socialmedias.socialposter.facepy import Facebook
 from apps.socialmedias.models import (
     CompanySharedHistorial,
     BlogSharedHistorial,
@@ -22,11 +24,16 @@ from .factories import (
 )
 
 
-class PosterTest(TestCase):
+test_page_id = settings.NEW_FACEBOOK_ID
+test_page_token = settings.NEW_FB_PAGE_ACCESS_TOKEN
+
+class FacePosterTest(TestCase):
     def setUp(self) -> None:
         self.emoji = EmojiFactory()
         self.def_title = DefaultTilteFactory()
-        self.hashtag = HashtagFactory()
+        self.hashtag = HashtagFactory(platform='twitter')
+        self.hashtag2 = HashtagFactory(platform='twitter')
+        self.hashtag3 = HashtagFactory(platform='twitter')
 
         self.term = Term.objects.create(
             title='term',
@@ -43,7 +50,8 @@ class PosterTest(TestCase):
         )
         self.company = Company.objects.create(
             name='Apple',
-            ticker='AAPL'
+            ticker='AAPL',
+            description='desc de prueba'
         )
         self.term2 = Term.objects.create(
             title='term 2',
@@ -62,34 +70,6 @@ class PosterTest(TestCase):
             name='Intel',
             ticker='INTC'
         )
-
-    def test_random_content(self):
-        random_Term_1 = Term.objects.get_random()
-        random_Question_1 = Question.objects.get_random()
-        random_PublicBlog_1 = PublicBlog.objects.get_random()
-        random_Company_1 = Company.objects.get_random()
-
-        random_Term_2 = Term.objects.get_random()
-        random_Question_2 = Question.objects.get_random()
-        random_PublicBlog_2 = PublicBlog.objects.get_random()
-        random_Company_2 = Company.objects.get_random()
-
-        if random_Term_1 == random_Term_2:
-            self.assertEqual(random_Term_1, random_Term_2)
-        else:
-            self.assertNotEqual(random_Term_1, random_Term_2)
-        if random_Question_1 == random_Question_2:
-            self.assertEqual(random_Question_1, random_Question_2)
-        else:
-            self.assertNotEqual(random_Question_1, random_Question_2)
-        if random_PublicBlog_1 == random_PublicBlog_2:
-            self.assertEqual(random_PublicBlog_1, random_PublicBlog_2)
-        else:
-            self.assertNotEqual(random_PublicBlog_1, random_PublicBlog_2)
-        if random_Company_1 == random_Company_2:
-            self.assertEqual(random_Company_1, random_Company_2)
-        else:
-            self.assertNotEqual(random_Company_1, random_Company_2)
     
     def test_blog(self):
         publicBlog = PublicBlog.objects.get_random()
@@ -114,8 +94,13 @@ class PosterTest(TestCase):
         company_poster = SocialPosting(CompanySharedHistorial, company).generate_content()
         company_response = company.name, 'https://inversionesyfinanzas.xyz' + company.get_absolute_url(), company.description, company.image
         self.assertEqual(company_poster, company_response)
+        title, link, description, media_url = company_poster
+        print(description)
+        fb_response = Facebook(test_page_id, test_page_token).post_on_facebook(title=title, caption=description, post_type=3, link=link, media_url=media_url)
+        print(fb_response)
 
     def test_news(self):
         company = Company.objects.get_random()
-        company_news_poster = SocialPosting(NewsSharedHistorial, company_related=company).generate_content()
+        title, link, description, media_url = SocialPosting(NewsSharedHistorial, company_related=company).generate_content()
         
+    

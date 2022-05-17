@@ -15,21 +15,20 @@ from ..models import (
 # logger = logging.getLogger('longs')
 
 INSTAGRAM_ID = settings.INSTAGRAM_ID
-
+PROD_FACEBOOK_ACCESS_TOKEN = settings.OLD_FB_PAGE_ACCESS_TOKEN
+PROD_FACEBOOK_PAGE_ID = settings.OLD_FACEBOOK_ID
 
 class Facebook():
-    def __init__(self) -> None:
-        self.new_page_id = settings.NEW_FACEBOOK_ID
-        self.old_page_id = settings.OLD_FACEBOOK_ID
+    def __init__(self, page_id=PROD_FACEBOOK_PAGE_ID, page_access_token=PROD_FACEBOOK_ACCESS_TOKEN) -> None:
+        self.page_id = page_id
         self.facebook_page_name = 'InversionesyFinanzas'
         self.app_secret = settings.FACEBOOK_APP_SECRET
         self.long_lived_user_token = settings.FB_USER_ACCESS_TOKEN
-        self.new_page_access_token = settings.NEW_FB_PAGE_ACCESS_TOKEN
-        self.old_page_access_token = settings.OLD_FB_PAGE_ACCESS_TOKEN
+        self.page_access_token = page_access_token
         self.facebook_url = 'https://graph.facebook.com/'
         self.facebook_video_url = "https://graph-video.facebook.com/"
-        self.post_facebook_url = self.facebook_url + self.new_page_id
-        self.post_facebook_video_url = self.facebook_video_url + self.new_page_id
+        self.post_facebook_url = self.facebook_url + self.page_id
+        self.post_facebook_video_url = self.facebook_video_url + self.page_id
     
     
     def get_long_live_user_token(self, app_id, user_token):
@@ -51,7 +50,7 @@ class Facebook():
     
 
     def get_long_live_page_token(self, old=False):
-        url = f'{self.facebook_url}{self.new_page_id}'
+        url = f'{self.facebook_url}{self.page_id}'
 
         parameters = {
             'fields':'access_token',
@@ -75,17 +74,17 @@ class Facebook():
         """
 
         files = {'source': open(video_url, 'rb')}
-
+        access_token = self.page_access_token
         if post_now is True:
             data ={
-                'access_token': self.old_page_access_token,
+                'access_token': access_token,
                 'title':title,
                 'description': description
             }
 
         else:
             data ={
-                'access_token': self.old_page_access_token,
+                'access_token': access_token,
                 'published' : False,
                 'scheduled_publish_time': post_time,
                 'title': title,
@@ -101,7 +100,7 @@ class Facebook():
             pass
         else:
             data ={
-                'access_token': self.old_page_access_token,
+                'access_token': self.page_access_token,
                 'message': text
             }
         
@@ -114,7 +113,7 @@ class Facebook():
 
     def post_image(self, description= "", photo_url= "", title= "", post_time=datetime.datetime.now(), post_now = False):
         data ={
-            'access_token': self.old_page_access_token,
+            'access_token': self.page_access_token,
             'url': photo_url
         }
         return self._send_content('image', data)
@@ -155,7 +154,8 @@ class Facebook():
         caption:str=None,
         num_emojis:int=1,
         post_type:int=3,
-        link:str=None
+        link:str=None,
+        media_url:str=None
         ):
 
         emojis = Emoji.objects.random_emojis(num_emojis)
@@ -178,6 +178,8 @@ class Facebook():
 
         elif post_type == 3 or post_type == 4:
             content_type = 'text'
+            caption = f'{media_url} {caption}'
+
             post_response = self.post_text(text= caption, link=link)
 
         if post_response['result'] == 'success':
@@ -189,7 +191,7 @@ class Facebook():
                 'platform_shared': 'facebook'
             }            
 
-        return facebook_post
+            return facebook_post
     
 
     def share_facebook_post(self, post_id, yb_title):

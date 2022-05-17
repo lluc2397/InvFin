@@ -29,7 +29,7 @@ class SocialPosting:
             
             elif model_type == 'empresas.company':# Company:
                 title = content.name
-                description = content.resume
+                description = content.description
                 media_url = content.image
 
             elif model_type == 'public_blog.publicblog':# Company:
@@ -38,7 +38,7 @@ class SocialPosting:
                 media_url = 'https://inversionesyfinanzas.xyz' + content.image
                 link = content.custom_url
 
-            elif model_type == 'escritos.term':# Company:
+            elif model_type == 'escritos.term':# term:
                 title = content.title
                 description = content.resume
                 media_url = 'https://inversionesyfinanzas.xyz' + content.image
