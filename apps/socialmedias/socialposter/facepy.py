@@ -160,10 +160,8 @@ class Facebook():
 
         emojis = Emoji.objects.random_emojis(num_emojis)
         hashtags = Hashtag.objects.random_hashtags('facebook')
-
-        title=DefaultTilte.objects.random_title
         
-        custom_title = f'{emojis[0].emoji}{title}'
+        custom_title = f'{emojis[0].emoji} {title}'
 
         caption = self.create_fb_description(caption=caption, link=link, hashtags=[hashtag.name for hashtag in hashtags])
         

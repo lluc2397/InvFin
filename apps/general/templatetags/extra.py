@@ -15,6 +15,17 @@ def has_group(user, group_name):
 def readable_date(date):
     return (datetime.utcfromtimestamp(date).strftime('%Y-%m-%d %H:%M:%S'))
 
+
 @register.filter(name='per_cent')
 def percentagement(value):
     return (value * 100)
+
+
+@register.simple_tag(name='utm')
+def add_utms(medium='webapp', content='', term='', source='invfin', campaign='regular'):
+    utm_source = f'utm_source={source}'
+    utm_medium = f'utm_medium={medium}'
+    utm_campaign = f'utm_campaign={campaign}'
+    utm_content = f'utm_content={content}'
+    utm_term = f'utm_term={term}'
+    return f'?{utm_source}&{utm_medium}&{utm_content}&{utm_campaign}&{utm_term}'

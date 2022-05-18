@@ -23,12 +23,12 @@
  
  <!-- Twitter Card data -->
  <meta name="twitter:site" content="@InvFinz">
- <meta name="twitter:title" content="{{ meta_title}}">
+ <meta name="twitter:title" content="{{meta_title}}">
  <meta name="twitter:description" content="{{meta_desc}}">
  <meta name="twitter:creator" content="@InvFinz">
  <meta name="twitter:url" content="@InvFinz">
  <meta name="twitter:card" content="summary">
- <meta name="twitter:image" content="{% static 'general/assets/img/favicon/favicon.ico' %}">
+
 
 
  <!-- Open Graph data -->
@@ -39,11 +39,20 @@
  <meta property="og:site_name" content="Inversiones & Finanzas" />
  <meta name="author" content="Lucas Montes">
  <meta property="og:type" content="website">
+ {% if meta_image %}
+ <meta property="og:image" content="{{meta_img}}" />
+ <meta name="twitter:image" content="{{meta_img}}">
+ <meta itemprop="image" content="{{meta_img}}">
+ {% else %}
  <meta property="og:image" content="{% static 'general/assets/img/favicon/favicon.ico' %}" />
+ <meta name="twitter:image" content="{% static 'general/assets/img/favicon/favicon.ico' %}">
+ <meta itemprop="image" content="{% static 'general/assets/img/favicon/favicon.ico' %}">
+ {% endif %}
+
 
  <!-- Schema.org markup for Google+ -->
  <meta itemprop="name" content="{{ meta_title }}">
  <meta itemprop="description" content="{{meta_desc}}">
 
- <meta itemprop="image" content="{% static 'general/assets/img/favicon/favicon.ico' %}">
+
 

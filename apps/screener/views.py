@@ -101,10 +101,11 @@ class CompanyDetailsView(DetailView):
         empresa = self.object
         UpdateCompany(empresa).general_update()
         self.request.session['screener'] = empresa.id
-        context["meta_desc"] = f'Estudia a fondo la empresa {empresa.name}. Más de 30 años de información, noticias, pros, contras y mucho más'
+        context["meta_desc"] = f'Estudia a fondo la empresa {empresa.name}. Más de 30 años de información, noticias, análisis FODA y mucho más'
         context["meta_tags"] = f'finanzas, blog financiero, blog el financiera, invertir, {empresa.name}, {empresa.ticker}'
         context["meta_title"] = f'Análisis completo de {empresa.name}'
         context["meta_url"] = f'/screener/analisis-de/{empresa.ticker}/'
+        context["meta_img"] = empresa.image
         context['company_is_fav'] = False
         if self.request.user.is_authenticated and empresa.ticker in self.request.user.fav_stocks.only('ticker'):
             context['company_is_fav'] = True

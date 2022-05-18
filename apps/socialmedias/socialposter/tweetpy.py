@@ -75,7 +75,8 @@ class Twitter:
                 last_position = current_position + 186
                 extra = f'{pagination}'
             
-            text_part = caption[current_position: last_position]+extra
+            content = caption[current_position: last_position]
+            text_part = f'{content} {extra}'
 
             response = twitter_api.update_status(status=text_part, 
                                         in_reply_to_status_id=response.id, 

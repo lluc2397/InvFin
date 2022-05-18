@@ -24,7 +24,7 @@ class SocialPosting:
             
             if model_type == 'preguntas_respuestas.question':# Quesiton
                 description = content.content
-                media_url = None
+                media_url = ''
                 title = content.title
             
             elif model_type == 'empresas.company':# Company:
@@ -49,7 +49,7 @@ class SocialPosting:
             title = news['headline']
             description = news['summary']
             description = google_translator().translate(description, lang_src='en', lang_tgt='es')
-            media_url = news['image']
+            media_url = ''
 
         if not link:
             link = 'https://inversionesyfinanzas.xyz' + content.get_absolute_url()
