@@ -7,41 +7,45 @@
      <!-- Two lists gainers and losers -->
 {% endblock FirstCta %}
 
-    {% block FirstContent %}
-    {% endblock FirstContent%}
+{% block FirstContent %}
+<div class="col-12">
+    <!-- cta to save preferences or recommend companies -->
+    {% include "screener/cta/screener_inicio.html" %}
+</div>
+{% endblock FirstContent%}
 
-    {% block ListContent %}
-    <div class="row">
-        {% for org in organisations %}
-        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-            <div class="card card-lift--hover text-white h-75">
-                <a href="{% url 'screener:companies_by' org.name %}{% utm 'screener' 'inicio' org.name %}">
-                    <img src="{{org.image}}" class="card-img" alt="{{org.name}}" height="260px">
-                    <div class="card-img-overlay">
-                        <div style="color: white;text-shadow: 2px 2px 4px #000000;">
-                            <strong>{{org.name}}</strong><br>
-                            {{org.sub_exchange1}}{% if org.sub_exchange2 %}, {{org.sub_exchange2}} {% endif %}
-                        </div>
+{% block ListContent %}
+<div class="row">
+    {% for org in organisations %}
+    <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+        <div class="card card-lift--hover text-white h-75">
+            <a href="{% url 'screener:companies_by' org.name %}{% utm 'screener' 'inicio' org.name %}">
+                <img src="{{org.image}}" class="card-img" alt="{{org.name}}" height="260px">
+                <div class="card-img-overlay">
+                    <div style="color: white;text-shadow: 2px 2px 4px #000000;">
+                        <strong>{{org.name}}</strong><br>
+                        {{org.sub_exchange1}}{% if org.sub_exchange2 %}, {{org.sub_exchange2}} {% endif %}
                     </div>
-                </a>
-            </div>
+                </div>
+            </a>
         </div>
-        {% endfor %}
     </div>
-    {% endblock ListContent%}
+    {% endfor %}
+</div>
+{% endblock ListContent%}
 
-    {% block MiddleCta %}
-    <div class="col-12">
-        {% block MiddleCtaContent %}
-        {% endblock MiddleCtaContent %}
-    </div>
-    {% endblock MiddleCta%}
+{% block MiddleCta %}
+<div class="col-12">
+    {% block MiddleCtaContent %}
+    {% endblock MiddleCtaContent %}
+</div>
+{% endblock MiddleCta%}
 
-    {% block ListContinuation %}
-    {% endblock ListContinuation %}
+{% block ListContinuation %}
+{% endblock ListContinuation %}
 
-    {% block LastCta %}
-    {% endblock LastCta %}
+{% block LastCta %}
+{% endblock LastCta %}
 
 {% block javascript %}
 {{ block.super }}
