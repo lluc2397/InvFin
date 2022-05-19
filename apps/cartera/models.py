@@ -51,7 +51,7 @@ class Asset(Model):
     
     @property
     def amount_invested(self):
-        return sum(move.movement_cost for move in PositionMovement.objects.filter(asset_related = self))
+        return sum(move.movement_cost for move in self.movements.filter(asset_related = self))
 
 
 class PositionMovement(Model):
@@ -183,35 +183,6 @@ class Patrimonio(Model, ChartSerializer):
 
     def __str__(self):
         return self.user.username
-    
-    # comparaison_dict = {
-    #         'label': field['title'],
-    #         'data': field['values'],
-    #         'backgroundColor': '',
-    #             'borderColor': '',
-            
-    #         'yAxisID':"right",
-    #         'order': 0,
-    #         'type': chart_type
-    # }
-    
-    # def serial():
-    #     inc_json = {
-    #         'labels': [data.date for data in inc],
-    #         'fields': [
-    #             {'title':'Ingresos',
-    #             'url':"#!",
-    #             'percent': 'false',
-    #             'short': 'false',
-    #             'values' : [data.revenue for data in inc]},]}
-
-    @property
-    def empresas_en_cartera (self):
-        return [empresa.object for empresa in self.assets.filter(is_stock=True)]
-    
-    @property
-    def porcentaje_empresas_en_cartera (self):
-        return sum(Decimal(item.percentage_capital_invested) for item in self.empresas_en_cartera)
 
     def gastos_totales(self, ingresos_totales):
         spends = Spend.objects.filter(user = self.user)
@@ -255,7 +226,6 @@ class Patrimonio(Model, ChartSerializer):
         income_invested = self.cantidad_total_invertida(total_income_earned['total'])
         income_saved = self.ahorros_totales(total_income_earned['total'], total_income_spend['total'], income_invested['total'])
 
-        
         percentage_spend = total_income_spend['percentage']
         percentage_saved = income_saved['percentage']
         percentage_invested = income_invested['percentage']
@@ -266,7 +236,7 @@ class Patrimonio(Model, ChartSerializer):
         income_spend = total_income_spend['total']
         income_saved = income_saved['total']
         income_invested = income_invested['total']
-        
+
         return {
             'income_earned': f'{income_earned}',
             'income_spend': f'{income_spend}',
@@ -280,3 +250,21 @@ class Patrimonio(Model, ChartSerializer):
             'percentage_saved': percentage_saved,
             'percentage_invested': percentage_invested,
         }
+    
+    def empresas_en_cartera(self, total_invertido):
+        empresas_en_cartera = {'empresas': []}
+        for empresa in self.assets.filter(is_stock=True).only('name', 'ticker'):
+            empresa_info = {
+                'name': empresa.object.name,
+                'ticker': empresa.object.ticker,
+                'amount_invested': empresa.amount_invested,
+                'percentage_invested': ((empresa.amount_invested / total_invertido) * 100) if total_invertido !=0 else 0}
+            empresas_en_cartera['empresas'].append(empresa_info)
+        return empresas_en_cartera
+    
+    @property
+    def balance_sheet(self):
+        patrimoine = self.patrimoine
+        total_invertido = float(patrimoine['income_invested'])
+        empresas_en_cartera = self.empresas_en_cartera(total_invertido)
+        return empresas_en_cartera.update(patrimoine)

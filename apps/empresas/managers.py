@@ -60,3 +60,4 @@ class CompanyManager(BaseSharedManager):
             'META',
             ''
         ]
+    

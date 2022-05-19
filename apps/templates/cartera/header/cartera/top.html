@@ -1,18 +1,15 @@
 {% load static %}
+{% load extra %}
 <div class="row align-items-center py-4">
     <div class="col-lg-3 col-4">
         <h6 class="h2 d-inline-block mb-0 mr-5">{{meta_title}}</h6>
     </div>
     <div class="col-lg-9 col-8 text-right">
         <div class="btn-group" role="group" aria-label="Basic outlined example">
-            <!-- <button type="button" 
+            <a href="{% url 'cartera:financials_inicio' %}{% utm 'cartera' 'Balance general' 'Flujo de caja' %}"
                 class="btn btn-outline-primary">
-                Activos
-            </button>
-            <button type="button" 
-                class="btn btn-outline-primary">
-                Cashflow
-            </button> -->
+                Flujo de caja
+            </a>
             <button id="btnGroupDrop1" type="button" 
                 class="btn btn-outline-primary dropdown-toggle"
                 data-bs-toggle="dropdown" aria-expanded="false">
