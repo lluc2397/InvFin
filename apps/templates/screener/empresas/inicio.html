@@ -1,5 +1,5 @@
 {% extends "general/bases/base_content.html" %}
-{% load static %}
+{% load static extra humanize %}
 {% block header %}{% include "screener/headers/inicio_header.html" %}{% endblock header%}
 
 {% block FirstCta %}{% include "screener/cta/empresa_inicio.html" %}{% endblock FirstCta %}
@@ -13,7 +13,7 @@
            <div class="row align-items-center">
               <div class="col-auto">
                  <!-- Avatar -->
-                 <a href="{% url 'screener:company' empresa.ticker %}" class="avatar avatar-xl rounded-circle">
+                 <a href="{% url 'screener:company' empresa.ticker %}{% utm 'screener' 'market' empresa.ticker %}" class="avatar avatar-xl rounded-circle">
                  <img alt="{{empresa.ticker}}" src="{{empresa.image}}">
                  </a>
               </div>

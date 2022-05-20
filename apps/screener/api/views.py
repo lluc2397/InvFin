@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.views.generic import ListView, TemplateView
+from django.views.generic import ListView
 from django.http.response import JsonResponse, HttpResponse
 from django.db.models import Q
 from django.shortcuts import render
@@ -21,9 +21,11 @@ from ..models import (
 from ..forms import UserCompanyObservationForm
 
 import json
+import yahooquery as yq
 
 
 User = get_user_model()
+
 
 class ReadOnly(BasePermission):
     def has_permission(self, request, view):
@@ -70,6 +72,45 @@ def get_company_valuation(request, ticker):
     company_valuation = Company.objects.get(ticker=ticker).calculate_current_ratios()
     return render(request, 'screener/empresas/company_parts/valuations/response.html', {
         'company_valuation': company_valuation,
+    })
+
+
+def retreive_top_lists(request):
+    yahoo = yq.Screener().get_screeners(['most_actives', 'day_gainers', 'day_losers'], 5)
+    extra = {
+        'positive': 'text-success',
+        'negative': 'text-danger'
+    }
+    url = '/screener/analisis-de/'
+    day_gainers = {
+        'title': 'Mayor aumento de precio',
+        'subtitle': 'day_gainers',
+        'extra': extra,
+        'url': url,
+        'data': yahoo['day_gainers']['quotes'] 
+    }
+    day_losers = {
+        'title': 'Mayor disminución de precio',
+        'subtitle': 'day_losers',
+        'extra': extra,
+        'url': url,
+        'data': yahoo['day_losers']['quotes'] 
+    }
+    most_actives = {
+        'title': 'Más activos',
+        'subtitle': 'most_actives',
+        'extra': extra,
+        'url': url,
+        'data': yahoo['most_actives']['quotes']
+    }
+
+    gainers_actives_losers = [
+        day_gainers,
+        most_actives,
+        day_losers
+    ]
+    return render(request, 'screener/entrance/top-lists.html', {
+        'gainers_actives_losers': gainers_actives_losers,
     })
 
 

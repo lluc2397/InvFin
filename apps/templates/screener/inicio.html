@@ -1,47 +1,90 @@
 {% extends "general/bases/base_content.html" %}
-{% load static %}
-{% load extra %}
+{% load static i18n extra %}
 {% block header %}{% include "screener/headers/inicio_header.html" %}{% endblock header%}
 
 {% block FirstCta %}
-     <!-- Two lists gainers and losers -->
-{% endblock FirstCta %}
-
-    {% block FirstContent %}
-    {% endblock FirstContent%}
-
-    {% block ListContent %}
-    <div class="row">
-        {% for org in organisations %}
-        <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-            <div class="card card-lift--hover text-white h-75">
-                <a href="{% url 'screener:companies_by' org.name %}{% utm 'screener' 'inicio' org.name %}">
-                    <img src="{{org.image}}" class="card-img" alt="{{org.name}}" height="260px">
-                    <div class="card-img-overlay">
-                        <div style="color: white;text-shadow: 2px 2px 4px #000000;">
-                            <strong>{{org.name}}</strong><br>
-                            {{org.sub_exchange1}}{% if org.sub_exchange2 %}, {{org.sub_exchange2}} {% endif %}
-                        </div>
+<div class="row" hx-trigger="load" hx-get="{% url 'screener:retreive_top_lists' %}" hx-target="this">
+    <div class="col-lg-4 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                Mayor aumento de precio
+            </div>
+            <div class="card-body">
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
                     </div>
-                </a>
+                    Cargando...
+                  </div>
             </div>
         </div>
-        {% endfor %}
     </div>
-    {% endblock ListContent%}
-
-    {% block MiddleCta %}
-    <div class="col-12">
-        {% block MiddleCtaContent %}
-        {% endblock MiddleCtaContent %}
+    <div class="col-lg-4 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                Más activo
+            </div>
+            <div class="card-body">
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                    </div>
+                    Cargando...
+                  </div>
+            </div>
+        </div>
     </div>
-    {% endblock MiddleCta%}
+    <div class="col-lg-4 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                Mayor disminución de precio
+            </div>
+            <div class="card-body">
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                    </div>
+                    Cargando...
+                  </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock FirstCta %}
 
-    {% block ListContinuation %}
-    {% endblock ListContinuation %}
+{% block FirstContent %}
+<!-- Añadir buscador de empresas -->
+{% endblock FirstContent%}
 
-    {% block LastCta %}
-    {% endblock LastCta %}
+{% block ListContent %}
+<div class="row">
+    {% for org in organisations %}
+    <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+        <div class="card card-lift--hover text-white h-75">
+            <a href="{% url 'screener:companies_by' org.name %}{% utm 'screener' 'select-market' org.name %}">
+                <img src="{{org.image}}" class="card-img" alt="{{org.name}}" height="260px">
+                <div class="card-img-overlay">
+                    <div style="color: white;text-shadow: 2px 2px 4px #000000;">
+                        <strong>{{org.name}}</strong><br>
+                        {{org.sub_exchange1}}{% if org.sub_exchange2 %}, {{org.sub_exchange2}} {% endif %}
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock ListContent%}
+
+{% block MiddleCta %}
+<div class="col-12">
+    {% block MiddleCtaContent %}
+    {% endblock MiddleCtaContent %}
+</div>
+{% endblock MiddleCta%}
+
+{% block ListContinuation %}
+{% endblock ListContinuation %}
+
+{% block LastCta %}
+{% endblock LastCta %}
 
 {% block javascript %}
 {{ block.super }}

@@ -19,7 +19,7 @@ def readable_date(date):
 @register.filter(name='per_cent')
 def percentagement(value):
     return (value * 100)
-
+    
 
 @register.simple_tag(name='utm')
 def add_utms(medium='webapp', content='', term='', source='invfin', campaign='regular'):
