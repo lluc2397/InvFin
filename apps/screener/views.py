@@ -105,7 +105,7 @@ class CompanyDetailsView(DetailView):
         context["meta_tags"] = f'finanzas, blog financiero, blog el financiera, invertir, {empresa.name}, {empresa.ticker}'
         context["meta_title"] = f'Análisis completo de {empresa.name}'
         context["meta_url"] = f'/screener/analisis-de/{empresa.ticker}/'
-        context["meta_img"] = empresa.image
+        context["meta_img"] = f'{empresa.image}'
         context['company_is_fav'] = False
         if self.request.user.is_authenticated and empresa.ticker in self.request.user.fav_stocks.only('ticker'):
             context['company_is_fav'] = True

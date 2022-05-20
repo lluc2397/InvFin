@@ -19,7 +19,7 @@
  <meta name="keywords" content="{{meta_tags}}">
  <meta name="Description" content="{{meta_desc}}">
  <title>{{meta_title}}</title>
- <link rel=”canonical” href={{meta_url}}/>
+ <link rel=”canonical” href="{{meta_url}}" />
  
  <!-- Twitter Card data -->
  <meta name="twitter:site" content="@InvFinz">
@@ -39,14 +39,14 @@
  <meta property="og:site_name" content="Inversiones & Finanzas" />
  <meta name="author" content="Lucas Montes">
  <meta property="og:type" content="website">
- {% if meta_image %}
- <meta property="og:image" content="{{meta_img}}" />
- <meta name="twitter:image" content="{{meta_img}}">
- <meta itemprop="image" content="{{meta_img}}">
+ {% if meta_img %}
+ <meta property="og:image" href="{{meta_img}}" />
+ <meta name="twitter:image" href="{{meta_img}}">
+ <meta itemprop="image" href="{{meta_img}}">
  {% else %}
- <meta property="og:image" content="{% static 'general/assets/img/favicon/favicon.ico' %}" />
- <meta name="twitter:image" content="{% static 'general/assets/img/favicon/favicon.ico' %}">
- <meta itemprop="image" content="{% static 'general/assets/img/favicon/favicon.ico' %}">
+ <meta property="og:image" href="{% static 'general/assets/img/favicon/favicon.ico' %}" />
+ <meta name="twitter:image" href="{% static 'general/assets/img/favicon/favicon.ico' %}">
+ <meta itemprop="image" href="{% static 'general/assets/img/favicon/favicon.ico' %}">
  {% endif %}
 
 
