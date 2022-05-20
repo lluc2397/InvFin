@@ -40,9 +40,9 @@
  <meta name="author" content="Lucas Montes">
  <meta property="og:type" content="website">
  {% if meta_img %}
- <meta property="og:image" content="{{meta_img}}" />
- <meta name="twitter:image" content="{{meta_img}}">
- <meta itemprop="image" content="{{meta_img}}">
+ <meta property="og:image" href="{{meta_img}}" />
+ <meta name="twitter:image" href="{{meta_img}}">
+ <meta itemprop="image" href="{{meta_img}}">
  {% else %}
  <meta property="og:image" href="{% static 'general/assets/img/favicon/favicon.ico' %}" />
  <meta name="twitter:image" href="{% static 'general/assets/img/favicon/favicon.ico' %}">
