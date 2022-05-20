@@ -3,46 +3,48 @@
 {% block header %}{% include "screener/headers/inicio_header.html" %}{% endblock header%}
 
 {% block FirstCta %}
-<div class="row" hx-trigger="load" hx-get="{% url 'screener:retreive_top_lists' %}" hx-target="this">
-    <div class="col-lg-4 col-sm-12">
-        <div class="card">
-            <div class="card-header">
-                Mayor aumento de precio
-            </div>
-            <div class="card-body">
-                <div class="text-center">
-                    <div class="spinner-border" role="status">
+<div hx-trigger="load" hx-get="{% url 'screener:retreive_top_lists' %}" hx-target="this">
+    <div class="row">
+        <div class="col-lg-4 col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    Mayor aumento de precio
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                        </div>
+                        Cargando...
                     </div>
-                    Cargando...
-                  </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-lg-4 col-sm-12">
-        <div class="card">
-            <div class="card-header">
-                Más activo
-            </div>
-            <div class="card-body">
-                <div class="text-center">
-                    <div class="spinner-border" role="status">
+        <div class="col-lg-4 col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    Más activo
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                        </div>
+                        Cargando...
                     </div>
-                    Cargando...
-                  </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-lg-4 col-sm-12">
-        <div class="card">
-            <div class="card-header">
-                Mayor disminución de precio
-            </div>
-            <div class="card-body">
-                <div class="text-center">
-                    <div class="spinner-border" role="status">
+        <div class="col-lg-4 col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    Mayor disminución de precio
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                        </div>
+                        Cargando...
                     </div>
-                    Cargando...
-                  </div>
+                </div>
             </div>
         </div>
     </div>
@@ -50,27 +52,36 @@
 {% endblock FirstCta %}
 
 {% block FirstContent %}
-<!-- Añadir buscador de empresas -->
+<div class="col-12">
+    <div class="p-4 p-md-5 mb-4 text-white card bg-gradient-success">
+        <div class="row">
+            <h1 class="display-4 text-white fst-italic">¿Ya sabes qué empresa buscas?</h1>
+            <div class="text-center">
+                {% include "general/search/search-companies.html" %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock FirstContent%}
 
 {% block ListContent %}
-<div class="row">
-    {% for org in organisations %}
-    <div class="col-lg-3 col-md-6 col-sm-12 mt-4">
-        <div class="card card-lift--hover text-white h-75">
-            <a href="{% url 'screener:companies_by' org.name %}{% utm 'screener' 'select-market' org.name %}">
-                <img src="{{org.image}}" class="card-img" alt="{{org.name}}" height="260px">
-                <div class="card-img-overlay">
-                    <div style="color: white;text-shadow: 2px 2px 4px #000000;">
-                        <strong>{{org.name}}</strong><br>
-                        {{org.sub_exchange1}}{% if org.sub_exchange2 %}, {{org.sub_exchange2}} {% endif %}
-                    </div>
+
+{% for org in organisations %}
+<div class="col-lg-3 col-md-6 col-sm-12 mt-4">
+    <div class="card card-lift--hover text-white h-75">
+        <a href="{% url 'screener:companies_by' org.name %}{% utm 'screener' 'select-market' org.name %}">
+            <img src="{{org.image}}" class="card-img" alt="{{org.name}}" height="260px">
+            <div class="card-img-overlay">
+                <div style="color: white;text-shadow: 2px 2px 4px #000000;">
+                    <strong>{{org.name}}</strong><br>
+                    {{org.sub_exchange1}}{% if org.sub_exchange2 %}, {{org.sub_exchange2}} {% endif %}
                 </div>
-            </a>
-        </div>
+            </div>
+        </a>
     </div>
-    {% endfor %}
 </div>
+{% endfor %}
+
 {% endblock ListContent%}
 
 {% block MiddleCta %}
