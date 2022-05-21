@@ -199,13 +199,16 @@ class NotificationSystem:
         }
         return enviar_email_task.delay(email, user.pk, 'notif')
 
-    def notify_related_users(self, question, notif_type:str, attr:str):
-        for obj in question.related_users:
-            user = obj.author
+    def notify_related_users(self, object_name:str, object_related, notif_type:str, attr:str):
+        for obj in object_related.related_users:
+            if object_name == 'question':
+                user = obj.author
+            else:
+                user = obj.user
             user_profile = user.user_profile
             field = getattr(user_profile, attr)
             if field and user_profile.field is True:
-                self.save_notif(user, question, notif_type)
+                self.save_notif(user, object_related, notif_type)
 
     def notify_all_users(self, object_related, notif_type):
         for user in User.objects.all():
@@ -232,7 +235,7 @@ class NotificationSystem:
             self.notify_all_followers(object_related, notif_type)
 
         elif whom_notify == 'relateds':
-            self.notify_related_users(object_related, notif_type, attr)
+            self.notify_related_users(object_name, object_related, notif_type, attr)
 
         else:
             self.notify_single_user()        

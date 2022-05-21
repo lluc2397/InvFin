@@ -1,9 +1,10 @@
 from typing import Any, Sequence
-
+from factory import SubFactory
 from django.contrib.auth import get_user_model
 from factory import Faker, post_generation
 from factory.django import DjangoModelFactory
 
+from apps.users.models import Profile
 
 class UserFactory(DjangoModelFactory):
     id = 1
@@ -30,3 +31,10 @@ class UserFactory(DjangoModelFactory):
     class Meta:
         model = get_user_model()
         django_get_or_create = ["id"]
+
+
+class ProfileFactory(DjangoModelFactory):
+    user = SubFactory(UserFactory)
+
+    class Meta:
+        model = Profile

@@ -14,7 +14,7 @@ from django.db.models import (
 )
 
 from django.urls import reverse
-from datetime import datetime
+from itertools import chain
 
 from apps.general.models import (
     Currency,
@@ -130,6 +130,13 @@ class Company(CompanyExtended):
             {current_ratios['current_price']}{current_ratios['current_currency']} y {current_ratios['average_shares_out']}\
             acciones en circulación la empresa tiene una capitalización bursátil de {current_ratios['marketcap']} {current_ratios['current_price']}"
         return intro
+    
+    @property
+    def related_users(self):
+        from apps.screener.models import FavoritesStocksHistorial
+        favs = FavoritesStocksHistorial.objects.filter(stock__in=self)
+        fodas = self.company_foda.all()
+        return list(chain(favs, fodas))
 
 
 class CompanyStockPrice(Model):
