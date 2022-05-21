@@ -13,6 +13,8 @@ from apps.public_blog.forms import WritterProfileForm
 from .forms import UserForm, UserProfileForm
 from .models import Profile
 
+from itertools import chain
+
 User = get_user_model()
 
 
@@ -24,7 +26,7 @@ class UserDetailView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context["meta_desc"] = 'Todo lo que necesitas para invertir'
         context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir'
-        context["meta_title"] = 'Dashboard'
+        context["meta_title"] = f'Bienvenido {self.request.user.username}'
         context["meta_url"] = '/inicio/'
         return context
 
@@ -100,3 +102,38 @@ def user_update_profile(request):
             }
    
     return render(request, 'profile/private/settings.html', context)
+
+
+class UserHistorialView(LoginRequiredMixin, TemplateView):
+    template_name = 'profile/private/historial.html'
+
+    def meta_information(self, slug):
+        return {
+            "meta_desc": 'Tu historial en la plataforma',
+            "meta_tags": 'finanzas, blog financiero, blog el financiera, invertir',
+            "meta_title": f'Historial de {slug}',
+            "meta_url": f'/historial-perfil/{slug}'
+        }
+    
+    def get_object(self, slug):
+        user = self.request.user
+        if slug == 'Aportes':
+            content = user.corrector.all()
+        elif slug == 'Comentarios':
+            questions_coms = user.quesitoncomment_set.all()
+            answers_coms = user.answercomment_set.all()
+            content = list(chain(answers_coms, questions_coms))
+        else:
+            content = user.usercompanyobservation_set.all()
+        return {
+            'content': content,
+            'slug': slug
+        }
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        slug = self.kwargs['slug']
+        context.update(self.meta_information(slug))
+        if self.request.user.is_authenticated:
+            context.update(self.get_object(slug))        
+        return context

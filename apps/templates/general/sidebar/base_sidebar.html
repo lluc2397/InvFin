@@ -73,27 +73,21 @@
             </li> -->
             <hr class="my-3">
             <li class="nav-item">
-              <a class="nav-link" href="#{% utm 'webapp' 'sidebar' Análisis %}">
-                <i class="fas fa-compass text-primary"></i>
+              <a class="nav-link" href="{% url 'users:user_historial' 'Análisis' %}{% utm 'webapp' 'sidebar' 'análisis-historial' %}">
+                <i class="fas fa-chart-bar text-primary"></i>
                 <span class="nav-link-text">Análisis</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#{% utm 'webapp' 'sidebar' Aportes %}">
-                <i class="fas fa-compass text-primary"></i>
+              <a class="nav-link" href="{% url 'users:user_historial' 'Aportes' %}{% utm 'webapp' 'sidebar' 'aportes-historial' %}">
+                <i class="fas fa-edit text-primary"></i>
                 <span class="nav-link-text">Aportes</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#{% utm 'webapp' 'sidebar' Comentarios %}">
-                <i class="fas fa-compass text-primary"></i>
+              <a class="nav-link" href="{% url 'users:user_historial' 'Comentarios' %}{% utm 'webapp' 'sidebar' 'comentarios-historial' %}">
+                <i class="fas fa-pen text-primary"></i>
                 <span class="nav-link-text">Comentarios</span>
-              </a>
-            </li>            
-            <li class="nav-item">
-              <a class="nav-link" href="#{% utm 'webapp' 'sidebar' Historial %}">
-                <i class="fas fa-compass text-primary"></i>
-                <span class="nav-link-text">Historial</span>
               </a>
             </li>
           </ul>
