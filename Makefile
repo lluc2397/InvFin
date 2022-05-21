@@ -3,7 +3,7 @@
 build:
 	docker-compose -f local.yml build $(ar)
 
-up-back:
+up-b:
 	docker-compose -f local.yml up $(ar) -d
 
 up:
