@@ -43,12 +43,11 @@ class Question(BasicWrittenContent):
     
     @property
     def related_users(self):
-        answers_users = ''
-        upvotes_users = ''
-        downvotes_users = ''
-        comments_users = ''
-        result_list = list(chain(answers_users, upvotes_users))
-        return 
+        answers_users = self.related_answers
+        upvotes_users = self.upvotes.all()
+        downvotes_users = self.downvotes.all()
+        comments_users = self.comments_related.all()
+        return list(chain(answers_users, upvotes_users, downvotes_users, comments_users))
     
     @property
     def related_answers(self):

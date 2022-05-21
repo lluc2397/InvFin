@@ -7,7 +7,6 @@ from .models import (
     Country,
     Currency,
     Notification,
-    NotificationsType,
     EmailNotification
 )
 
@@ -28,14 +27,6 @@ class NotificationAdmin(admin.ModelAdmin):
         'id',
         'user',
         'object',
-    ]
-
-
-@admin.register(NotificationsType)
-class NotificationsTypeAdmin(admin.ModelAdmin):
-    list_display = [
-        'id',
-        'name'
     ]
 
 

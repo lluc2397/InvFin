@@ -9,10 +9,8 @@ import time
 
 from apps.public_blog.models import WritterProfile
 
-from .models import (
-    Notification,
-    NotificationsType
-)
+from .models import Notification
+from .constants import NOTIFICATIONS_TYPES
 
 User = get_user_model()
 
@@ -171,45 +169,20 @@ class EmailingSystem():
 
 
 class NotificationSystem:
-    def __init__(self) -> None:
-        self.new_blog_post = NotificationsType.objects.get_or_create(name = 'Nuevo escrito')[0]
-        self.new_comment = NotificationsType.objects.get_or_create(name = 'Nuevo comentario')[0]
-        self.new_vote = NotificationsType.objects.get_or_create(name = 'Nuevo voto')[0]
-        self.new_follower = NotificationsType.objects.get_or_create(name = 'Nuevo seguidor')[0]
-        self.new_question = NotificationsType.objects.get_or_create(name = 'Nueva pregunta')[0]
-        self.new_answer = NotificationsType.objects.get_or_create(name = 'Nueva respuesta')[0]
-        self.answer_accepted = NotificationsType.objects.get_or_create(name = 'Respuesta acceptada')[0]
+    """
+    new_blog_post = 1    -----> followers
+    new_comment = 2      -----> related
+    new_vote = 3         -----> single
+    new_follower = 4     -----> sinlge
+    new_question = 5     -----> all
+    new_answer = 6       -----> related
+    answer_accepted = 7  -----> related
+    new_obs_company = 8  -----> related
+    new_news_company = 9  -----> related
+    """  
 
-        """
-        new_blog_post = 1    -----> followers
-        new_comment = 2      -----> related
-        new_vote = 3         -----> single
-        new_follower = 4     -----> sinlge
-        new_question = 5     -----> all
-        new_answer = 6       -----> related
-        answer_accepted = 7  -----> related
-        """  
-
-    def select_notification_type(self, notif_type_num):
-        if notif_type_num == 1:
-            notif_type = self.new_blog_post
-        elif notif_type_num == 2:
-            notif_type = self.new_comment 
-        elif notif_type_num == 3:
-            notif_type = self.new_vote 
-        elif notif_type_num == 4:
-            notif_type = self.new_follower 
-        elif notif_type_num == 5:
-            notif_type = self.new_question 
-        elif notif_type_num == 6:
-            notif_type = self.new_answer 
-        elif notif_type_num == 7:
-            notif_type = self.answer_accepted 
-        return notif_type
-
-    def save_notif(self, user, object_related, notif_type_num):
+    def save_notif(self, user, object_related, notif_type):
         from .tasks import enviar_email_task
-        notif_type = self.select_notification_type(notif_type_num)
 
         notification = Notification.objects.create(
         user = user,
@@ -226,44 +199,40 @@ class NotificationSystem:
         }
         return enviar_email_task.delay(email, user.pk, 'notif')
 
-    def notify_related_users(self, question, notif_type_num):
-        pass
+    def notify_related_users(self, question, notif_type:str, attr:str):
+        for obj in question.related_users:
+            user = obj.author
+            user_profile = user.user_profile
+            field = getattr(user_profile, attr)
+            if field and user_profile.field is True:
+                self.save_notif(user, question, notif_type)
 
-    def notify_all_users(self, object_related, notif_type_num):
+    def notify_all_users(self, object_related, notif_type):
         for user in User.objects.all():
-            self.save_notif(user, object_related, notif_type_num)
+            self.save_notif(user, object_related, notif_type)
 
-    def notify_all_followers(self, object_related, notif_type_num):
+    def notify_all_followers(self, object_related, notif_type):
         for user in object_related.author.main_writter_followed.followers.all():
-            self.save_notif(user, object_related, notif_type_num)
+            self.save_notif(user, object_related, notif_type)
 
-    def notify_single_user(self, user, object_related, notif_type_num):
-        self.save_notif(user, object_related, notif_type_num)            
+    def notify_single_user(self, user, object_related, notif_type):
+        self.save_notif(user, object_related, notif_type)            
 
-    def notify(self, object_related, notif_type_num:int):
+    def notify(self, object_related:dict, whom_notify:str, notif_type:str, attr:str):
         """
-        whom_notify may be all, followers or single
+        whom_notify may be all, relateds or single
         """
-        time.sleep(10)
         app_label = object_related['app_label']
         object_name = object_related['object_name']
         id = object_related['id']
 
         object_related = apps.get_model(app_label, object_name, require_ready=True).objects.get(pk=id)
 
-        if notif_type_num == 1:
-            self.notify_all_followers(object_related, notif_type_num)
+        if whom_notify == 'all':
+            self.notify_all_followers(object_related, notif_type)
 
-        elif notif_type_num == 2 or notif_type_num == 6 or notif_type_num == 7:
-            self.notify_related_users(object_related, notif_type_num)
+        elif whom_notify == 'relateds':
+            self.notify_related_users(object_related, notif_type, attr)
 
-        elif notif_type_num == 3 or notif_type_num == 4:
-            self.notify_single_user(object_related, notif_type_num)
-
-        elif notif_type_num == 5:
-            self.notify_all_users(object_related, notif_type_num)
-
-        
-        
-
-        
+        else:
+            self.notify_single_user()        

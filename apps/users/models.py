@@ -243,7 +243,22 @@ class MetaProfileHistorial(Model):
         db_table = "meta_profile_historial"
 
 
-class Profile(Model, ResizeImageMixin):
+class NotificationsPreference(Model):
+    new_blog_post = BooleanField(default=True)
+    new_comment = BooleanField(default=True)
+    new_vote = BooleanField(default=True)
+    new_follower = BooleanField(default=True)
+    new_question = BooleanField(default=True)
+    new_answer = BooleanField(default=True)
+    answer_accepted = BooleanField(default=True)
+    new_obs_company = BooleanField(default=True)
+    new_news_company = BooleanField(default=True)
+
+    class Meta:
+        abstract = True
+
+
+class Profile(NotificationsPreference, ResizeImageMixin):
     user = OneToOneField(User, on_delete=CASCADE, null=True, related_name='user_profile')
     reputation_score = IntegerField(default=0)
     creditos = IntegerField(default=0)

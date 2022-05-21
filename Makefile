@@ -6,6 +6,9 @@ build:
 up-back:
 	docker-compose -f local.yml up $(ar) -d
 
+restart:
+	docker-compose -f local.yml restart
+
 up:
 	docker-compose -f local.yml up $(ar)
 

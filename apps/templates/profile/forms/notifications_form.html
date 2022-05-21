@@ -1,8 +1,20 @@
-{% extends "general/index.html" %}
-{% load static %}
-{% block header %}{% include "users/complements/header_inicio.html" %}{% endblock header%}
-{% block content %}
-
-{% csrf_token %}
-
-{% endblock content %}
+{% load static crispy_forms_tags %}
+<div class="row">
+    <div class="col">
+        <h4>Quiero estar al tanto y recibir notificaciones cuando hayan:</h4>
+        <div class="row">
+            <div class="col ml-4">
+                {{ profile_form.new_blog_post|as_crispy_field }}
+                {{ profile_form.new_comment|as_crispy_field }}
+                {{ profile_form.new_vote|as_crispy_field }}
+                {{ profile_form.new_follower|as_crispy_field }}
+                {{ profile_form.new_question|as_crispy_field }}
+                {{ profile_form.new_answer|as_crispy_field }}
+                {{ profile_form.answer_accepted|as_crispy_field }}
+                {{ profile_form.new_obs_company|as_crispy_field }}
+                {{ profile_form.new_news_company|as_crispy_field }}
+            </div>
+        </div>
+        <div class="col-12"><button type="submit" class="btn btn-primary col-12">Guardar</button></div>
+    </div>
+</div>

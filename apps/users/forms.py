@@ -63,6 +63,16 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     edad= forms.DateField(widget=forms.SelectDateWidget)
 
+    new_blog_post = forms.BooleanField(required=False, label='Nueva publicación de mis escritores favoritos')
+    new_comment = forms.BooleanField(required=False, label='Nuevo comentario en mi publicación')
+    new_vote = forms.BooleanField(required=False, label='Nuevo voto en mi publicación')
+    new_follower = forms.BooleanField(required=False, label='Nuevo seguidor')
+    new_question = forms.BooleanField(required=False, label='Nueva pregunta')
+    new_answer = forms.BooleanField(required=False, label='Nueva respuesta en mi publicación')
+    answer_accepted = forms.BooleanField(required=False, label='Respuesta acceptada')
+    new_obs_company = forms.BooleanField(required=False, label='Nuevo análisis para mis empresas favoritas')
+    new_news_company = forms.BooleanField(required=False, label='Nuevas noticias para mis empresas favoritas')
+
     class Meta:
         model = Profile
         fields = [
@@ -70,5 +80,14 @@ class UserProfileForm(forms.ModelForm):
             'ciudad',
             'pais',
             'foto_perfil',
-            'bio'
+            'bio',
+            'new_blog_post',
+            'new_comment',
+            'new_vote',
+            'new_follower',
+            'new_question',
+            'new_answer',
+            'answer_accepted',
+            'new_obs_company',
+            'new_news_company',
         ]

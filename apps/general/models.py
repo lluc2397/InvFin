@@ -29,6 +29,7 @@ User = get_user_model()
 
 from apps.seo.models import MetaParametersHistorial
 
+from .constants import NOTIFICATIONS_TYPES
 from .mixins import CommonMixin, BaseEscritosMixins
 
 
@@ -222,20 +223,9 @@ class GenericModelsBase(Model):
         return self._meta.object_name
 
 
-class NotificationsType(Model):
-    name = CharField(max_length=500)
-
-    class Meta:
-        verbose_name = "Notification type"
-        db_table = "notifications_types"
-
-    def __str__(self, *args, **kwargs):
-        return self.name
-
-
 class Notification(GenericModelsBase):
     user = ForeignKey(User, on_delete=CASCADE)
-    notification_type = ForeignKey(NotificationsType, on_delete=CASCADE)
+    notification_type = CharField(max_length=250, choices=NOTIFICATIONS_TYPES, null=True)
     is_seen = BooleanField(default=False)
 
     class Meta:

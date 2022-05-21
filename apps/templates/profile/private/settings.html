@@ -40,11 +40,11 @@
                   Perfil
                 </button>
               </li>
-              <!-- <li class="nav-item">
+              <li class="nav-item">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#notifs" type="button" role="tab" aria-controls="notifs" aria-selected="false">
                   Notificaciones
                 </button>
-              </li> -->
+              </li>
               {% if request.user.is_writter %}
               <li class="nav-item">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#writter" type="button" role="tab" aria-controls="writter" aria-selected="false">
@@ -54,7 +54,7 @@
               {% endif %}
             </ul>
 
-            <form method="POST" enctype="multipart/form-data" action="{% url 'users:update' %}">
+          <form method="POST" enctype="multipart/form-data" action="{% url 'users:update' %}">
               {% csrf_token %}
             <div class="tab-content pt-3">
 
@@ -63,13 +63,14 @@
                 
               </div>
 
-              <!-- <div class="tab-pane" id="notifs" role="tabpanel" aria-labelledby="notifs-tab">
-                
-              </div> -->
+              <div class="tab-pane" id="notifs" role="tabpanel" aria-labelledby="notifs-tab">
+                {% include "profile/forms/notifications_form.html" %}
+              </div>
               {% if request.user.is_writter %}
               <div class="tab-pane" id="writter" role="tabpanel" aria-labelledby="writter-tab">
                 {% include "profile/forms/writter_form.html" %}
-              </div>{% endif %}
+              </div>
+              {% endif %}
             </div>
             <div class="modal fade" id="picture-modal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
               <div class="modal-dialog modal-lg" role="document">

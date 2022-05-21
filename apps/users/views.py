@@ -9,6 +9,7 @@ from django.views.generic import (
     TemplateView)
 
 from apps.public_blog.forms import WritterProfileForm
+from apps.general.constants import NOTIFICATIONS_TYPES
 
 from .forms import UserForm, UserProfileForm
 from .models import Profile
@@ -94,7 +95,6 @@ def user_update_profile(request):
             'profile_form': profile_form, 
             'form': form, 
             'writter_form':writter_form,
-            
             'meta_title': 'Tu perfil',
             
             }
