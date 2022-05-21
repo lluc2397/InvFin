@@ -1,4 +1,5 @@
 {% load static %}
+{% load extra %}
 <nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main">
     <div class="scrollbar-inner">
       <!-- Brand -->
@@ -27,9 +28,9 @@
           <ul class="navbar-nav">
             <li class="nav-item">
               {% if request.user.is_anonymous %}
-              <a class="nav-link active" href="{% url 'preguntas_respuestas:list_questions' %}">
+              <a class="nav-link active" href="{% url 'preguntas_respuestas:list_questions' %}{% utm 'webapp' 'sidebar' Inicio %}">
                 {% else %}
-              <a class="nav-link active" href="{% url 'users:user_inicio' %}">
+              <a class="nav-link active" href="{% url 'users:user_inicio' %}{% utm 'webapp' 'sidebar' Inicio %}">
                 {% endif %}
                 <i class="fas fa-home text-primary"></i>
                 <span class="nav-link-text">Inicio</span>
@@ -39,6 +40,13 @@
               <a class="nav-link" href="#">
                 <i class="fas fa-compass text-primary"></i>
                 <span class="nav-link-text">Explorar</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link"
+              href="{% url 'roboadvisor:roboadvisor' %}{% utm 'webapp' 'sidebar' Roboadvisor %}">
+                <i class="fas fa-robot"></i>
+                <span class="nav-link-text">Roboadvisor</span>
               </a>
             </li> -->
             <hr class="my-3">
@@ -63,7 +71,25 @@
                 <span class="nav-link-text">Roboadvisor</span>
               </a>
             </li> -->
-
+            <hr class="my-3">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'users:user_historial' 'Análisis' %}{% utm 'webapp' 'sidebar' 'análisis-historial' %}">
+                <i class="fas fa-chart-bar text-primary"></i>
+                <span class="nav-link-text">Análisis</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'users:user_historial' 'Aportes' %}{% utm 'webapp' 'sidebar' 'aportes-historial' %}">
+                <i class="fas fa-edit text-primary"></i>
+                <span class="nav-link-text">Aportes</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'users:user_historial' 'Comentarios' %}{% utm 'webapp' 'sidebar' 'comentarios-historial' %}">
+                <i class="fas fa-pen text-primary"></i>
+                <span class="nav-link-text">Comentarios</span>
+              </a>
+            </li>
           </ul>
         </div>
       </div>
