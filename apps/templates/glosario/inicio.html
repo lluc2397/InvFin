@@ -1,9 +1,6 @@
 {% extends "general/bases/base_content.html" %}
-{% load static %}
-
+{% load static i18n extra %}
 {% block header %}{% include "glosario/header/inicio.html" %}{% endblock header%}
-
-
 {% block FirstCtaContent %}
 {% include "glosario/cta/inicio.html" %}
 {% endblock FirstCtaContent %}
@@ -15,7 +12,7 @@
         <div class="row">
             <div class="col-lg-9">
                 <div class="d-flex flex-column h-100">
-                    <a href="{{term.get_absolute_url}}">
+                    <a href="{{term.get_absolute_url}}{% utm 'glosario' 'inicio' term.title %}">
                         <p class="h1 mb-1 pt-2 text-bold">
                             {{term.title}}
                         </p>
@@ -30,10 +27,10 @@
                             {% endfor %}
                         </div>
                     </h5>
-                    <p class="mb-5"><a href="{{term.get_absolute_url}}">
+                    <p class="mb-5"><a href="{{term.get_absolute_url}}{% utm 'glosario' 'inicio' term.title %}">
                         {{term.resume}}
                     </a></p>
-                    <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="{{term.get_absolute_url}}">
+                    <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="{{term.get_absolute_url}}{% utm 'glosario' 'inicio' term.title %}">
                     Leer más
                     <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
                     </a>

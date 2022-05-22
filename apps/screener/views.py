@@ -1,10 +1,11 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
 from django.views.generic import ListView, DetailView
+from django.contrib import messages
 
 from apps.empresas.models import Company, ExchangeOrganisation
 from apps.etfs.models import Etf
 from apps.empresas.company.update import UpdateCompany
-from apps.empresas.valuations import discounted_cashflow
 
 
 class ScreenerInicioView(ListView):
@@ -59,8 +60,8 @@ class CompanyDetailsView(DetailView):
 
     def get_object(self):
         ticker = self.kwargs.get('ticker')
-        return get_object_or_404(
-            Company.objects.prefetch_related(
+        try:
+            response = Company.objects.prefetch_related(
                 'inc_statements',
                 'balance_sheets',
                 'cf_statements',
@@ -93,9 +94,15 @@ class CompanyDetailsView(DetailView):
                 'isin',
                 'description',
                 'ipoDate',
-            ),
-            ticker=ticker)
-    
+            ).get(ticker=ticker)
+        # except model.DoesNotExist:
+        except Exception as e:
+            response, _ = Company.objects.get_or_create(
+                name='Need-parsing',
+                ticker=ticker
+            )            
+        return response
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         empresa = self.object
@@ -110,7 +117,14 @@ class CompanyDetailsView(DetailView):
         if self.request.user.is_authenticated and empresa.ticker in self.request.user.fav_stocks.only('ticker'):
             context['company_is_fav'] = True
         return context
-
+    
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.name == 'Need-parsing':
+            messages.error(self.request, 'Lo sentimos, esta empresa todavía no tiene información ahora mismo vamos a recabar información y estará lista en poco tiempo')
+            return redirect(reverse('screener:screener_inicio'))
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
 
 class EtfDetailsView(DetailView):
     model = Etf

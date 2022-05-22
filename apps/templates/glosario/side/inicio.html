@@ -1,3 +1,4 @@
+{% load static i18n extra %}
 <div class="card text-center">
     <div class="card-header">
         Recomendaciones
@@ -5,13 +6,13 @@
     <div class="card-body">
         <div class="row">
             <div class="col-12">                
-                <a class="btn btn-secondary" href="{% url 'screener:screener_inicio' %}">No te pierdas las empresas</a>
+                <a class="btn btn-secondary" href="{% url 'screener:screener_inicio' %}{% utm 'glosario' 'inicio' 'side-recoms' %}">No te pierdas las empresas</a>
             </div>
             <div class="col-12 mt-4">
-                <a class="btn btn-youtube" href="{% url 'preguntas_respuestas:list_questions' %}">Ayuda a la comunidad</a>
+                <a class="btn btn-youtube" href="{% url 'preguntas_respuestas:list_questions' %}{% utm 'glosario' 'inicio' 'side-recoms' %}">Ayuda a la comunidad</a>
             </div>
             <div class="col-12 mt-4">
-                <a class="btn btn-slack" href="{% url 'public_blog:blog_list' %}">Descubre los escritores</a>
+                <a class="btn btn-slack" href="{% url 'public_blog:blog_list' %}{% utm 'glosario' 'inicio' 'side-recoms' %}">Descubre los escritores</a>
             </div>
         </div>
     </div>

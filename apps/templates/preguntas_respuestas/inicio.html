@@ -1,5 +1,5 @@
 {% extends "general/bases/base_content.html" %}
-{% load static %}
+{% load static i18n extra %}
 {% block extra %}
 <script>
     (function(h,o,t,j,a,r){
@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="d-flex flex-column h-100">
-                        <a href="{{question.get_absolute_url}}">
+                        <a href="{{question.get_absolute_url}}{% utm 'preguntas' 'inicio' question.title %}">
                             <p class="h1 mb-1 pt-2 text-bold">
                                 {{question.title}}
                             </p>
@@ -40,7 +40,7 @@
                         </div>
                         
                         <div class="mb-2 mt-2">
-                            <a href="{{question.get_absolute_url}}">
+                            <a href="{{question.get_absolute_url}}{% utm 'preguntas' 'inicio' question.title %}">
                                 {{question.content|safe|truncatechars:200}}
                             </a>
                         </div>
