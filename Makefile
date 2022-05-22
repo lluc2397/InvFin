@@ -3,8 +3,9 @@
 build:
 	docker-compose -f local.yml build $(ar)
 
-up-back:
+up-b:
 	docker-compose -f local.yml up $(ar) -d
+	docker-compose -f local.yml logs -f django
 
 up:
 	docker-compose -f local.yml up $(ar)
@@ -78,8 +79,8 @@ backup:
 ls-backups:
 	docker-compose -f local.yml exec postgres backups
 
-cp-backups:
-	docker cp $(docker-compose -f local.yml ps -q postgres):/backups ./backups
+rt-backups:
+	docker cp docker-compose -f local.yml ps -q postgres:/backups ./backups
 
 restore:
 	docker-compose -f local.yml exec postgres restore $(ar)
