@@ -8,7 +8,11 @@ from django.db.models import (
     OneToOneField,
     FloatField,
     IntegerField,
-    ManyToManyField
+    ManyToManyField,
+    CharField,
+    JSONField,
+    TextField,
+    SlugField
 )
 
 from apps.empresas.models import Company
@@ -21,6 +25,7 @@ User = get_user_model()
 
 from apps.general.models import FavoritesHistorial
 
+from . import constants
 
 class FavoritesStocksHistorial(FavoritesHistorial):
     asset = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True)
@@ -148,3 +153,13 @@ class UserCompanyObservation(Model):
             data['status'] = 'Amenaza'
             data['color'] = 'danger'
         return data
+
+
+class YahooScreener(Model):
+    name = CharField(max_length=150)
+    slug = SlugField()
+    description = TextField()
+    json_info = JSONField(default=dict)
+    yq_name = CharField(max_length=150)
+    asset_class_related = CharField(max_length=25, choices=constants.ASSET_CLASS)
+    show = BooleanField(default=True)

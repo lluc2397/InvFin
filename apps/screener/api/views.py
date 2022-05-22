@@ -109,7 +109,7 @@ def retreive_top_lists(request):
         most_actives,
         day_losers
     ]
-    return render(request, 'screener/entrance/top-lists.html', {
+    return render(request, 'screener/yahoo-screeners/top-lists.html', {
         'gainers_actives_losers': gainers_actives_losers,
     })
 
