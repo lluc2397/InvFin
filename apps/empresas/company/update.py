@@ -112,7 +112,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
             except Exception as e:
                 self.company.has_error = True
                 self.company.error_message = e
-                self.company.save()
+                self.company.save(update_fields=['has_error', 'error_message'])
             else:
                 try:
                     self.create_current_stock_price(price = current_data['currentPrice'])
@@ -130,11 +130,16 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
 
                     self.company.updated = True
                     self.company.last_update = datetime.now()
-                    self.company.save()
+                    self.company.save(update_fields=['updated', 'last_update'])
                 except Exception as e:
                     self.company.has_error = True
                     self.company.error_message = e
-                    self.company.save()
+                    self.company.save(update_fields=['has_error', 'error_message'])
+        else:
+            from apps.empresas.tasks import update_company_financials_task
+            self.company.date_updated = True
+            self.company.save(update_fields=['date_updated'])
+            update_company_financials_task.delay()
 
     def check_last_filing(self):
         least_recent_date = self.yq_company.balance_sheet()['asOfDate'].max().value // 10**9 # normalize time
