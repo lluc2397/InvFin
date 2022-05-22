@@ -1,3 +1,24 @@
 {% extends "general/bases/base_content.html" %}
 {% load static i18n extra %}
 {% block header %}{% include "screener/headers/screener.html" %}{% endblock header%}
+{% block FirstCta %}
+{% endblock FirstCta %}
+
+{% block FirstContent %}
+<div class="col-12">
+    <div class="p-4 p-md-5 mb-4 text-white card bg-gradient-success">
+        <div class="row">
+            <h1 class="display-4 text-white fst-italic">¿Ya sabes qué empresa buscas?</h1>
+            <div class="text-center">
+                {% include "general/search/search-companies.html" %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock FirstContent%}
+
+{% block ListContent %}
+
+{% for screener in screeners %}
+{% endfor %}
+{% endblock ListContent %}

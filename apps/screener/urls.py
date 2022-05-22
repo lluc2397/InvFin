@@ -5,7 +5,9 @@ from .views import (
     CompanyScreenerInicioView,
     EtfScreenerInicioView,
     CompanyDetailsView,
-    EtfDetailsView
+    EtfDetailsView,
+    AllYahooScreenersView,
+    YahooScreenerView
 )
 
 from .api.urls import urlpatterns
@@ -27,6 +29,9 @@ urlpatterns = [
 
     path('analisis-de/<ticker>/', CompanyDetailsView.as_view(), name="company"),
     path('analisis-etf/<ticker>/', EtfDetailsView.as_view(), name="etf"),
+
+    path('todas-las-mejores-listas/', AllYahooScreenersView.as_view(), name="all_yahoo_screeners"),
+    path('lista-de/<slug>/', YahooScreenerView.as_view(), name="yahoo_screener"),
 ] + urlpatterns
 
 # for serializer in list_of_serializers:

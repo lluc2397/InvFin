@@ -23,7 +23,7 @@ from ckeditor.fields import RichTextField
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from apps.general.models import FavoritesHistorial
+from apps.general.models import FavoritesHistorial, Category, Tag
 
 from . import constants
 
@@ -156,10 +156,22 @@ class UserCompanyObservation(Model):
 
 
 class YahooScreener(Model):
-    name = CharField(max_length=150)
-    slug = SlugField()
+    name = CharField(max_length=500)
+    slug = SlugField(max_length=500)
     description = TextField()
     json_info = JSONField(default=dict)
-    yq_name = CharField(max_length=150)
+    yq_name = CharField(max_length=500)
     asset_class_related = CharField(max_length=25, choices=constants.ASSET_CLASS)
     show = BooleanField(default=True)
+    categories = ManyToManyField(Category, blank=True)
+    tags = ManyToManyField(Tag, blank=True)
+
+    class Meta:
+        verbose_name = "Yahoo screener"
+        db_table = "screener_yahoo_screeners"
+    
+    def __str__(self):
+        return self.name
+    
+    def get_absolute_url(self):
+        return reverse("screener:yahoo_screener", kwargs={"slug": self.slug})

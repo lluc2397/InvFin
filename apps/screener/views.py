@@ -1,11 +1,15 @@
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
 
-from apps.empresas.models import Company, ExchangeOrganisation
+from apps.empresas.models import (
+    Company, 
+    ExchangeOrganisation
+)
 from apps.etfs.models import Etf
 from apps.empresas.company.update import UpdateCompany
 from apps.empresas.valuations import discounted_cashflow
 
+from .models import YahooScreener
 
 class ScreenerInicioView(ListView):
     model = ExchangeOrganisation
@@ -37,6 +41,28 @@ class CompanyScreenerInicioView(ListView):
         context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir'
         context["meta_title"] = f'Más de 30 años de información financiera de cualquier empresa de {name}'
         context["meta_url"] = f'/screener/empresas-de/{name}/'
+        return context
+
+
+class AllYahooScreenersView(ListView):
+    model = YahooScreener
+    template_name = 'screener/yahoo-screeners/all-screeners.html'
+    context_object_name = "screeners"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context[''] = ''
+        return context
+
+
+class YahooScreenerView(DetailView):
+    model = YahooScreener
+    template_name = 'screener/yahoo-screeners/screener.html'
+    context_object_name = "screener"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context[''] = ''
         return context
 
 

@@ -10,6 +10,7 @@ from .views import (
     get_company_price,
     get_company_valuation,
     retreive_top_lists,
+    retreive_yahoo_screener_info
 )
 
 
@@ -27,4 +28,5 @@ urlpatterns = [
     path('screener-medium-valuation/', medium_valuation_view, name="medium_valuation_view"),
 
     path('retreive-top-lists/', retreive_top_lists, name="retreive_top_lists"),
+    path('retreive-yahoo-lists/', retreive_yahoo_screener_info, name="retreive_yahoo_screener_info"),
 ]
