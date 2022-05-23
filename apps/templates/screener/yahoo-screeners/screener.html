@@ -1,6 +1,6 @@
 {% extends "general/bases/base_content.html" %}
 {% load static i18n extra %}
-{% block header %}{% include "screener/headers/screener.html" %}{% endblock header%}
+{% block header %}{% include "screener/headers/screeners.html" %}{% endblock header%}
 {% block FirstCta %}
 {% endblock FirstCta %}
 
@@ -18,11 +18,25 @@
 {% endblock FirstContent%}
 
 {% block ListContent %}
-<div hx-trigger="load" hx-get="{% url 'screener:retreive_top_lists' %}" hx-target="this">
-    <div class="text-center">
-        <div class="spinner-border" role="status">
+<div class="card">
+    <div class="card-header">
+        <div class="text-center">
+            <h2>{{screener.name}}</h2>
         </div>
-        Cargando...
+    </div>
+    <div class="card-body">
+        {{screener.description}}
+    </div>
+</div>
+<div hx-trigger="load" hx-get="{% url 'screener:retreive_yahoo_screener_info' screener.yq_name %}" hx-target="this">
+    <div class="card">
+        <div class="card-body">
+            <div class="text-center">
+                <div class="spinner-border" role="status">
+                </div>
+                Cargando...
+            </div>
+        </div>
     </div>
 </div>
 {% endblock ListContent %}

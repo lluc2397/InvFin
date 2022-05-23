@@ -6,33 +6,14 @@ from .views import (
     RoboAdvisorUserResultsListView
 )
 
-from apps.roboadvisor.api.views import (
-    RoboAdvisorQuestionCompanyAnalysisAPIView,
-    RoboAdvisorQuestionStocksPortfolioAPIView,
-    RoboAdvisorQuestionFinancialSituationAPIView,
-    RoboAdvisorQuestionInvestorExperienceAPIView,
-    RoboAdvisorQuestionPortfolioAssetsWeightAPIView,
-    RoboAdvisorQuestionPortfolioCompositionAPIView,
-    RoboAdvisorQuestionRiskAversionAPIView
-)
+from apps.roboadvisor.api.urls import urlpatterns
 
 
 app_name = "roboadvisor"
 
-urlpatterns =[
+urlpatterns = [
     path('roboadvisor/', RoboAdvisorServicesListView.as_view(), name="roboadvisor"),
     path('robo-options/<slug>/', RoboAdvisorServiceOptionView.as_view(), name="robo-option"),
-
-    path('robo-step-analysis', RoboAdvisorQuestionCompanyAnalysisAPIView.as_view(), name='analysis'),
-    
-    path('robo-step-financial', RoboAdvisorQuestionFinancialSituationAPIView.as_view(), name='financial'),
-    path('robo-step-experience', RoboAdvisorQuestionInvestorExperienceAPIView.as_view(), name='experience'),
-    path('robo-step-weights', RoboAdvisorQuestionPortfolioAssetsWeightAPIView.as_view(), name='weights'),
-    
-    path('robo-step-risk-aversion', RoboAdvisorQuestionRiskAversionAPIView.as_view(), name='risk-aversion'),
-
-    path('robo-step-composition', RoboAdvisorQuestionPortfolioCompositionAPIView.as_view(), name='composition'),
-    path('robo-step-stocks-portfolio', RoboAdvisorQuestionStocksPortfolioAPIView.as_view(), name='stocks-portfolio'),
 
     path('robo-result/<slug>/', RoboAdvisorResultView.as_view(), name="result"),
 
@@ -50,4 +31,4 @@ urlpatterns =[
     # path('portfolio-etf-form/', PORTFOLIO_ETF_FORM, name='portfolio-etf-form'),
     # path('portfolio-etf-details/<pk>', PORTFOLIO_ETF_DETAILS, name="portfolio-etf-details"),
     
-]
+] + urlpatterns

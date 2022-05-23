@@ -40,41 +40,29 @@
               <span class="docs-normal">Exploradores</span>
             </h6>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'screener:all_yahoo_screeners' %}{% utm 'sidebar' 'all-users' 'all-screeners' %}">
-                <i class="fa-solid fa-square-poll-horizontal text-danger"></i>
-                <span class="nav-link-text">Screeners</span>
+              <a class="nav-link" href="{% url 'screener:all_yahoo_screeners' %}{% utm 'webapp' 'sidebar' 'Screeners' %}">
+                <i class="fa-solid fa-square-poll-horizontal text-primary"></i>
+                <span class="nav-link-text">Lista Screeners</span>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link"
-              href="{% url 'roboadvisor:roboadvisor' %}{% utm 'webapp' 'sidebar' Roboadvisor %}">
-                <i class="fas fa-robot"></i>
-                <span class="nav-link-text">Roboadvisor</span>
-              </a>
-            </li> -->
+            
             <hr class="my-3">
             <h6 class="navbar-heading pl-4 text-muted">
               <span class="docs-normal">Favoritos</span>
             </h6>
             {% block favorites %}
             {% endblock favorites %}
-            <!-- <hr class="my-3">
+            <hr class="my-3">
             <h6 class="navbar-heading pl-4 text-muted">
-              <span class="docs-normal">Extras</span>
+              <span class="docs-normal">Historial</span>
             </h6>
-
             <li class="nav-item">
-              <a class="nav-link" 
-              {% if request.user.is_authenticated %}
-              href="{% url 'roboadvisor:user-robo-results' %}"
-              {% else %}
-              href="{% url 'roboadvisor:roboadvisor' %}?roborequest=s"
-              {% endif %}>
-                <i class="fas fa-robot"></i>
+              <a class="nav-link"
+              href="{% url 'roboadvisor:user-robo-results' %}{% utm 'webapp' 'sidebar' 'Roboadvisor' %}">
+                <i class="fas fa-robot text-primary"></i>
                 <span class="nav-link-text">Roboadvisor</span>
               </a>
-            </li> -->
-            <hr class="my-3">
+            </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'users:user_historial' 'Análisis' %}{% utm 'webapp' 'sidebar' 'análisis-historial' %}">
                 <i class="fas fa-chart-bar text-primary"></i>

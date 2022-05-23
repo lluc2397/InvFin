@@ -1,4 +1,5 @@
 from django.views.generic import ListView, DetailView
+from django.db.models import Q
 
 from .mixins import ServicePaymentMixin
 from .models import (
@@ -13,6 +14,8 @@ from .forms import (
 	RoboAdvisorQuestionPortfolioCompositionForm,
 	RoboAdvisorQuestionRiskAversionForm
 )
+
+from . import constants
 from .brain.investor import get_investor_type
 # If user ask for a company recom and it doesn't have profile, recommend to tkae the test
 
@@ -102,7 +105,11 @@ class RoboAdvisorUserResultsListView(ListView):
 	context_object_name = "services"
 
 	def get_queryset(self):
-		return super().get_queryset().filter(user = self.request.user)
+		return super().get_queryset().filter(
+			Q(status = constants.FINISED) |
+			Q(status = constants.NOT_PAYED),
+			user = self.request.user			
+		)
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)

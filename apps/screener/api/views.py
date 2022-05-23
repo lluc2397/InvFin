@@ -77,7 +77,7 @@ def get_company_valuation(request, ticker):
 
 def retreive_yahoo_screener_info(request, query):
     yahoo = yq.Screener().get_screeners(query)
-    return render(request, 'screener/yahoo-screeners/screener-data.html', yahoo)
+    return render(request, 'screener/yahoo-screeners/screener-data.html', {'yahoo':yahoo})
 
 
 def retreive_top_lists(request):

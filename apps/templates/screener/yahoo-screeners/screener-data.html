@@ -1,0 +1,57 @@
+{% load static i18n extra %}
+<div class="row">
+  {% for stock_information in yahoo %}
+  <div class="col-xl-4 col-lg-12">
+    <div class="card">
+      <div class="card-header clearfix">
+        <div class="float-start">
+          {{stock_information.title}}
+        </div>
+        <div class="float-end">
+          <a>Ver más</a>
+        </div>        
+      </div>
+      <div class="table-responsive">
+          <table class="table table-hover">
+            <tbody>
+              {% for information in stock_information.data %}
+                <tr>
+                  <th scope="row" style="width: 10px">
+                      <a href="{% url 'screener:company' information.symbol %}{% utm 'screener' stock_information.subtitle information.symbol %}"
+                        class="name mb-0 text-sm">
+                        {{information.symbol}}
+                      </a>
+                      <br>
+                      <span class="name mb-0 text-xsm" style="font-size: 8px;">
+                        {{information.shortName}}
+                      </span>
+                  </th>
+                  <th>
+                      Precio actual
+                      <br>
+                  <span class="name mb-0 text-xsm">
+                      {{information.regularMarketPrice|floatformat}} {{information.currency}}
+                  </span>
+                  </th>
+                  <th>
+                      Cambio de precio
+                      <br>
+                  <span class="name mb-0 text-xsm 
+                  {% if information.regularMarketChangePercent > 0 %}
+                  {{stock_information.extra.positive}}
+                  {% else %}
+                  {{stock_information.extra.negative}}
+                  {% endif %}">
+                      {{information.regularMarketChangePercent|floatformat}} %
+                  </span>
+                  </th>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+

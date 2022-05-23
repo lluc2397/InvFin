@@ -3,14 +3,25 @@
   <div class="col-lg-6 col-7">
     <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
         <ol class="breadcrumb breadcrumb-links breadcrumb-light">
-            <li class="breadcrumb-item">
-                <a href="{% url 'screener:screener_inicio' %}{% utm 'screener' 'all-screeners' 'inicio' %}">
-                  <i class="fa-solid fa-square-poll-horizontal"></i>
-                </a>
-                </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                Todos los screeners
-            </li>
+          <li class="breadcrumb-item">
+            <a href="{% url 'screener:screener_inicio' %}{% utm 'screener' 'main' 'inicio' %}">
+              <i class="fa-solid fa-square-poll-horizontal"></i>
+            </a>
+          </li>
+          {% if screener %}
+          <li class="breadcrumb-item">
+            <a href="{% url 'screener:all_yahoo_screeners' %}{% utm 'screener' 'all-screeners' 'inicio' %}">
+              Todos los screeners
+            </a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            {{screener.name}}
+          </li>
+          {% else %}
+          <li class="breadcrumb-item active" aria-current="page">
+            Todos los screeners
+          </li>
+          {% endif %}
         </ol>
     </nav>
   </div>
