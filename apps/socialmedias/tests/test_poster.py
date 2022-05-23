@@ -4,7 +4,6 @@ from apps.escritos.models import Term
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog
 from apps.empresas.models import Company
-
 from apps.socialmedias.models import (
     CompanySharedHistorial,
     BlogSharedHistorial,
@@ -13,6 +12,8 @@ from apps.socialmedias.models import (
     ProfileSharedHistorial,
     QuestionSharedHistorial
 )
+# from apps.public_blog.tests.factories
+
 from ..poster import SocialPosting
 
 from .factories import (
@@ -100,7 +101,7 @@ class PosterTest(TestCase):
     def test_question(self):
         question = Question.objects.get_random()
         question_poster = SocialPosting(QuestionSharedHistorial, question).generate_content()
-        question_response= question.title, 'https://inversionesyfinanzas.xyz' + question.get_absolute_url(), question.content, None
+        question_response= question.title, 'https://inversionesyfinanzas.xyz' + question.get_absolute_url(), question.content, ''
         self.assertEqual(question_poster, question_response)
 
     def test_term(self):
@@ -115,7 +116,7 @@ class PosterTest(TestCase):
         company_response = company.name, 'https://inversionesyfinanzas.xyz' + company.get_absolute_url(), company.description, company.image
         self.assertEqual(company_poster, company_response)
 
-    def test_news(self):
-        company = Company.objects.get_random()
-        company_news_poster = SocialPosting(NewsSharedHistorial, company_related=company).generate_content()
+    # def test_news(self):
+    #     company = Company.objects.get_random()
+    #     company_news_poster = SocialPosting(NewsSharedHistorial, company_related=company).generate_content()
         

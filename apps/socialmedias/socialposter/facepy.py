@@ -203,15 +203,16 @@ class Facebook():
             link = url_to_share)  
 
 
-    def create_fb_description(self, caption:str, link:str, hashtags:list):
+    def create_fb_description(self, caption:str, link:str = None, hashtags:list = None):
         hashtags = '#'.join(hashtags)
-        face_description = f"""
-        {caption}
+        if link:
+            link = f'Más en {link}'
+        else:
+            link = 'Prueba las herramientas que todo inversor inteligente necesita: https://inversionesyfinanzas.xyz'
+        face_description = f"""{caption}
 
-        Más en {link}
+        {link}
         
-        Prueba las herramientas que todo inversor inteligente necesita: https://inversionesyfinanzas.xyz
-
         Visita nuestras redes sociales:
         Facebook: https://www.facebook.com/InversionesyFinanzas/
         Instagram: https://www.instagram.com/inversiones.finanzas/
