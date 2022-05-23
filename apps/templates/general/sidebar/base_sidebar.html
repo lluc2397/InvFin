@@ -1,4 +1,4 @@
-{% load static %}
+{% load static i18n extra %}
 <nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main">
     <div class="scrollbar-inner">
       <!-- Brand -->
@@ -27,20 +27,24 @@
           <ul class="navbar-nav">
             <li class="nav-item">
               {% if request.user.is_anonymous %}
-              <a class="nav-link active" href="{% url 'preguntas_respuestas:list_questions' %}">
+              <a class="nav-link active" href="{% url 'preguntas_respuestas:list_questions' %}{% utm 'sidebar' 'non-auth' 'questions' %}">
                 {% else %}
-              <a class="nav-link active" href="{% url 'users:user_inicio' %}">
+              <a class="nav-link active" href="{% url 'users:user_inicio' %}{% utm 'sidebar' 'auth' 'inicio' %}">
                 {% endif %}
                 <i class="fas fa-home text-primary"></i>
                 <span class="nav-link-text">Inicio</span>
               </a>
             </li>
-            <!-- <li class="nav-item">
-              <a class="nav-link" href="#">
-                <i class="fas fa-compass text-primary"></i>
-                <span class="nav-link-text">Explorar</span>
+            <hr class="my-3">
+            <h6 class="navbar-heading pl-4 text-muted">
+              <span class="docs-normal">Exploradores</span>
+            </h6>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'screener:all_yahoo_screeners' %}{% utm 'sidebar' 'all-users' 'all-screeners' %}">
+                <i class="fa-solid fa-square-poll-horizontal text-danger"></i>
+                <span class="nav-link-text">Screeners</span>
               </a>
-            </li> -->
+            </li>
             <hr class="my-3">
             <h6 class="navbar-heading pl-4 text-muted">
               <span class="docs-normal">Favoritos</span>

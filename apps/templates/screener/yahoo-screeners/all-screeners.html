@@ -1,6 +1,6 @@
 {% extends "general/bases/base_content.html" %}
 {% load static i18n extra %}
-{% block header %}{% include "screener/headers/screener.html" %}{% endblock header%}
+{% block header %}{% include "screener/headers/screeners.html" %}{% endblock header%}
 {% block FirstCta %}
 {% endblock FirstCta %}
 
@@ -18,7 +18,10 @@
 {% endblock FirstContent%}
 
 {% block ListContent %}
-
 {% for screener in screeners %}
+<div class="row">
+    
+</div>
+{{screener.name}}
 {% endfor %}
 {% endblock ListContent %}
