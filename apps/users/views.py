@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import (
     DetailView,
@@ -119,15 +120,19 @@ class UserHistorialView(LoginRequiredMixin, TemplateView):
         user = self.request.user
         if slug == 'Aportes':
             content = user.corrector.all()
+            url = 'escritos:glosario'
         elif slug == 'Comentarios':
             questions_coms = user.quesitoncomment_set.all()
             answers_coms = user.answercomment_set.all()
             content = list(chain(answers_coms, questions_coms))
+            url = 'preguntas_respuestas:list_questions'
         else:
             content = user.usercompanyobservation_set.all()
+            url = 'screener:screener_inicio'
         return {
             'content': content,
-            'slug': slug
+            'slug': slug,
+            'url': reverse(url)
         }
     
     def get_context_data(self, **kwargs):
