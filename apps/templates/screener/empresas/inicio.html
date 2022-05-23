@@ -24,11 +24,19 @@
                  <p class="text-sm text-muted mb-0">{{empresa.description|truncatewords:"25"}}</p>
               </div>
               <div class="col-auto">
-                 <!-- <button type="button" class="btn btn-sm btn-success mb-1">Añadir favoritos</button>
-                 <br> -->
+                 <button type="button" class="btn btn-sm btn-success mb-1" 
+                     onclick="AddToFav('{{empresa.ticker}}', '{{empresa.id}}')" type="submit" id="button-favs-{{empresa.id}}">
+                     <i class="fa fa-star" aria-hidden="true"></i>
+                     Favoritos
+                  </button>
+
+                 <br>
                  <!-- <button type="button" class="btn btn-sm btn-primary mb-1">Añadir cartera</button>
                  <br> -->
-                 <a href="{% url 'screener:company' empresa.ticker %}" type="button" class="btn btn-sm btn-primary">Visitar</a>
+                 <a href="{% url 'screener:company' empresa.ticker %}" type="button" class="btn btn-sm btn-primary">
+                  <i class="fa fa-eye" aria-hidden="true"></i>
+                    Visitar
+                  </a>
                  
               </div>
            </div>
@@ -71,4 +79,30 @@
      {% endif %}
    </ul>
  </nav>
+ <script>
+   const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+   
+   function AddToFav(ticker, id){
+ 
+     event.preventDefault(); // <---- Add this line
+     $.ajax({
+       url: '{% url "general:update_favorites" %}',
+       type: "POST",
+       dataType: "json",
+       data: JSON.stringify({ticker: ticker,}),
+       headers: {
+       "X-Requested-With": "XMLHttpRequest",
+       'X-CSRFToken': csrftoken,
+       
+     },
+     success: (response) => {
+         let buttonStock = document.getElementById("button-favs-"+id)
+         if (response.is_favorite === true){
+           buttonStock.className ='btn btn-sm btn-success mb-1'}
+         else {
+           buttonStock.className ='btn btn-sm btn-outline-success mb-1'}
+           }
+     });
+   };
+ </script>
 {% endblock FirstContent%}
