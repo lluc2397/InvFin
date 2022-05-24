@@ -1,5 +1,8 @@
 from django.contrib import admin
 from django.contrib.sessions.models import Session
+
+from apps.general.utils import ExportCsv
+
 from .models import (
     Visiteur,
     MetaParameters,
@@ -36,7 +39,7 @@ class UsersJourneyAdmin(admin.ModelAdmin):
 
 
 @admin.register(Visiteur)
-class VisiteurAdmin(admin.ModelAdmin):
+class VisiteurAdmin(admin.ModelAdmin, ExportCsv):
     list_display = [
         'id',
         'ip',
