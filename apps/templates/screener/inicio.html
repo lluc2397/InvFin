@@ -52,16 +52,7 @@
 {% endblock FirstCta %}
 
 {% block FirstContent %}
-<div class="col-12">
-    <div class="p-4 p-md-5 mb-4 text-white card bg-gradient-success">
-        <div class="row">
-            <h1 class="display-4 text-white fst-italic">¿Ya sabes qué empresa buscas?</h1>
-            <div class="text-center">
-                {% include "general/search/search-companies.html" %}
-            </div>
-        </div>
-    </div>
-</div>
+{% include "screener/cta/buscador_empresas.html" %}
 {% endblock FirstContent%}
 
 {% block ListContent %}

@@ -17,7 +17,7 @@
               {% for information in stock_information.data %}
                 <tr>
                   <th scope="row" style="width: 10px">
-                      <a href="{% url 'screener:company' information.symbol %}{% utm 'screener' stock_information.subtitle information.symbol %}"
+                      <a href="{% url 'screener:company' information.symbol %}{% utm 'webapp' 'screener' information.symbol %}"
                         class="name mb-0 text-sm">
                         {{information.symbol}}
                       </a>

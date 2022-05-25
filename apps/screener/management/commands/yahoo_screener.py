@@ -31,8 +31,8 @@ class Command(BaseCommand):
                 name = screener_lookup_info['title'] 
                 description = screener_lookup_info['description'] 
 
-                # name = google_translator().translate(name, lang_src='en', lang_tgt='es')
-                # description = google_translator().translate(description, lang_src='en', lang_tgt='es')
+                name = google_translator().translate(name, lang_src='en', lang_tgt='es')
+                description = google_translator().translate(description, lang_src='en', lang_tgt='es')
                 slug = slugify(name)
 
                 YahooScreener.objects.create(
