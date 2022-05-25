@@ -60,6 +60,8 @@ class YahooScreenerView(DetailView):
     model = YahooScreener
     template_name = 'screener/yahoo-screeners/screener.html'
     context_object_name = "screener"
+    slug_url_kwarg = 'slug'
+    slug_field = 'slug'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

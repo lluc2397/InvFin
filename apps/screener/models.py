@@ -14,6 +14,7 @@ from django.db.models import (
     TextField,
     SlugField
 )
+from django.template.defaultfilters import slugify
 
 from apps.empresas.models import Company
 from apps.etfs.models import Etf
@@ -172,6 +173,10 @@ class YahooScreener(Model):
     
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        return super().save(self, *args, **kwargs)
     
     def get_absolute_url(self):
         return reverse("screener:yahoo_screener", kwargs={"slug": self.slug})

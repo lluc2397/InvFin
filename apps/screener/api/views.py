@@ -16,7 +16,8 @@ from apps.empresas.models import Company
 from ..models import (
     UserCompanyObservation,
     UserScreenerMediumPrediction,
-    UserScreenerSimplePrediction
+    UserScreenerSimplePrediction,
+    YahooScreener
 )
 from ..forms import UserCompanyObservationForm
 
@@ -77,7 +78,10 @@ def get_company_valuation(request, ticker):
 
 def retreive_yahoo_screener_info(request, query):
     yahoo = yq.Screener().get_screeners(query)
-    return render(request, 'screener/yahoo-screeners/screener-data.html', {'yahoo':yahoo})
+    context = {
+        'yahoo': yahoo[query]['quotes']
+    }
+    return render(request, 'screener/yahoo-screeners/screener-data.html', context)
 
 
 def retreive_top_lists(request):
@@ -90,20 +94,23 @@ def retreive_top_lists(request):
     day_gainers = {
         'title': 'Mayor aumento de precio',
         'subtitle': 'day_gainers',
+        'slug': YahooScreener.objects.get(yq_name='day_gainers').slug,
         'extra': extra,
         'url': url,
-        'data': yahoo['day_gainers']['quotes'] 
+        'data': yahoo['day_gainers']['quotes']
     }
     day_losers = {
         'title': 'Mayor disminución de precio',
         'subtitle': 'day_losers',
+        'slug': YahooScreener.objects.get(yq_name='day_losers').slug,
         'extra': extra,
         'url': url,
-        'data': yahoo['day_losers']['quotes'] 
+        'data': yahoo['day_losers']['quotes']
     }
     most_actives = {
         'title': 'Más activos',
         'subtitle': 'most_actives',
+        'slug': YahooScreener.objects.get(yq_name='most_actives').slug,
         'extra': extra,
         'url': url,
         'data': yahoo['most_actives']['quotes']

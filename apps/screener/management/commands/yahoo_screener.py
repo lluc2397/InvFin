@@ -12,6 +12,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         yq_screener = yq.Screener()
         for screener in yq_screener.available_screeners:
+            if YahooScreener.objects.filter(yq_name=screener).exists():
+                continue
             if screener.startswith('all_cryptocurrencies'):
                 asset_class_related = constants.CRYPTO
             elif screener.startswith('reit'):
