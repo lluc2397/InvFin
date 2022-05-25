@@ -27,6 +27,9 @@ def companies_searcher(request):
 
 
 class ExcelAPIIncome(APIView):
+    authentication_classes = []
+    permission_classes = []
+
     def get(self, request, format=None):
         excel_token = request.GET['api_key'] 
         ticker = request.GET['ticker']
@@ -42,6 +45,9 @@ class ExcelAPIIncome(APIView):
 
 
 class ExcelAPIBalance(APIView):
+    authentication_classes = []
+    permission_classes = []
+
     def get(self, request, format=None):
         excel_token = request.GET['api_key'] 
         ticker = request.GET['ticker']
@@ -57,6 +63,9 @@ class ExcelAPIBalance(APIView):
 
 
 class ExcelAPICashflow(APIView):
+    authentication_classes = []
+    permission_classes = []
+    
     def get(self, request, format=None):
         excel_token = request.GET['api_key'] 
         ticker = request.GET['ticker']

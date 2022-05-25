@@ -40,6 +40,7 @@ class UsersJourneyAdmin(admin.ModelAdmin):
 
 @admin.register(Visiteur)
 class VisiteurAdmin(admin.ModelAdmin, ExportCsv):
+    actions = ["export_as_csv"]
     list_display = [
         'id',
         'ip',
