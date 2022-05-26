@@ -38,6 +38,7 @@ class Key(Model):
         verbose_name = "Key"
         verbose_name_plural = "Keys"
         db_table = "api_keys"
+        ordering = ['-created']
 
     def save(self, *args, **kwargs):
         if not self.key:

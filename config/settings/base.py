@@ -350,12 +350,13 @@ SOCIALACCOUNT_FORMS = {"signup": "apps.users.forms.UserSocialSignupForm"}
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
-    ],
-    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
-    'DEFAULT_VERSIONING_CLASS': ["rest_framework.versioning.NamespaceVersioning"]
+    "DEFAULT_AUTHENTICATION_CLASSES": ["apps.api.authentication.KeyAuthentication",],
+    "DEFAULT_PERMISSION_CLASSES": ["apps.api.permissions.ReadOnly"],
+    'DEFAULT_VERSIONING_CLASS': ["rest_framework.versioning.NamespaceVersioning"],
+    'DEFAULT_RENDERER_CLASSES': ['rest_framework.renderers.JSONRenderer',],
+    'DEFAULT_PARSER_CLASSES': ['rest_framework.parsers.JSONParser',],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 20
 }
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
