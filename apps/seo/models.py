@@ -24,7 +24,7 @@ User = get_user_model()
 
 
 class Visiteur(Model):
-    ip = CharField(max_length=10000, null=True, blank=True)
+    ip = CharField(max_length=50, null=True, blank=True)
     session_id = CharField(max_length=10000, null=True, blank=True)
     HTTP_USER_AGENT = CharField(max_length=10000, null=True, blank=True)
     country_code = CharField(max_length=10000, null=True, blank=True)
@@ -50,10 +50,10 @@ class Visiteur(Model):
     
 
 class MetaParameters(Model):
-    meta_title = CharField(max_length=99999,null=True, blank=True)
+    meta_title = CharField(max_length=999,null=True, blank=True)
     meta_description = TextField(null=True, blank=True)
-    meta_img = CharField(max_length=99999,null=True, blank=True)
-    meta_url = CharField(max_length=99999,null=True, blank=True)
+    meta_img = CharField(max_length=999,null=True, blank=True)
+    meta_url = CharField(max_length=999,null=True, blank=True)
     meta_keywords = TextField()
     meta_author = ForeignKey(User, on_delete=SET_NULL, null=True)
     published_time = DateTimeField(auto_now=True)
@@ -84,8 +84,8 @@ class MetaParametersHistorial(Model):
 
 class Journey(Model):
     date = DateTimeField(auto_now_add=True)
-    current_path = CharField(max_length=20000, null=True, blank=True)
-    comes_from = CharField(max_length=20000, null=True, blank=True)
+    current_path = CharField(max_length=2000, null=True, blank=True)
+    comes_from = CharField(max_length=2000, null=True, blank=True)
 
     class Meta:
         abstract = True

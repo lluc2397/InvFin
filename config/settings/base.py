@@ -83,7 +83,6 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "django_celery_beat",
     "rest_framework",
-    "rest_framework.authtoken",
     "corsheaders",
     "ckeditor",
     "django_cleanup.apps.CleanupConfig",
@@ -107,7 +106,8 @@ LOCAL_APPS = [
     "apps.screener",
     "apps.cartera",
     "apps.roboadvisor",
-    "apps.socialmedias"
+    "apps.socialmedias",
+    "apps.api"
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -350,11 +350,12 @@ SOCIALACCOUNT_FORMS = {"signup": "apps.users.forms.UserSocialSignupForm"}
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
+    "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
-    ),
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    ],
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    'DEFAULT_VERSIONING_CLASS': ["rest_framework.versioning.NamespaceVersioning"]
 }
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup

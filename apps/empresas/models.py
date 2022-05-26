@@ -14,7 +14,7 @@ from django.db.models import (
 )
 
 from django.urls import reverse
-from datetime import datetime
+from django.contrib.auth import get_user_model
 
 from apps.general.models import (
     Currency,
@@ -25,6 +25,8 @@ from apps.general.models import (
 
 from .managers import CompanyManager
 from apps.empresas.company.extension import CompanyExtended
+
+User = get_user_model()
 
 
 class ExchangeOrganisation(Model):

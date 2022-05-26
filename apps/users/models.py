@@ -1,4 +1,5 @@
 from cloudinary.models import CloudinaryField
+
 from django.contrib.auth.models import AbstractUser
 from django.contrib.sites.models import Site
 from django.db.models import (
@@ -21,7 +22,7 @@ from django_countries.fields import CountryField
 
 from apps.general.mixins import ResizeImageMixin
 
-from .manager import ProfileManager, UserExtraManager
+from .managers import ProfileManager, UserExtraManager
 
 
 DOMAIN = Site.objects.get_current().domain
@@ -76,6 +77,14 @@ class User(AbstractUser):
             full_name = self.username
         return full_name
     
+    @property
+    def api_key(self):
+        from apps.api.models import Token
+        token = Token.objects.filter(user=self, in_use=True)
+        if token.exists():
+            return token.first()
+        return None
+        
     @property
     def questions_asked(self):
         return self.question_set.all()
@@ -213,7 +222,7 @@ class User(AbstractUser):
 
 
 class MetaProfile(Model):    
-    ip = CharField(max_length=10000, null=True, blank=True)
+    ip = CharField(max_length=50, null=True, blank=True)
     country_code = CharField(max_length=10000, null=True, blank=True)
     country_name = CharField(max_length=10000, null=True, blank=True)
     dma_code = CharField(max_length=10000, null=True, blank=True)
