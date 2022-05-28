@@ -1,5 +1,5 @@
-from apps.general.managers import BaseSharedManager
+from django.db.models import Manager
 
 
-class QuestionManager(BaseSharedManager):
+class QuestionManager(Manager):
     pass

@@ -37,6 +37,8 @@ class HomePage(TemplateView):
         context['escritor1'] = escritores[0]
         context['escritor2'] = escritores[1]
         context['escritor3'] = escritores[2]
+        long = '12345'
+        print(long[-2:])
         return context
 
 

@@ -5,7 +5,7 @@ from django.urls import include, path
 from django.views import defaults as default_views
 from django.contrib.sitemaps.views import sitemap
 
-from rest_framework.authtoken.views import obtain_auth_token
+from apps.api.views import obtain_auth_key
 
 from apps.seo.sitemaps import (
     TermSitemap,
@@ -52,22 +52,20 @@ urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+# API URLS
+urlpatterns += [
+    # API base url
+    path("api/", include("apps.api.urls")),
+    # DRF auth token
+    path("api/obtener-clave/", obtain_auth_key),
+]
+
 handler403 = "apps.web.views.handler403"
 handler404 = "apps.web.views.handler404"
 handler500 = "apps.web.views.handler500"
 
-
 if settings.DEBUG:
-    # API URLS
-    urlpatterns += [
-        # API base url
-        path("api/", include("config.api_router")),
-        # DRF auth token
-        path("auth-token/", obtain_auth_token),
-
-        path("private/", include("apps.empresas.api.api_router")),
-        
-    ]
+    
     if "drf_spectacular" in settings.INSTALLED_APPS:
         from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
         urlpatterns += [

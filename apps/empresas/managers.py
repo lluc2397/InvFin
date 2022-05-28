@@ -1,7 +1,7 @@
-from apps.general.managers import BaseSharedManager
+from django.db.models import Manager
 
 
-class CompanyManager(BaseSharedManager):
+class CompanyManager(Manager):
 
     def companies_by_main_exchange(self, name=None):
         return self.filter(exchange__main_org__name = name)

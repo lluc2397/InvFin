@@ -5,7 +5,10 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.apps import apps
 from django.contrib.auth import get_user_model
+from django.template.defaultfilters import slugify
 
+import binascii
+import os
 import time
 import csv
 
@@ -282,3 +285,23 @@ class ExportCsv:
         return response
 
     export_as_csv.short_description = "Export to csv"
+
+
+class UniqueCreator:
+    @classmethod
+    def create_unique_field(cls, model, value, field, original_value=None, extra=None):
+        if model.__class__.objects.filter(**{field:value}).exists():
+            if field == 'key':
+                value = UniqueCreator.generate_key()
+            else:
+                value = UniqueCreator.generate_slug(original_value, extra)
+            return UniqueCreator.create_unique_field(value, field)
+        return value
+    
+    @classmethod
+    def generate_key(cls):
+        return binascii.hexlify(os.urandom(20)).decode()
+    
+    @classmethod
+    def generate_slug(cls, value=None, extra=None):
+        return slugify(value + extra)

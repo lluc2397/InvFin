@@ -1,8 +1,9 @@
+import binascii
+import os
+
 from django.db.models import Manager
 
-from apps.general.managers import BaseSharedManager
-
-class KeyManager(Manager, BaseSharedManager):
+class KeyManager(Manager):
 
     def key_is_active(self, key):
         return self.filter(key=key, in_use=True).exists()
@@ -20,5 +21,14 @@ class KeyManager(Manager, BaseSharedManager):
 
     def has_cuota(self, key):
         return self.cuota_remainig(key) > 0
+    
+    def generate_key(self):
+        return binascii.hexlify(os.urandom(20)).decode()
+    
+    def create_unique_key(self):
+        key = self.generate_key()
+        if self.filter(key=key).exists():
+            return self.create_unique_key()
+        return key
 
     

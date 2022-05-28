@@ -36,15 +36,22 @@ class Command(BaseCommand):
                 name = google_translator().translate(name, lang_src='en', lang_tgt='es')
                 description = google_translator().translate(description, lang_src='en', lang_tgt='es')
                 slug = slugify(name)
-
-                YahooScreener.objects.create(
-                    name = name,
-                    slug = slug,
-                    description = description,
-                    json_info = screener_lookup_info,
-                    yq_name = screener,
-                    asset_class_related = asset_class_related
-                )
+                screener_search = YahooScreener.objects.filter(yq_name=screener)
+                if screener_search.exists():
+                    if screener_search.count()>1:
+                        sc = screener_search.first()
+                        sc.slug = f'{sc.slug}-{screener[-2:]}'
+                    else:
+                        continue
+                else:
+                    YahooScreener.objects.create(
+                        name = name,
+                        slug = slug,
+                        description = description,
+                        json_info = screener_lookup_info,
+                        yq_name = screener,
+                        asset_class_related = asset_class_related
+                    )
 
                 print(f'{screener} created')
             except Exception:

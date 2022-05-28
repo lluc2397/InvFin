@@ -9,7 +9,8 @@ from django.contrib.sessions.models import Session
 
 class SeoInformation:
 
-    def get_client_ip(self, request):
+    @staticmethod
+    def get_client_ip(request):
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
             
@@ -25,7 +26,7 @@ class SeoInformation:
 
     def meta_information(self, request):
         g = GeoIP2()
-        ip = self.get_client_ip(request)
+        ip = SeoInformation.get_client_ip(request)
         if settings.DEBUG:
             ip = '162.158.50.77'
         meta = {

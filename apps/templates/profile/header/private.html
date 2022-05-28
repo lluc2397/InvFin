@@ -12,7 +12,6 @@
             {% if request.user.is_writter %}
             <a href="{% url 'public_blog:manage_blogs' request.user.username %}" class="btn btn-sm btn-neutral">Escritos</a>
             {% endif %}
-            <!-- <a href="{% url 'account_email' %}" class="btn btn-sm btn-neutral">E-Mail</a> -->
             <a href="{% url 'users:update' %}" class="btn btn-sm btn-neutral">Editar</a>
           </div>
         </div>

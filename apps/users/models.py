@@ -77,13 +77,20 @@ class User(AbstractUser):
             full_name = self.username
         return full_name
     
+    # @property
+    # def has_api_key(self):
+    #     from apps.api.models import Key
+    #     key = Key.objects.filter(user=self, in_use=True)
+    #     if key.exists():
+    #         return key.first()
+
     @property
-    def api_key(self):
-        from apps.api.models import Token
-        token = Token.objects.filter(user=self, in_use=True)
-        if token.exists():
-            return token.first()
-        return None
+    def user_api_key(self):
+        from apps.api.models import Key
+        key = Key.objects.filter(user=self, in_use=True)
+        if key.exists() is True:
+            return key.first()
+        return False
         
     @property
     def questions_asked(self):

@@ -1,7 +1,4 @@
-import sys 
 import random
-import uuid
-import logging
 
 from django.db.models import Manager
 
@@ -9,16 +6,12 @@ from django.db.models import Manager
 class TitlesManager(Manager):
     @property
     def random_title(self):
-        titles = [title for title in self.all()]
-        return random.choice(titles)
+        return random.choice(list(self.all()))
 
 
 class EmojisManager(Manager):
     def random_emojis(self, num):
-        emojis = []        
-        for i in range(num):            
-            emojis.append(random.choice(list(self.all())))
-        return emojis  
+        return random.choices(list(self.all()), k=num)  
         
 
 class HashtagsManager(Manager):

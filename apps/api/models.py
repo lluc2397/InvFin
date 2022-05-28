@@ -1,5 +1,6 @@
+from django.conf import settings
 from datetime import datetime, timedelta, time
-
+from django.template.defaultfilters import slugify
 from django.db.models import (
     Model,
     CharField,
@@ -10,19 +11,22 @@ from django.db.models import (
     DateTimeField,
     BooleanField,
     PositiveIntegerField,
-    Q
+    Q,
+    JSONField,
+    IntegerField
 )
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from apps.escritos.models import Term
 from apps.empresas.models import Company
+from apps.general.utils import UniqueCreator
 
 from .managers import KeyManager
 
 
 User = get_user_model()
-
+API_version = settings.API_VERSION['CURRENT_VERSION']
 
 class Key(Model):
     user = ForeignKey(User, on_delete=CASCADE, related_name="api_key")
@@ -30,7 +34,7 @@ class Key(Model):
     key = CharField(_("Key"), max_length=40, primary_key=True)
     in_use = BooleanField(default=True)
     created = DateTimeField(_("Created"), auto_now_add=True)
-    removed = DateTimeField(_("Removed"), blank=True)
+    removed = DateTimeField(_("Removed"), null=True, blank=True)
     limit = PositiveIntegerField(default=0)
     objects = KeyManager()
 
@@ -42,8 +46,12 @@ class Key(Model):
 
     def save(self, *args, **kwargs):
         if not self.key:
-            key = KeyManager.generate_key()
-            self.key = KeyManager.create_unique_field(key, self.key)
+            key = UniqueCreator.create_unique_field(
+                self,
+                UniqueCreator.generate_key(),
+                'key'    
+            )
+            self.key = key
         return super().save(*args, **kwargs)
 
     def __str__(self):
@@ -101,4 +109,43 @@ class TermRequestAPI(BaseRequestAPI):
         verbose_name_plural = "Terms requested"
         db_table = "api_terms_requested"
 
+
+class EndpointsCategory(Model):
+    title = CharField(max_length=250)
+
+    class Meta:
+        verbose_name = "Endpoints category"
+        verbose_name_plural = "Endpoints categories"
+        db_table = "api_endpoints_categories"
+
+
+class Endpoint(Model):
+    title_related = ForeignKey(EndpointsCategory, on_delete=SET_NULL, null=True, blank=True)
+    title = CharField(max_length=250, blank=True)
+    slug = CharField(max_length=250, blank=True)
+    url = CharField(max_length=250, blank=True)
+    description = TextField(blank=True)
+    url_example = CharField(max_length=250, blank=True)
+    response_example = JSONField(blank=True)    
+    date_created = DateTimeField(auto_now_add=True)
+    is_premium = BooleanField(default=False)
+    is_available = BooleanField(default=True)
+    is_deprecated = BooleanField(default=False)
+    version = CharField(max_length=3, blank=True, default=API_version)
+    date_deprecated = DateTimeField(blank=True)
+    price = IntegerField(default=0)
+
+    class Meta:
+        verbose_name = "Endpoint"
+        verbose_name_plural = "Endpoints"
+        db_table = "api_endpoints"
+
+    def save(self, *args, **kwargs): # new
+        if not self.slug:
+            self.slug = slugify((self.name))
+        self.result_example = self.result_example.replace('<pre>','').replace('</pre>','')
+        return super().save(*args, **kwargs)
     
+    @property
+    def final_url(self):
+        return f'api/{self.version}/{self.url}'

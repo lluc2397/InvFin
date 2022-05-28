@@ -2,10 +2,11 @@ import random
 import binascii
 import os
 
+from django.db.models import Manager
 from django.template.defaultfilters import slugify
 
 
-class BaseSharedManager:
+class BaseSharedManager(Manager):
 
     def get_random(self, query=None):
         query = query if query else self.all()
@@ -13,10 +14,6 @@ class BaseSharedManager:
         return random.choice(models_list)
     
     def create_unique_field(self, value, field, original_value=None, extra=None):
-        print(self)
-        print(self.__dict__)
-        print(self.__class__)
-        print(self.instance)
         if self.filter(**{field:value}).exists():
             if field.verbose_name == 'Key':
                 value = self.generate_key()
