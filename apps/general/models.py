@@ -10,7 +10,8 @@ from django.db.models import (
     PositiveIntegerField,
     ImageField,
     IntegerField,
-    ManyToManyField
+    ManyToManyField,
+    SlugField
 )
 
 from django.contrib.sitemaps import ping_google
@@ -61,8 +62,8 @@ class Tag(EscritosClassification):
 
 
 class BasicWrittenContent(CommonMixin):
-    title = CharField(max_length=500,null = True, blank=True)
-    slug = CharField(max_length=500,null = True, blank=True)
+    title = CharField(max_length=1000, null=True, blank=True)
+    slug = SlugField(max_length=1000, null=True, blank=True, unique=False)
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
     total_votes = IntegerField(default=0)
@@ -75,9 +76,16 @@ class BasicWrittenContent(CommonMixin):
     class Meta:
         abstract = True
     
-    def save(self, *args, **kwargs): # new
+    def save(self, *args, **kwargs):
+        from .utils import UniqueCreator
         if not self.slug:
-            self.slug = slugify(self.title)
+            slug = UniqueCreator.create_unique_field(
+                self, 
+                slugify(self.title),
+                'slug',
+                self.title
+            )
+            self.slug = slug
         return super().save(*args, **kwargs)
     
     def __str__(self):

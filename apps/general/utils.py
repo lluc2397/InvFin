@@ -289,7 +289,7 @@ class ExportCsv:
 
 class UniqueCreator:
     @classmethod
-    def create_unique_field(cls, model, value, field, original_value=None, extra=None):
+    def create_unique_field(cls, model, value, field, original_value=None, extra:int = 0):
         if model.__class__.objects.filter(**{field:value}).exists():
             if field == 'key':
                 value = UniqueCreator.generate_key()
@@ -303,5 +303,6 @@ class UniqueCreator:
         return binascii.hexlify(os.urandom(20)).decode()
     
     @classmethod
-    def generate_slug(cls, value=None, extra=None):
-        return slugify(value + extra)
+    def generate_slug(cls, value=None, extra:int = 0):
+        extra += 1
+        return slugify(value + str(extra))

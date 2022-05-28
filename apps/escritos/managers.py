@@ -2,4 +2,5 @@ from django.db.models import Manager
 
 
 class TermManager(Manager):
-    pass
+    def clean_terms(self):
+        return self.filter(status = 1)

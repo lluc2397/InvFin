@@ -1,0 +1,152 @@
+{% extends "general/bases/base_content.html" %}
+{% load static i18n extra %}
+
+{% block sidebar %}
+<nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main">
+    <div class="scrollbar-inner">
+      <!-- Brand -->
+        <div class="sidenav-header  d-flex align-items-center">
+            
+            <a class="navbar-brand text-right">
+            <img src="{% static 'general/assets/img/general/finanzaseinversiones.WebP' %}" height="40" class="navbar-brand-img" alt="Logo">
+            </a>
+
+            <div class=" ml-auto ">
+            <!-- Sidenav toggler -->
+            <div class="sidenav-toggler d-none d-xl-block" data-action="sidenav-unpin" data-target="#sidenav-main">
+                <div class="sidenav-toggler-inner">
+                <i class="sidenav-toggler-line"></i>
+                <i class="sidenav-toggler-line"></i>
+                <i class="sidenav-toggler-line"></i>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="navbar-inner">
+            <!-- Collapse -->
+            <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+            <!-- Nav items -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        {% if request.user.is_anonymous %}
+                        <a class="nav-link active" href="{% url 'preguntas_respuestas:list_questions' %}{% utm 'webapp' 'sidebar' 'Inicio' %}">
+                            {% else %}
+                        <a class="nav-link active" href="{% url 'users:user_inicio' %}{% utm 'webapp' 'sidebar' 'Inicio' %}">
+                            {% endif %}
+                            <i class="fas fa-home text-primary"></i>
+                            <span class="nav-link-text">Inicio</span>
+                        </a>
+                    </li>
+                    {% for category in endpoints_categories %}
+                    <hr class="my-3">
+                    <h6 class="navbar-heading pl-4 text-muted">
+                        <span class="docs-normal">{{category.title}}</span>
+                    </h6>
+                        {% for endpoint in category.endpoints.all %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#{{endpoint.slug}}">
+                            <i class="fa-solid fa-square-poll-horizontal text-primary"></i>
+                            <span class="nav-link-text">
+                                {{endpoint.title}}
+                                {% if endpoint.is_new %}
+                                <span class="badge badge-pill badge-xs bg-info">Nuevo</span>
+                                {% elif endpoint.is_premium %}
+                                <span class="badge badge-pill badge-xs bg-yellow">Premium</span>
+                                {% elif endpoint.is_deprecated %}
+                                <span class="badge badge-pill badge-xs bg-danger">Deprecated</span>
+                                {% endif %}
+                            </span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+{% endblock sidebar %}
+
+{% block header %}{% include "explorar/header/api.html" %}{% endblock header%}
+
+{% block FirstCtaContent %}
+{% include "explorar/cta/first.html" %}
+{% endblock FirstCtaContent %}
+{% block FirstContent %}
+<h1 class="mt-4"><b>Guía de utilización</b></h1>
+      <p>
+        La API de Inversiones & Finanzas está basada en REST, con respuestas basadas en los códigos usuales HTTP y la información presentada en JSON.
+      </p>
+      <p>
+        El url de base de la API es: https://inversionesyfinanzas.xyz/
+      </p>
+        <br>
+        <p>
+        Es posible que la API evolucione con el tiempo y algunos endpoints se vuelvan obsoletos, en caso de ser así avisaremos por email con antelación.
+      </p>
+        <br>
+        <p>
+        A la hora de utilizar la API <b>es obligatorio</b> hacer referencia a Inversiones & Finanzas añadiendo el siguiente enlace: 
+        <input class="form-control" readonly value='<a href="https://inversionesyfinanzas.xyz">Datos provenientes de Inversiones & Finanzas</a>'>
+      </p>
+        <br>
+      <p>
+        En caso de tener alguna duda o sugerencia puedes contactarnos a <b>contacto[at]inversionesyfinanzas.xyz</b>
+      </p>
+      <br>
+      <p>
+        {% if user.is_authenticated %}
+          {% if show_api_key == True %}
+            <button class="form-control" id="prog_api" style="background-color: #dfdfdfaf;word-break: break-all;" onclick="copyToClipboard('#prog_api')"
+                data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Copiar">{{key}}</button>
+          {% else %}
+          <a href="#!" data-bs-toggle="modal" data-bs-target="#APIKeyModal" class="form-control" readonly>Obtener clave API</a>
+          {% endif %}
+        {% else %}
+        <a href="{% url 'users:user_inicio' %}{% utm 'webapp' 'api-doc' 'sign-up' %}" class="form-control">Consigue tu Clave</a>
+        {% endif %}
+      </p>
+      <hr class="mb-4">
+      {% for category in endpoints_categories %}
+      <h2><b>{{category.title}}</b></h2>
+      {% for endpoint in category.endpoints.all %}
+      {% if endpoint.is_available is True %}
+      <div class="row mt-4 mb-4">
+        <div class="col-12">
+            <h5 id="{{endpoint.slug}}">
+                <b>{{endpoint.title}}</b>
+                {% if endpoint.is_premium %}
+                <span class="badge badge-pill badge-xs bg-yellow">Premium</span>
+                {% elif endpoint.is_deprecated %}
+                <span class="badge badge-pill badge-xs bg-danger">Deprecated</span>
+                {% endif %}
+            </h5>            
+        </div>
+        <div class="col-xl-6 col-sm-12">
+            <button class="form-control" id="{{endpoint.id}}" style="background-color: #dfdfdfaf;word-break: break-all;" onclick="copyToClipboard('#{{endpoint.id}}')"
+            data-bs-toggle="popover" data-bs-placement="top" 
+            data-bs-content="Copiar">{{endpoint.final_url}}?api_key={{key}}{{endpoint.continuation_url}}</button>
+          <p class="mt-4">
+            {{endpoint.description}}
+          </p>
+        </div>
+        <div class="col-xl-6 col-sm-12">
+          <textarea style="height: 300px; font-size: 12px;background-color: #dfdfdfaf;" class="col-xl-9 col-sm-12 form-control" readonly>{{ endpoint.response_example | pprint }}</textarea>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+      <hr>
+      {% endfor %}
+      <script>
+        function copyToClipboard(element) {
+         var $temp = $("<input>");
+         $("body").append($temp);
+         $temp.val($(element).text()).select();
+         document.execCommand("copy");
+         $temp.remove();
+       }
+         </script>
+{% endblock FirstContent%}
+

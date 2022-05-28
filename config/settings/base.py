@@ -349,9 +349,9 @@ SOCIALACCOUNT_FORMS = {"signup": "apps.users.forms.UserSocialSignupForm"}
 # django-rest-framework
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
-DRF_PARSER_CLASS = 'rest_framework.parsers.JSONParser'
+DRF_DEFAULT_RENDERER_CLASSES ='rest_framework.renderers.JSONRenderer'
 if DEBUG == True:
-    DRF_PARSER_CLASS = 'rest_framework.renderers.BrowsableAPIRenderer'
+    DRF_DEFAULT_RENDERER_CLASSES = 'rest_framework.renderers.BrowsableAPIRenderer'
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -361,10 +361,9 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PERMISSION_CLASSES": ["apps.api.permissions.ReadOnly"],
     'DEFAULT_VERSIONING_CLASS': "rest_framework.versioning.NamespaceVersioning",
-    'DEFAULT_RENDERER_CLASSES': ['rest_framework.renderers.JSONRenderer'],
-    'DEFAULT_PARSER_CLASSES': [DRF_PARSER_CLASS,],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 20
+    'DEFAULT_RENDERER_CLASSES': [DRF_DEFAULT_RENDERER_CLASSES],
+    'DEFAULT_PARSER_CLASSES': ['rest_framework.parsers.JSONParser'],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination'
 }
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup

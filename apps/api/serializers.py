@@ -1,21 +1,34 @@
 from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
+from django.utils.html import strip_tags
 
-from rest_framework import serializers
+from rest_framework.serializers import (
+    CharField,
+    Serializer,
+    ModelSerializer,
+    ValidationError
+)
+
+from .models import Key
 
 
-class AuthKeySerializer(serializers.Serializer):
-    username = serializers.CharField(
+class RichTextField(CharField):
+    def to_representation(self, value):
+        return strip_tags(value)
+
+
+class AuthKeySerializer(Serializer):
+    username = CharField(
         label=_("Username"),
         write_only=True
     )
-    password = serializers.CharField(
+    password = CharField(
         label=_("Password"),
         style={'input_type': 'password'},
         trim_whitespace=False,
         write_only=True
     )
-    key = serializers.CharField(
+    key = CharField(
         label=_("Token"),
         read_only=True
     )
@@ -33,10 +46,10 @@ class AuthKeySerializer(serializers.Serializer):
             # backend.)
             if not user:
                 msg = _('Unable to log in with provided credentials.')
-                raise serializers.ValidationError(msg, code='authorization')
+                raise ValidationError(msg, code='authorization')
         else:
             msg = _('Must include "username" and "password".')
-            raise serializers.ValidationError(msg, code='authorization')
+            raise ValidationError(msg, code='authorization')
 
         attrs['user'] = user
         return attrs

@@ -24,7 +24,7 @@ img {
 </style>
 {% for parts in object.term_parts %} 
 <section>
-<h2 id="{{ parts.title }}">{{parts.title}} <span style="font-size: 15px;">[<a href="{% url 'escritos:correction_term' parts.id%}">Editar</a>]</span></h2>
+<h2 id="{{ parts.title|slugify }}">{{parts.title}} <span style="font-size: 15px;">[<a href="{% url 'escritos:correction_term' parts.id%}">Editar</a>]</span></h2>
 
 <div class="text-black">{{parts.content|safe}}</div>
 </section>

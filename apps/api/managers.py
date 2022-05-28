@@ -11,6 +11,17 @@ class KeyManager(Manager):
     def get_key(self, key):
         return self.get(key=key, in_use=True)
     
+    def return_if_key(self, user):
+        key = self.filter(user=user, in_use=True)
+        if key.exists():
+            return key.first().key
+    
+    def key_for_docs(self, user):
+        key = self.return_if_key(user)
+        if not key:
+            key = '*****************'
+        return key
+    
     def cuota_remainig(self, key):
         from .models import CompanyRequestAPI, TermRequestAPI
         companies = CompanyRequestAPI.objects.count_use_today(key)

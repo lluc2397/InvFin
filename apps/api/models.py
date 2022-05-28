@@ -1,5 +1,5 @@
 from django.conf import settings
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta, time, date
 from django.template.defaultfilters import slugify
 from django.db.models import (
     Model,
@@ -15,6 +15,7 @@ from django.db.models import (
     JSONField,
     IntegerField
 )
+from django.contrib.sites.models import Site
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
@@ -24,6 +25,8 @@ from apps.general.utils import UniqueCreator
 
 from .managers import KeyManager
 
+
+DOMAIN = Site.objects.get_current().domain
 
 User = get_user_model()
 API_version = settings.API_VERSION['CURRENT_VERSION']
@@ -67,6 +70,9 @@ class ReasonKeyRequested(Model):
         verbose_name = "Reason for requesting Key"
         verbose_name_plural = "Reason for requesting Key"
         db_table = "api_reason_key"
+    
+    def __str__(self) -> str:
+        return f'{self.user}'
 
 
 class BaseRequestAPI(Model):
@@ -112,40 +118,64 @@ class TermRequestAPI(BaseRequestAPI):
 
 class EndpointsCategory(Model):
     title = CharField(max_length=250)
+    order = IntegerField(default=0)
+    icon = CharField(max_length=250)
 
     class Meta:
         verbose_name = "Endpoints category"
         verbose_name_plural = "Endpoints categories"
         db_table = "api_endpoints_categories"
+        ordering = ['order']
+    
+    def __str__(self) -> str:
+        return self.title
 
 
 class Endpoint(Model):
-    title_related = ForeignKey(EndpointsCategory, on_delete=SET_NULL, null=True, blank=True)
+    title_related = ForeignKey(EndpointsCategory, on_delete=SET_NULL, null=True, blank=True, related_name='endpoints')
     title = CharField(max_length=250, blank=True)
     slug = CharField(max_length=250, blank=True)
     url = CharField(max_length=250, blank=True)
-    description = TextField(blank=True)
+    order = IntegerField(default=0)
+    description = TextField(blank=True, default='')
     url_example = CharField(max_length=250, blank=True)
-    response_example = JSONField(blank=True)    
+    response_example = JSONField(default=dict, blank=True)    
     date_created = DateTimeField(auto_now_add=True)
     is_premium = BooleanField(default=False)
     is_available = BooleanField(default=True)
     is_deprecated = BooleanField(default=False)
     version = CharField(max_length=3, blank=True, default=API_version)
-    date_deprecated = DateTimeField(blank=True)
+    date_deprecated = DateTimeField(blank=True, null=True)
     price = IntegerField(default=0)
 
     class Meta:
         verbose_name = "Endpoint"
         verbose_name_plural = "Endpoints"
         db_table = "api_endpoints"
+        ordering = ['order']
+    
+    def __str__(self) -> str:
+        return self.title
 
     def save(self, *args, **kwargs): # new
         if not self.slug:
-            self.slug = slugify((self.name))
-        self.result_example = self.result_example.replace('<pre>','').replace('</pre>','')
+            slug = UniqueCreator.create_unique_field(
+                self, 
+                slugify(self.title),
+                'slug',
+                self.title
+            )
+            self.slug = slug
         return super().save(*args, **kwargs)
     
     @property
     def final_url(self):
-        return f'api/{self.version}/{self.url}'
+        return f'https://{DOMAIN}/api/{self.version}/{self.url}/'
+    
+    @property
+    def continuation_url(self):
+        return f'&{self.url_example}' if self.url_example else ''
+    
+    @property
+    def is_new(self):
+        return (self.date_created.date() - date.today()).days < 3

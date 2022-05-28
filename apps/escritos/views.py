@@ -29,7 +29,7 @@ class GlosarioView(ListView):
 	paginate_by = 10
 
 	def get_queryset(self):
-		queryset = Term.objects.filter(status = 1)
+		queryset = Term.objects.clean_terms()
 		return queryset
 
 	def get_context_data(self, **kwargs):
