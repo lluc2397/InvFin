@@ -9,37 +9,9 @@
 {% endblock FirstContent%}
 
 {% block ListContent %}
-{% for screener in screeners %}
 <div class="row">
-    <div class="card-translucent bg-transparent">
-        <div class="card-body p-3">
-            <div class="row">
-                <div class="col-12">
-                    <div class="d-flex flex-column h-100">
-                        <a href="{{screener.get_absolute_url}}">
-                            <p class="h1 mb-1 pt-2 text-bold">
-                                {{screener.name}}
-                            </p>
-                        </a>
-                        
-                        <div class="d-flex">
-                            <a href="#" class="badge badge-info text-center mr-2">
-                                <span class="font-weight-bolder">
-                                    {{screener.asset_class_related}}
-                                </span>
-                            </a>
-                        </div>
-                        
-                        <div class="mb-2 mt-2">
-                            <a href="{{screener.get_absolute_url}}">
-                                {{screener.description}}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+{% for screener in screeners %}
+{% include "screener/yahoo-screeners/screener-list.html" %}
 {% endfor %}
+</div>
 {% endblock ListContent %}

@@ -23,6 +23,7 @@ class ScreenerInicioView(ListView):
         context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir'
         context["meta_title"] = 'Más de 30 años de información financiera de cualquier activo'
         context["meta_url"] = '/screener/'
+        context["screeners"] = YahooScreener.objects.all()
         return context
 
 
@@ -140,10 +141,17 @@ class CompanyDetailsView(DetailView):
         context["meta_tags"] = f'finanzas, blog financiero, blog el financiera, invertir, {empresa.name}, {empresa.ticker}'
         context["meta_title"] = f'Análisis completo de {empresa.name}'
         context["meta_url"] = f'/screener/analisis-de/{empresa.ticker}/'
-        context["meta_img"] = f'{empresa.image}'
-        context['company_is_fav'] = False
-        if self.request.user.is_authenticated and empresa.ticker in self.request.user.fav_stocks.only('ticker'):
-            context['company_is_fav'] = True
+        context["meta_img"] = f'{empresa.meta_image}'
+        company_is_fav = False
+        limit_years = 10
+        has_bought = False
+        if self.request.user.is_authenticated:
+            if empresa.ticker in self.request.user.fav_stocks.only('ticker'):
+                company_is_fav = True
+        
+        context['has_bought'] = has_bought
+        context['company_is_fav'] = company_is_fav
+        context['complete_info'] = empresa.complete_info(limit_years)
         return context
     
     def get(self, request, *args, **kwargs):

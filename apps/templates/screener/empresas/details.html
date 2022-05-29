@@ -8,8 +8,8 @@
 {% include "screener/headers/empresa_header.html" %}
 {% endblock TopHeader%}
 {% block MainContent %}
-{% with the_company_financials=the_company.complete_info %}
-
+{% with the_company_financials=complete_info %}
+<script>let hasBought = {{has_bought}}</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js" 
@@ -80,6 +80,22 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </div>
 </div>
 {% endwith %}
+<div class="modal fade" id="NecesitasMembresiaModal" tabindex="-1" 
+  role="dialog" aria-labelledby="NecesitasMembresiaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-success modal-dialog-centered modal-" role="document">
+      <div class="modal-content bg-gradient-success">
+          <div class="modal-header">
+              <h6 class="modal-title" id="modal-title-notification">Tu clave API</h6>
+              <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+              </button>
+          </div>
+          <div class="modal-body">
+            Necesitas puntos
+          </div>
+      </div>
+  </div>
+</div>
 {% endblock MainContent %}
 {% block javascript %}
 {{ block.super }}

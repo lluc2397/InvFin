@@ -119,6 +119,10 @@ class Company(CompanyExtended):
         return reverse("screener:company", kwargs={"ticker": self.ticker})
     
     @property
+    def meta_image(self):
+        return self.remote_image_imagekit if self.remote_image_imagekit else self.remote_image_cloudinary
+    
+    @property
     def most_recent_year(self):
         return self.inc_statements.latest().date
     

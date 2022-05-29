@@ -83,6 +83,12 @@
 {% endblock MiddleCta%}
 
 {% block ListContinuation %}
+<div class="row">
+    <h1>Descubre el resto de screeners</h1>
+    {% for screener in screeners %}
+    {% include "screener/yahoo-screeners/screener-list.html" %}
+    {% endfor %}
+</div>
 {% endblock ListContinuation %}
 
 {% block LastCta %}
