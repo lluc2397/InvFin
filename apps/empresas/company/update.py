@@ -18,6 +18,9 @@ HEADERS = {
     'Accept-Encoding': 'gzip, deflate'
 }
 
+IMAGEKIT_URL_ENDPOINT = settings.IMAGEKIT_URL_ENDPOINT
+IMAGE_KIT = settings.IMAGE_KIT
+
 
 class UpdateCompany(CalculateCompanyFinancialRatios):
     def __init__(self, company) -> None:
@@ -53,7 +56,33 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
         try:
             self.company.image = self.yf_company.info['logo_url']
             self.company.has_logo = True
-            self.company.save()
+            self.company.save(update_fields=['has_logo'])
+        except Exception as e:
+            print(e)
+    
+    def save_logo_remotely(self):        
+        try:
+            imagekit_url = IMAGE_KIT.upload_file(
+                file= self.image, # required
+                file_name= f"{self.ticker}.webp", # required
+                options= {
+                    "folder" : f"/companies/{self.sector.sector}/",
+                "tags": [
+                    self.ticker, self.exchange.exchange, 
+                    self.country.country, self.sector.sector, 
+                    self.industry.industry
+                    ],
+                    "is_private_file": False,
+                    "use_unique_file_name": False,
+                }
+            )
+            image = imagekit_url['response']['url']
+            imagekit_url = IMAGE_KIT.url({
+                "src": image,
+                "transformation": [{"height": "300", "width": "300"}],
+            })
+            self.remote_image_imagekit = imagekit_url
+            self.save(update_fields=['remote_image_imagekit'])
         except Exception as e:
             print(e)
 
@@ -61,7 +90,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
         try:
             self.company.description = google_translator().translate(self.company.description, lang_src='en', lang_tgt='es')
             self.company.description_translated = True
-            self.company.save()
+            self.company.save(update_fields=['description_translated'])
         except Exception as e:
             print(e)
 
@@ -70,6 +99,8 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
             self.add_logo()
         if self.company.description_translated is False:
             self.add_description()
+        if self.has_logo is True and not self.remote_image_imagekit:
+            self.save_logo_remotely()
     
     def financial_update(self):
         if self.check_last_filing() == 'need update':

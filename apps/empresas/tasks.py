@@ -19,6 +19,16 @@ def update_basic_info_company_task():
 
 
 @celery_app.task()
+def save_remote_images_company_task():
+    companies_without_info = Company.objects.filter(has_logo=True, exchange__main_org__name='Estados Unidos')
+    if companies_without_info.exists():
+        company = companies_without_info.first()
+        return UpdateCompany(company).save_logo_remotely()
+    else:
+        return send_mail('No companies left', 'All companies have images', settings.EMAIL_DEFAULT, [settings.EMAIL_DEFAULT])
+
+
+@celery_app.task()
 def update_company_financials_task():
     org_name = 'Estados Unidos'
     companies_without_info = Company.objects.clean_companies_to_update(org_name).filter(date_updated=False)

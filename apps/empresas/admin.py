@@ -59,7 +59,7 @@ class BalanceSheetAdmin(admin.ModelAdmin):
 @admin.action(description='Save remote images')
 def save_remote_imagekit(modeladmin, request, queryset):
     for query in queryset:
-        if query.has_logo is False:
+        if query.has_logo is False or query.remote_image_imagekit:
             continue
         imagekit_url = IMAGE_KIT.upload_file(
             file= query.image, # required
