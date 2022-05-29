@@ -8,8 +8,57 @@ from .models import (
     MetaParameters,
     MetaParametersHistorial,
     VisiteurJourney,
-    UsersJourney
+    UsersJourney,
+    Promotion,
+    PromotionCampaign,
+    VisiteurUserRelation
 )
+
+
+@admin.register(PromotionCampaign)
+class PromotionCampaignAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'title',
+        'slug',
+        'start_date',
+        'end_date',
+    ]
+
+
+@admin.register(Promotion)
+class PromotionAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'title',
+        'slug',
+        'prize',
+        'has_prize',
+        'shareable_url',
+        'redirect_to',
+        'medium',
+        'web_promotion_type',
+        'web_location',
+        'social_media',
+        'publication_date',
+        'campaign_related',
+        'reuse',
+        'times_to_reuse',
+        'clicks_by_user',
+        'clicks_by_not_user',
+        ]
+
+
+
+@admin.register(VisiteurUserRelation)
+class VisiteurUserRelationAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'user',
+        'visiteur',
+        'date',
+        ]
+
 
 @admin.register(Session)
 class SessionAdmin(admin.ModelAdmin):

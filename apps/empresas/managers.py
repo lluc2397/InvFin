@@ -1,7 +1,14 @@
+import random
+
 from django.db.models import Manager
 
 
 class CompanyManager(Manager):
+
+    def get_random(self, query=None):
+        query = query if query else self.all()
+        models_list = list(query)
+        return random.choice(models_list)
 
     def companies_by_main_exchange(self, name=None):
         return self.filter(exchange__main_org__name = name)

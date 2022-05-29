@@ -151,13 +151,6 @@ class BaseComment(Model):
     class Meta:
         abstract = True
 
-    def save(self, *args, **kwargs): # new
-        return super().save(*args, **kwargs)        
-        # return self.create_notification(self.id)
-
-    def create_notification(self, id):
-        pass
-
 
 class Industry(Model):
     industry = CharField(max_length=500, null=True, blank=True)

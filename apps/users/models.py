@@ -220,7 +220,11 @@ class User(AbstractUser):
 
     def create_new_user(self, request):
         from allauth.account.utils import sync_user_email_addresses
+        from apps.seo.models import VisiteurUserRelation, Visiteur
 
+        if 'visiteur_id' in request.session:
+            visiteur_id = request.session['visiteur_id']
+            VisiteurUserRelation.objects.create(user=self, visiteur_id=visiteur_id)
         sync_user_email_addresses(self)
         self.create_profile(request)
         self.create_meta_profile(request)

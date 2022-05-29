@@ -108,7 +108,8 @@ LOCAL_APPS = [
     "apps.cartera",
     "apps.roboadvisor",
     "apps.socialmedias",
-    "apps.api"
+    "apps.api",
+    # "apps.business"
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

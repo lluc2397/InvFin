@@ -112,12 +112,15 @@ class PromotionCampaign(Model):
     slug = SlugField(blank=True)
     categories = ManyToManyField('general.Category', blank=True)
     tags = ManyToManyField('general.Tag', blank=True)
-    start_date = DateTimeField(blank=True)
-    end_date = DateTimeField(blank=True)
+    start_date = DateTimeField(blank=True, null=True)
+    end_date = DateTimeField(blank=True, null=True)
 
     class Meta:
         verbose_name = "Promotions campaigns"
         db_table = "promotions_campaigns"
+
+    def __str__(self) -> str:
+        return self.title
 
 
 class Promotion(Model):
@@ -153,7 +156,7 @@ class Promotion(Model):
         db_table = "promotions"
     
     def __str__(self) -> str:
-        return super().__str__()
+        return self.title
     
     @property
     def full_url(self):
@@ -165,3 +168,16 @@ class Promotion(Model):
         utm_campaign = f'utm_campaign={self.campaign_related.title}'
         utm_term = f'utm_term={self.title}'
         return f'{self.redirect_to}?{utm_source}&{utm_medium}&{utm_campaign}&{utm_term}'
+
+
+class VisiteurUserRelation(Model):
+    user = ForeignKey(User, on_delete=SET_NULL, null=True)
+    visiteur = ForeignKey(Visiteur, on_delete=SET_NULL, null=True)
+    date = DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Visiteur and user relation"
+        db_table = "visiteur_user_relateds"
+    
+    def __str__(self) -> str:
+        return self.user.username

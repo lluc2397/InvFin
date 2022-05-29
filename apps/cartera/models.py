@@ -14,7 +14,7 @@ from django.db.models import (
     DateField,
     DecimalField
 )
-import json
+
 from decimal import Decimal
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
