@@ -5,6 +5,10 @@ from django.conf import settings
 
 from apps.general.models import Currency
 from apps.translate.google_trans_new import google_translator
+from apps.empresas.models import (
+    TopInstitutionalOwnership,
+    InstitutionalOrganization
+)
 
 from .ratios import CalculateCompanyFinancialRatios
 
@@ -99,7 +103,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
             self.add_logo()
         if self.company.description_translated is False:
             self.add_description()
-        if self.has_logo is True and not self.remote_image_imagekit:
+        if self.company.has_logo is True and not self.company.remote_image_imagekit:
             self.save_logo_remotely()
     
     def financial_update(self):
@@ -387,3 +391,27 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
     def create_price_to_ratio(self, data:dict):
         price_to_ratios = self.company.price_to_ratios.create(**data)
         return price_to_ratios
+    
+    def institutional_ownership(self):
+        df = self.yq_company.institution_ownership
+        df = df.reset_index()
+        df = df.drop(columns=['symbol','row','maxAge'])
+        for index, data in df.iterrows():
+            institution, _ = InstitutionalOrganization.objects.get_or_create(
+                name=data['organization']
+            )
+            if TopInstitutionalOwnership.objects.filter(
+                year=data['reportDate'],
+                company=self.company,
+                organization=institution,
+            ).exists():
+                continue
+            TopInstitutionalOwnership.objects.create(
+                date=data['reportDate'][:4],
+                year=data['reportDate'],
+                company=self.company,
+                organization=institution,
+                percentage_held=data['pctHeld'],
+                position=data['position'],
+                value=data['value']
+            )

@@ -19,12 +19,39 @@ from .models import (
     FreeCashFlowRatio,
     PerShareValue,
     CompanyStockPrice,
-    NonGaap
+    NonGaap,
+    TopInstitutionalOwnership,
+    InstitutionalOrganization
 )
 
 
 IMAGEKIT_URL_ENDPOINT = settings.IMAGEKIT_URL_ENDPOINT
 IMAGE_KIT = settings.IMAGE_KIT
+
+
+@admin.register(InstitutionalOrganization)
+class InstitutionalOrganizationAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'name'
+    ]
+    search_fields = ['name']
+
+
+@admin.register(TopInstitutionalOwnership)
+class TopInstitutionalOwnershipAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'date',
+        'year',
+        'company',
+        'organization',
+        'percentage_held',
+        'position',
+        'value',
+    ]
+    
+
 
 @admin.register(CashflowStatement)
 class CashflowStatementAdmin(admin.ModelAdmin):

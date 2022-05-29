@@ -1,10 +1,11 @@
 import requests
+import yfinance as yf
+import yahooquery as yq
+
 from datetime import datetime
 
 from django.conf import settings
 
-import yfinance as yf
-import yahooquery as yq
 
 FINHUB_TOKEN = settings.FINHUB_TOKEN
 
@@ -55,3 +56,6 @@ class RetreiveCompanyData:
         return requests.get(f'https://finnhub.io/api/v1/company-news?symbol={self.ticker}&from={final_date}&to={datetime.now().strftime("%Y-%m-%d")}&token={FINHUB_TOKEN}').json()
 
     
+            
+            
+            
