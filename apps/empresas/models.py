@@ -103,6 +103,8 @@ class Company(CompanyExtended):
     has_error = BooleanField(default=False)
     error_message = TextField( null=True, blank=True)
     objects = CompanyManager()
+    remote_image_imagekit = CharField(max_length=500 , default='', blank=True)
+    remote_image_cloudinary = CharField(max_length=500 , default='', blank=True)
 
     class Meta:        
         verbose_name = "Company"

@@ -1,6 +1,7 @@
 from pathlib import Path
 from django.contrib.messages import constants as messages
 import environ
+from imagekitio import ImageKit
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # invfin/
@@ -578,3 +579,13 @@ TWITTER_ACCESS_TOKEN_SECRET = env.str('TWITTER_ACCESS_TOKEN_SECRET')
 #         re.compile(r'^SiteSucker.*'),
 #         re.compile(r'^sohu-search'),
 #     ]
+
+IMAGEKIT_PRIVATE_KEY = env.str('IMAGEKIT_PRIVATE_KEY')
+IMAGEKIT_PUBLIC_KEY = env.str('IMAGEKIT_PUBLIC_KEY')
+IMAGEKIT_URL_ENDPOINT = env.str('IMAGEKIT_URL_ENDPOINT')    
+
+IMAGE_KIT = ImageKit(
+    private_key = IMAGEKIT_PRIVATE_KEY,
+    public_key = IMAGEKIT_PUBLIC_KEY,
+    url_endpoint = IMAGEKIT_URL_ENDPOINT
+)
