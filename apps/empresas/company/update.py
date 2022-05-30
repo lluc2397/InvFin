@@ -67,14 +67,14 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
     def save_logo_remotely(self):        
         try:
             imagekit_url = IMAGE_KIT.upload_file(
-                file= self.image, # required
-                file_name= f"{self.ticker}.webp", # required
+                file= self.company.image, # required
+                file_name= f"{self.company.ticker}.webp", # required
                 options= {
-                    "folder" : f"/companies/{self.sector.sector}/",
+                    "folder" : f"/companies/{self.company.sector.sector}/",
                 "tags": [
-                    self.ticker, self.exchange.exchange, 
-                    self.country.country, self.sector.sector, 
-                    self.industry.industry
+                    self.company.ticker, self.company.exchange.exchange, 
+                    self.company.country.country, self.company.sector.sector, 
+                    self.company.industry.industry
                     ],
                     "is_private_file": False,
                     "use_unique_file_name": False,
@@ -85,8 +85,8 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
                 "src": image,
                 "transformation": [{"height": "300", "width": "300"}],
             })
-            self.remote_image_imagekit = imagekit_url
-            self.save(update_fields=['remote_image_imagekit'])
+            self.company.remote_image_imagekit = imagekit_url
+            self.company.save(update_fields=['remote_image_imagekit'])
         except Exception as e:
             print(e)
 
@@ -177,7 +177,8 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
             update_company_financials_task.delay()
 
     def check_last_filing(self):
-        least_recent_date = self.yq_company.balance_sheet()['asOfDate'].max().value // 10**9 # normalize time
+        least_recent_date = self.yq_company.balance_sheet()
+        least_recent_date = least_recent_date['asOfDate'].max().value // 10**9 # normalize time
         least_recent_year = datetime.fromtimestamp(least_recent_date).year
         if least_recent_year != self.company.most_recent_year:
             print('need update', self.company)

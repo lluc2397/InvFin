@@ -39,7 +39,7 @@ class SocialPosting:
                 title = content.title
                 description = content.resume
             
-        if self.company_related:# News
+        elif self.company_related:# News
             content = self.company_related
             news = content.show_news[0]
             title = news['headline']
@@ -51,7 +51,7 @@ class SocialPosting:
 
         return title, link, description
     
-    def share_content(self, post_type):
+    def share_content(self, post_type=3):
         title, link, description = self.generate_content()
         fb_response = Facebook().post_on_facebook(title=title, caption=description, post_type=3, link=link)
         self.save_post(fb_response)

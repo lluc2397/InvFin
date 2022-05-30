@@ -1,5 +1,6 @@
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .mixins import ServicePaymentMixin
 from .models import (
@@ -44,9 +45,9 @@ class RoboAdvisorServiceOptionView(DetailView):
 
 	def prepare_forms(self, user, service):
 		context_forms = {}
-		if RoboAdvisorUserServiceActivity.objects.filter(user = user, service = service, status = 2).exists():
-			# get pre filed data
-			pass
+		# if RoboAdvisorUserServiceActivity.objects.filter(user = user, service = service, status = 2).exists():
+		# 	# get pre filed data
+		# 	pass
 		
 		context_forms["experience_form"] = RoboAdvisorQuestionInvestorExperienceForm()
 		context_forms["company_analysis_form"] = RoboAdvisorQuestionCompanyAnalysisForm()
@@ -99,7 +100,7 @@ class RoboAdvisorResultView(DetailView, ServicePaymentMixin):
 		return context
 
 
-class RoboAdvisorUserResultsListView(ListView):
+class RoboAdvisorUserResultsListView(LoginRequiredMixin, ListView):
 	model = RoboAdvisorUserServiceActivity
 	template_name = "roboadvisor/own-results.html"
 	context_object_name = "services"

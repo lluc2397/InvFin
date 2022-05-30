@@ -41,10 +41,11 @@ class UserPublicProfileDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["meta_desc"] = self.request.user.user_profile.bio
+        user = self.get_object()
+        context["meta_desc"] = user.user_profile.bio
         context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir, excel'
-        context["meta_title"] = self.request.user.username
-        context["meta_url"] = f'perfil/{self.request.user.username}/'
+        context["meta_title"] = user.username
+        context["meta_url"] = f'perfil/{user.username}/'
         return context
 
 
@@ -62,12 +63,15 @@ def invitation_view(request, invitation_code):
 
 @login_required
 def user_update_profile(request):
+    writter_profile = None
+    if request.user.is_writter:
+        writter_profile = request.user.writter_profile
     if request.method == 'POST':
         profile_form = UserProfileForm(request.POST, request.FILES, instance=request.user.user_profile)
         form = UserForm(request.POST, instance=request.user)
 
         if request.user.is_writter:
-            writter_form = WritterProfileForm(request.POST, instance=request.user.writter_profile)
+            writter_form = WritterProfileForm(request.POST, instance=writter_profile)
 
         vieja_foto = request.user.user_profile.foto_perfil
 
@@ -91,7 +95,7 @@ def user_update_profile(request):
     else:
         form = UserForm(instance=request.user)
         profile_form = UserProfileForm(instance=request.user.user_profile)
-        writter_form = WritterProfileForm(instance=request.user.writter_profile)
+        writter_form = WritterProfileForm(instance=writter_profile)
 
         context = {
             'profile_form': profile_form, 

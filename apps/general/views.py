@@ -97,7 +97,11 @@ def search_results(request):
 		
 		else:
 			if term.isupper():
-				empresa_busqueda = Company.objects.filter(ticker = ticker)
+				empresa_busqueda = Company.objects.filter(ticker = term)
+				if empresa_busqueda.exists():
+					redirect_to = empresa_busqueda[0].get_absolute_url()
+			elif term.isupper() == False:
+				empresa_busqueda = Company.objects.filter(name__icontains = term)
 				if empresa_busqueda.exists():
 					redirect_to = empresa_busqueda[0].get_absolute_url()
 			else:

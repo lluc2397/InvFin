@@ -173,7 +173,7 @@ class Patrimonio(Model, ChartSerializer):
     default_currency = ForeignKey(Currency, 
         on_delete=SET_NULL, 
         null=True, blank=True, 
-        default='USD'
+        default='1'
     )
 
     class Meta:        
