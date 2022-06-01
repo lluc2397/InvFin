@@ -64,7 +64,7 @@ class SuperinvestorActivity(Model):
     share_change = FloatField(null=True, blank=True)
     portfolio_change = FloatField(null=True, blank=True)
     is_new = BooleanField(default=False)
-    movement = PositiveIntegerField(choices=MOVE)
+    movement = PositiveIntegerField(choices=MOVE, null=True, blank=True)
     company_name = TextField(blank=True, null=True)
     not_registered_company = BooleanField(default=False)
     need_verify_company = BooleanField(default=False)

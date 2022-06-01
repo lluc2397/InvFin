@@ -32,7 +32,7 @@ def get_investors_accronym():
     all_investors = []
 
     for t in all_td[1:]:
-      superinvestor = Superinvestor.objects.get_or_create(
+      superinvestor, _ = Superinvestor.objects.get_or_create(
         name=t.text,
         fund_name='',
         info_accronym=t.find('a', href=True)['href'].split('=')[1],
@@ -44,14 +44,22 @@ def get_investors_accronym():
 
 
 def get_activity(superinvestor):
-  try:
     main_url = f'{SITE}/m/m_activity.php?m={superinvestor.info_accronym}&typ=a'
     url = requests.get(main_url, headers=HEADERS).content
     soup = bs(url, 'html.parser')
-
-    pages = [div.text for div in soup.find('div', id="pages").find_all('a')][1:-1]
-
+    print('+'*100)
+    print(superinvestor.info_accronym)
+    print('+'*100)
+    try:
+      pages = [div.text for div in soup.find('div', id="pages").find_all('a')][1:-1]
+      skip_followings = False
+    except AttributeError:
+      pages = range(0, 1)
+      skip_followings = True
+    
     for page in pages:
+      if skip_followings is True and page > 0:
+        continue
       investor_url = f'{main_url}&L={page}'
       url = requests.get(investor_url, headers=HEADERS).content
       soup = bs(url, 'html.parser')
@@ -65,7 +73,7 @@ def get_activity(superinvestor):
         if td.find('b') is not None:
           quarter = td.text.split(' ')[0][1:]
           year = td.text.split(' ')[1][-4:]
-          period = Period.objects.get_or_create(
+          period, _ = Period.objects.get_or_create(
             year=datetime.strptime(year, '%Y'),
             period=quarter
           )
@@ -107,16 +115,19 @@ def get_activity(superinvestor):
           elif clase[0] == 'buy' or clase[0] == 'sell':
             movement = None
             is_new = False
-            if info.startswith('Add') or info.startswith('Buy'):
-              if info.startswith('Buy'):
+            if 'Add' in info or 'Buy' in info:
+              if 'Buy' in info:
                 is_new = True
               movement = 1
-            elif info.startswith('Reduce') or info.startswith('Sell'):
+            elif 'Reduce' in info or 'Sell' in info:
               movement = 2
-            if movement:
-              percentage_share_change=info.split(' ')[1][:-1],
-              is_new=is_new,
-              movement=movement
+            if movement is not None:
+              percentage_share_change=info.split(' ')[1][:-1]
+              if percentage_share_change == '':
+                percentage_share_change = 0
+              superinvestor_activity.percentage_share_change=percentage_share_change
+              superinvestor_activity.is_new=is_new
+              superinvestor_activity.movement=movement
               superinvestor_activity.save(update_fields=[
                 'percentage_share_change',
                 'is_new',
@@ -124,15 +135,10 @@ def get_activity(superinvestor):
                 ])
               continue # activity
             else:
-              share_change = info.replace(',', '')
-              share_change=share_change
+              superinvestor_activity.share_change=info.replace(',', '')
               superinvestor_activity.save(update_fields=['share_change'])
               continue # share change
         else:
           superinvestor_activity.portfolio_change=info
           superinvestor_activity.save(update_fields=['portfolio_change'])
           continue
-  except Exception as e:
-    superinvestor.has_error = True
-    superinvestor.error = e
-    superinvestor_activity.save(update_fields=['has_error', 'error'])

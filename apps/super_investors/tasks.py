@@ -19,5 +19,10 @@ def scrap_superinvestors():
 @celery_app.task()
 def scrap_superinvestors_activity():
     for superinvestor in Superinvestor.objects.all():
-        get_activity(superinvestor)
+        try:
+            get_activity(superinvestor)
+        except Exception as e:
+            superinvestor.has_error = True
+            superinvestor.error = e
+            superinvestor.save(update_fields=['has_error', 'error'])
     return send_mail('All activity done', f'All activity done', settings.EMAIL_DEFAULT, [settings.EMAIL_DEFAULT])
