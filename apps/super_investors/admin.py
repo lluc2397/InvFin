@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import Superinvestor, SuperinvestorActivity, Period
 
-
+@admin.register(Superinvestor)
 class SuperinvestorAdmin(admin.ModelAdmin):
     list_display = [
         'id',
@@ -15,6 +15,7 @@ class SuperinvestorAdmin(admin.ModelAdmin):
     ]
 
 
+@admin.register(SuperinvestorActivity)
 class SuperinvestorActivityAdmin(admin.ModelAdmin):
     list_display = [
         'id',
@@ -32,7 +33,8 @@ class SuperinvestorActivityAdmin(admin.ModelAdmin):
 
     ] 
 
-    
+
+@admin.register(Period)
 class PeriodAdmin(admin.ModelAdmin):
     list_display = [
         'id',
