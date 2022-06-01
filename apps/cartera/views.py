@@ -22,18 +22,18 @@ class DefaultCateraView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        initial = {}
+        
 
         user = self.request.user
         patrimoine = Patrimonio.objects.get_or_create(user=user)[0]
         context["patrimonio"] = patrimoine
-        initial['currency'] = patrimoine.default_currency
+        initial = {'currency': patrimoine.default_currency}
             
         context["cashflowform"] = CashflowMoveForm(initial=initial)
         context["defcurrencyform"] = DefaultCurrencyForm(initial=initial)
 
-        context["asset_movement_form"] = PositionMovementForm(user=user)
-        context["new_asset_form"] = AddNewAssetForm()
+        context["asset_movement_form"] = PositionMovementForm(user=user, initial=initial)
+        context["new_asset_form"] = AddNewAssetForm(initial=initial)
 
         context["add_categories_form"] = AddCategoriesForm()
         context["add_financial_objective_form"] = FinancialObjectifForm()

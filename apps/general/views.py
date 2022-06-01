@@ -6,7 +6,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.apps import apps
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
-from django.views.generic import TemplateView, ListView
+from django.views.generic import ListView
 from django.http.response import JsonResponse, HttpResponse
 from django.db.models import Q
 
@@ -14,7 +14,6 @@ import json
 import base64
 
 from apps.escritos.models import Term, FavoritesTermsHistorial, FavoritesTermsList
-from apps.public_blog.models import PublicBlog
 from apps.empresas.models import Company
 from apps.screener.models import FavoritesStocksHistorial
 
@@ -161,16 +160,6 @@ def email_opened_view(request, uidb64):
         modelo.date_opened = timezone.now()
         modelo.save()
         return HttpResponse(pixel_gif, content_type='image/gif')  
-
-
-class EscritosView(TemplateView):
-    template_name = 'escritos/inicio.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['terms'] = Term.objects.filter(status = 1)
-        context['blogs'] = PublicBlog.objects.filter(status = 1)
-        return context
 
 
 class NotificationsListView(LoginRequiredMixin, ListView):
