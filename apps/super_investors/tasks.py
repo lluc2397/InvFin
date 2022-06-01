@@ -1,4 +1,3 @@
-from ntpath import join
 from config import celery_app
 
 from django.core.mail import send_mail
