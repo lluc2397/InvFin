@@ -10,7 +10,7 @@ from django.db.models import (
     PositiveIntegerField,
     FloatField,
     IntegerField,
-    ManyToManyField
+    TextField
 )
 
 from apps.empresas.models import Company
@@ -25,8 +25,9 @@ class Superinvestor(Model):
     fund_name = CharField(max_length=600000, null=True, blank=True)
     info_accronym = CharField(max_length=600000, null=True, blank=True)
     slug = CharField(max_length=600000, null=True, blank=True)
-    updated = BooleanField(default=False)
     last_update = DateTimeField(null=True, blank=True)
+    has_error = BooleanField(default=False)
+    error = TextField(blank=True, null=True)
 
     class Meta:
         verbose_name = "Superinvestor"
@@ -59,8 +60,16 @@ class SuperinvestorActivity(Model):
     superinvestor_related = ForeignKey(Superinvestor, on_delete=SET_NULL, null=True, blank=True)
     period_related = ForeignKey(Period, on_delete=SET_NULL, null=True, blank=True)
     company = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True)
-    percentage_added = FloatField(null=True, blank=True)
+    percentage_share_change = FloatField(null=True, blank=True)
     share_change = FloatField(null=True, blank=True)
     portfolio_change = FloatField(null=True, blank=True)
     is_new = BooleanField(default=False)
     movement = PositiveIntegerField(choices=MOVE)
+    company_name = TextField(blank=True, null=True)
+    not_registered_company = BooleanField(default=False)
+    need_verify_company = BooleanField(default=False)
+
+    class Meta:
+        verbose_name = "Superinvestor activity"
+        verbose_name_plural = "Superinvestors activity"
+        db_table = "superinvestors_activity"

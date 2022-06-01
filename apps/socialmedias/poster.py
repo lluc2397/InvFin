@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
+from django.utils.safestring import mark_safe
 
 from apps.translate.google_trans_new import google_translator
 from apps.socialmedias.socialposter.facepy import Facebook
@@ -49,7 +50,7 @@ class SocialPosting:
         if not link:
             link = 'https://inversionesyfinanzas.xyz' + content.get_absolute_url()
 
-        return title, link, description
+        return mark_safe(title), link, mark_safe(description)
     
     def share_content(self, post_type=3):
         title, link, description = self.generate_content()

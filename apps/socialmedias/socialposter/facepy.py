@@ -94,14 +94,15 @@ class Facebook():
         return self._send_content('video', data, files)
 
     
-    def post_text(self, text= "", post_time= "", post_now = True, link=None):
+    def post_text(self, text= "", post_time= "", post_now = True, link=None, title=''):
 
         if post_now is False:
             pass
         else:
             data ={
                 'access_token': self.page_access_token,
-                'message': text
+                'message': text,
+                'title': title
             }
         
         if link:
@@ -158,7 +159,7 @@ class Facebook():
         media_url:str=None
         ):
 
-        emojis = Emoji.objects.random_emojis(num_emojis)
+        emojis = Emoji.objects.random_emojis(2)
         hashtags = Hashtag.objects.random_hashtags('facebook')
         
         custom_title = f'{emojis[0].emoji} {title}'
@@ -178,7 +179,7 @@ class Facebook():
             content_type = 'text'
             caption = f'{media_url} {caption}'
 
-            post_response = self.post_text(text= caption, link=link)
+            post_response = self.post_text(text= caption, link=link, title=title)
 
         if post_response['result'] == 'success':
             facebook_post = {

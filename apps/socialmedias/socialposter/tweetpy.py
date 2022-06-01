@@ -100,7 +100,7 @@ class Twitter:
         link:str=None,
         title:str=None,
         ):
-            emojis = Emoji.objects.random_emojis(num_emojis)
+            emojis = Emoji.objects.random_emojis(2)
 
             hashtags = Hashtag.objects.random_hashtags('twitter')
             hashtag1 = random.choice(hashtags)
