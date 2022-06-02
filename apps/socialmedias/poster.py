@@ -51,7 +51,7 @@ class SocialPosting:
             description = google_translator().translate(description, lang_src='en', lang_tgt='es')
             media_url = ''
 
-        if not link:
+        if link is None:
             link = 'https://inversionesyfinanzas.xyz' + content.get_absolute_url()
 
         return title, link, description, media_url

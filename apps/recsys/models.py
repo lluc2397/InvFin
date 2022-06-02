@@ -25,8 +25,10 @@ User = get_user_model()
 class CompanyShowed(Model):
     company = ForeignKey(Company, on_delete=SET_NULL, null=True, related_name="shows")
     place = CharField(max_length=500, choices=constants.WEP_PROMOTION_LOCATION)
+    kind = CharField(max_length=500, choices=constants.WEP_PROMOTION_TYPE)
     start_date = DateTimeField(auto_now_add=True)
     end_date = DateTimeField(null=True, blank=True)
+    showing = BooleanField(default=False)
 
 
 class CompanyMostVisited(Model):

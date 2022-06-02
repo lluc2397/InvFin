@@ -21,4 +21,4 @@ class ExplorationView(TemplateView):
 # Hay que hacer un algoritmo que busque en el seo journey las búsquedas y las empareje con los usuarios.
 # Despues hay que recomendar en diferentes partes de la web cosas que puedan gustarle al usuario.
 # Si no le gusta restar un punto. Si le gusta sumar un punto. Ir guardando los gustos para mejorar las recomendaciones
-#
+# Preparar banners, listas y Call To action

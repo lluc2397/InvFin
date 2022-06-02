@@ -220,6 +220,7 @@ TEMPLATES = [
                 "apps.public_blog.context_processors.keep_email",
                 "apps.seo.context_processors.journey",
                 "apps.seo.context_processors.debug",
+                "apps.recsys.context_processors.debug",
             ],
         },
     }
