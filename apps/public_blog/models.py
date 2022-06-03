@@ -18,7 +18,7 @@ from django.db.models import Avg, Sum
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from apps.general.models import BaseEscrito, BaseComment, Newsletter, BaseEmail
+from apps.general.bases import BaseEmail, BaseEscrito, BaseComment, BaseNewsletter
 
 from .managers import PublicBlogManager
 
@@ -140,7 +140,7 @@ class PublicBlog(BaseEscrito):
         return result
 
 
-class PublicBlogAsNewsletter(Newsletter):
+class PublicBlogAsNewsletter(BaseNewsletter):
     blog_related = OneToOneField(
         PublicBlog,
         on_delete=SET_NULL,

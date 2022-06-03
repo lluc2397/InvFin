@@ -47,7 +47,7 @@ class SocialPosting:
             description = news['summary']
             description = google_translator().translate(description, lang_src='en', lang_tgt='es')
 
-        if not link:
+        if link is None:
             link = 'https://inversionesyfinanzas.xyz' + content.get_absolute_url()
 
         return mark_safe(title), link, mark_safe(description)

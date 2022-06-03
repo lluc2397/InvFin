@@ -8,7 +8,7 @@
           {{stock_information.title}}
         </div>
         <div class="float-end">
-          <a href="{% url 'screener:yahoo_screener' stock_information.slug %}{% utm 'webapp' 'screener' stock_information.title %}">
+          <a href="{% url 'screener:yahoo_screener' stock_information.subtitle %}{% utm 'screener' 'visit-screener' stock_information.subtitle %}">
             Ver más
           </a>
         </div>        

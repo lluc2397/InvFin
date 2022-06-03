@@ -20,10 +20,8 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
 from apps.general.utils import ChartSerializer
-from apps.empresas.models import (
-    Currency,
-    Company,
-    )
+from apps.empresas.models import Company
+from apps.general.models import Currency
 
 from apps.etfs.models import (
     Etf)

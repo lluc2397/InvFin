@@ -7,7 +7,7 @@ from django.db.models import (
 from django.template.defaultfilters import slugify
 from ckeditor.fields import RichTextField
 
-from apps.general.models import Newsletter, BaseEmail
+from apps.general.bases import BaseEmail, BaseNewsletter
 
 class WebsiteLegalPage(Model):
     title = CharField(max_length=8000)
@@ -37,7 +37,7 @@ class WebsiteEmailsType(Model):
         return self.name
 
 
-class WebsiteEmail(Newsletter):
+class WebsiteEmail(BaseNewsletter):
     type_related = ForeignKey(WebsiteEmailsType, null=True, blank=True, on_delete=SET_NULL)
 
     class Meta:

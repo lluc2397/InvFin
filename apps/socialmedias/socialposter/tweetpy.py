@@ -100,14 +100,20 @@ class Twitter:
         link:str=None,
         title:str=None,
         ):
-            emojis = Emoji.objects.random_emojis(2)
-
+            emojis = Emoji.objects.random_emojis(num_emojis)
+            platform = 'twitter'
             hashtags = Hashtag.objects.random_hashtags('twitter')
             hashtag1 = random.choice(hashtags)
             hashtag2 = random.choice(hashtags)
             hashtag3 = random.choice(hashtags)
 
-            tweet = f'{media_url} {emojis[0].emoji} {caption} Más en {link} #{hashtag1.name} #{hashtag2.name} #{hashtag3.name}'
+            utm_source = f'utm_source={platform}'
+            utm_medium = f'utm_medium={platform}'
+            utm_campaign = f'utm_campaign=post-shared-auto'
+            utm_term = f'utm_term={title}'
+            link = f'{link}?{utm_source}&{utm_medium}&{utm_campaign}&{utm_term}'
+
+            tweet = f'{emojis[0].emoji} {caption} Más en {link} #{hashtag1.name} #{hashtag2.name} #{hashtag3.name}'
                     
             if post_type == 3 or post_type == 4:
                 tweet_len = len(tweet)
@@ -136,7 +142,7 @@ class Twitter:
                     'post_type': post_type ,
                     'social_id': post_response,
                     'description': caption,
-                    'platform_shared': 'twitter'
+                    'platform_shared': platform
                 }
                 
             return twitter_post

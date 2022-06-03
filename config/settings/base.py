@@ -15,6 +15,11 @@ if READ_DOT_ENV_FILE:
 
 # GENERAL
 # ------------------------------------------------------------------------------
+PROTOCOL = 'http://'
+MAIN_DOMAIN = 'inversionesyfinanzas.xyz'
+CURRENT_DOMAIN = '0.0.0.0:8000'
+FULL_DOMAIN = f'{PROTOCOL}{CURRENT_DOMAIN}'
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env.bool("DJANGO_DEBUG", False)
 # Local time zone. Choices are
@@ -44,7 +49,6 @@ NUMBER_GROUPING = 3
 
 # Thousand separator symbol
 THOUSAND_SEPARATOR = "."
-
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -109,7 +113,8 @@ LOCAL_APPS = [
     "apps.roboadvisor",
     "apps.socialmedias",
     "apps.api",
-    # "apps.business"
+    # "apps.business",
+    # "apps.recsys"
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
