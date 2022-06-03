@@ -17,6 +17,10 @@ from django.contrib.auth import get_user_model
 
 from ckeditor.fields import RichTextField
 
+from apps.empresas.models import Company
+from apps.escritos.models import Term
+from apps.preguntas_respuestas.models import Question
+from apps.public_blog.models import PublicBlog
 from apps.socialmedias.constants import SOCIAL_MEDIAS
 from . import constants 
 
@@ -165,3 +169,97 @@ class Promotion(Model):
         utm_campaign = f'utm_campaign={self.campaign_related.title}'
         utm_term = f'utm_term={self.title}'
         return f'{self.redirect_to}?{utm_source}&{utm_medium}&{utm_campaign}&{utm_term}'
+
+
+class BaseModelVisited(Model):
+    date = DateTimeField(null=True, blank=True)
+
+    class Meta:
+        abstract = True
+    
+    def __str__(self) -> str:
+        try:
+            response = self.user.username
+        except:
+            response = f'Visiteur - {self.user.id}'
+        return response
+
+
+class BaseVisiteurModelVisited(BaseModelVisited):
+    user = ForeignKey(Visiteur, on_delete=SET_NULL, null=True)
+    visit = ForeignKey(VisiteurJourney, on_delete=SET_NULL, null=True)
+
+    class Meta:
+        abstract = True
+
+
+class BaseUserModelVisited(BaseModelVisited):
+    user = ForeignKey(User, on_delete=SET_NULL, null=True)
+    visit = ForeignKey(UsersJourney, on_delete=SET_NULL, null=True)
+    
+    class Meta:
+        abstract = True
+
+
+class VisiteurCompanyVisited(BaseVisiteurModelVisited):
+    model_visited = ForeignKey(Company, on_delete=SET_NULL, null=True)
+
+    class Meta:
+        verbose_name = "Company visited by visiteur"
+        db_table = "seo_companies_visited_visiteurs"
+    
+
+class UserCompanyVisited(BaseUserModelVisited):
+    model_visited = ForeignKey(Company, on_delete=SET_NULL, null=True)
+
+    class Meta:
+        verbose_name = "Company visited by user"
+        db_table = "seo_companies_visited_users"
+
+
+class VisiteurPublicBlogVisited(BaseVisiteurModelVisited):
+    model_visited = ForeignKey(PublicBlog, on_delete=SET_NULL, null=True)
+
+    class Meta:
+        verbose_name = "PublicBlog visited by visiteur"
+        db_table = "seo_public_blogs_visited_visiteurs"
+    
+
+class UserPublicBlogVisited(BaseUserModelVisited):
+    model_visited = ForeignKey(PublicBlog, on_delete=SET_NULL, null=True)
+
+    class Meta:
+        verbose_name = "PublicBlog visited by user"
+        db_table = "seo_public_blogs_visited_users"
+
+
+class VisiteurQuestionVisited(BaseVisiteurModelVisited):
+    model_visited = ForeignKey(Question, on_delete=SET_NULL, null=True)
+
+    class Meta:
+        verbose_name = "Question visited by visiteur"
+        db_table = "seo_questions_visited_visiteurs"
+    
+
+class UserQuestionVisited(BaseUserModelVisited):
+    model_visited = ForeignKey(Question, on_delete=SET_NULL, null=True)
+
+    class Meta:
+        verbose_name = "Question visited by user"
+        db_table = "seo_questions_visited_users"
+
+
+class VisiteurTermVisited(BaseVisiteurModelVisited):
+    model_visited = ForeignKey(Term, on_delete=SET_NULL, null=True)
+
+    class Meta:
+        verbose_name = "Term visited by visiteur"
+        db_table = "seo_terms_visited_visiteurs"
+    
+
+class UserTermVisited(BaseUserModelVisited):
+    model_visited = ForeignKey(Term, on_delete=SET_NULL, null=True)
+
+    class Meta:
+        verbose_name = "Term visited by user"
+        db_table = "seo_terms_visited_users"

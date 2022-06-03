@@ -18,7 +18,8 @@ from django.utils import timezone
 
 from ckeditor.fields import RichTextField
 
-from apps.general.models import BaseEscrito, BaseComment, FavoritesHistorial
+from apps.general.bases import BaseEscrito, BaseComment, BaseFavoritesHistorial
+
 
 from .managers import TermManager
 
@@ -131,7 +132,7 @@ class TermsRelatedToResume(Model):
         db_table = "terms_to_resume"
 
 
-class FavoritesTermsHistorial(FavoritesHistorial):
+class FavoritesTermsHistorial(BaseFavoritesHistorial):
     term = ForeignKey(Term, on_delete=SET_NULL, null=True, blank=True)
 
     class Meta:

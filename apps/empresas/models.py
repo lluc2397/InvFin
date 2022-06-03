@@ -14,14 +14,6 @@ from django.db.models import (
 )
 
 from django.urls import reverse
-from datetime import datetime
-
-from apps.general.models import (
-    Currency,
-    Country,
-    Industry,
-    Sector
-)
 
 from .managers import CompanyManager
 from apps.empresas.company.extension import CompanyExtended
@@ -46,7 +38,7 @@ class ExchangeOrganisation(Model):
 class Exchange(Model):
     exchange_ticker = CharField(max_length=30, null=True, blank=True)
     exchange = CharField(max_length=250, null=True, blank=True)
-    country = ForeignKey(Country, on_delete=SET_NULL, null=True, blank=True)
+    country = ForeignKey("general.Country", on_delete=SET_NULL, null=True, blank=True)
     main_org = ForeignKey(ExchangeOrganisation, on_delete=SET_NULL, null=True, blank=True)
 
     class Meta:        
@@ -66,12 +58,12 @@ class Exchange(Model):
 class Company(CompanyExtended):
     ticker = CharField(max_length=30, unique=True, db_index=True)
     name = CharField(max_length=700, null=True, blank=True)
-    currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)
-    industry = ForeignKey(Industry, on_delete=SET_NULL, null=True, blank=True)
-    sector = ForeignKey(Sector, on_delete=SET_NULL, null=True, blank=True)
+    currency = ForeignKey("general.Currency", on_delete=SET_NULL, null=True, blank=True)
+    industry = ForeignKey("general.Industry", on_delete=SET_NULL, null=True, blank=True)
+    sector = ForeignKey("general.Sector", on_delete=SET_NULL, null=True, blank=True)
     website  = CharField(max_length=250 , null=True, blank=True)
     state = CharField(max_length=250 , null=True, blank=True)
-    country =  ForeignKey(Country, on_delete=SET_NULL, null=True, blank=True)
+    country =  ForeignKey("general.Country", on_delete=SET_NULL, null=True, blank=True)
     ceo = CharField(max_length=250 , null=True, blank=True)
     image = CharField(max_length=250 , null=True, blank=True)
     city  = CharField(max_length=250 , null=True, blank=True)
@@ -153,7 +145,7 @@ class IncomeStatement(Model):
     date = IntegerField(default=0)
     year = DateField(auto_now=True)
     company = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True, related_name="inc_statements")
-    reported_currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)
+    reported_currency = ForeignKey("general.Currency", on_delete=SET_NULL, null=True, blank=True)
     revenue = FloatField(default=0, blank=True, null=True)
     cost_of_revenue = FloatField(default=0, blank=True, null=True)
     gross_profit = FloatField(default=0, blank=True, null=True)
@@ -190,7 +182,7 @@ class BalanceSheet(Model):
     date = IntegerField(default=0)
     year = DateField(auto_now=True)
     company = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True, related_name="balance_sheets")
-    reported_currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)
+    reported_currency = ForeignKey("general.Currency", on_delete=SET_NULL, null=True, blank=True)
     cash_and_cash_equivalents = FloatField(default=0, blank=True, null=True)
     short_term_investments = FloatField(default=0, blank=True, null=True)
     cash_and_short_term_investements = FloatField(default=0, blank=True, null=True)
@@ -246,7 +238,7 @@ class CashflowStatement(Model):
     date = IntegerField(default=0)
     year = DateField(auto_now=True)
     company = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True, related_name="cf_statements")
-    reported_currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)
+    reported_currency = ForeignKey("general.Currency", on_delete=SET_NULL, null=True, blank=True)
     net_income = FloatField(default=0, blank=True, null=True)
     depreciation_amortization = FloatField(default=0, blank=True, null=True)
     deferred_income_tax = FloatField(default=0, blank=True, null=True)

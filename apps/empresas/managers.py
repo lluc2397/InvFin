@@ -60,3 +60,6 @@ class CompanyManager(BaseSharedManager):
             'META',
             ''
         ]
+    
+    def get_companies_user_likes(self, user):
+        pass

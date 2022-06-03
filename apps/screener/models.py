@@ -23,11 +23,12 @@ from ckeditor.fields import RichTextField
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from apps.general.models import FavoritesHistorial, Category, Tag
+from apps.general.models import Category, Tag
+from apps.general.bases import BaseFavoritesHistorial
 
 from . import constants
 
-class FavoritesStocksHistorial(FavoritesHistorial):
+class FavoritesStocksHistorial(BaseFavoritesHistorial):
     asset = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True)
 
     class Meta:
@@ -52,7 +53,7 @@ class FavoritesStocksList(Model):
         return self.user.username
 
 
-class FavoritesEtfsHistorial(FavoritesHistorial):
+class FavoritesEtfsHistorial(BaseFavoritesHistorial):
     asset = ForeignKey(Etf, on_delete=SET_NULL, null=True, blank=True)
 
     class Meta:

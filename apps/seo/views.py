@@ -60,3 +60,20 @@ def robots_txt(request):
         "Disallow: /junk/",
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
+
+
+class SEOViewMixin:
+    meta_description = None
+    meta_tags = 'finanzas, blog financiero, blog el financiera, invertir'
+    meta_title = None
+    meta_url = None
+    meta_image = 'https://inversionesyfinanzas.xyz/static/general/assets/img/favicon/favicon.ico'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["meta_desc"] = self.meta_description
+        context["meta_tags"] = self.meta_tags
+        context["meta_title"] = self.meta_title
+        context["meta_url"] = self.meta_url
+        context["meta_img"] = self.meta_image
+        return context

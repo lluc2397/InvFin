@@ -157,11 +157,17 @@ class Facebook():
         link:str=None,
         media_url:str=None
         ):
-
+        platform = 'facebook'
         emojis = Emoji.objects.random_emojis(num_emojis)
-        hashtags = Hashtag.objects.random_hashtags('facebook')
+        hashtags = Hashtag.objects.random_hashtags(platform)
         
         custom_title = f'{emojis[0].emoji} {title}'
+
+        utm_source = f'utm_source={platform}'
+        utm_medium = f'utm_medium={platform}'
+        utm_campaign = f'utm_campaign=post-shared-auto'
+        utm_term = f'utm_term={title}'
+        link = f'{link}?{utm_source}&{utm_medium}&{utm_campaign}&{utm_term}'
 
         caption = self.create_fb_description(caption=caption, link=link, hashtags=[hashtag.name for hashtag in hashtags])
         
@@ -176,7 +182,7 @@ class Facebook():
 
         elif post_type == 3 or post_type == 4:
             content_type = 'text'
-            caption = f'{media_url} {caption}'
+            caption = f'{caption}'
 
             post_response = self.post_text(text= caption, link=link)
 
@@ -186,7 +192,7 @@ class Facebook():
                 'social_id': post_response['extra'],
                 'title': custom_title ,
                 'description': caption,
-                'platform_shared': 'facebook'
+                'platform_shared': platform
             }            
 
             return facebook_post

@@ -11,10 +11,14 @@ from .base import env
 
 # GENERAL
 # ------------------------------------------------------------------------------
+PROTOCOL = 'https://'
+CURRENT_DOMAIN = MAIN_DOMAIN
+
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["inversionesyfinanzas.xyz"])
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[CURRENT_DOMAIN])
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -46,7 +50,7 @@ SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-secure
 SESSION_COOKIE_SECURE = True
 
-SESSION_COOKIE_DOMAIN = ".inversionesyfinanzas.xyz"
+SESSION_COOKIE_DOMAIN = f".{CURRENT_DOMAIN}"
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-secure
 CSRF_COOKIE_SECURE = True
 # https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
