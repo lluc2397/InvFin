@@ -49,6 +49,23 @@ class Superinvestor(Model):
         if not self.slug:
             self.slug = slugify((self.name))
         return super().save(*args, **kwargs)
+    
+    # @property
+    # def current_portfolio(self):
+    #     last_period = Period.objects.latest()
+    #     return self.positions.filter(superinvestor_related = self, period_related=last_period)
+        
+    # @property
+    # def total_number_of_holdings(self):
+    #     return self.current_portfolio.count()
+    
+    # @property
+    # def portfolio_value(self):
+    #     return sum(position for position in self.current_portfolio)
+
+    # @property
+    # def top_holdings(self):
+    #     return self.current_portfolio.order_by('percentage')[:5]
 
 
 class Period(Model):
@@ -60,6 +77,7 @@ class Period(Model):
         verbose_name = "Period"
         verbose_name_plural = "Periods"
         db_table = "assets_periods"
+        ordering = ['period', 'year']
     
     def __str__(self):
         return f'{self.period}-{str(self.year)}'
@@ -68,7 +86,10 @@ class Period(Model):
 class SuperinvestorActivity(Model):
     MOVE = ((1, 'Compra'), (2, 'Venta'))
 
-    superinvestor_related = ForeignKey(Superinvestor, on_delete=SET_NULL, null=True, blank=True)
+    superinvestor_related = ForeignKey(
+        Superinvestor, on_delete=SET_NULL, 
+        null=True, blank=True, related_name='positions'
+    )
     period_related = ForeignKey(Period, on_delete=SET_NULL, null=True, blank=True)
     company = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True)
     percentage_share_change = FloatField(null=True, blank=True)
@@ -79,12 +100,17 @@ class SuperinvestorActivity(Model):
     company_name = TextField(blank=True, null=True)
     not_registered_company = BooleanField(default=False)
     need_verify_company = BooleanField(default=False)
+    shares = FloatField(null=True, blank=True)
+    reported_price = FloatField(null=True, blank=True)
 
     class Meta:
         verbose_name = "Superinvestor activity"
         verbose_name_plural = "Superinvestors activity"
         db_table = "superinvestors_activity"
-    
+
     def __str__(self):
-        company = self.company if self.company else self.company_name
-        return f'{self.superinvestor_related.name}-{self.period_related}-{company}'
+        return f'{self.superinvestor_related.name}-{self.period_related}-{self.actual_company}'
+    
+    @property
+    def actual_company(self):
+        return self.company if self.company else self.company_name

@@ -43,13 +43,19 @@ def get_investors_accronym():
     return all_investors
 
 
+def get_historial(superinvestor_activity):
+  if type(superinvestor_activity.actual_company) == str:
+    ticker = superinvestor_activity.actual_company.split('-')[0].strip()
+  else:
+    ticker = superinvestor_activity.actual_company.ticker
+  url = f'{SITE}/m/hist/hist.php?f={superinvestor_activity.superinvestor_related.info_accronym}&s={ticker}'
+  response = requests.get(url)
+
+
 def get_activity(superinvestor):
     main_url = f'{SITE}/m/m_activity.php?m={superinvestor.info_accronym}&typ=a'
     url = requests.get(main_url, headers=HEADERS).content
     soup = bs(url, 'html.parser')
-    print('+'*100)
-    print(superinvestor.info_accronym)
-    print('+'*100)
     try:
       pages = [div.text for div in soup.find('div', id="pages").find_all('a')][1:-1]
       skip_followings = False
