@@ -112,7 +112,7 @@ LOCAL_APPS = [
     "apps.cartera",
     "apps.roboadvisor",
     "apps.socialmedias",
-    "apps.recsys"
+    # "apps.recsys"
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

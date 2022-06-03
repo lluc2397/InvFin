@@ -21,8 +21,18 @@ User = get_user_model()
 
 class BaseModelRecommended(BaseGenericModels):
     EXPLANATION = {
-        'tags': [],
-        'categories': [], 
+        'tags': [
+            {
+                'id': 0,
+                'points': 0
+            },
+        ],
+        'categories': [
+            {
+                'id': 0,
+                'points': 0
+            },
+        ],
     }
     place = CharField(max_length=150, choices=constants.WEP_PROMOTION_LOCATION)
     kind = CharField(max_length=150, choices=constants.WEP_PROMOTION_TYPE)
@@ -32,13 +42,6 @@ class BaseModelRecommended(BaseGenericModels):
 
     class Meta:
         abstract = True
-    
-    def __str__(self) -> str:
-        try:
-            response = self.user.username
-        except:
-            response = f'Visiteur - {self.user.id}'
-        return response
     
     """
     Sobre escribir método clean o full clean. Cojer los motivos de la personalización o de la recomendación y guardalos en el json.
@@ -57,6 +60,9 @@ class BaseVisiteurModelRecommended(BaseModelRecommended):
 
     class Meta:
         abstract = True
+    
+    def __str__(self) -> str:
+        return f'Visiteur - {self.user.id}'    
 
 
 class BaseUserModelRecommended(BaseModelRecommended):
@@ -65,6 +71,9 @@ class BaseUserModelRecommended(BaseModelRecommended):
     
     class Meta:
         abstract = True
+    
+    def __str__(self) -> str:
+        return self.user.username
 
 
 class VisiteurCompanyRecommended(BaseVisiteurModelRecommended):
