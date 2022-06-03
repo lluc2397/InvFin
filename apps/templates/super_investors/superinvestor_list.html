@@ -1,0 +1,63 @@
+{% extends "general/bases/base_content.html" %}
+{% load static i18n extra %}
+{% block header %}{% include "super_investors/headers/inicio.html" %}{% endblock header%}
+
+{% block OnTopContent %}
+{% endblock OnTopContent%}
+
+{% block FirstCta %}
+<div class="col-12">
+    {% block FirstCtaContent %}
+    {% endblock FirstCtaContent %}
+</div>
+{% endblock FirstCta %}
+
+{% block FirstContent %}
+{% endblock FirstContent%}
+
+
+{% block LeftSide %}
+{% for superinvestor in superinvestors %}
+    <div class="card-translucent bg-transparent">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex flex-column h-100">
+                        <a href="{{superinvestor.get_absolute_url}}{% utm 'superinvestors' 'inicio' superinvestor.name %}">
+                            <p class="h1 mb-1 pt-2 text-bold">
+                                {{superinvestor.name}}
+                            </p>
+                        </a>
+                        <div class="d-flex">
+                            <spanclass="badge badge-info text-center mr-2">
+                                <span class="font-weight-bolder" style="font:">{{superinvestor.last_update}}</span>
+                            </span>
+                        </div>          
+                        <div class="mb-2 mt-2">
+                            
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr style="margin-top: 0em;">
+{% endfor %}
+{% endblock LeftSide %}
+
+{% block RightSide %}
+{% endblock RightSide %}
+
+
+{% block MiddleCta %}
+<div class="col-12">
+    {% block MiddleCtaContent %}
+    {% endblock MiddleCtaContent %}
+</div>
+{% endblock MiddleCta%}
+
+{% block ListContinuation %}
+{% endblock ListContinuation %}
+
+{% block LastCta %}
+{% endblock LastCta %}

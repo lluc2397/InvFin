@@ -44,6 +44,7 @@ class Visiteur(Model):
     continent_code = CharField(max_length=10000, null=True, blank=True)
     continent_name = CharField(max_length=10000, null=True, blank=True)
     first_visit_date = DateTimeField(auto_now_add=True)
+    is_bot = BooleanField(default=False)
 
     class Meta:
         verbose_name = "Visiteur"
@@ -90,6 +91,7 @@ class Journey(Model):
     date = DateTimeField(auto_now_add=True)
     current_path = CharField(max_length=2000, null=True, blank=True)
     comes_from = CharField(max_length=2000, null=True, blank=True)
+    parsed = BooleanField(default=False)
 
     class Meta:
         abstract = True
@@ -109,6 +111,16 @@ class UsersJourney(Journey):
     class Meta:
         verbose_name = "Historial visitas usuarios"
         db_table = "visits_historial_users"
+
+
+class VisiteurUserRelation(Model):
+    user = ForeignKey(User, null = True, blank=True, on_delete=SET_NULL)
+    visiteur = ForeignKey(Visiteur, null = True, blank=True, on_delete=SET_NULL)
+    date = DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Relación usuarios visitantes"
+        db_table = "seo_users_visiteurs_relation"
 
 
 class PromotionCampaign(Model):

@@ -29,7 +29,7 @@ class SocialPosting:
             
             elif model_type == 'empresas.company':# Company:
                 title = content.name
-                description = content.description
+                description = f'{content.short_introduction} {content.description}'
 
             elif model_type == 'public_blog.publicblog':# Company:
                 title = content.title

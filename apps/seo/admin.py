@@ -11,8 +11,64 @@ from .models import (
     UsersJourney,
     Promotion,
     PromotionCampaign,
-    VisiteurUserRelation
+    VisiteurUserRelation,
+    VisiteurCompanyVisited,
+    UserCompanyVisited,
+    VisiteurPublicBlogVisited,
+    UserPublicBlogVisited,
+    VisiteurQuestionVisited,
+    UserQuestionVisited,
+    VisiteurTermVisited,
+    UserTermVisited,
 )
+
+class BaseModelVisitedAdmin(admin.ModelAdmin):
+    list_display = [
+        'user',
+        'model_visited',
+        'visit',
+        'date',
+    ]
+
+
+@admin.register(VisiteurCompanyVisited)
+class VisiteurCompanyVisitedAdmin(BaseModelVisitedAdmin):
+    pass
+
+
+@admin.register(UserCompanyVisited)
+class UserCompanyVisitedAdmin(BaseModelVisitedAdmin):
+    pass
+
+
+@admin.register(VisiteurPublicBlogVisited)
+class VisiteurPublicBlogVisitedAdmin(BaseModelVisitedAdmin):
+    pass
+
+
+@admin.register(UserPublicBlogVisited)
+class UserPublicBlogVisitedAdmin(BaseModelVisitedAdmin):
+    pass
+
+
+@admin.register(VisiteurQuestionVisited)
+class VisiteurQuestionVisitedAdmin(BaseModelVisitedAdmin):
+    pass
+
+
+@admin.register(UserQuestionVisited)
+class UserQuestionVisitedAdmin(BaseModelVisitedAdmin):
+    pass
+
+
+@admin.register(VisiteurTermVisited)
+class VisiteurTermVisitedAdmin(BaseModelVisitedAdmin):
+    pass
+
+
+@admin.register(UserTermVisited)
+class UserTermVisitedAdmin(BaseModelVisitedAdmin):
+    pass
 
 
 @admin.register(PromotionCampaign)

@@ -1,5 +1,12 @@
 from django.shortcuts import redirect
-from django.views.generic import RedirectView
+from django.views.generic import (
+    ListView, 
+    DetailView, 
+    RedirectView,
+    View,
+    FormView,
+    TemplateView
+)
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 
@@ -8,7 +15,7 @@ from apps.public_blog.models import PublicBlog
 from apps.preguntas_respuestas.models import Question
 
 from .models import Promotion
-
+from .mixins import SEOViewMixin
 
 def redirect_old_urls(request, ques_slug=False, term_slug=False, publs_slug=False):
     if ques_slug == False and term_slug == False:
@@ -62,18 +69,22 @@ def robots_txt(request):
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
 
-class SEOViewMixin:
-    meta_description = None
-    meta_tags = 'finanzas, blog financiero, blog el financiera, invertir'
-    meta_title = None
-    meta_url = None
-    meta_image = 'https://inversionesyfinanzas.xyz/static/general/assets/img/favicon/favicon.ico'
+class SEOListView(SEOViewMixin, ListView):
+    pass
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["meta_desc"] = self.meta_description
-        context["meta_tags"] = self.meta_tags
-        context["meta_title"] = self.meta_title
-        context["meta_url"] = self.meta_url
-        context["meta_img"] = self.meta_image
-        return context
+
+class SEODetailView(SEOViewMixin, DetailView):
+    pass
+
+
+class SEOView(SEOViewMixin, View):
+    pass
+
+
+class SEOFormView(SEOViewMixin, FormView):
+    pass
+
+
+class SEOTemplateView(SEOViewMixin, TemplateView):
+    pass
+

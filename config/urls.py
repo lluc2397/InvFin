@@ -38,7 +38,7 @@ urlpatterns = [
 
     path("screener/", include("apps.screener.urls", namespace="screener")),
 
-    # path("", include("apps.super_investors.urls", namespace="super_investors")),    
+    path("", include("apps.super_investors.urls", namespace="super_investors")),    
     path("", include("apps.empresas.urls", namespace="empresas")),
     # path("", include("apps.etfs.urls", namespace="etfs")),
 

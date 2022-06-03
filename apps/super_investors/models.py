@@ -12,27 +12,38 @@ from django.db.models import (
     IntegerField,
     TextField
 )
+from django.urls import reverse
+from django.template.defaultfilters import slugify
+from django.contrib.auth import get_user_model
 
 from apps.empresas.models import Company
 
-from django.template.defaultfilters import slugify
-from django.contrib.auth import get_user_model
-MyUser = get_user_model()
+from .managers import SuperinvestorManager
+
+User = get_user_model()
 
 
 class Superinvestor(Model):
-    name = CharField(max_length=600000, null=True, blank=True)
-    fund_name = CharField(max_length=600000, null=True, blank=True)
-    info_accronym = CharField(max_length=600000, null=True, blank=True)
-    slug = CharField(max_length=600000, null=True, blank=True)
+    name = CharField(max_length=600, null=True, blank=True)
+    fund_name = CharField(max_length=600, null=True, blank=True)
+    info_accronym = CharField(max_length=20, null=True, blank=True)
+    slug = CharField(max_length=600, null=True, blank=True)
     last_update = DateTimeField(null=True, blank=True)
     has_error = BooleanField(default=False)
     error = TextField(blank=True, null=True)
+    image = CharField(max_length=600, null=True, blank=True)
+    objects = SuperinvestorManager()
 
     class Meta:
         verbose_name = "Superinvestor"
         verbose_name_plural = "Superinvestors"
         db_table = "superinvestors"
+    
+    def __str__(self):
+        return self.name
+    
+    def get_absolute_url(self):
+        return reverse("super_investors:superinvestor", kwargs={"slug": self.slug})
     
     def save(self, *args, **kwargs): # new
         if not self.slug:
@@ -51,7 +62,7 @@ class Period(Model):
         db_table = "assets_periods"
     
     def __str__(self):
-        return str(self.year)     
+        return f'{self.period}-{str(self.year)}'
 
 
 class SuperinvestorActivity(Model):
@@ -73,3 +84,7 @@ class SuperinvestorActivity(Model):
         verbose_name = "Superinvestor activity"
         verbose_name_plural = "Superinvestors activity"
         db_table = "superinvestors_activity"
+    
+    def __str__(self):
+        company = self.company if self.company else self.company_name
+        return f'{self.superinvestor_related.name}-{self.period_related}-{company}'

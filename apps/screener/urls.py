@@ -24,7 +24,7 @@ app_name = "screener"
 
 urlpatterns = [
     path('', ScreenerInicioView.as_view(), name="screener_inicio"),
-    path('empresas-de/<name>/', CompanyScreenerInicioView.as_view(), name="companies_by"),
+    path('empresas-de/<slug>/', CompanyScreenerInicioView.as_view(), name="companies_by"),
     path('etfs/', EtfScreenerInicioView.as_view(), name="etfs_inicio"),
 
     path('analisis-de/<ticker>/', CompanyDetailsView.as_view(), name="company"),
