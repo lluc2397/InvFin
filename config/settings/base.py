@@ -586,6 +586,8 @@ TWITTER_ACCESS_TOKEN_SECRET = env.str('TWITTER_ACCESS_TOKEN_SECRET')
 #         re.compile(r'^sohu-search'),
 #     ]
 
+# IMAKIT
+# ------------------------------------------------------------------------------
 IMAGEKIT_PRIVATE_KEY = env.str('IMAGEKIT_PRIVATE_KEY')
 IMAGEKIT_PUBLIC_KEY = env.str('IMAGEKIT_PUBLIC_KEY')
 IMAGEKIT_URL_ENDPOINT = env.str('IMAGEKIT_URL_ENDPOINT')    
@@ -595,3 +597,8 @@ IMAGE_KIT = ImageKit(
     public_key = IMAGEKIT_PUBLIC_KEY,
     url_endpoint = IMAGEKIT_URL_ENDPOINT
 )
+
+# STRIPE
+# ------------------------------------------------------------------------------
+STRIPE_PRIVATE = env.str('STRIPE_PRIVATE')
+STRIPE_PUBLIC = env.str('STRIPE_PUBLIC')
