@@ -66,6 +66,10 @@ pdb_manage:
 	docker-compose -f local.yml stop django
 	docker-compose -f local.yml run --rm --service-ports django  ./manage.py $(ar) --settings=config.settings.local
 
+# requirements:
+# 	docker-compose run --rm essentialist.api /requirements.sh "temp_venv/bin/pip"
+# 	rm -rf temp_venv/
+
 # Postgres
 shell_db:
 	docker-compose -f local.yml exec postgres /bin/sh

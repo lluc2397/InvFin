@@ -31,6 +31,7 @@ class ProductAdmin(admin.ModelAdmin):
         'slug',
         'stripe_id',
         'visits',
+        'is_active',
         'created_at',
         'updated_at'
     ]
@@ -80,6 +81,7 @@ class ProductComplementaryAdmin(admin.ModelAdmin):
         'secondary_title',
         'product',
         'price',
+        'is_active',
         'payment_type',
         'stripe_price_id',
         'currency',

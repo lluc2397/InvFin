@@ -4,6 +4,7 @@ from django.db.models import (
     SET_NULL,
     CASCADE,
     ForeignKey,
+    IntegerField,
     BooleanField,
 )
 
@@ -71,20 +72,9 @@ class Sector(Model):
         return str(self.sector)
 
 
-class Currency(Model):
-    currency = CharField(max_length=500 , null=True, blank=True)
-
-    class Meta:
-        verbose_name = "Currency"
-        verbose_name_plural = "Currencies"
-        db_table = "assets_currencies"
-
-    def __str__(self):
-        return str(self.currency)
-
-
 class Country(Model):
     country = CharField(max_length=500 , null=True, blank=True)
+    iso = CharField(max_length=500 , null=True, blank=True)
 
     class Meta:
         verbose_name = "Country"
@@ -93,6 +83,26 @@ class Country(Model):
 
     def __str__(self):
         return str(self.country)
+
+
+class Currency(Model):
+    currency = CharField(max_length=500 , null=True, blank=True)
+    name = CharField(max_length=500 , null=True, blank=True)
+    iso = CharField(max_length=500 , null=True, blank=True)
+    decimals = IntegerField(default=2, blank=True)
+    country = ForeignKey(Country,
+        on_delete=CASCADE,
+        null=True,
+        related_name = "currency"
+    )
+
+    class Meta:
+        verbose_name = "Currency"
+        verbose_name_plural = "Currencies"
+        db_table = "assets_currencies"
+
+    def __str__(self):
+        return str(self.currency)
 
 
 class NotificationsType(Model):

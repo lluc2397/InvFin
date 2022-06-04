@@ -21,6 +21,7 @@ from apps.general.bases import BaseComment
 from apps.general.models import Currency
 
 from .managers import ProductManager
+from apps.business import constants
 
 User = get_user_model()
 
@@ -65,10 +66,7 @@ class Product(Model):
 
 
 class ProductComplementary(Model):
-    PRODUCT_TYPE = [
-        ('subscription', 'Subscripción'),
-        ('payment', 'Un pago')
-    ]
+    
     product = ForeignKey(Product,
         on_delete=CASCADE,
         null=True,
@@ -76,11 +74,15 @@ class ProductComplementary(Model):
     secondary_title = CharField(max_length=300, blank=True)
     secondary_slug = SlugField(max_length=300, null=True, blank=True)
     price = FloatField(null=True, blank=True)
-    payment_type = CharField(max_length=300, blank=True, choices=PRODUCT_TYPE)
+    payment_type = CharField(max_length=300, blank=True, choices=constants.PAYMENT_TYPE)
     stripe_price_id = CharField(max_length=500, null=True, blank=True)
     secondary_description = RichTextField(null=True, blank=True)
     is_active = BooleanField(default=True)
     currency = ForeignKey(Currency, on_delete=SET_NULL, null=True)
+    subscription_period = CharField(max_length=300, blank=True, choices=constants.SUBSCRIPTION_PERIOD)
+    subscription_interval = IntegerField(default=0, blank=True)
+    created_at = DateTimeField(auto_now_add=True)
+    updated_at = DateTimeField(null=True, blank=True)
 
     class Meta:
         verbose_name = 'Product complementary'
@@ -123,6 +125,8 @@ class ProductDiscount(Model):
     start_date = DateTimeField(null=True, blank=True)
     end_date = DateTimeField(null=True, blank=True)
     discount = FloatField(null=True, blank=True)
+    is_percentage = BooleanField(default=True)
+    is_active = BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Product discount'
@@ -134,13 +138,6 @@ class ProductDiscount(Model):
 
 
 class TransactionHistorial(Model):
-    PAYMENT_METHOD = [
-        ('credits', 'Credits'),
-        ('wire', 'Wire'),
-        ('paypal', 'Paypal'),
-        ('other', 'Others'),
-        ('card', 'Card')
-    ]
     product = ForeignKey(
         Product, 
         on_delete=SET_NULL, 
@@ -160,7 +157,7 @@ class TransactionHistorial(Model):
     )
     customer = ForeignKey(Customer, on_delete=SET_NULL, null=True)
     created_at = DateTimeField(auto_now_add=True)
-    payment_method = CharField(max_length=300, blank=True, choices=PAYMENT_METHOD)
+    payment_method = CharField(max_length=300, blank=True, choices=constants.PAYMENT_METHOD)
     currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)
     discount = ForeignKey(ProductDiscount, on_delete=SET_NULL, null=True, blank=True)
     final_amount = FloatField(null=True, blank=True)
