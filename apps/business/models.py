@@ -8,7 +8,9 @@ from django.db.models import (
     SlugField,
     DateTimeField,
     IntegerField,
-    FloatField
+    JSONField,
+    FloatField,
+    BooleanField
 )
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -17,6 +19,8 @@ from ckeditor.fields import RichTextField
 
 from apps.general.bases import BaseComment
 from apps.general.models import Currency
+
+from .managers import ProductManager
 
 User = get_user_model()
 
@@ -45,6 +49,8 @@ class Product(Model):
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(null=True, blank=True)
     visits = IntegerField(default=0)
+    is_active = BooleanField(default=True)
+    objects = ProductManager()
 
     class Meta:
         verbose_name = 'Product'
@@ -67,10 +73,13 @@ class ProductComplementary(Model):
         on_delete=CASCADE,
         null=True,
         related_name = "complementary")
+    secondary_title = CharField(max_length=300, blank=True)
+    secondary_slug = SlugField(max_length=300, null=True, blank=True)
     price = FloatField(null=True, blank=True)
     payment_type = CharField(max_length=300, blank=True, choices=PRODUCT_TYPE)
     stripe_price_id = CharField(max_length=500, null=True, blank=True)
     secondary_description = RichTextField(null=True, blank=True)
+    is_active = BooleanField(default=True)
     currency = ForeignKey(Currency, on_delete=SET_NULL, null=True)
 
     class Meta:
@@ -91,7 +100,7 @@ class ProductComment(BaseComment):
     
     class Meta:
         verbose_name = 'Product'
-        verbose_name_plural = 'Products'
+        verbose_name_plural = 'Products comments'
         db_table = 'business_products_comments'
     
     def __str__(self):
@@ -105,7 +114,7 @@ class ProductDiscount(Model):
         null=True,
         blank=True
     )
-    product = ForeignKey(
+    product_complementary = ForeignKey(
         ProductComplementary, 
         on_delete=SET_NULL, 
         null=True, 
@@ -137,7 +146,7 @@ class TransactionHistorial(Model):
         on_delete=SET_NULL, 
         null=True
     )
-    product = ForeignKey(
+    product_complementary = ForeignKey(
         ProductComplementary, 
         on_delete=SET_NULL, 
         null=True, 
@@ -155,6 +164,7 @@ class TransactionHistorial(Model):
     currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)
     discount = ForeignKey(ProductDiscount, on_delete=SET_NULL, null=True, blank=True)
     final_amount = FloatField(null=True, blank=True)
+    stripe_response = JSONField(default=dict, null=True, blank=True)
 
     class Meta:
         verbose_name = "Transaction"

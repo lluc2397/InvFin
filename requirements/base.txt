@@ -50,3 +50,7 @@ django-admin-honeypot
 django-import-export
 geoip2==4.5.0
 psycopg2-binary # https://github.com/psycopg/psycopg2
+
+# Payment
+# ------------------------------------------------------------------------------
+stripe

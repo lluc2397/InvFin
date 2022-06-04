@@ -113,7 +113,7 @@ LOCAL_APPS = [
     "apps.roboadvisor",
     "apps.socialmedias",
     "apps.api",
-    # "apps.business",
+    "apps.business",
     # "apps.recsys"
 ]
 
