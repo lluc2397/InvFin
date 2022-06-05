@@ -32,8 +32,8 @@ class StripeManagement:
         )
         return product
     
-    def delete_product(self, stripe_id:str) -> dict:
-        product = self.stripe_product.delete(stripe_id)
+    def disable_product(self, stripe_id:str) -> dict:
+        product = self.stripe_product.modify(sid=stripe_id, active=False)
         return product
     
     def create_product_complementary(
@@ -52,8 +52,10 @@ class StripeManagement:
             'currency': currency,
         }
         if is_recurring:
-            price_data["interval"] = subscription_period,
-            price_data["interval_count"] = subscription_interval
+            price_data['recurring'] = {
+                "interval": subscription_period,
+                "interval_count": subscription_interval
+            }
         
         price = self.stripe_price.create(**price_data)
         return price
@@ -61,24 +63,14 @@ class StripeManagement:
     def update_product_complementary(
         self,
         stripe_price_id:str,
-        product_stripe_id:str,
-        price:float,
-        currency:str,
-        is_recurring:bool = False,
-        subscription_period:str = None,
-        subscription_interval: int = None
+        active:bool = False,
     ) -> dict:
 
         price_data = {
             'sid': stripe_price_id,
-            'product': product_stripe_id,
-            'unit_amount': price,
-            'currency': currency,
+            'active': active
         }
-        if is_recurring:
-            price_data["interval"] = subscription_period,
-            price_data["interval_count"] = subscription_interval
-        
+
         price = self.stripe_price.modify(**price_data)
         return price
     

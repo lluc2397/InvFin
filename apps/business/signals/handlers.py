@@ -11,11 +11,6 @@ from apps.business.stripe_management import StripeManagement
 from apps.business import constants
 
 class BusinessSignal:
-
-    @classmethod
-    def product_pre_delete(cls, sender, instance: Product, **kwargs):
-        if instance.stripe_id:
-            StripeManagement().delete_product(instance.stripe_id)
     
     @classmethod
     def product_pre_save(cls, sender, instance: Product, **kwargs):
@@ -58,13 +53,7 @@ class BusinessSignal:
         else:
             stripe_product_complementary = stripe.update_product_complementary(
                 instance.stripe_price_id,
-                instance.product.stripe_id,
-                instance.price,
-                instance.currency.currency,
-
-                is_recurring,
-                subscription_period,
-                subscription_interval
+                instance.is_active
             )
             instance.updated_at = timezone.now()
 
