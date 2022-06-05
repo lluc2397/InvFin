@@ -1,6 +1,7 @@
 import stripe
 from django.conf import settings
 
+from apps.business.models import Customer, ProductComplementary
 from apps.general.models import Currency
 
 
@@ -38,7 +39,7 @@ class StripeManagement:
     
     def create_product_complementary(
         self,
-        product_stripe_id:str,
+        stripe_id:str,
         price:float,
         currency:str,
         is_recurring:bool = False,
@@ -47,7 +48,7 @@ class StripeManagement:
     ) -> dict:
 
         price_data = {
-            'product': product_stripe_id,
+            'product': stripe_id,
             'unit_amount': int(price*100),
             'currency': currency,
         }
@@ -62,12 +63,12 @@ class StripeManagement:
     
     def update_product_complementary(
         self,
-        stripe_price_id:str,
+        stripe_id:str,
         active:bool = False,
     ) -> dict:
 
         price_data = {
-            'sid': stripe_price_id,
+            'sid': stripe_id,
             'active': active
         }
 
@@ -86,3 +87,21 @@ class StripeManagement:
             name=name
         )
         return customer
+
+    def create_subscription(self, customer: Customer, stripe_price_obj: ProductComplementary) -> dict:
+        subscription = stripe.Subscription.create(
+            customer=customer.stripe_id,
+            items=[
+                {"price": stripe_price_obj.stripe_id},
+            ],
+        )
+        return subscription
+    
+    def create_payment_link(self, customer: Customer, stripe_price_obj: ProductComplementary) -> dict:
+        subscription = stripe.Subscription.create(
+            customer=customer.stripe_id,
+            items=[
+                {"price": stripe_price_obj.stripe_id},
+            ],
+        )
+        return subscription

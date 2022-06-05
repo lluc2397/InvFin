@@ -23,8 +23,13 @@ class CustomerAdmin(admin.ModelAdmin):
     search_fields = ['user__username']
 
 
+class ProductComplementaryInline(admin.StackedInline):
+    model = ProductComplementary
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    inlines = [ProductComplementaryInline]
     list_display = [
         'id',
         'title',
@@ -35,9 +40,9 @@ class ProductAdmin(admin.ModelAdmin):
         'created_at',
         'updated_at'
     ]
-    list_editable = []
-    list_filter = []
-    search_fields= []
+    list_editable = ['is_active']
+    list_filter = ['is_active']
+    search_fields= ['title']
 
 
 @admin.register(ProductComment)
@@ -78,12 +83,12 @@ class TransactionHistorialAdmin(admin.ModelAdmin):
 class ProductComplementaryAdmin(admin.ModelAdmin):
     list_display = [
         'id',
-        'secondary_title',
+        'title',
         'product',
         'price',
         'is_active',
         'payment_type',
-        'stripe_price_id',
+        'stripe_id',
         'currency',
     ]
     list_editable = []

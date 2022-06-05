@@ -27,22 +27,28 @@ from . import constants
 User = get_user_model()
 
 
+# class URLHistorial(Model):
+#     old_url
+#     new_url
+
+
+
 class Visiteur(Model):
     ip = CharField(max_length=50, null=True, blank=True)
-    session_id = CharField(max_length=10000, null=True, blank=True)
-    HTTP_USER_AGENT = CharField(max_length=10000, null=True, blank=True)
-    country_code = CharField(max_length=10000, null=True, blank=True)
-    country_name = CharField(max_length=10000, null=True, blank=True)
-    dma_code = CharField(max_length=10000, null=True, blank=True)
+    session_id = CharField(max_length=1000, null=True, blank=True)
+    HTTP_USER_AGENT = CharField(max_length=1000, null=True, blank=True)
+    country_code = CharField(max_length=300, null=True, blank=True)
+    country_name = CharField(max_length=300, null=True, blank=True)
+    dma_code = CharField(max_length=300, null=True, blank=True)
     is_in_european_union = BooleanField(null=True, blank=True)
-    latitude = CharField(max_length=10000, null=True, blank=True)
-    longitude = CharField(max_length=10000, null=True, blank=True)
-    city = CharField(max_length=10000, null=True, blank=True)
-    region = CharField(max_length=10000, null=True, blank=True)
-    time_zone = CharField(max_length=10000, null=True, blank=True)
-    postal_code = CharField(max_length=10000, null=True, blank=True)
-    continent_code = CharField(max_length=10000, null=True, blank=True)
-    continent_name = CharField(max_length=10000, null=True, blank=True)
+    latitude = CharField(max_length=300, null=True, blank=True)
+    longitude = CharField(max_length=300, null=True, blank=True)
+    city = CharField(max_length=500, null=True, blank=True)
+    region = CharField(max_length=300, null=True, blank=True)
+    time_zone = CharField(max_length=300, null=True, blank=True)
+    postal_code = CharField(max_length=15, null=True, blank=True)
+    continent_code = CharField(max_length=300, null=True, blank=True)
+    continent_name = CharField(max_length=300, null=True, blank=True)
     first_visit_date = DateTimeField(auto_now_add=True)
     is_bot = BooleanField(default=False)
 

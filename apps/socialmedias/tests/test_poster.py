@@ -1,5 +1,8 @@
 from django.test import TestCase
 
+from django.utils.safestring import mark_safe
+from django.utils.html import strip_tags
+
 from apps.escritos.models import Term
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog
@@ -35,7 +38,7 @@ class PosterTest(TestCase):
         )
         self.question = Question.objects.create(
             title='question',
-            content='pregutna larga',
+            content='<div><p>masidf sdbf sdf sfg fdïfdsf  hbsdf ónjbfds ds ds</p> <a>sdfjhfb  fusd fvgsvd fsvd <a/></div>',
         )
         self.publicBlog = PublicBlog.objects.create(
             title='public blog',
@@ -95,28 +98,28 @@ class PosterTest(TestCase):
     def test_blog(self):
         publicBlog = PublicBlog.objects.get_random()
         blog_poster = SocialPosting(BlogSharedHistorial, publicBlog).generate_content()
-        blog_response = publicBlog.title, 'https://inversionesyfinanzas.xyz' + publicBlog.get_absolute_url(), publicBlog.resume, 'https://inversionesyfinanzas.xyz' + publicBlog.image
+        blog_response = publicBlog.title, 'https://inversionesyfinanzas.xyz' + publicBlog.get_absolute_url(), publicBlog.resume
         self.assertEqual(blog_poster, blog_response)
 
     def test_question(self):
         question = Question.objects.get_random()
         question_poster = SocialPosting(QuestionSharedHistorial, question).generate_content()
-        question_response= question.title, 'https://inversionesyfinanzas.xyz' + question.get_absolute_url(), question.content, ''
+        question_response= question.title, 'https://inversionesyfinanzas.xyz' + question.get_absolute_url(), question.content
         self.assertEqual(question_poster, question_response)
 
     def test_term(self):
         term = Term.objects.get_random()
         term_poster = SocialPosting(TermSharedHistorial, term).generate_content()
-        term_response = term.title, 'https://inversionesyfinanzas.xyz' + term.get_absolute_url(), term.resume, 'https://inversionesyfinanzas.xyz' + term.image
+        term_response = term.title, 'https://inversionesyfinanzas.xyz' + term.get_absolute_url(), term.resume
         self.assertEqual(term_poster, term_response)
 
     def test_company(self):
         company = Company.objects.get_random()
         company_poster = SocialPosting(CompanySharedHistorial, company).generate_content()
-        company_response = company.name, 'https://inversionesyfinanzas.xyz' + company.get_absolute_url(), company.description, company.image
+        company_response = company.name, 'https://inversionesyfinanzas.xyz' + company.get_absolute_url(), company.description
         self.assertEqual(company_poster, company_response)
 
-    # def test_news(self):
-    #     company = Company.objects.get_random()
-    #     company_news_poster = SocialPosting(NewsSharedHistorial, company_related=company).generate_content()
-        
+    def test_clean_description(self):
+        title, link, description = SocialPosting(QuestionSharedHistorial, self.question).generate_content()
+        description = strip_tags(description)
+        self.assertEqual(description, 'masidf sdbf sdf sfg fdïfdsf  hbsdf ónjbfds ds ds sdfjhfb  fusd fvgsvd fsvd ')

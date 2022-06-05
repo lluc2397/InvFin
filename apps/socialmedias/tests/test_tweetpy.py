@@ -93,5 +93,5 @@ class PosterTest(TestCase):
         company = Company.objects.get_random()
         title, link, description, media_url = SocialPosting(NewsSharedHistorial, company_related=company).generate_content()
         tw_response = Twitter().tweet(caption=description, post_type=3, media_url=media_url, link=link)
-        print(tw_response)
+
     

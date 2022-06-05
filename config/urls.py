@@ -26,28 +26,20 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path(settings.SECOND_ADMIN_URL, include('admin_honeypot.urls', namespace='admin_honeypot')),
     path("", include("apps.general.urls", namespace="general")),
-
     path("", include("apps.web.urls", namespace="web")),
-    # User management
     path("", include("apps.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),    
-    
     path("", include("apps.preguntas_respuestas.urls", namespace="preguntas_respuestas")),
     path("", include("apps.escritos.urls", namespace="escritos")),
     path("", include("apps.public_blog.urls", namespace="public_blog")),
-
     path("screener/", include("apps.screener.urls", namespace="screener")),
-
     path("", include("apps.super_investors.urls", namespace="super_investors")),    
     path("", include("apps.empresas.urls", namespace="empresas")),
     # path("", include("apps.etfs.urls", namespace="etfs")),
-
     path("", include("apps.cartera.urls", namespace="cartera")),
-
     path("", include("apps.seo.urls", namespace="seo")),
-
     path("", include("apps.roboadvisor.urls", namespace="roboadvisor")),
-
+    path("", include("apps.business.urls", namespace="business")),
 
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

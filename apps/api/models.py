@@ -22,6 +22,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.escritos.models import Term
 from apps.empresas.models import Company
 from apps.general.utils import UniqueCreator
+from apps.business.models import ProductSubscriber
 
 from .managers import KeyManager
 
@@ -40,6 +41,13 @@ class Key(Model):
     removed = DateTimeField(_("Removed"), null=True, blank=True)
     limit = PositiveIntegerField(default=0)
     objects = KeyManager()
+    subscription = ForeignKey(
+        ProductSubscriber, 
+        on_delete=CASCADE, 
+        related_name="subscription_related",
+        null=True, 
+        blank=True
+    )
 
     class Meta:
         verbose_name = "Key"

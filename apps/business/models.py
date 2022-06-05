@@ -10,6 +10,7 @@ from django.db.models import (
     IntegerField,
     JSONField,
     FloatField,
+    ManyToManyField,
     BooleanField
 )
 from django.urls import reverse
@@ -41,7 +42,7 @@ class Customer(Model):
 
 
 class Product(Model):
-    title = CharField(max_length=300, blank=True)
+    title = CharField(max_length=300)
     slug = SlugField(max_length=300, null=True, blank=True)
     stripe_id = CharField(max_length=500, null=True, blank=True)
     description = RichTextField(null=True, blank=True)
@@ -62,7 +63,7 @@ class Product(Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("Transaction_detail", kwargs={"pk": self.pk})
+        return reverse("business:product", kwargs={"slug": self.slug})
 
 
 class ProductComplementary(Model):
@@ -71,12 +72,12 @@ class ProductComplementary(Model):
         on_delete=CASCADE,
         null=True,
         related_name = "complementary")
-    secondary_title = CharField(max_length=300, blank=True)
-    secondary_slug = SlugField(max_length=300, null=True, blank=True)
+    title = CharField(max_length=300, blank=True)
+    slug = SlugField(max_length=300, null=True, blank=True)
     price = FloatField(null=True, blank=True)
     payment_type = CharField(max_length=300, blank=True, choices=constants.PAYMENT_TYPE)
-    stripe_price_id = CharField(max_length=500, null=True, blank=True)
-    secondary_description = RichTextField(null=True, blank=True)
+    stripe_id = CharField(max_length=500, null=True, blank=True)
+    description = RichTextField(null=True, blank=True)
     is_active = BooleanField(default=True)
     currency = ForeignKey(Currency, on_delete=SET_NULL, null=True)
     subscription_period = CharField(max_length=300, blank=True, choices=constants.SUBSCRIPTION_PERIOD)
@@ -88,6 +89,51 @@ class ProductComplementary(Model):
         verbose_name = 'Product complementary'
         verbose_name_plural = 'Products complementary'
         db_table = 'business_products_complementary'
+
+    def __str__(self):
+        return self.product.title
+
+
+class ProductComplementaryPaymentLunk(Model):
+    product_complementary = ForeignKey(ProductComplementary,
+        on_delete=CASCADE,
+        null=True,
+        related_name = "payment_links")
+    link = CharField(max_length=500, null=True, blank=True)
+    stripe_id = CharField(max_length=500, null=True, blank=True)
+    created_at = DateTimeField(auto_now_add=True)
+    updated_at = DateTimeField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Product complementary payment link'
+        verbose_name_plural = 'Products complementary payment link'
+        db_table = 'business_products_complementary_payment_link'
+
+    def __str__(self):
+        return self.product_complementary.product.title
+
+
+class ProductSubscriber(Model):    
+    product = ForeignKey(Product,
+        on_delete=CASCADE,
+        null=True,
+        related_name = "subscribers")
+    product_complementary = ForeignKey(ProductComplementary,
+        on_delete=CASCADE,
+        null=True,
+        related_name = "complementary_subs")
+    subscriber = ForeignKey(User,
+        on_delete=CASCADE,
+        null=True,
+        related_name = "subscriptions")
+    created_at = DateTimeField(auto_now_add=True)
+    updated_at = DateTimeField(null=True, blank=True)
+    is_active = BooleanField(default=True)
+
+    class Meta:
+        verbose_name = 'Product subscriber'
+        verbose_name_plural = 'Products subscribers'
+        db_table = 'business_products_subscribers'
 
     def __str__(self):
         return self.product.title
@@ -170,6 +216,3 @@ class TransactionHistorial(Model):
 
     def __str__(self):
         return self.product.title
-
-    def get_absolute_url(self):
-        return reverse("Transaction_detail", kwargs={"pk": self.pk})

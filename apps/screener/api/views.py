@@ -115,7 +115,6 @@ def create_company_observation(request):
             model.save(update_fields=['user', 'company'])
             return HttpResponse(status=204, headers={'HX-Trigger': 'refreshObservationsCompany'})
         else:
-            print(form.errors)
             return HttpResponse(status=500)
     else:
         form = UserCompanyObservationForm()

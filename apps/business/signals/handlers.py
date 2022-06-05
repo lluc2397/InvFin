@@ -11,12 +11,29 @@ from apps.business.stripe_management import StripeManagement
 from apps.business import constants
 
 class BusinessSignal:
+    @classmethod
+    def generate_content(cls, instance):
+        prod = getattr(instance, 'product')
+        if prod:
+            description = prod.description
+        else:
+            description = instance.title
+        
+        if not instance.description:
+            instance.description = description
+
+        if not instance.slug:
+            instance.slug = instance.title
+        
+        if not instance.updated_at:
+            instance.updated_at = instance.created_at
     
     @classmethod
     def product_pre_save(cls, sender, instance: Product, **kwargs):
         stripe = StripeManagement()
         if not instance.pk:
-            stripe_product = stripe.create_product(instance.title, instance.is_active)
+            BusinessSignal.generate_content(instance)
+            stripe_product = stripe.create_product(instance.title, instance.description, instance.is_active)
             instance.stripe_id = stripe_product['id']
         else:
             stripe_product = stripe.update_product(
@@ -39,7 +56,7 @@ class BusinessSignal:
             subscription_period = instance.subscription_period
             subscription_interval = instance.subscription_interval
         if not instance.pk:
-
+            BusinessSignal.generate_content(instance)
             stripe_product_complementary = stripe.create_product_complementary(
                 instance.product.stripe_id,
                 instance.price,
@@ -49,10 +66,10 @@ class BusinessSignal:
                 subscription_period,
                 subscription_interval
             )
-            instance.stripe_price_id = stripe_product_complementary['id']
+            instance.stripe_id = stripe_product_complementary['id']
         else:
             stripe_product_complementary = stripe.update_product_complementary(
-                instance.stripe_price_id,
+                instance.stripe_id,
                 instance.is_active
             )
             instance.updated_at = timezone.now()

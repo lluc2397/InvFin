@@ -8,6 +8,7 @@ class SEOViewMixin:
     meta_title = None
     meta_url = None
     meta_image = None
+    meta_author = None
 
     def get_meta_url(self):
         meta_url = self.meta_url
@@ -15,6 +16,15 @@ class SEOViewMixin:
             meta_url = self.request.path
         return meta_url
     
+    def get_meta_author(self, instance: object = None):
+        meta_author = self.meta_author
+        if not meta_author:
+            if instance:
+                meta_author = getattr(instance, 'author')
+            else:
+                meta_author = 'InvFin'
+        return meta_author
+
     def get_meta_title(self, instance: object = None):
         meta_title = self.meta_title
         if not meta_title:
