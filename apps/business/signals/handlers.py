@@ -13,7 +13,8 @@ from apps.business import constants
 class BusinessSignal:
     @classmethod
     def generate_content(cls, instance):
-        prod = getattr(instance, 'product')
+        prod = getattr(instance, 'product', None)
+
         if prod:
             description = prod.description
         else:

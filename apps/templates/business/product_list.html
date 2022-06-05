@@ -16,37 +16,54 @@
 {% endblock FirstContent%}
 
 
-{% block LeftSide %}
+{% block ListContent %}
 {% for product in products %}
-    <div class="card-translucent bg-transparent">
-        <div class="card-body">
+{% if forloop.first == True%}
+<div class="col-12">
+    <div class="card bg-red">
+{% else %}
+<div class="col-md-6 col-sm-12">
+    <div class="card">
+{% endif %}    
+        <div class="card-body p-3">
             <div class="row">
-                <div class="col-12">
+                <div class="col-lg-9">
                     <div class="d-flex flex-column h-100">
-                        <a href="{{product.get_absolute_url}}{% utm 'products' 'inicio' product.title %}">
+                        <a href="{{product.get_absolute_url}}{% utm 'all-products' 'inicio' product.title %}">
                             <p class="h1 mb-1 pt-2 text-bold">
                                 {{product.title}}
                             </p>
                         </a>
-                        <div class="d-flex">
-                            <spanclass="badge badge-info text-center mr-2">
-                                <span class="font-weight-bolder" style="font-size: 10px">Última actualización: {{product.updated_at|date:"d.m.y"}}</span>
-                            </span>
-                        </div>          
-                        <div class="mb-2 mt-2">
-                            {{product.description}}
-                        </div>                        
+                       
+                        <h5 class="font-weight-bolder">
+                            <div class="d-flex">
+                                {% for tag in product.tags.all %}
+                                <a href="#" class="badge badge-info text-center mr-2">
+                                    <span class="font-weight-bolder">{{tag.name}}</span>
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </h5>
+                        <p class="mb-5">
+                            <a href="{{product.get_absolute_url}}{% utm 'all-products' 'inicio' product.title %}">
+                                {{product.description|safe}}
+                            </a>
+                        </p>
                     </div>
                 </div>
+                {% if product.image %}
+                <div class="col-lg-3 ms-auto text-center mt-5 mt-lg-0">
+                    <div class="bg-gradient-yellow border-radius-lg h-100 ">
+                        <img src="{{product.image}}" class="h-100 w-100 rounded top-0 d-lg-block d-none" alt="waves">                    
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
-    <hr style="margin-top: 0em;">
+</div>
 {% endfor %}
-{% endblock LeftSide %}
-
-{% block RightSide %}
-{% endblock RightSide %}
+{% endblock ListContent %}
 
 
 {% block MiddleCta %}

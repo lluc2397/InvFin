@@ -64,10 +64,9 @@ class Product(Model):
 
     def get_absolute_url(self):
         return reverse("business:product", kwargs={"slug": self.slug})
-
+    
 
 class ProductComplementary(Model):
-    
     product = ForeignKey(Product,
         on_delete=CASCADE,
         null=True,

@@ -24,10 +24,17 @@ class ProductsListView(SEOListView):
     meta_description = 'Las mejores herramientas para ser un mejor inversor, todo, al mejor precio, gratis.'
     meta_title = 'Las herramientas inteligentes para invertir como un experto'
     context_object_name = 'products'
+    ordering = ['visits']
 
 
 class ProductDetailView(SEODetailView):
     model = Product
+
+    def get(self, request, *args, **kwargs) -> HttpResponse:
+        product = self.get_object()
+        product.visits += 1
+        product.save(update_fields=['visits'])
+        return super().get(request, *args, **kwargs)
 
 
 
