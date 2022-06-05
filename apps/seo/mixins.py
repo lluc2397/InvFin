@@ -29,9 +29,9 @@ class SEOViewMixin:
         meta_title = self.meta_title
         if not meta_title:
             if instance:
-                meta_title = getattr(instance, 'name')
+                meta_title = getattr(instance, 'name', None)
                 if not meta_title:
-                    meta_title = getattr(instance, 'title')
+                    meta_title = getattr(instance, 'title', None)
             else:
                 meta_title = 'Invierte correctamente'
         return meta_title
@@ -40,9 +40,9 @@ class SEOViewMixin:
         meta_description = self.meta_description
         if not meta_description:
             if instance:
-                meta_description = getattr(instance, 'description')
+                meta_description = getattr(instance, 'description', None)
                 if not meta_description:
-                    meta_description = getattr(instance, 'resume')
+                    meta_description = getattr(instance, 'resume', None)
             else:
                 meta_description = 'Todo lo que necesitas para ser un mejor inversor'            
         return meta_description
@@ -51,11 +51,11 @@ class SEOViewMixin:
         meta_image = self.meta_image
         if not meta_image:
             if instance:
-                meta_image = getattr(instance, 'meta_image')
+                meta_image = getattr(instance, 'meta_image', None)
                 if not meta_image:
-                    meta_image = getattr(instance, 'image')
+                    meta_image = getattr(instance, 'image', None)
                 if not meta_image:
-                    meta_image = getattr(instance, 'thumbnail')
+                    meta_image = getattr(instance, 'thumbnail', None)
             else:
                 meta_image = f'{SITE}/static/general/assets/img/favicon/favicon.ico'
         return meta_image

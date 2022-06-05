@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.contrib.sessions.models import Session
 
+from import_export.admin import ImportExportActionModelAdmin
+from import_export.resources import ModelResource
+
 from apps.general.utils import ExportCsv
 
 from .models import (
@@ -123,8 +126,17 @@ class SessionAdmin(admin.ModelAdmin):
     list_display = ['session_key', '_session_data', 'expire_date']
 
 
+class VisiteurJourneyResource(ModelResource):
+    chunk_size = 10000
+    class Meta:
+        model = VisiteurJourney
+
+
+
 @admin.register(VisiteurJourney)
-class VisiteurJourneyAdmin(admin.ModelAdmin):
+class VisiteurJourneyAdmin(ImportExportActionModelAdmin):
+    actions = ["export_as_csv"]
+    resource_class = VisiteurJourneyResource
     list_display = [
         'user',
         'date',
