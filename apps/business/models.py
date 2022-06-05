@@ -1,3 +1,4 @@
+from builtins import property
 from django.db.models import (
     Model,
     CharField,
@@ -10,7 +11,6 @@ from django.db.models import (
     IntegerField,
     JSONField,
     FloatField,
-    ManyToManyField,
     BooleanField
 )
 from django.urls import reverse
@@ -67,6 +67,23 @@ class Product(Model):
     
 
 class ProductComplementary(Model):
+    EXTRAS = {
+   "title":"¿Qué incluye?",
+   "include":[
+      {
+         "icon":"<i class='fas fa-infinity'></i>",
+         "text":"Acceso de por vida"
+      },
+      {
+         "icon":"<i class='fas fa-file-archive'></i>",
+         "text":"Actualizaciones constantes"
+      },
+      {
+         "icon":"<i class='fas fa-book'></i>",
+         "text":"Ebook de regalo"
+      }
+   ]
+}
     product = ForeignKey(Product,
         on_delete=CASCADE,
         null=True,
@@ -83,6 +100,7 @@ class ProductComplementary(Model):
     subscription_interval = IntegerField(default=0, blank=True)
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(null=True, blank=True)
+    extras = JSONField(default=EXTRAS)
 
     class Meta:
         verbose_name = 'Product complementary'
@@ -91,9 +109,17 @@ class ProductComplementary(Model):
 
     def __str__(self):
         return self.product.title
+    
+    @property
+    def final_price(self):
+        return f'{self.price} {self.currency}'
+    
+    @property
+    def subscription_type(self):
+        return f'{self.price} {self.currency}'
 
 
-class ProductComplementaryPaymentLunk(Model):
+class ProductComplementaryPaymentLink(Model):
     product_complementary = ForeignKey(ProductComplementary,
         on_delete=CASCADE,
         null=True,
@@ -215,3 +241,5 @@ class TransactionHistorial(Model):
 
     def __str__(self):
         return self.product.title
+
+

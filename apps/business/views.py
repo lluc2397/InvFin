@@ -32,6 +32,7 @@ class ProductDetailView(SEODetailView):
 
     def get(self, request, *args, **kwargs) -> HttpResponse:
         product = self.get_object()
+        print(product.updated_at)
         product.visits += 1
         product.save(update_fields=['visits'])
         return super().get(request, *args, **kwargs)

@@ -6,6 +6,7 @@ from apps.business.models import (
     ProductDiscount
 )
 from django.utils import timezone
+from django.template.defaultfilters import slugify
 
 from apps.business.stripe_management import StripeManagement
 from apps.business import constants
@@ -24,10 +25,7 @@ class BusinessSignal:
             instance.description = description
 
         if not instance.slug:
-            instance.slug = instance.title
-        
-        if not instance.updated_at:
-            instance.updated_at = instance.created_at
+            instance.slug = slugify(instance.title)
     
     @classmethod
     def product_pre_save(cls, sender, instance: Product, **kwargs):
@@ -43,7 +41,7 @@ class BusinessSignal:
                 instance.description, 
                 instance.is_active
             )
-            instance.updated_at = timezone.now()
+        instance.updated_at = timezone.now()
 
     @classmethod
     def product_complementary_pre_save(cls, sender, instance: Product, **kwargs):
@@ -73,7 +71,7 @@ class BusinessSignal:
                 instance.stripe_id,
                 instance.is_active
             )
-            instance.updated_at = timezone.now()
+        instance.updated_at = timezone.now()
 
     @classmethod
     def product_discount_pre_save(cls, sender, instance: Product, **kwargs):
