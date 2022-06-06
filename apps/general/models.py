@@ -87,6 +87,7 @@ class Country(Model):
 
 class Currency(Model):
     currency = CharField(max_length=500 , null=True, blank=True)
+    symbol = CharField(max_length=5, null=True, blank=True)
     name = CharField(max_length=500 , null=True, blank=True)
     iso = CharField(max_length=500 , null=True, blank=True)
     decimals = IntegerField(default=2, blank=True)

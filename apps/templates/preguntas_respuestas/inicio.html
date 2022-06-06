@@ -66,7 +66,11 @@
             </div>
         </div>
     </div>
-    <hr style="margin-top: 0em;">
+    {% if forloop.last %}
+{% else %}
+<hr style="margin-top: 0em;">
+{% endif %} 
+    
 {% endfor %}
 {% endblock LeftSide %}
 

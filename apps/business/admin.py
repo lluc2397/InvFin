@@ -6,7 +6,8 @@ from .models import (
     ProductComment,
     TransactionHistorial,
     ProductComplementary,
-    ProductDiscount
+    ProductDiscount,
+    ProductComplementaryPaymentLink
 )
 
 
@@ -79,8 +80,22 @@ class TransactionHistorialAdmin(admin.ModelAdmin):
     search_fields= []
 
 
+class ProductComplementaryPaymentLinkInline(admin.StackedInline):
+    model = ProductComplementaryPaymentLink
+
+
+@admin.action(description='Create payment link')
+def create_payment_link(modeladmin, request, queryset):
+    for query in queryset:
+        ProductComplementaryPaymentLink.objects.create(
+            product_complementary=query
+        )
+
+
 @admin.register(ProductComplementary)
 class ProductComplementaryAdmin(admin.ModelAdmin):
+    actions = [create_payment_link]
+    inlines = [ProductComplementaryPaymentLinkInline]
     list_display = [
         'id',
         'title',

@@ -1,7 +1,11 @@
 import stripe
 from django.conf import settings
 
-from apps.business.models import Customer, ProductComplementary
+from apps.business.models import (
+    Customer, 
+    ProductComplementary,
+    ProductComplementaryPaymentLink
+)
 from apps.general.models import Currency
 
 
@@ -97,11 +101,13 @@ class StripeManagement:
         )
         return subscription
     
-    def create_payment_link(self, customer: Customer, stripe_price_obj: ProductComplementary) -> dict:
-        subscription = stripe.Subscription.create(
-            customer=customer.stripe_id,
-            items=[
-                {"price": stripe_price_obj.stripe_id},
+    def create_payment_link(self, stripe_price_obj: ProductComplementaryPaymentLink) -> dict:
+        payment_link = stripe.PaymentLink.create(
+            line_items=[
+                {
+                "price": stripe_price_obj.product_complementary.stripe_id,
+                "quantity": 1,
+                },
             ],
         )
-        return subscription
+        return payment_link

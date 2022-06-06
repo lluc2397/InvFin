@@ -602,3 +602,4 @@ IMAGE_KIT = ImageKit(
 # ------------------------------------------------------------------------------
 STRIPE_PRIVATE = env.str('STRIPE_PRIVATE')
 STRIPE_PUBLIC = env.str('STRIPE_PUBLIC')
+WEBHOOK_SECRET = env.str('WEBHOOK_SECRET')

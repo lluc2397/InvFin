@@ -1,4 +1,3 @@
-from builtins import property
 from django.db.models import (
     Model,
     CharField,
@@ -20,7 +19,7 @@ from ckeditor.fields import RichTextField
 
 from apps.general.bases import BaseComment
 from apps.general.models import Currency
-
+from apps.seo.models import Promotion
 from .managers import ProductManager
 from apps.business import constants
 
@@ -67,9 +66,9 @@ class Product(Model):
     
 
 class ProductComplementary(Model):
-    EXTRAS = {
-   "title":"¿Qué incluye?",
-   "include":[
+    EXTRAS = dict(
+   title="¿Qué incluye?",
+   include=[
       {
          "icon":"<i class='fas fa-infinity'></i>",
          "text":"Acceso de por vida"
@@ -82,12 +81,14 @@ class ProductComplementary(Model):
          "icon":"<i class='fas fa-book'></i>",
          "text":"Ebook de regalo"
       }
-   ]
-}
+   ])
+
     product = ForeignKey(Product,
         on_delete=CASCADE,
         null=True,
         related_name = "complementary")
+    image = CharField(max_length=500, null=True, blank=True)
+    video = CharField(max_length=500, null=True, blank=True)
     title = CharField(max_length=300, blank=True)
     slug = SlugField(max_length=300, null=True, blank=True)
     price = FloatField(null=True, blank=True)
@@ -116,27 +117,24 @@ class ProductComplementary(Model):
     
     @property
     def subscription_type(self):
-        return f'{self.price} {self.currency}'
-
-
-class ProductComplementaryPaymentLink(Model):
-    product_complementary = ForeignKey(ProductComplementary,
-        on_delete=CASCADE,
-        null=True,
-        related_name = "payment_links")
-    link = CharField(max_length=500, null=True, blank=True)
-    stripe_id = CharField(max_length=500, null=True, blank=True)
-    created_at = DateTimeField(auto_now_add=True)
-    updated_at = DateTimeField(null=True, blank=True)
-
-    class Meta:
-        verbose_name = 'Product complementary payment link'
-        verbose_name_plural = 'Products complementary payment link'
-        db_table = 'business_products_complementary_payment_link'
-
-    def __str__(self):
-        return self.product_complementary.product.title
-
+        period = 'Mensual'
+        if constants.PERIOD_MONTHLY == self.subscription_period:
+            if self.subscription_interval == 6:
+                period = 'Bianual'
+        if constants.PERIOD_YEARLY == self.subscription_period:
+            period = 'Anual'
+        return period
+    
+    @property
+    def payment(self):
+        payment = self.payment_type
+        if self.payment_type == constants.TYPE_SUBSCRIPTION:
+            payment = f'{constants.PAYMENT_TYPE[0][1]} {self.subscription_type}'
+        return payment
+    
+    # @property
+    # def payment_link(self):
+    #     return self.payment_links.filter(for_website=True).first()
 
 class ProductSubscriber(Model):    
     product = ForeignKey(Product,
@@ -193,6 +191,13 @@ class ProductDiscount(Model):
         null=True, 
         blank=True
     )
+    promotion = ForeignKey(
+        Promotion, 
+        on_delete=SET_NULL, 
+        null=True, 
+        blank=True,
+        related_name="promotion_discount"
+    )
     start_date = DateTimeField(null=True, blank=True)
     end_date = DateTimeField(null=True, blank=True)
     discount = FloatField(null=True, blank=True)
@@ -206,6 +211,33 @@ class ProductDiscount(Model):
     
     def __str__(self):
         return self.product.title
+
+
+class ProductComplementaryPaymentLink(Model):
+    product_complementary = ForeignKey(ProductComplementary,
+        on_delete=CASCADE,
+        null=True,
+        related_name = "payment_links")
+    promotion = ForeignKey(
+        Promotion, 
+        on_delete=SET_NULL, 
+        null=True, 
+        blank=True,
+        related_name="promotion_link_payment"
+    )
+    link = CharField(max_length=500, null=True, blank=True)
+    stripe_id = CharField(max_length=500, null=True, blank=True)
+    created_at = DateTimeField(auto_now_add=True)
+    updated_at = DateTimeField(null=True, blank=True)
+    for_website = BooleanField(default=True)
+
+    class Meta:
+        verbose_name = 'Product complementary payment link'
+        verbose_name_plural = 'Products complementary payment link'
+        db_table = 'business_products_complementary_payment_link'
+
+    def __str__(self):
+        return self.product_complementary.product.title
 
 
 class TransactionHistorial(Model):

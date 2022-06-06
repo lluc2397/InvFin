@@ -3,7 +3,8 @@ from apps.business.models import (
     Product,
     TransactionHistorial,
     ProductComplementary,
-    ProductDiscount
+    ProductDiscount,
+    ProductComplementaryPaymentLink
 )
 from django.utils import timezone
 from django.template.defaultfilters import slugify
@@ -74,11 +75,13 @@ class BusinessSignal:
         instance.updated_at = timezone.now()
 
     @classmethod
-    def product_discount_pre_save(cls, sender, instance: Product, **kwargs):
-        # stripe = StripeManagement()
-        # if not instance.pk:
-        #     stripe_product_discount = stripe.create_product(instance.title, instance.is_active)
-        #     instance.stripe_id = stripe_product_discount['id']
-        # else:
-        #     stripe_product_discount
-        pass
+    def complementary_payment_link_pre_save(cls, sender, instance: ProductComplementaryPaymentLink, **kwargs):
+        stripe = StripeManagement()
+        if not instance.pk and instance.for_website:
+            payment_link = stripe.create_payment_link(instance)
+            instance.link = payment_link['url']
+            instance.stripe_id = payment_link['id']
+    
+    @classmethod
+    def product_discount_pre_save(cls, sender, instance: ProductDiscount, **kwargs):
+        stripe = StripeManagement()
