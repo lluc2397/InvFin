@@ -7,8 +7,21 @@ from .models import (
     TransactionHistorial,
     ProductComplementary,
     ProductDiscount,
-    ProductComplementaryPaymentLink
+    ProductComplementaryPaymentLink,
+    StripeWebhookResponse
 )
+
+
+
+@admin.register(StripeWebhookResponse)
+class StripeWebhookResponseAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'product',
+        'product_complementary',
+        'customer',
+        'created_at',
+    ]
 
 
 @admin.register(Customer)

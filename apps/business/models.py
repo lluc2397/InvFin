@@ -132,9 +132,10 @@ class ProductComplementary(Model):
             payment = f'{constants.PAYMENT_TYPE[0][1]} {self.subscription_type}'
         return payment
     
-    # @property
-    # def payment_link(self):
-    #     return self.payment_links.filter(for_website=True).first()
+    @property
+    def payment_link(self):
+        return self.payment_links.filter(for_website=True).first().link
+
 
 class ProductSubscriber(Model):    
     product = ForeignKey(Product,
@@ -275,3 +276,102 @@ class TransactionHistorial(Model):
         return self.product.title
 
 
+class StripeWebhookResponse(Model):
+    product = ForeignKey(
+        Product, 
+        on_delete=SET_NULL, 
+        null=True
+    )
+    product_complementary = ForeignKey(
+        ProductComplementary, 
+        on_delete=SET_NULL, 
+        null=True, 
+        blank=True
+    )
+    customer = ForeignKey(
+        Customer, 
+        on_delete=SET_NULL, 
+        null=True, 
+        blank=True
+    )
+    full_response = JSONField(default=dict)
+    created_at = DateTimeField(auto_now_add=True)
+    stripe_id = CharField(max_length=500, null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Stripe webhook response"
+        verbose_name_plural = "Stripe webhook responses"
+        db_table = 'business_stripe_webhook_responses'
+
+    def __str__(self):
+        return str(self.created_at)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#         {
+#    "id":"evt_1L7pr1Giv4HfkKGHjyT5e6hB",
+#    "data":{
+#       "object":{
+#          "id":"cus_LpUqB8Y1NCDdhB",
+#          "name":"dferere",
+#          "email":"dfhgdhgf@hotmail.com",
+#          "phone":null,
+#          "object":"customer",
+#          "address":{
+#             "city":null,
+#             "line1":null,
+#             "line2":null,
+#             "state":null,
+#             "country":"ES",
+#             "postal_code":null
+#          },
+#          "balance":0,
+#          "created":1654560061,
+#          "currency":null,
+#          "discount":null,
+#          "livemode":false,
+#          "metadata":{
+            
+#          },
+#          "shipping":null,
+#          "delinquent":false,
+#          "tax_exempt":"none",
+#          "test_clock":null,
+#          "description":null,
+#          "default_source":null,
+#          "invoice_prefix":"584C03CC",
+#          "invoice_settings":{
+#             "footer":null,
+#             "custom_fields":null,
+#             "default_payment_method":null
+#          },
+#          "preferred_locales":[
+#             "en-US"
+#          ]
+#       }
+#    },
+#    "type":"customer.created",
+#    "object":"event",
+#    "created":1654560061,
+#    "request":{
+#       "id":"req_kPYvbpLooFvSpo",
+#       "idempotency_key":"2c2b2ffc-e272-41d8-800b-ec66166fd1fc"
+#    },
+#    "livemode":false,
+#    "api_version":"2020-08-27",
+#    "pending_webhooks":2
+# }

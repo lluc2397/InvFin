@@ -5,6 +5,13 @@ from django.http import HttpResponse
 
 import stripe
 
+from .models import (
+    StripeWebhookResponse, 
+    ProductComplementary, 
+    Product,
+    Customer
+)
+
 stripe.api_key = settings.STRIPE_PRIVATE
 
 STRIPE_PUBLIC_KEY = settings.STRIPE_PUBLIC
@@ -18,7 +25,7 @@ def stripe_webhook(request):
     
     try:
         event = stripe.Webhook.construct_event(
-            payload, sig_header, settings.STRIPE_WEBHOOK
+            payload, sig_header, settings.WEBHOOK_SECRET
         )
     except ValueError as e:
         # Invalid payload
@@ -26,7 +33,10 @@ def stripe_webhook(request):
     except stripe.error.SignatureVerificationError as e:
         # Invalid signature
         return HttpResponse(status=400)
-    
+    StripeWebhookResponse.objects.create(
+        stripe_id=event['id'],
+        full_response=event
+        )
     if event["type"] == "payment_intent.created":
         event['data']['object']['receipt_email'] = stripe.Customer.retrieve(event['data']['object']["customer"])['email']
         
@@ -40,10 +50,10 @@ def stripe_webhook(request):
 
         customer_email = stripe_customer['email']
 
-        # send_mail('Solicitud recibida',
-		# f'{intent}' ,
-		# "contacto@inversionesyfinanzas.xyz",
-		# ['a.inversionesyfinanzas@gmail.com'],)
+        send_mail('Solicitud recibida',
+		f'{intent}' ,
+		"contacto@inversionesyfinanzas.xyz",
+		['a.inversionesyfinanzas@gmail.com'],)
 
     # Handle the checkout.session.completed event
     elif event['type'] == 'checkout.session.completed':
