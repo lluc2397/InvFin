@@ -7,7 +7,7 @@ from django.db.models import Manager
 
 class UserExtraManager(BaseUserManager):
     
-    def get_or_create_quick_user(self, email, request, just_newsletter = False, just_correction = False):
+    def get_or_create_quick_user(self, email, request, just_newsletter:bool=False, just_correction:bool=False, local_request:bool=True):
         if self.filter(email = email).exists():
             user = self.get(email = email)
 
@@ -19,8 +19,9 @@ class UserExtraManager(BaseUserManager):
             just_newsletter = just_newsletter,
             just_correction = just_correction)
             
-            user.create_new_user(request)
-            request.session['F-E'] = email
+            if local_request:
+                user.create_new_user(request)
+                request.session['F-E'] = email
 
         return user
 

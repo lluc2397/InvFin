@@ -2,6 +2,8 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 import stripe
 
@@ -39,21 +41,6 @@ def stripe_webhook(request):
         )
     if event["type"] == "payment_intent.created":
         event['data']['object']['receipt_email'] = stripe.Customer.retrieve(event['data']['object']["customer"])['email']
-        
-
-    
-    if event["type"] == "payment_intent.succeeded":
-        intent = event['data']['object']
-
-        stripe_customer_id = intent["customer"]
-        stripe_customer = stripe.Customer.retrieve(stripe_customer_id)
-
-        customer_email = stripe_customer['email']
-
-        send_mail('Solicitud recibida',
-		f'{intent}' ,
-		"contacto@inversionesyfinanzas.xyz",
-		['a.inversionesyfinanzas@gmail.com'],)
 
     # Handle the checkout.session.completed event
     elif event['type'] == 'checkout.session.completed':
@@ -63,6 +50,21 @@ def stripe_webhook(request):
 		# f'{session}' ,
 		# "contacto@inversionesyfinanzas.xyz",
 		# ['a.inversionesyfinanzas@gmail.com'],)
+    
+    if event["type"] == "payment_intent.succeeded":
+        intent = event['data']['object']
+
+        stripe_customer_id = intent["customer"]
+        stripe_customer = stripe.Customer.retrieve(stripe_customer_id)
+        customer_email = stripe_customer['email']
+
+        user = User.objects.get_or_create_quick_user(customer_email, request)
+        Customer.objects.get_or_create(user=user, stripe_id=stripe_customer_id)
+
+        send_mail('Solicitud recibida',
+		f'{intent}' ,
+		"contacto@inversionesyfinanzas.xyz",
+		['a.inversionesyfinanzas@gmail.com'],)
 
     
         
