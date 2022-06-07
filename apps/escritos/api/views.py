@@ -1,4 +1,5 @@
 from apps.api.views import BaseAPIView
+from apps.api.pagination import StandardResultPagination 
 from apps.escritos.models import Term, TermContent
 
 from .serializers import (
@@ -11,6 +12,7 @@ from .serializers import (
 class AllTermsAPIView(BaseAPIView):
     serializer_class = AllTermsSerializer
     custom_queryset = Term.objects.clean_terms()
+    pagination_class = StandardResultPagination
 
 
 class TermAPIView(BaseAPIView):

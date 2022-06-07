@@ -23,10 +23,10 @@ from .serializers import AuthKeySerializer
 
 
 class ObtainAuthKey(APIView):
-    throttle_classes = ()
-    permission_classes = ()
+    throttle_classes = []
+    permission_classes = []
     authentication_classes = [BasicAuthentication, SessionAuthentication]
-    parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
+    parser_classes = [parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser]
     serializer_class = AuthKeySerializer
 
     if coreapi_schema.is_enabled():
@@ -99,11 +99,15 @@ class BaseAPIView(APIView):
     def save_request(self, api_key, queryset, path, ip):
         key = Key.objects.get(key=api_key)
         queryed_model = self.serializer_class.Meta.model.__name__
+        if 'Term' not in queryed_model and queryed_model != 'PublicBlog':
+            queryed_model = 'Company'
         object_name = f'{queryed_model}RequestAPI'
         request_model = apps.get_model('api', object_name, require_ready=True)
         search = queryset
         if type(queryset).__name__ == 'QuerySet':
             search = None
+            if 'ticker' in self.query_name and queryset[0]._meta.app_label == 'empresas':
+                search = queryset[0].company
         request_data = {
             'ip': ip,
             'key': key,
@@ -148,8 +152,8 @@ class BaseAPIView(APIView):
         model, many = self.get_object()
         query_dict = request.GET.dict()
         api_key = query_dict.pop('api_key')
-        if many is False:
-            query_param, query_value = self.find_query_value(query_dict)
+        query_param, query_value = self.find_query_value(query_dict)
+        if many is False:            
             if query_value:
                 try:
                     queryset = model.objects.get(**{query_param: query_value})
@@ -165,7 +169,7 @@ class BaseAPIView(APIView):
                         status=status.HTTP_404_NOT_FOUND)
         else:
             if self.fk_lookup_model:
-                queryset = model.filter(**{f'{self.fk_lookup_model}': query_value})
+                queryset = model.objects.filter(**{f'{self.fk_lookup_model}': query_value})
             else:
                 queryset = model
         serializer = self.serializer_class(queryset, many=many)

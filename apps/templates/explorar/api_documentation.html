@@ -38,6 +38,12 @@
                             <span class="nav-link-text">Inicio</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'business:all_products' %}{% utm 'webapp' 'sidebar' 'Herramientas' %}">
+                        <i class="fa-solid fa-briefcase text-primary"></i>
+                        <span class="nav-link-text">Herramientas</span>
+                      </a>
+                    </li>
                     {% for category in endpoints_categories %}
                     <hr class="my-3">
                     <h6 class="navbar-heading pl-4 text-muted">
