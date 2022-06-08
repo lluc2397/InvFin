@@ -1,6 +1,28 @@
 from django.contrib import admin
 
-from .models import Superinvestor, SuperinvestorActivity, Period
+from .models import (
+    Superinvestor, 
+    SuperinvestorActivity, 
+    Period,
+    SuperinvestorHistory
+)
+
+
+@admin.register(SuperinvestorHistory)
+class SuperinvestorHistoryAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'superinvestor_related',
+        'period_related',
+        'company',
+        'company_name',
+        'portfolio_change',
+        'movement',
+        'shares',
+        'reported_price',
+        'portfolio_weight',
+    ]
+
 
 @admin.register(Superinvestor)
 class SuperinvestorAdmin(admin.ModelAdmin):

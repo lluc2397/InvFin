@@ -125,8 +125,7 @@ def create_answer_view(request, slug):
 	if request.method == 'POST':
 		user = request.user
 		if request.user.is_anonymous:
-			email = request.POST['email']
-			user = User.objects.get_or_create_quick_user(email, request)
+			user = User.objects.get_or_create_quick_user(request)
 
 		question = Question.objects.get(slug = slug)
 		

@@ -37,13 +37,12 @@ def writter_profile_view(request, host_name):
 
 def following_management_view(request):
 	if request.POST:
-		email = request.POST['email'] 
 		writter = request.POST['writter']
 		action = request.POST['what']
 
 		writter = User.objects.get(id = writter)
 	
-		follower = User.objects.get_or_create_quick_user(email, request, True)
+		follower = User.objects.get_or_create_quick_user(request, just_newsletter=True)
 		
 		update_follower = writter.update_followers(follower, action)
 

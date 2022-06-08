@@ -16,6 +16,12 @@ hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' class="modal-content">
     <div class="col-12">
         {{ form.observation_type|as_crispy_field }}
     </div>
+    {% if request.user.is_anonymous %}
+    <div class="col-12">
+        <label for="exampleFormControlInput1" class="form-label">Email</label>
+        <input type="email" name='email' class="form-control" id="exampleFormControlInput1">
+    </div>
+    {% endif %}
 </div>
 </div>
 <div class="modal-footer">

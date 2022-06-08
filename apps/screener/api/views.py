@@ -107,9 +107,12 @@ def create_company_observation(request):
     if request.method == 'POST':
         company_id = request.session['screener']
         form = UserCompanyObservationForm(request.POST)
+
+        user = User.objects.get_or_create_quick_user(request)           
+        
         if form.is_valid():
             model = form.save()
-            model.user = request.user
+            model.user = user
             company = Company.objects.get(id = company_id)
             model.company = company
             model.save(update_fields=['user', 'company'])

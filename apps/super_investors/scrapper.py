@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup as bs
 import requests
+import pandas as pd
 from datetime import datetime
 
 from django.utils import timezone
@@ -9,11 +10,12 @@ from apps.empresas.models import Company
 from .models import (
     Superinvestor,
     SuperinvestorActivity,
-    Period
+    Period,
+    SuperinvestorHistory
 )
 
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36',
     'Accept-Encoding': 'gzip, deflate'
 }
 
@@ -44,12 +46,63 @@ def get_investors_accronym():
 
 
 def get_historial(superinvestor_activity):
-  if type(superinvestor_activity.actual_company) == str:
-    ticker = superinvestor_activity.actual_company.split('-')[0].strip()
+  actual_company = superinvestor_activity.actual_company
+  if type(actual_company) == str:
+    ticker = actual_company.split('-')[0].strip()
+    company_saved = False
   else:
-    ticker = superinvestor_activity.actual_company.ticker
+    ticker = actual_company.ticker
+    company_saved = True
   url = f'{SITE}/m/hist/hist.php?f={superinvestor_activity.superinvestor_related.info_accronym}&s={ticker}'
-  response = requests.get(url)
+  response = requests.get(url, headers=HEADERS).content
+  print(url)
+  table = pd.read_html(response)[0]
+  table['Activity'] = table['Activity'].fillna('Hold')
+  table = table.fillna(0)
+  for index, content in table.iterrows():
+    period = content['Period']
+    period, created = Period.objects.get_or_create(
+      year=datetime.strptime(period[:4], '%Y'),
+      period=period[-1:]
+    )
+    if company_saved == True:
+      super_activity = SuperinvestorHistory.objects.filter(
+        period_related=period, 
+        company=actual_company,
+        superinvestor_related=superinvestor_activity.superinvestor_related
+      )
+    else:
+      super_activity = SuperinvestorHistory.objects.filter(
+        period_related=period, 
+        company_name=actual_company,
+        superinvestor_related=superinvestor_activity.superinvestor_related
+      )
+    if super_activity.exists():
+      continue
+    reported_price = content['Reported Price']
+    if type(reported_price) == int:
+      reported_price = reported_price
+    elif reported_price.startswith('$'):
+      try:
+        reported_price = float(reported_price[1:])
+      except ValueError:
+        reported_price = float(reported_price[1:].replace(',',''))
+    history = dict(
+      superinvestor_related=superinvestor_activity.superinvestor_related,
+      period_related=period,
+      portfolio_change=content['% Change to Portfolio'],
+      movement=content['Activity'],
+      shares=content['Shares'],
+      reported_price=reported_price,
+      portfolio_weight=content['% of Portfolio'],
+    )
+    if company_saved == True:
+      history['company'] = actual_company
+    else:
+      history['company_name'] = actual_company
+
+
+    superinvestor_history, created = SuperinvestorHistory.objects.get_or_create(**history)
 
 
 def get_activity(superinvestor):

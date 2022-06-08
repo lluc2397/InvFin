@@ -95,8 +95,7 @@ class TermCorrectionView(CreateView):
 			result = json.loads(response.read().decode())
 
 			if result['success']:
-				email = request.POST.get('email')
-				user = User.objects.get_or_create_quick_user(email, self.request, just_correction = True)
+				user = User.objects.get_or_create_quick_user(self.request, just_correction = True)
 			else:
 				messages.error(self.request, 'Hay un error con el captcha')
 				return self.form_invalid(form)

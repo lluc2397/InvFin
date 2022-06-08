@@ -100,8 +100,6 @@ class SuperinvestorActivity(Model):
     company_name = TextField(blank=True, null=True)
     not_registered_company = BooleanField(default=False)
     need_verify_company = BooleanField(default=False)
-    shares = FloatField(null=True, blank=True)
-    reported_price = FloatField(null=True, blank=True)
 
     class Meta:
         verbose_name = "Superinvestor activity"
@@ -114,3 +112,25 @@ class SuperinvestorActivity(Model):
     @property
     def actual_company(self):
         return self.company if self.company else self.company_name
+    
+
+class SuperinvestorHistory(Model):
+    superinvestor_related = ForeignKey(
+        Superinvestor, on_delete=SET_NULL, 
+        null=True, blank=True, related_name='history'
+    )
+    period_related = ForeignKey(Period, on_delete=SET_NULL, null=True, blank=True)
+    company = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True)
+    company_name = TextField(blank=True, null=True)
+    portfolio_change = FloatField(null=True, blank=True)
+    movement = CharField(max_length=500, null=True, blank=True)
+    not_registered_company = BooleanField(default=False)
+    need_verify_company = BooleanField(default=False)
+    shares = FloatField(null=True, blank=True)
+    reported_price = FloatField(null=True, blank=True)
+    portfolio_weight = FloatField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Superinvestor history"
+        verbose_name_plural = "Superinvestors history"
+        db_table = "superinvestors_history"

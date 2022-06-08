@@ -17,7 +17,7 @@ from .models import (
 stripe.api_key = settings.STRIPE_PRIVATE
 
 STRIPE_PUBLIC_KEY = settings.STRIPE_PUBLIC
-
+EMAIL_DEFAULT = settings.EMAIL_DEFAULT
 
 @csrf_exempt
 def stripe_webhook(request):
@@ -58,13 +58,13 @@ def stripe_webhook(request):
         stripe_customer = stripe.Customer.retrieve(stripe_customer_id)
         customer_email = stripe_customer['email']
 
-        user = User.objects.get_or_create_quick_user(customer_email, request)
+        user = User.objects.get_or_create_quick_user(request, customer_email)
         Customer.objects.get_or_create(user=user, stripe_id=stripe_customer_id)
 
         send_mail('Solicitud recibida',
 		f'{intent}' ,
-		"contacto@inversionesyfinanzas.xyz",
-		['a.inversionesyfinanzas@gmail.com'],)
+		EMAIL_DEFAULT,
+		[EMAIL_DEFAULT],)
 
     
         
