@@ -29,7 +29,7 @@
             <div class="row">
                 <div class="col-lg-9">
                     <div class="d-flex flex-column h-100">
-                        <a href="{{product.get_absolute_url}}{% utm 'all-products' 'inicio' product.title %}">
+                        <a href="{{product.get_absolute_url}}{% utm 'all-products' product.title %}">
                             <p class="h1 text-bold">
                                 {{product.title}}
                             </p>
@@ -43,7 +43,7 @@
                             </div>
                         </h5>
                         <p>
-                            <a href="{{product.get_absolute_url}}{% utm 'all-products' 'inicio' product.title %}">
+                            <a href="{{product.get_absolute_url}}{% utm 'all-products' product.title %}">
                                 {{product.description|safe}}
                             </a>
                         </p>

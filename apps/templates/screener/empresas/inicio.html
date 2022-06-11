@@ -13,7 +13,7 @@
            <div class="row align-items-center">
               <div class="col-auto">
                  <!-- Avatar -->
-                 <a href="{% url 'screener:company' empresa.ticker %}{% utm 'screener' 'market' empresa.ticker %}" class="avatar avatar-xl rounded-circle">
+                 <a href="{% url 'screener:company' empresa.ticker %}{% utm 'market' empresa.ticker %}" class="avatar avatar-xl rounded-circle">
                  <img alt="{{empresa.ticker}}" src="{{empresa.image}}">
                  </a>
               </div>

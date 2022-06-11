@@ -8,7 +8,7 @@
           {{stock_information.title}}
         </div>
         <div class="float-end">
-          <a href="{% url 'screener:yahoo_screener' stock_information.subtitle %}{% utm 'screener' 'visit-screener' stock_information.subtitle %}">
+          <a href="{% url 'screener:yahoo_screener' stock_information.subtitle %}{% utm 'visit-screener' stock_information.subtitle %}">
             Ver más
           </a>
         </div>        
@@ -19,7 +19,7 @@
               {% for information in stock_information.data %}
                 <tr>
                   <th scope="row" style="width: 10px">
-                      <a href="{% url 'screener:company' information.symbol %}{% utm 'webapp' 'screener' information.symbol %}"
+                      <a href="{% url 'screener:company' information.symbol %}{% utm 'screener' information.symbol %}"
                         class="name mb-0 text-sm">
                         {{information.symbol}}
                       </a>

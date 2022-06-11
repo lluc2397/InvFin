@@ -1,3 +1,5 @@
+from django.utils.translation import gettext as _
+
 COUNTRIES = {
     "AF": _("Afghanistan"),
     "AX": _("Åland Islands"),

@@ -15,7 +15,7 @@
           {% for information in yahoo %}
             <tr>
               <th scope="row" style="width: 10px">
-                  <a href="{% url 'screener:company' information.symbol %}{% utm 'screener' stock_information.subtitle information.symbol %}"
+                  <a href="{% url 'screener:company' information.symbol %}{% utm stock_information.subtitle information.symbol %}"
                     class="name mb-0 text-sm">
                     {{information.symbol}}
                   </a>

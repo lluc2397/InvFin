@@ -1,0 +1,19 @@
+{% for superinvestor in request.user.fav_superinvestors %}
+<li class="nav-item">
+  <a href="{{superinvestor.get_absolute_url}}" class="nav-link">
+    <span class="sidenav-mini-icon"> D </span>
+    <span class="sidenav-normal">
+        {{superinvestor.name|truncatechars:50}}
+    </span>
+  </a>
+  </li>
+{% empty %}
+<li class="nav-item">
+    <a href="{% url 'super_investors:all_superinvestors' %}" class="nav-link">
+      <span class="sidenav-mini-icon"> D </span>
+      <span class="sidenav-normal btn btn-primary btn-sm">
+        Sigue a un superinversor
+     </span>
+    </a>
+  </li>
+{% endfor %}

@@ -27,13 +27,15 @@ class SuperinvestorHistoryAdmin(admin.ModelAdmin):
 @admin.register(Superinvestor)
 class SuperinvestorAdmin(admin.ModelAdmin):
     list_display = [
-        'id',
         'name',
         'fund_name',
-        'info_accronym',
         'slug',
+        'image',
         'last_update',
         'has_error',
+    ]
+    list_editable = [
+        'image'
     ]
 
 

@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.conf import settings
 
+from .company.update import UpdateCompany
+
 from .models import (
     CashflowStatement,
     IncomeStatement,
@@ -111,9 +113,23 @@ def save_remote_imagekit(modeladmin, request, queryset):
         query.save(update_fields=['remote_image_imagekit'])
 
 
+@admin.action(description='Do a genreal update')
+def do_general_update(modeladmin, request, queryset):
+    for query in queryset:
+        UpdateCompany(query).general_update()
+
+
+@admin.action(description='Set has logo correctly')
+def update_has_logo(modeladmin, request, queryset):
+    for query in queryset:
+        if not query.image:
+            query.has_logo = False
+            query.save(update_fields=['has_logo'])
+
+
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
-    actions = [save_remote_imagekit]
+    actions = [save_remote_imagekit, update_has_logo, do_general_update]
     list_display = [
         'id',
         'name',

@@ -102,9 +102,9 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
                 </ul>
             </p>
             <div class="col-12">
-                <a class="btn btn-youtube" href="{% url 'preguntas_respuestas:list_questions' %}{% utm 'webapp' 'screener' the_company.ticker %}" >Preguntas</a>
-                <a class="btn btn-slack" href="{% url 'escritos:glosario' %}{% utm 'webapp' 'screener' the_company.ticker %}" >Glosario</a>
-                <a class="btn btn-danger" href="{% url 'screener:screener_inicio' %}{% utm 'webapp' 'screener' the_company.ticker %}" >Empresas</a>
+                <a class="btn btn-youtube" href="{% url 'preguntas_respuestas:list_questions' %}{% utm 'screener' the_company.ticker %}" >Preguntas</a>
+                <a class="btn btn-slack" href="{% url 'escritos:glosario' %}{% utm 'screener' the_company.ticker %}" >Glosario</a>
+                <a class="btn btn-danger" href="{% url 'screener:screener_inicio' %}{% utm 'screener' the_company.ticker %}" >Empresas</a>
             </div>
         </div>
       </div>

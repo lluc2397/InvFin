@@ -7,6 +7,6 @@ from .views import (
 
 app_name = "super_investors"
 urlpatterns = [
-    path('cartera-mejores-inversores-del-mundo/', AllSuperinvestorsView.as_view(), name="all_superinvestors"),
+    path('las-mejores-carteras-del-mundo/', AllSuperinvestorsView.as_view(), name="all_superinvestors"),
     path('cartera-de/<slug>/', SuperinvestorView.as_view(), name="superinvestor"),
 ]

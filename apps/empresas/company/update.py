@@ -60,7 +60,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
         try:
             self.company.image = self.yf_company.info['logo_url']
             self.company.has_logo = True
-            self.company.save(update_fields=['has_logo'])
+            self.company.save(update_fields=['has_logo', 'image'])
         except Exception as e:
             print(e)
     
@@ -94,7 +94,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
         try:
             self.company.description = google_translator().translate(self.company.description, lang_src='en', lang_tgt='es')
             self.company.description_translated = True
-            self.company.save(update_fields=['description_translated'])
+            self.company.save(update_fields=['description_translated', 'description'])
         except Exception as e:
             print(e)
 

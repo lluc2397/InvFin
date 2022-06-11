@@ -1,5 +1,5 @@
 {% extends "general/bases/base_content.html" %}
-{% load static extra %}
+{% load static i18n extra %}
 {% block header %}{% include "roboadvisor/header/own-results.html" %}{% endblock header%}
 
 {% block FirstCtaContent %}
@@ -56,7 +56,7 @@
         <div class="text-center">
             <h3>Todavía no has usado el Roboadvisor</h3>
             <br>
-            <a href="{% url 'roboadvisor:roboadvisor' %}{% utm 'webapp' 'roboadvisor' 'no-services' %}" 
+            <a href="{% url 'roboadvisor:roboadvisor' %}{% utm 'roboadvisor' 'no-services' %}" 
                 class="btn btn-success">
                 Descubre sus ventajas
             </a>  

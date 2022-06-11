@@ -139,6 +139,11 @@ class User(AbstractUser):
         return fav_terms
     
     @property
+    def fav_superinvestors(self):
+        fav_superinvestors = self.favorites_superinvestors.superinvestor.all()        
+        return fav_superinvestors
+    
+    @property
     def fav_writters(self):
         from apps.public_blog.models import NewsletterFollowers
         fav_writters = NewsletterFollowers.objects.filter(followers = self)

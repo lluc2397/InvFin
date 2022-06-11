@@ -17,7 +17,7 @@
         <div class="row">
             <div class="col-lg-9">
                 <div class="d-flex flex-column h-100">
-                    <a href="{{blog.get_absolute_url}}{% utm 'webapp' 'blog' blog.title %}">
+                    <a href="{{blog.get_absolute_url}}{% utm 'blog' blog.title %}">
                         <p class="h1 mb-1 pt-2 text-bold">
                             {{blog.title}}
                         </p>
@@ -32,7 +32,7 @@
                         </div>
                     </h5>
                     <p class="mb-5">
-                        <a href="{{blog.get_absolute_url}}{% utm 'webapp' 'blog' blog.title %}">
+                        <a href="{{blog.get_absolute_url}}{% utm 'blog' blog.title %}">
                         {{blog.resume}}
                         </a>
                     </p>
@@ -40,7 +40,7 @@
                         <div class="clearfix">
                             <div class="float-start">
                                 <img class="avatar" src="{{blog.author.foto}}">
-                                <a href="{{blog.author.custom_url}}{% utm 'webapp' 'blog' blog.title %}">
+                                <a href="{{blog.author.custom_url}}{% utm 'blog' blog.title %}">
                                     {{blog.author}}
                                 </a>
                             </div>

@@ -10,54 +10,52 @@ class SEOViewMixin:
     meta_image = None
     meta_author = None
 
+    def get_possible_meta_attribute(self, instance:object, fields:list, default:str):
+        meta_field = default
+        if instance:
+            for field in fields:
+                possible_meta_field = getattr(instance, field, None)
+                if possible_meta_field is not None:
+                    meta_field = possible_meta_field
+                    break
+        return meta_field
+
     def get_meta_url(self):
         meta_url = self.meta_url
         if not meta_url:
             meta_url = self.request.path
         return meta_url
     
-    def get_meta_author(self, instance: object = None):
+    def get_meta_author(self, instance: object=None):
         meta_author = self.meta_author
         if not meta_author:
-            if instance:
-                meta_author = getattr(instance, 'author')
-            else:
-                meta_author = 'InvFin'
+            meta_author = self.get_possible_meta_attribute(
+                instance, ['author'], 'InvFin'
+                )
         return meta_author
 
-    def get_meta_title(self, instance: object = None):
+    def get_meta_title(self, instance: object=None):
         meta_title = self.meta_title
         if not meta_title:
-            if instance:
-                meta_title = getattr(instance, 'name', None)
-                if not meta_title:
-                    meta_title = getattr(instance, 'title', None)
-            else:
-                meta_title = 'Invierte correctamente'
+            meta_title = self.get_possible_meta_attribute(
+                instance, ['meta_title', 'name', 'title'], 'Invierte correctamente'
+                )
         return meta_title
     
-    def get_meta_description(self, instance: object = None):
+    def get_meta_description(self, instance:object=None):
         meta_description = self.meta_description
         if not meta_description:
-            if instance:
-                meta_description = getattr(instance, 'description', None)
-                if not meta_description:
-                    meta_description = getattr(instance, 'resume', None)
-            else:
-                meta_description = 'Todo lo que necesitas para ser un mejor inversor'            
+            meta_description = self.get_possible_meta_attribute(
+                instance, ['meta_description', 'resume', 'description'], 'Todo lo que necesitas para ser un mejor inversor'
+                )
         return meta_description
     
     def get_meta_image(self, instance: object = None):
         meta_image = self.meta_image
         if not meta_image:
-            if instance:
-                meta_image = getattr(instance, 'meta_image', None)
-                if not meta_image:
-                    meta_image = getattr(instance, 'image', None)
-                if not meta_image:
-                    meta_image = getattr(instance, 'thumbnail', None)
-            else:
-                meta_image = f'{SITE}/static/general/assets/img/favicon/favicon.ico'
+            meta_image = self.get_possible_meta_attribute(
+                instance, ['meta_image', 'image', 'thumbnail'], f'{SITE}/static/general/assets/img/favicon/favicon.ico'
+                )
         return meta_image
     
     def get_meta_tags(self):

@@ -22,7 +22,7 @@ def percentagement(value):
     
 
 @register.simple_tag(name='utm')
-def add_utms(medium='webapp', content='', term='', source='invfin', campaign='regular'):
+def add_utms(content='', term='', medium='webapp', source='invfin', campaign='website-links'):
     utm_source = f'utm_source={source}'
     utm_medium = f'utm_medium={medium}'
     utm_campaign = f'utm_campaign={campaign}'

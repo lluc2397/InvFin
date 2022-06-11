@@ -1,4 +1,4 @@
-{% load static %}
+{% load static i18n extra %}
         <footer class="footer section pt-6 pt-md-8 pt-lg-10 pb-3 bg-primary text-white overflow-hidden">
             <div class="pattern pattern-soft top"></div>
             <div class="container">
@@ -30,22 +30,22 @@
                         <h6>InvFin</h6>
                         <ul class="links-vertical">
                             <li>
-                                <a href="{% url 'escritos:glosario' %}?utm_source=invfin&utm_medium=web&utm_content=footer">
+                                <a href="{% url 'escritos:glosario' %}{% utm content='footer' term='Glosario' medium='web' source='invfin' campaign='website-links' %}">
                                     Glosario
                                 </a>
                             </li>
                             <li>
-                                <a href="{% url 'screener:screener_inicio' %}?utm_source=invfin&utm_medium=web&utm_content=footer">
+                                <a href="{% url 'screener:screener_inicio' %}{% utm content='footer' term='Empresas' medium='web' source='invfin' campaign='website-links' %}">
                                     Empresas
                                 </a>
 
                             <li>
-                                <a href="{% url 'preguntas_respuestas:list_questions' %}?utm_source=invfin&utm_medium=web&utm_content=footer">
+                                <a href="{% url 'preguntas_respuestas:list_questions' %}{% utm content='footer' term='Preguntas' medium='web' source='invfin' campaign='website-links' %}">
                                     Preguntas
                                 </a>
                             </li>
                             <li>
-                                <a href="{% url 'web:soporte' %}?utm_source=invfin&utm_medium=web&utm_content=footer">
+                                <a href="{% url 'web:soporte' %}{% utm content='footer' term='Contáctanos' medium='web' source='invfin' campaign='website-links' %}">
                                     Contáctanos
                                 </a>
                             </li>
@@ -55,22 +55,22 @@
                         <h6>Útiles</h6>
                         <ul class="links-vertical">
                             <li>
-                                <a href="{% url 'escritos:glosario' %}?utm_source=invfin&utm_medium=web&utm_content=footer">
+                                <a href="{% url 'escritos:glosario' %}{% utm content='footer' term='Blog' medium='web' source='invfin' campaign='website-links' %}">
                                     Blog
                                 </a>
                             </li>
                             <li>
-                                <a href="{% url 'web:excel' %}?utm_source=invfin&utm_medium=web&utm_content=footer">
+                                <a href="{% url 'web:excel' %}{% utm content='footer' term='Excel' medium='web' source='invfin' campaign='website-links' %}">
                                     Excel
                                 </a>
                             </li>
                             <li>
-                                <a href="{% url 'public_blog:blog_list' %}?utm_source=invfin&utm_medium=web&utm_content=footer">
+                                <a href="{% url 'public_blog:blog_list' %}{% utm content='footer' term='Escritores' medium='web' source='invfin' campaign='website-links' %}">
                                     Escritores
                                 </a>
                             </li>
                             <li>
-                                <a href="{% url 'preguntas_respuestas:list_questions' %}?utm_source=invfin&utm_medium=web&utm_content=footer">
+                                <a href="{% url 'preguntas_respuestas:list_questions' %}{% utm content='footer' term='Campus' medium='web' source='invfin' campaign='website-links' %}">
                                     Campus
                                 </a>
 
