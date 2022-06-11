@@ -21,3 +21,13 @@ class SuperinvestorView(SEODetailView):
     slug_url_kwarg = 'slug'
     slug_field = 'slug'
     meta_tags = 'empresas, inversiones, analisis de empresas, invertir'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        investor = self.object
+        is_fav = False
+        if self.request.user.is_authenticated:
+            if investor.info_accronym in self.request.user.fav_superinvestors.only('info_accronym'):
+                is_fav = True
+        context['is_fav'] = is_fav
+        return context

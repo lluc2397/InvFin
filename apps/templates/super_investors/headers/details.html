@@ -1,2 +1,66 @@
 {% load static i18n extra %}
-<div class="mb-2"></div>
+<div class="header pb-2">
+    <div class="card">
+      <div class="card-header clearfix">                
+        <div class="float-start">
+          <table>
+            <tr>
+              <th class="avatar avatar-xl rounded-circle">
+                <img alt="{{superinvestor.name}}" src="{{superinvestor.image}}">
+              </th>
+              <th style='padding-left: 20px'>{{superinvestor.name}}</th>
+            </tr>
+            <tr style='padding-top: 1px'>
+              <td></td>
+              <td style='padding-left: 20px'>
+                Valor portfolio: USD {{superinvestor.portfolio_value|floatformat:0}} $
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="float-end">
+          {% if request.user.is_authenticated %}
+          <button class="btn btn-{% if is_fav %}{% else %}outline-{% endif %}warning btn-sm" aria-label="stock" onclick="AddToFav('{{superinvestor.slug}}')" type="submit" id="button-favs"><i class="fa fa-star" aria-hidden="true"></i> Favoritos</button>
+          {% else %}
+          <button class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#BeUserRequiredModal" aria-label="stock"><i class="fa fa-star" aria-hidden="true"></i> Favoritos</button>
+          {% endif %}
+        </div>
+      </div>
+    
+      <nav class="firstmenu">
+        <div class="nav nav-pills card-header" id="pills-tab" role="tablist">
+          <button class="nav-link active mr-1" id="pills-portfolio-tab" data-bs-toggle="pill" data-bs-target="#pills-portfolio" type="button" role="tab" aria-controls="pills-portfolio" aria-selected="true">Portfolio actual</button>
+          <button class="nav-link mr-1" id="pills-history-tab" data-bs-toggle="pill" data-bs-target="#pills-history" type="button" role="tab" aria-controls="pills-history" aria-selected="false">Historial</button>
+          <button class="nav-link mr-1" id="pills-activity-tab" data-bs-toggle="pill" data-bs-target="#pills-activity" type="button" role="tab" aria-controls="pills-activity" aria-selected="false">Movimientos</button>
+        </div>
+      </nav>
+            
+    </div>
+  </div>
+  
+  <script>
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+    function AddToFav(investor){
+  
+      event.preventDefault(); // <---- Add this line
+      $.ajax({
+        url: '{% url "general:update_favorites" %}',
+        type: "POST",
+        dataType: "json",
+        data: JSON.stringify({investor: investor}),
+        headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        'X-CSRFToken': csrftoken,
+        
+      },
+      success: (response) => {
+          let buttonStock = document.getElementById("button-favs")
+          if (response.is_favorite === true){
+            buttonStock.className ='btn btn-sm btn-warning mr-4'}
+          else {
+            buttonStock.className ='btn btn-sm btn-outline-warning mr-4'}
+            }
+      });
+    };
+</script>

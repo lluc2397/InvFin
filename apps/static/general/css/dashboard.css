@@ -95,6 +95,15 @@ abbr[data-original-title] {
     text-decoration-skip-ink: none;
 }
 
+.firstmenu .nav-pills {
+    overflow-x: auto;
+    overflow-y:hidden;
+    flex-wrap: nowrap;
+}
+.firstmenu .nav-pills .nav-link {
+    white-space: nowrap;
+}
+
 address {
     margin-bottom: 1rem;
     font-style: normal;
