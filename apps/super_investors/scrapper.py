@@ -55,7 +55,6 @@ def get_historial(superinvestor_activity):
     company_saved = True
   url = f'{SITE}/m/hist/hist.php?f={superinvestor_activity.superinvestor_related.info_accronym}&s={ticker}'
   response = requests.get(url, headers=HEADERS).content
-  print(url)
   table = pd.read_html(response)[0]
   table['Activity'] = table['Activity'].fillna('Hold')
   table = table.fillna(0)
