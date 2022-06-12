@@ -122,7 +122,7 @@ class Company(CompanyExtended):
     
     @property
     def short_introduction(self):
-        current_ratios = self.current_price_ratios
+        current_ratios = self.calculate_current_ratios()
         last_income_statement = current_ratios['last_income_statement']
         currency = last_income_statement.reported_currency
         intro = f"{self.ticker} ha tenido un crecimiento en sus ingresos del \

@@ -38,7 +38,7 @@ class RoboAdvisorServicesListView(ListView):
 		return context
 
 
-class RoboAdvisorServiceOptionView(DetailView):
+class RoboAdvisorServiceOptionView(LoginRequiredMixin, DetailView):
 	model = RoboAdvisorService
 	template_name = "roboadvisor/details.html"
 	context_object_name = "service"

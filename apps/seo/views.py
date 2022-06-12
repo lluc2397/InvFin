@@ -42,7 +42,7 @@ def redirect_old_urls(request, ques_slug=False, term_slug=False, publs_slug=Fals
             if old_url.exists():
                 redirect_to = old_url[0].get_absolute_url()
             else:
-                redirect_to = 'general:escritos'
+                redirect_to = 'escritos:glosario'
     return redirect(redirect_to)
         
 

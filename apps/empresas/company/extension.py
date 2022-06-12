@@ -782,8 +782,6 @@ class CompanyExtended(Model, ChartSerializer):
             ]}
         return cf_json, cf
     
-
-    
     def comparing_fcf_ratios_json(self, limit):
         comparing_json, cf = self.fcf_ratios_json(limit)
         chartData = self.generate_json(comparing_json)
@@ -860,7 +858,6 @@ class CompanyExtended(Model, ChartSerializer):
                 'values': [data.total_assets_ps for data in cf]},
             ]}
         return cf_json, cf
-
 
     
     def comparing_per_share_values_json(self, limit):
@@ -1472,10 +1469,10 @@ class CompanyExtended(Model, ChartSerializer):
     
     def calculate_current_ratios(
             self,
-            all_balance_sheets: list = None,
-            all_per_share: list = None,
-            all_margins: list = None,
-            all_inc_statements: list = None
+            all_balance_sheets:list=None,
+            all_per_share:list=None,
+            all_margins:list=None,
+            all_inc_statements:list=None
         ) -> dict:
         current_price = RetreiveCompanyData(self.ticker).get_current_price()['current_price']
 
