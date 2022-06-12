@@ -2,10 +2,8 @@
 {% load static i18n extra %}
 {% block TopHeader %}{% include "super_investors/headers/details.html" %}{% endblock TopHeader%}
 
-{% block OnTopContent %}
-{% endblock OnTopContent%}
-
-{% block LeftSide %}
+{% block MainContent %}
+{% with superinvestor.all_information as all_information %}
 <div class="col-12">
     <div class="tab-content" id="pills-tabContent">
         <!-- portfolio tab -->
@@ -18,23 +16,9 @@
         </div>
         <!-- activity tab -->
         <div class="tab-pane fade show" id="pills-activity" role="tabpanel" aria-labelledby="pills-activity-tab">
-            {% include "super_investors/tables/activity.html" %}
+            {% include "super_investors/tables/pre_activity.html" %}
         </div>
     </div>
 </div>
-{% endblock LeftSide %}
-{% block RightSide %}
-{% endblock RightSide %}
-
-{% block MiddleCta %}
-<div class="col-12">
-    {% block MiddleCtaContent %}
-    {% endblock MiddleCtaContent %}
-</div>
-{% endblock MiddleCta%}
-
-{% block ListContinuation %}
-{% endblock ListContinuation %}
-
-{% block LastCta %}
-{% endblock LastCta %}
+{% endwith %}
+{% endblock MainContent %}

@@ -47,12 +47,11 @@ def get_investors_accronym():
 
 def get_historial(superinvestor_activity):
   actual_company = superinvestor_activity.actual_company
-  if type(actual_company) == str:
-    ticker = actual_company.split('-')[0].strip()
-    company_saved = False
+  if 'company_name' in actual_company:
+    ticker = actual_company['company_name'].split('-')[0].strip()
   else:
-    ticker = actual_company.ticker
-    company_saved = True
+    ticker = actual_company['company'].ticker
+
   url = f'{SITE}/m/hist/hist.php?f={superinvestor_activity.superinvestor_related.info_accronym}&s={ticker}'
   response = requests.get(url, headers=HEADERS).content
   table = pd.read_html(response)[0]
@@ -64,18 +63,11 @@ def get_historial(superinvestor_activity):
       year=datetime.strptime(period[:4], '%Y'),
       period=period[-1:]
     )
-    if company_saved == True:
-      super_activity = SuperinvestorHistory.objects.filter(
-        period_related=period, 
-        company=actual_company,
-        superinvestor_related=superinvestor_activity.superinvestor_related
-      )
-    else:
-      super_activity = SuperinvestorHistory.objects.filter(
-        period_related=period, 
-        company_name=actual_company,
-        superinvestor_related=superinvestor_activity.superinvestor_related
-      )
+    super_activity = SuperinvestorHistory.objects.filter(
+      **actual_company,
+      period_related=period,
+      superinvestor_related=superinvestor_activity.superinvestor_related
+    )
     if super_activity.exists():
       continue
     reported_price = content['Reported Price']
@@ -95,13 +87,10 @@ def get_historial(superinvestor_activity):
       reported_price=reported_price,
       portfolio_weight=content['% of Portfolio'],
     )
-    if company_saved == True:
-      history['company'] = actual_company
-    else:
-      history['company_name'] = actual_company
-
-
+    history.update(actual_company)
     superinvestor_history, created = SuperinvestorHistory.objects.get_or_create(**history)
+    superinvestor_history.need_verify_company = True
+    superinvestor_history.save(update_fields=['need_verify_company'])
 
 
 def get_activity(superinvestor):

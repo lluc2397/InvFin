@@ -53,21 +53,44 @@ class Superinvestor(Model):
         return super().save(*args, **kwargs)
     
     @property
-    def current_portfolio(self):
-        last_period = Period.objects.latest()
-        return self.history.filter(period_related=last_period)
+    def portfolio_information(self):
+        all_history = self.history.prefetch_related(
+            'period_related', 'company'
+            ).all()
+        all_companies = self.history.order_by().values(
+            'company', 'company_name'
+            ).distinct('company', 'company_name')
+        portfolio = []
+        for company in all_companies:
+            query_company_history = self.history.filter(**company)
+            
+            if query_company_history.last().shares != 0:
+                portfolio.append(query_company_history.last())
         
-    @property
-    def total_number_of_holdings(self):
-        return self.current_portfolio.count()
+        total_number_of_holdings = len(portfolio)
+        portfolio_value = sum(position.total_value for position in portfolio)
+        top_holdings = sorted(portfolio, key=lambda x : x.portfolio_weight)
+        sectors_invested = set()
+        for company in portfolio:
+            if company.not_registered_company:
+                continue
+            sectors_invested.add(company.company.sector)
+        num_sectors = len(sectors_invested)
+        return {
+            'portfolio': portfolio, 
+            'all_history': all_history,
+            'total_number_of_holdings': total_number_of_holdings,
+            'portfolio_value': portfolio_value,
+            'top_holdings': top_holdings[:5],
+            'sectors_invested': sectors_invested,
+            'num_sectors': num_sectors
+        }
     
     @property
-    def portfolio_value(self):
-        return sum(position.total_value for position in self.current_portfolio)
-
-    @property
-    def top_holdings(self):
-        return self.current_portfolio.order_by('portfolio_weight')[:5]
+    def all_information(self):
+        portfolio_information = self.portfolio_information
+        portfolio_information['all_activity'] = self.positions.all()
+        return portfolio_information
 
 
 class FavoritesSuperinvestorsHistorial(BaseFavoritesHistorial):
@@ -104,11 +127,11 @@ class Period(Model):
         verbose_name = "Period"
         verbose_name_plural = "Periods"
         db_table = "assets_periods"
-        ordering = ['period', 'year']
-        get_latest_by = ['period', 'year']
+        ordering = ['-year', '-period']
+        get_latest_by = ['-year', '-period']
     
     def __str__(self):
-        return f'{self.period}-{str(self.year)}'
+        return f'Q{self.period} {str(self.year.year)}'
 
 
 class BaseSuperinvestorHoldingsInformation(Model):
@@ -124,21 +147,26 @@ class BaseSuperinvestorHoldingsInformation(Model):
     
     @property
     def actual_company(self):
-        return self.company if self.company else self.company_name
+        actual_company = {}
+        if self.company:
+            actual_company['company'] = self.company
+        else: 
+            actual_company['company_name'] = self.company_name
+        return actual_company
     
     @property
-    def actual_company_image(self):
-        image = None
-        if type(self.actual_company) != str:
-            image = self.actual_company.image
-        return image
-    
-    @property
-    def actual_company_ticker(self):
-        ticker = None
-        if type(self.actual_company) != str:
-            ticker = self.actual_company.ticker
-        return ticker
+    def actual_company_info(self):
+        actual_company_info = {}
+        if self.company:
+            company = self.company
+            actual_company_info['full_name'] = f'({company.ticker}) {company.name}'
+            actual_company_info['image'] = company.image
+            actual_company_info['ticker'] = company.ticker
+        else:
+            actual_company_info['full_name'] = self.company_name
+            actual_company_info['image'] = None
+            actual_company_info['ticker'] = None
+        return actual_company_info
 
 
 class SuperinvestorActivity(BaseSuperinvestorHoldingsInformation):
@@ -157,9 +185,18 @@ class SuperinvestorActivity(BaseSuperinvestorHoldingsInformation):
         verbose_name = "Superinvestor activity"
         verbose_name_plural = "Superinvestors activity"
         db_table = "superinvestors_activity"
+        ordering = ['period_related']
+        get_latest_by = ['period_related']
 
     def __str__(self):
         return f'{self.superinvestor_related.name}-{self.period_related}-{self.actual_company}'
+    
+    @property
+    def movement_type(self):
+        movement_type = {'move': 'Venta', 'color': 'danger'}
+        if self.movement == 1:
+            movement_type = {'move': 'Compra', 'color': 'success'}
+        return movement_type
     
 
 class SuperinvestorHistory(BaseSuperinvestorHoldingsInformation):
@@ -176,7 +213,19 @@ class SuperinvestorHistory(BaseSuperinvestorHoldingsInformation):
         verbose_name = "Superinvestor history"
         verbose_name_plural = "Superinvestors history"
         db_table = "superinvestors_history"
+        ordering = ['period_related']
+        get_latest_by = ['period_related']
+    
+    def __str__(self):
+        return f'{self.superinvestor_related.name}-{self.period_related}-{self.actual_company}'
     
     @property
     def total_value(self):
         return self.shares * self.reported_price
+    
+    @property
+    def movement_type(self):
+        movement_type = {'move': 'Venta', 'color': 'danger'}
+        if self.movement.startswith('Add') or self.movement.startswith('Buy'):
+            movement_type = {'move': 'Compra', 'color': 'success'}
+        return movement_type

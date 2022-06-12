@@ -18,6 +18,7 @@
 
 {% block LeftSide %}
 {% for superinvestor in superinvestors %}
+{% with superinvestor.portfolio_information as portfolio_info %}
 <div class="card card-profile">
     <img src="https://res.cloudinary.com/inversionesfinanzas/image/upload/v1654963515/1280px-White_Background__28To_id_screen_dust_during_cleanup_29_gh4icb.jpg" height='90px' alt="Image placeholder" class="card-img-top">
     <div class="row justify-content-center">
@@ -44,15 +45,15 @@
             <div class="col">
                 <div class="card-profile-stats d-flex justify-content-center">
                     <div>
-                        <span class="heading">{{superinvestor.total_number_of_holdings}}</span>
+                        <span class="heading">{{portfolio_info.total_number_of_holdings}}</span>
                         <span class="description">Empresas</span>
                     </div>
                     <div>
-                        <span class="heading">{{superinvestor.portfolio_value}}</span>
+                        <span class="heading">{{portfolio_info.num_sectors}}</span>
                         <span class="description">Sectores</span>
                     </div>
                     <div>
-                        <span class="heading">{{superinvestor.portfolio_value|floatformat}}</span>
+                        <span class="heading">{{portfolio_info.portfolio_value|floatformat}}</span>
                         <span class="description">Valor Total</span>
                     </div>
                 </div>
@@ -67,14 +68,14 @@
             </div>
             <div class="h5 mt-4">
                 <div class="avatar-group">
-                    {% for holding in superinvestor.top_holdings %}
-                    {% if holding.actual_company_ticker %}
-                    <a href="{% url 'screener:company' holding.actual_company_ticker %}{% utm 'superinvestors' holding.actual_company_ticker %}"
+                    {% for holding in portfolio_info.top_holdings %}
+                    {% if holding.actual_company_info.ticker %}
+                    <a href="{% url 'screener:company' holding.actual_company_info.ticker %}{% utm 'superinvestors' holding.actual_company_info.ticker %}"
                     {% else %}
                     <a href="#!"
                     {% endif %}
-                        class="avatar rounded-circle" data-toggle="tooltip" data-placement="top" title="{{holding.actual_company}}">
-                        <img alt="{{holding.actual_company}}" src="{{holding.actual_company_image}}">
+                        class="avatar rounded-circle" data-toggle="tooltip" data-placement="top" title="{{holding.actual_company_info.ticker}}">
+                        <img alt="{{holding.actual_company_info.ticker}}" src="{{holding.actual_company_info.image}}">
                     </a>
                     {% endfor %}
                 </div>
@@ -82,6 +83,8 @@
         </div>
     </div>
 </div>
+{% endwith %}
+{% endfor %}
 <script>
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     
@@ -108,7 +111,6 @@
       });
     };
 </script>
-{% endfor %}
 {% endblock LeftSide %}
 
 {% block RightSide %}

@@ -16,24 +16,38 @@ def scrap_superinvestors():
 
 
 @celery_app.task()
-def scrap_superinvestors_activity():
+def scrap_superinvestors_activity(superinvestor_id):
+    try:
+        superinvestor = Superinvestor.objects.get(id=superinvestor_id)
+        get_activity(superinvestor)
+    except Exception as e:
+        superinvestor.has_error = True
+        superinvestor.error = e
+        superinvestor.save(update_fields=['has_error', 'error'])
+
+
+@celery_app.task()
+def scrap_superinvestors_history(superinvestor_activity_id):
+    try:
+        superinvestor_activity = SuperinvestorActivity.objects.get(id=superinvestor_activity_id)
+        get_historial(superinvestor_activity)
+    except Exception as e:
+        superinvestor_activity.superinvestor_related.has_error = True
+        superinvestor_activity.superinvestor_related.error = e
+        superinvestor_activity.superinvestor_related.save(update_fields=['has_error', 'error'])
+    
+
+@celery_app.task()
+def prepare_scrap_superinvestors_activity():
     for superinvestor in Superinvestor.objects.all():
-        try:
-            get_activity(superinvestor)
-        except Exception as e:
-            superinvestor.has_error = True
-            superinvestor.error = e
-            superinvestor.save(update_fields=['has_error', 'error'])
+        scrap_superinvestors_activity.delay(superinvestor.id)
     send_mail('All activity done', f'All activity done', settings.EMAIL_DEFAULT, [settings.EMAIL_DEFAULT])
     return 'finished'
 
 
 @celery_app.task()
-def scrap_superinvestors_history():
-    for superinvestor in SuperinvestorActivity.objects.all():
-        try:
-            get_historial(superinvestor)
-        except Exception as e:
-            print(e)
+def prepare_scrap_superinvestors_history():
+    for superinvestor in SuperinvestorActivity.objects.filter(need_verify_company=False):
+        scrap_superinvestors_history.delay(superinvestor.id)
     send_mail('All activity done', f'All activity done', settings.EMAIL_DEFAULT, [settings.EMAIL_DEFAULT])
     return 'finished'

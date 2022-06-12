@@ -113,6 +113,10 @@ class Company(CompanyExtended):
         return reverse("screener:company", kwargs={"ticker": self.ticker})
     
     @property
+    def full_name(self):
+        return f'{self.ticker} {self.name}'
+    
+    @property
     def meta_image(self):
         return self.remote_image_imagekit if self.remote_image_imagekit else self.remote_image_cloudinary
     

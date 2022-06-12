@@ -1,32 +1,53 @@
 {% load static i18n extra %}
 <div class="card">
     <div class="card-header">
-        Valor de empresa
+        Portfolio
     </div>
-    <div class="card-body">
-        <div class="table-responsive ">
-            <table class="table table-borderless">                        
-                <tbody>
-                    <tr>
-                        <th>Enterprise Value</th>
-                        <td>{{company_valuation.ev|floatformat:2}}</td>
-                        <th>CAGR</th> 
-                        <td class="pe-4">{{company_valuation.cagr|floatformat:2}}%</td>                               
-                    </tr>
-                    <tr>
-                        <th>Valoración tradicional</th>
-                        <td>{{company_valuation.gramvalu|floatformat:2}}</td>
-                        <th>Margen de seguridad</th>
-                        <td>{{company_valuation.safety_margin_pes|floatformat:2}}%</td>                               
-                    </tr>
-                    <tr>
-                        <th>Valoración DCF</th>
-                        <td>{{company_valuation.fair_value|floatformat:2}}</td>
-                        <th >Margen de seguridad</th>
-                        <td class="pe-4">{{company_valuation.safety_margin_opt|floatformat:2}}%</td>                               
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="table-responsive">
+        <table class="table align-items-center">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Empresa</th>
+                    <th scope="col">Acciones en cartera</th>
+                    <th scope="col">Precio de compra</th>
+                    <th scope="col">% en cartera</th>
+                </tr>
+            </thead>
+            <tbody class="list">
+                {% for company in all_information.portfolio %}
+                <tr>
+                    <th scope="row">
+                        <div class="media align-items-center">
+                            {% if company.actual_company_info.ticker %}
+                            <a href="{% url 'screener:company' company.actual_company_info.ticker %}{% utm superinvestor.name company.actual_company_info.ticker %}"
+                            {% else %}
+                            <a href="#!"
+                            {% endif %} 
+                            class="avatar rounded-circle mr-3">
+                                <img alt="{{company.actual_company_info.ticker}}" src="{{company.actual_company_info.image}}">
+                            </a>
+                            <div class="media-body">
+                                {% if company.actual_company_info.ticker %}
+                                <a href="{% url 'screener:company' company.actual_company_info.ticker %}{% utm superinvestor.name company.actual_company_info.ticker %}"
+                                {% else %}
+                                <a href="#!"
+                                {% endif %} 
+                                class="name mb-0 text-sm">{{company.actual_company_info.full_name}}</a>
+                            </div>
+                        </div>
+                    </th>
+                    <td>
+                        {{company.shares}}
+                    </td>
+                    <td>
+                        ${{company.reported_price}} USD
+                    </td>
+                    <td class="budget">
+                        {{company.portfolio_weight}} %
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
