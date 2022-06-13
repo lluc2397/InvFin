@@ -6,7 +6,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.apps import apps
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
-from django.views.generic import TemplateView, ListView
+from django.views.generic import ListView
 from django.http.response import JsonResponse, HttpResponse
 from django.db.models import Q
 
@@ -14,9 +14,9 @@ import json
 import base64
 
 from apps.escritos.models import Term, FavoritesTermsHistorial, FavoritesTermsList
-from apps.public_blog.models import PublicBlog
 from apps.empresas.models import Company
 from apps.screener.models import FavoritesStocksHistorial
+from apps.super_investors.models import FavoritesSuperinvestorsHistorial, FavoritesSuperinvestorsList, Superinvestor
 
 from .models import Notification
 
@@ -97,7 +97,11 @@ def search_results(request):
 		
 		else:
 			if term.isupper():
-				empresa_busqueda = Company.objects.filter(ticker = ticker)
+				empresa_busqueda = Company.objects.filter(ticker = term)
+				if empresa_busqueda.exists():
+					redirect_to = empresa_busqueda[0].get_absolute_url()
+			elif term.isupper() == False:
+				empresa_busqueda = Company.objects.filter(name__icontains = term)
 				if empresa_busqueda.exists():
 					redirect_to = empresa_busqueda[0].get_absolute_url()
 			else:
@@ -127,7 +131,7 @@ def update_favorites(request):
 				user.favorites_companies.stock.add(current_stock)
 				is_favorite = True
 		
-		else:
+		elif 'term' in data.keys():
 			term_id = data.get('term')
 			current_term = Term.objects.get(id = term_id)
 			try:
@@ -142,8 +146,25 @@ def update_favorites(request):
 				FavoritesTermsHistorial.objects.create(user = user, term = current_term, added = True)
 				user.favorites_terms.term.add(current_term)
 				is_favorite = True
+		
+		elif 'investor' in data.keys():
+			superinvestor = data.get('investor')
+			current_superinvestor = Superinvestor.objects.get(slug = superinvestor)
+			try:
+				user.favorites_superinvestors
+			except:
+				FavoritesSuperinvestorsList.objects.create(user=user)
+			if current_superinvestor in user.fav_superinvestors:
+				user.favorites_superinvestors.superinvestor.remove(current_superinvestor)
+				FavoritesSuperinvestorsHistorial.objects.create(user=user, superinvestor=current_superinvestor, removed=True)
+				is_favorite = False
+			else:
+				FavoritesSuperinvestorsHistorial.objects.create(user=user, superinvestor=current_superinvestor, added=True)
+				user.favorites_superinvestors.superinvestor.add(current_superinvestor)
+				is_favorite = True
 				
 		return JsonResponse ({'is_favorite':is_favorite})
+
 
 def coming_soon(request):
 	return render(request, 'general/complements/coming_soon.html')
@@ -161,16 +182,6 @@ def email_opened_view(request, uidb64):
         modelo.date_opened = timezone.now()
         modelo.save()
         return HttpResponse(pixel_gif, content_type='image/gif')  
-
-
-class EscritosView(TemplateView):
-    template_name = 'escritos/inicio.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['terms'] = Term.objects.filter(status = 1)
-        context['blogs'] = PublicBlog.objects.filter(status = 1)
-        return context
 
 
 class NotificationsListView(LoginRequiredMixin, ListView):

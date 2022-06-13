@@ -1,5 +1,5 @@
 {% extends "general/bases/base_content.html" %}
-{% load static %}
+{% load static extra %}
 
 {% block TopHeader %}
 <link rel="stylesheet" href="{% static 'general/assets/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}">
@@ -8,8 +8,8 @@
 {% include "screener/headers/empresa_header.html" %}
 {% endblock TopHeader%}
 {% block MainContent %}
-{% with the_company_financials=the_company.complete_info %}
-
+{% with the_company_financials=complete_info %}
+<script>let hasBought = {% if has_bought %} true {% else %} false {% endif %}</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js" 
@@ -29,14 +29,14 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   background-color:#fff;
 }
 
-    .chart-canvas{height: 600px !important;}
+.chart-canvas{height: 600px !important;}
 </style>
 <div class="col-12">
     <div class="tab-content" id="pills-tabContent">
       <!-- resume tab -->
       <div class="tab-pane fade show active" id="pills-resume" role="tabpanel" aria-labelledby="pills-resume-tab">
         {% include "screener/empresas/company_parts/resume/response.html" %}
-        </div>
+      </div>
       <!-- First tab -->
       <div class="tab-pane fade" id="pills-income" role="tabpanel" aria-labelledby="pills-income-tab"> 
         {% include "screener/empresas/company_parts/income_statement/income_statement.html" %}
@@ -80,6 +80,36 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </div>
 </div>
 {% endwith %}
+<div class="modal fade" id="NecesitasMembresiaModal" tabindex="-1" 
+  role="dialog" aria-labelledby="NecesitasMembresiaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-success modal-dialog-centered modal-" role="document">
+      <div class="modal-content bg-gradient-success">
+          <div class="modal-header">
+              <h6 class="modal-title" id="modal-title-notification">Descubre toda la historia de la empresa</h6>
+              <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+              </button>
+          </div>
+          <div class="modal-body">
+            <p>No tienes suficientes créditos.
+                <br>
+                Los créditos son monedas que puedes usar en la web para tener accesos privilegiados, puedes conseguir más créditos:                    
+                <ul>
+                    <li>Aportando respuestas</li>
+                    <li>Haciendo preguntas</li>
+                    <li>Colaborando en el glosario</li>
+                    <li>Contribuyendo en las empresas</li>
+                </ul>
+            </p>
+            <div class="col-12">
+                <a class="btn btn-youtube" href="{% url 'preguntas_respuestas:list_questions' %}{% utm 'screener' the_company.ticker %}" >Preguntas</a>
+                <a class="btn btn-slack" href="{% url 'escritos:glosario' %}{% utm 'screener' the_company.ticker %}" >Glosario</a>
+                <a class="btn btn-danger" href="{% url 'screener:screener_inicio' %}{% utm 'screener' the_company.ticker %}" >Empresas</a>
+            </div>
+        </div>
+      </div>
+  </div>
+</div>
 {% endblock MainContent %}
 {% block javascript %}
 {{ block.super }}

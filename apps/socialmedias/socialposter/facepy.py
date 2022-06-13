@@ -94,14 +94,15 @@ class Facebook():
         return self._send_content('video', data, files)
 
     
-    def post_text(self, text= "", post_time= "", post_now = True, link=None):
+    def post_text(self, text= "", post_time= "", post_now = True, link=None, title=''):
 
         if post_now is False:
             pass
         else:
             data ={
                 'access_token': self.page_access_token,
-                'message': text
+                'message': text,
+                'title': title
             }
         
         if link:
@@ -157,11 +158,17 @@ class Facebook():
         link:str=None,
         media_url:str=None
         ):
-
+        platform = 'facebook'
         emojis = Emoji.objects.random_emojis(num_emojis)
-        hashtags = Hashtag.objects.random_hashtags('facebook')
+        hashtags = Hashtag.objects.random_hashtags(platform)
         
         custom_title = f'{emojis[0].emoji} {title}'
+
+        utm_source = f'utm_source={platform}'
+        utm_medium = f'utm_medium={platform}'
+        utm_campaign = f'utm_campaign=post-shared-auto'
+        utm_term = f'utm_term={title}'
+        link = f'{link}?{utm_source}&{utm_medium}&{utm_campaign}&{utm_term}'
 
         caption = self.create_fb_description(caption=caption, link=link, hashtags=[hashtag.name for hashtag in hashtags])
         
@@ -176,9 +183,9 @@ class Facebook():
 
         elif post_type == 3 or post_type == 4:
             content_type = 'text'
-            caption = f'{media_url} {caption}'
+            caption = f'{caption}'
 
-            post_response = self.post_text(text= caption, link=link)
+            post_response = self.post_text(text= caption, link=link, title=title)
 
         if post_response['result'] == 'success':
             facebook_post = {
@@ -186,7 +193,7 @@ class Facebook():
                 'social_id': post_response['extra'],
                 'title': custom_title ,
                 'description': caption,
-                'platform_shared': 'facebook'
+                'platform_shared': platform
             }            
 
             return facebook_post
@@ -203,15 +210,16 @@ class Facebook():
             link = url_to_share)  
 
 
-    def create_fb_description(self, caption:str, link:str, hashtags:list):
+    def create_fb_description(self, caption:str, link:str = None, hashtags:list = None):
         hashtags = '#'.join(hashtags)
-        face_description = f"""
-        {caption}
+        if link:
+            link = f'Más en {link}'
+        else:
+            link = 'Prueba las herramientas que todo inversor inteligente necesita: https://inversionesyfinanzas.xyz'
+        face_description = f"""{caption}
 
-        Más en {link}
+        {link}
         
-        Prueba las herramientas que todo inversor inteligente necesita: https://inversionesyfinanzas.xyz
-
         Visita nuestras redes sociales:
         Facebook: https://www.facebook.com/InversionesyFinanzas/
         Instagram: https://www.instagram.com/inversiones.finanzas/

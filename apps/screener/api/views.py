@@ -1,13 +1,8 @@
 from django.contrib.auth import get_user_model
-from django.views.generic import ListView, TemplateView
+from django.views.generic import ListView
 from django.http.response import JsonResponse, HttpResponse
 from django.db.models import Q
 from django.shortcuts import render
-
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.permissions import BasePermission, AllowAny, SAFE_METHODS
-from rest_framework import status
 
 from apps.empresas.company.retreive_data import RetreiveCompanyData
 from apps.empresas.valuations import discounted_cashflow
@@ -16,31 +11,16 @@ from apps.empresas.models import Company
 from ..models import (
     UserCompanyObservation,
     UserScreenerMediumPrediction,
-    UserScreenerSimplePrediction
+    UserScreenerSimplePrediction,
+    YahooScreener
 )
 from ..forms import UserCompanyObservationForm
 
 import json
+import yahooquery as yq
 
 
 User = get_user_model()
-
-class ReadOnly(BasePermission):
-    def has_permission(self, request, view):
-        return request.method in SAFE_METHODS
-
-class CompanyBaseAPIView(APIView):
-    serializer_class = None
-    permission_classes = [AllowAny|ReadOnly]
-
-    def get(self, request):
-        model = self.serializer_class.Meta.model
-        queryset = model.objects.filter(company__ticker = request.GET['ticker'])[:10]
-        serializer = self.serializer_class(queryset, many=True)
-        if status.is_success:
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response(status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
 
 class CompanyFODAListView(ListView):
@@ -73,19 +53,71 @@ def get_company_valuation(request, ticker):
     })
 
 
+def retreive_yahoo_screener_info(request, query):
+    yahoo = yq.Screener().get_screeners(query)
+    context = {
+        'yahoo': yahoo[query]['quotes']
+    }
+    return render(request, 'screener/yahoo-screeners/screener-data.html', context)
+
+
+def retreive_top_lists(request):
+    yahoo = yq.Screener().get_screeners(['most_actives', 'day_gainers', 'day_losers'], 5)
+    extra = {
+        'positive': 'text-success',
+        'negative': 'text-danger'
+    }
+    url = '/screener/analisis-de/'
+    day_gainers = {
+        'title': 'Mayor aumento de precio',
+        'subtitle': 'day_gainers',
+        'slug': YahooScreener.objects.get(yq_name='day_gainers').slug,
+        'extra': extra,
+        'url': url,
+        'data': yahoo['day_gainers']['quotes']
+    }
+    day_losers = {
+        'title': 'Mayor disminución de precio',
+        'subtitle': 'day_losers',
+        'slug': YahooScreener.objects.get(yq_name='day_losers').slug,
+        'extra': extra,
+        'url': url,
+        'data': yahoo['day_losers']['quotes']
+    }
+    most_actives = {
+        'title': 'Más activos',
+        'subtitle': 'most_actives',
+        'slug': YahooScreener.objects.get(yq_name='most_actives').slug,
+        'extra': extra,
+        'url': url,
+        'data': yahoo['most_actives']['quotes']
+    }
+
+    gainers_actives_losers = [
+        day_gainers,
+        most_actives,
+        day_losers
+    ]
+    return render(request, 'screener/yahoo-screeners/top-lists.html', {
+        'gainers_actives_losers': gainers_actives_losers,
+    })
+
+
 def create_company_observation(request):
     if request.method == 'POST':
         company_id = request.session['screener']
         form = UserCompanyObservationForm(request.POST)
+
+        user = User.objects.get_or_create_quick_user(request)           
+        
         if form.is_valid():
             model = form.save()
-            model.user = request.user
+            model.user = user
             company = Company.objects.get(id = company_id)
             model.company = company
             model.save(update_fields=['user', 'company'])
             return HttpResponse(status=204, headers={'HX-Trigger': 'refreshObservationsCompany'})
         else:
-            print(form.errors)
             return HttpResponse(status=500)
     else:
         form = UserCompanyObservationForm()

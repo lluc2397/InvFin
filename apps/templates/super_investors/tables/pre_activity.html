@@ -1,0 +1,13 @@
+{% load static i18n extra %}
+<div class="card">
+    <div class="card-header">
+        Movimientos
+    </div>
+    <div hx-trigger="load" 
+        hx-get="{% url 'super_investors:return_superinvestor_movements' superinvestor.id %}" hx-target="this">
+        <div class="text-center">
+            <div class="spinner-border" role="status"></div>
+            Cargando...
+        </div>
+    </div>
+</div>

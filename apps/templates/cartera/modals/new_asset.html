@@ -22,7 +22,12 @@
                         </div>
                         {% endif %}
                         {% endfor %}
-                        {% include "roboadvisor/forms/select-company.html" %}
+                        <div class="col-12 mb-1">
+                            <label class="form-label">
+                                Selecciona la empresa que quieras
+                              </label>
+                            {% include "general/search/search-companies.html" %}
+                        </div>                        
                         {{ new_asset_form|crispy }}
                   
                     </div>

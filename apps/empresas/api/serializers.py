@@ -51,7 +51,7 @@ class CompanyStockPriceSerializer(ModelSerializer):
 
     class Meta:
         model = CompanyStockPrice
-        exclude = ['id']
+        exclude = ['id', 'year']
 
 
 class IncomeStatementSerializer(ModelSerializer):
@@ -59,7 +59,7 @@ class IncomeStatementSerializer(ModelSerializer):
 
     class Meta:        
         model = IncomeStatement
-        exclude = ['id']
+        exclude = ['id', 'year']
 
 
 class BalanceSheetSerializer(ModelSerializer):
@@ -67,7 +67,7 @@ class BalanceSheetSerializer(ModelSerializer):
 
     class Meta:
         model = BalanceSheet
-        exclude = ['id']
+        exclude = ['id', 'year']
 
 
 class CashflowStatementSerializer(ModelSerializer):
@@ -75,83 +75,83 @@ class CashflowStatementSerializer(ModelSerializer):
     
     class Meta:
         model = CashflowStatement
-        exclude = ['id']
+        exclude = ['id', 'year']
 
 
 class RentabilityRatioSerializer(ModelSerializer):
 
     class Meta:
         model = RentabilityRatio
-        exclude = ['id']
+        exclude = ['id', 'year']
 
 
 class LiquidityRatioSerializer(ModelSerializer):
 
     class Meta:
         model = LiquidityRatio
-        exclude = ['id']
+        exclude = ['id', 'year']
 
 
 class MarginRatioSerializer(ModelSerializer):
 
     class Meta:
         model = MarginRatio
-        exclude = ['id']
+        exclude = ['id', 'year']
 
 
 class FreeCashFlowRatioSerializer(ModelSerializer):
 
     class Meta:
         model = FreeCashFlowRatio
-        exclude = ['id']
+        exclude = ['id', 'year']
 
 
 class PerShareValueSerializer(ModelSerializer):
 
     class Meta:
         model = PerShareValue
-        exclude = ['id']
+        exclude = ['id', 'year']
 
 
 class NonGaapSerializer(ModelSerializer):
 
     class Meta:
         model = NonGaap
-        exclude = ['id']
+        exclude = ['id', 'year']
 
 
 class OperationRiskRatioSerializer(ModelSerializer):
 
     class Meta:
         model = OperationRiskRatio
-        exclude = ['id']
+        exclude = ['id', 'year']
 
 
 class EnterpriseValueRatioSerializer(ModelSerializer):
 
     class Meta:
         model = EnterpriseValueRatio
-        exclude = ['id']
+        exclude = ['id', 'year']
 
 
 class CompanyGrowthSerializer(ModelSerializer):
 
     class Meta:
         model = CompanyGrowth
-        exclude = ['id']
+        exclude = ['id', 'year']
 
 
 class EficiencyRatioSerializer(ModelSerializer):
 
     class Meta:
         model = EficiencyRatio
-        exclude = ['id']
+        exclude = ['id', 'year']
 
 
 class PriceToRatioSerializer(ModelSerializer):
 
     class Meta:
         model = PriceToRatio
-        exclude = ['id']
+        exclude = ['id', 'year']
 
 

@@ -5,7 +5,7 @@ from django.urls import include, path
 from django.views import defaults as default_views
 from django.contrib.sitemaps.views import sitemap
 
-from rest_framework.authtoken.views import obtain_auth_token
+from apps.api.views import obtain_auth_key
 
 from apps.seo.sitemaps import (
     TermSitemap,
@@ -26,48 +26,38 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path(settings.SECOND_ADMIN_URL, include('admin_honeypot.urls', namespace='admin_honeypot')),
     path("", include("apps.general.urls", namespace="general")),
-
     path("", include("apps.web.urls", namespace="web")),
-    # User management
     path("", include("apps.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),    
-    
     path("", include("apps.preguntas_respuestas.urls", namespace="preguntas_respuestas")),
     path("", include("apps.escritos.urls", namespace="escritos")),
     path("", include("apps.public_blog.urls", namespace="public_blog")),
-
     path("screener/", include("apps.screener.urls", namespace="screener")),
-
-    # path("", include("apps.super_investors.urls", namespace="super_investors")),    
+    path("", include("apps.super_investors.urls", namespace="super_investors")),    
     path("", include("apps.empresas.urls", namespace="empresas")),
     # path("", include("apps.etfs.urls", namespace="etfs")),
-
     path("", include("apps.cartera.urls", namespace="cartera")),
-
     path("", include("apps.seo.urls", namespace="seo")),
-
     path("", include("apps.roboadvisor.urls", namespace="roboadvisor")),
-
+    path("", include("apps.business.urls", namespace="business")),
 
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# API URLS
+urlpatterns += [
+    # API base url
+    path("api/", include("apps.api.urls")),
+    # DRF auth token
+    path("api/obtener-clave/", obtain_auth_key),
+]
 
 handler403 = "apps.web.views.handler403"
 handler404 = "apps.web.views.handler404"
 handler500 = "apps.web.views.handler500"
 
-
 if settings.DEBUG:
-    # API URLS
-    urlpatterns += [
-        # API base url
-        path("api/", include("config.api_router")),
-        # DRF auth token
-        path("auth-token/", obtain_auth_token),
-
-        path("private/", include("apps.empresas.api.api_router")),
-        
-    ]
+    
     if "drf_spectacular" in settings.INSTALLED_APPS:
         from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
         urlpatterns += [

@@ -7,8 +7,28 @@ from .models import (
     FavoritesStocksList,
     UserCompanyObservation,
     UserScreenerMediumPrediction,
-    UserScreenerSimplePrediction
+    UserScreenerSimplePrediction,
+    YahooScreener
 )
+
+
+@admin.register(YahooScreener)
+class YahooScreenerAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'name',
+        'slug',
+        'description',
+        'yq_name',
+        'asset_class_related',
+        'show',
+    ]
+    list_editable = [
+        'name',
+        'slug',
+        'asset_class_related',
+        'show',
+    ]
 
 
 

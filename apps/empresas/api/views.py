@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 
 from rest_framework.response import Response
+from rest_framework import status
+
 from rest_framework.viewsets import ViewSet
 
 from apps.empresas.api.serializers import (
@@ -22,7 +24,7 @@ from apps.empresas.api.serializers import (
 User = get_user_model()
 
 from django.apps import apps
-
+from apps.api.views import BaseAPIView
 
 class CompanyBaseViewSet(ViewSet):
 

@@ -12,16 +12,20 @@ from django.db.models import (
     IntegerField,
     ManyToManyField
 )
+from django.contrib.sites.models import Site
+from django.template.defaultfilters import slugify
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils import timezone
 
 from ckeditor.fields import RichTextField
 
-from apps.general.models import BaseEscrito, BaseComment, FavoritesHistorial
+from apps.general.bases import BaseEscrito, BaseComment, BaseFavoritesHistorial
+
 
 from .managers import TermManager
 
+DOMAIN = Site.objects.get_current().domain
 User = get_user_model()
 
 class Term(BaseEscrito):
@@ -41,6 +45,9 @@ class Term(BaseEscrito):
     @property
     def term_parts(self):
         return TermContent.objects.filter(term_related= self)
+    
+    def link(self):
+        return f'https://{DOMAIN}{self.get_absolute_url()}'
 
 
 class TermContent(Model):
@@ -58,7 +65,12 @@ class TermContent(Model):
         return f'{self.title}'
     
     def get_absolute_url(self):
-        return self.term_related.get_absolute_url()
+        slug = slugify(self.title)
+        path = self.term_related.get_absolute_url()
+        return f'{path}#{slug}'
+    
+    def link(self):
+        return f'https://{DOMAIN}{self.get_absolute_url()}'
 
 
 class TermCorrection(Model):
@@ -131,7 +143,7 @@ class TermsRelatedToResume(Model):
         db_table = "terms_to_resume"
 
 
-class FavoritesTermsHistorial(FavoritesHistorial):
+class FavoritesTermsHistorial(BaseFavoritesHistorial):
     term = ForeignKey(Term, on_delete=SET_NULL, null=True, blank=True)
 
     class Meta:

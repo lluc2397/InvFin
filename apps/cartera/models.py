@@ -14,16 +14,14 @@ from django.db.models import (
     DateField,
     DecimalField
 )
-import json
+
 from decimal import Decimal
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
 from apps.general.utils import ChartSerializer
-from apps.empresas.models import (
-    Currency,
-    Company,
-    )
+from apps.empresas.models import Company
+from apps.general.models import Currency
 
 from apps.etfs.models import (
     Etf)
@@ -173,7 +171,7 @@ class Patrimonio(Model, ChartSerializer):
     default_currency = ForeignKey(Currency, 
         on_delete=SET_NULL, 
         null=True, blank=True, 
-        default='USD'
+        default='1'
     )
 
     class Meta:        

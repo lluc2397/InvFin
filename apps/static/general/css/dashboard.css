@@ -11,7 +11,6 @@
     --green: #2dce89;
     --teal: #11cdef;
     --cyan: #2bffc6;
-    --white: #fff;
     --gray: #8898aa;
     --gray-dark: #32325d;
     --light: #ced4da;
@@ -94,6 +93,15 @@ abbr[data-original-title] {
     border-bottom: 0;
     -webkit-text-decoration-skip-ink: none;
     text-decoration-skip-ink: none;
+}
+
+.firstmenu .nav-pills {
+    overflow-x: auto;
+    overflow-y:hidden;
+    flex-wrap: nowrap;
+}
+.firstmenu .nav-pills .nav-link {
+    white-space: nowrap;
 }
 
 address {
@@ -8602,7 +8610,7 @@ button.bg-darker:focus {
 }
 
 .shadow {
-    box-shadow: 0 0 2rem 0 rgba(136, 152, 170, 0.15) !important;
+    box-shadow: 0px 0px 10px 1px #aaaaaa;;
 }
 
 .shadow-lg {

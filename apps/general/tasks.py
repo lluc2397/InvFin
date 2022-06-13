@@ -8,7 +8,8 @@ from apps.public_blog.models import PublicBlog, PublicBlogAsNewsletter, Newslett
 
 User = get_user_model()
 
-from .utils import EmailingSystem, NotificationSystem
+from apps.general.outils.notifications import NotificationSystem
+from apps.general.outils.emailing import EmailingSystem
 
 @celery_app.task()
 def enviar_email_task(newsletter, receiver_id, email_type):

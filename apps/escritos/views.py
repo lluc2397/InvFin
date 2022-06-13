@@ -1,11 +1,10 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.conf import settings
 from django.views.generic import (
 	ListView,
 	DetailView,
 	CreateView)
 from django.contrib import messages
-from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -30,7 +29,7 @@ class GlosarioView(ListView):
 	paginate_by = 10
 
 	def get_queryset(self):
-		queryset = Term.objects.filter(status = 1)
+		queryset = Term.objects.clean_terms()
 		return queryset
 
 	def get_context_data(self, **kwargs):
@@ -96,8 +95,7 @@ class TermCorrectionView(CreateView):
 			result = json.loads(response.read().decode())
 
 			if result['success']:
-				email = request.POST.get('email')
-				user = User.objects.get_or_create_quick_user(email, self.request, just_correction = True)
+				user = User.objects.get_or_create_quick_user(self.request, just_correction = True)
 			else:
 				messages.error(self.request, 'Hay un error con el captcha')
 				return self.form_invalid(form)

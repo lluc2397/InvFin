@@ -14,17 +14,13 @@ from django.db.models import (
 )
 
 from django.urls import reverse
-from datetime import datetime
 
-from apps.general.models import (
-    Currency,
-    Country,
-    Industry,
-    Sector
-)
+from django.contrib.auth import get_user_model
 
 from .managers import CompanyManager
 from apps.empresas.company.extension import CompanyExtended
+
+User = get_user_model()
 
 
 class ExchangeOrganisation(Model):
@@ -46,7 +42,7 @@ class ExchangeOrganisation(Model):
 class Exchange(Model):
     exchange_ticker = CharField(max_length=30, null=True, blank=True)
     exchange = CharField(max_length=250, null=True, blank=True)
-    country = ForeignKey(Country, on_delete=SET_NULL, null=True, blank=True)
+    country = ForeignKey("general.Country", on_delete=SET_NULL, null=True, blank=True)
     main_org = ForeignKey(ExchangeOrganisation, on_delete=SET_NULL, null=True, blank=True)
 
     class Meta:        
@@ -66,12 +62,12 @@ class Exchange(Model):
 class Company(CompanyExtended):
     ticker = CharField(max_length=30, unique=True, db_index=True)
     name = CharField(max_length=700, null=True, blank=True)
-    currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)
-    industry = ForeignKey(Industry, on_delete=SET_NULL, null=True, blank=True)
-    sector = ForeignKey(Sector, on_delete=SET_NULL, null=True, blank=True)
+    currency = ForeignKey("general.Currency", on_delete=SET_NULL, null=True, blank=True)
+    industry = ForeignKey("general.Industry", on_delete=SET_NULL, null=True, blank=True)
+    sector = ForeignKey("general.Sector", on_delete=SET_NULL, null=True, blank=True)
     website  = CharField(max_length=250 , null=True, blank=True)
     state = CharField(max_length=250 , null=True, blank=True)
-    country =  ForeignKey(Country, on_delete=SET_NULL, null=True, blank=True)
+    country =  ForeignKey("general.Country", on_delete=SET_NULL, null=True, blank=True)
     ceo = CharField(max_length=250 , null=True, blank=True)
     image = CharField(max_length=250 , null=True, blank=True)
     city  = CharField(max_length=250 , null=True, blank=True)
@@ -101,6 +97,8 @@ class Company(CompanyExtended):
     has_error = BooleanField(default=False)
     error_message = TextField( null=True, blank=True)
     objects = CompanyManager()
+    remote_image_imagekit = CharField(max_length=500 , default='', blank=True)
+    remote_image_cloudinary = CharField(max_length=500 , default='', blank=True)
 
     class Meta:        
         verbose_name = "Company"
@@ -115,12 +113,20 @@ class Company(CompanyExtended):
         return reverse("screener:company", kwargs={"ticker": self.ticker})
     
     @property
+    def full_name(self):
+        return f'{self.ticker} {self.name}'
+    
+    @property
+    def meta_image(self):
+        return self.remote_image_imagekit if self.remote_image_imagekit else self.remote_image_cloudinary
+    
+    @property
     def most_recent_year(self):
         return self.inc_statements.latest().date
     
     @property
     def short_introduction(self):
-        current_ratios = self.current_price_ratios
+        current_ratios = self.calculate_current_ratios()
         last_income_statement = current_ratios['last_income_statement']
         currency = last_income_statement.reported_currency
         intro = f"{self.ticker} ha tenido un crecimiento en sus ingresos del \
@@ -153,7 +159,7 @@ class IncomeStatement(Model):
     date = IntegerField(default=0)
     year = DateField(auto_now=True)
     company = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True, related_name="inc_statements")
-    reported_currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)
+    reported_currency = ForeignKey("general.Currency", on_delete=SET_NULL, null=True, blank=True)
     revenue = FloatField(default=0, blank=True, null=True)
     cost_of_revenue = FloatField(default=0, blank=True, null=True)
     gross_profit = FloatField(default=0, blank=True, null=True)
@@ -190,7 +196,7 @@ class BalanceSheet(Model):
     date = IntegerField(default=0)
     year = DateField(auto_now=True)
     company = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True, related_name="balance_sheets")
-    reported_currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)
+    reported_currency = ForeignKey("general.Currency", on_delete=SET_NULL, null=True, blank=True)
     cash_and_cash_equivalents = FloatField(default=0, blank=True, null=True)
     short_term_investments = FloatField(default=0, blank=True, null=True)
     cash_and_short_term_investements = FloatField(default=0, blank=True, null=True)
@@ -246,7 +252,7 @@ class CashflowStatement(Model):
     date = IntegerField(default=0)
     year = DateField(auto_now=True)
     company = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True, related_name="cf_statements")
-    reported_currency = ForeignKey(Currency, on_delete=SET_NULL, null=True, blank=True)
+    reported_currency = ForeignKey("general.Currency", on_delete=SET_NULL, null=True, blank=True)
     net_income = FloatField(default=0, blank=True, null=True)
     depreciation_amortization = FloatField(default=0, blank=True, null=True)
     deferred_income_tax = FloatField(default=0, blank=True, null=True)
@@ -558,4 +564,44 @@ class PriceToRatio(Model):
     def __str__(self):
         return self.company.ticker + str(self.date)
     
-    
+
+class InstitutionalOrganization(Model):
+    name = CharField(max_length=500, blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Institutional Organization"
+        verbose_name_plural = "Institutional Organizations"
+        db_table = "assets_institutional_organizations"
+
+    def __str__(self):
+        return self.name
+
+
+class TopInstitutionalOwnership(Model):
+    date = IntegerField(default=0)
+    year = DateField(blank=True, null=True) 
+    company = ForeignKey(
+        Company, on_delete=SET_NULL, null=True, 
+        blank=True, related_name="top_institutional_ownership"
+    )
+    organization = ForeignKey(
+        InstitutionalOrganization, on_delete=SET_NULL, null=True, 
+        blank=True, related_name="institution"
+    )
+    percentage_held = FloatField(default=0, blank=True, null=True)
+    position = FloatField(default=0, blank=True, null=True)
+    value = FloatField(default=0, blank=True, null=True)
+
+    class Meta:
+        get_latest_by = 'date'
+        ordering = ['-date']
+        verbose_name = "Top institutional owners"
+        verbose_name_plural = "Top institutional owners"
+        db_table = "assets_top_institutional_ownership"
+
+    def __str__(self):
+        return self.company.ticker + str(self.date)
+
+
+
+

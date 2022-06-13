@@ -14,11 +14,12 @@ from apps.web.models import WebsiteLegalPage
 from apps.public_blog.models import WritterProfile
 from apps.public_blog.views import writter_profile_view
 from apps.general.utils import HostChecker
+from apps.seo.mixins import SEOViewMixin
 
 from .forms import ContactForm, WebEmailForm
 
 
-class HomePage(TemplateView):
+class HomePage(SEOViewMixin, TemplateView):
     template_name = 'web_principal/inicio.html'
 
     def get(self, request, *args, **kwargs):
@@ -30,13 +31,11 @@ class HomePage(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         escritores = WritterProfile.objects.all()
-        context["meta_desc"] = 'Todo lo que necesitas para ser un mejor inversor'
-        context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir'
-        context["meta_title"] = 'Invierte correctamente'
-        context["meta_url"] = ''
         context['escritor1'] = escritores[0]
         context['escritor2'] = escritores[1]
         context['escritor3'] = escritores[2]
+        long = '12345'
+        print(long[-2:])
         return context
 
 

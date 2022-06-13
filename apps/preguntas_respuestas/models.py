@@ -13,7 +13,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from apps.general.models import BasicWrittenContent, BaseComment
+from apps.general.bases import BaseWrittenContent, BaseComment
 from ckeditor.fields import RichTextField
 
 from apps.general.mixins import CommonMixin
@@ -22,7 +22,7 @@ from itertools import chain
 
 from .managers import QuestionManager
 
-class Question(BasicWrittenContent):
+class Question(BaseWrittenContent):
     content = RichTextField(config_name='writter')
     is_answered = BooleanField(default=False)
     has_accepted_answer = BooleanField(default=False)

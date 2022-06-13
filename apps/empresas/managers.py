@@ -1,7 +1,14 @@
-from apps.general.managers import BaseSharedManager
+import random
+
+from django.db.models import Manager
 
 
-class CompanyManager(BaseSharedManager):
+class CompanyManager(Manager):
+
+    def get_random(self, query=None):
+        query = query if query else self.all()
+        models_list = list(query)
+        return random.choice(models_list)
 
     def companies_by_main_exchange(self, name=None):
         return self.filter(exchange__main_org__name = name)
@@ -61,3 +68,5 @@ class CompanyManager(BaseSharedManager):
             ''
         ]
     
+    def get_companies_user_likes(self, user):
+        pass

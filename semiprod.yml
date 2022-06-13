@@ -113,7 +113,7 @@ services:
     command: /start-flower
   
   nginx:
-    restart: always
+    # restart: always
     container_name: invfin_local_nginx
     build:
       context: .

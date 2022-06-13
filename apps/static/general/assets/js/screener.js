@@ -117,7 +117,7 @@ function generateChart(chartDatasets, chartTitle, chartID, chartLoaderID){
   });
 }
 
-function displayTable(tableDatasets, tableID, loaderID){
+function displayTable(tableDatasets, tableID, loaderID, hasBought){
     let currency = ''
 
     if (tableDatasets['currency']){
@@ -157,7 +157,11 @@ function displayTable(tableDatasets, tableID, loaderID){
         tableBody += '<td id="blur">67466</td></tr>';
     });
 
-    tableHead += '<th scope="col" class="border-0"><button data-bs-toggle="modal" data-bs-target="#NecesitasMembresiaModal" class="btn btn-danger btn-sm">Más años</button></th></tr></thead>'
+    tableHead += '<th scope="col" class="border-0">'
+    if (hasBought == false){
+      tableHead += '<button data-bs-toggle="modal" data-bs-target="#NecesitasMembresiaModal" class="btn btn-danger btn-sm">Más años</button>'
+    }    
+    tableHead += '</th></tr></thead>'
     table += tableHead
     tableBody += '</tbody>';
     table += tableBody
@@ -166,12 +170,12 @@ function displayTable(tableDatasets, tableID, loaderID){
     tableID.innerHTML = table;
 }
 
-function createContent(datasets, tableID, loaderID, chartTitle, chartID, chartLoaderID){
+function createContent(datasets, tableID, loaderID, chartTitle, chartID, chartLoaderID, hasBought){
    
     // if (chartID) {chartID.destroy();}
     let tableDatasets = datasets['table']
     let chartDatasets = datasets['chart']
-    displayTable(tableDatasets, tableID, loaderID);
+    displayTable(tableDatasets, tableID, loaderID, hasBought);
 
     generateChart(chartDatasets, chartTitle, chartID, chartLoaderID);
     

@@ -1,4 +1,6 @@
 from django.views.generic import ListView, DetailView
+from django.db.models import Q
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .mixins import ServicePaymentMixin
 from .models import (
@@ -13,6 +15,8 @@ from .forms import (
 	RoboAdvisorQuestionPortfolioCompositionForm,
 	RoboAdvisorQuestionRiskAversionForm
 )
+
+from . import constants
 from .brain.investor import get_investor_type
 # If user ask for a company recom and it doesn't have profile, recommend to tkae the test
 
@@ -34,16 +38,16 @@ class RoboAdvisorServicesListView(ListView):
 		return context
 
 
-class RoboAdvisorServiceOptionView(DetailView):
+class RoboAdvisorServiceOptionView(LoginRequiredMixin, DetailView):
 	model = RoboAdvisorService
 	template_name = "roboadvisor/details.html"
 	context_object_name = "service"
 
 	def prepare_forms(self, user, service):
 		context_forms = {}
-		if RoboAdvisorUserServiceActivity.objects.filter(user = user, service = service, status = 2).exists():
-			# get pre filed data
-			pass
+		# if RoboAdvisorUserServiceActivity.objects.filter(user = user, service = service, status = 2).exists():
+		# 	# get pre filed data
+		# 	pass
 		
 		context_forms["experience_form"] = RoboAdvisorQuestionInvestorExperienceForm()
 		context_forms["company_analysis_form"] = RoboAdvisorQuestionCompanyAnalysisForm()
@@ -96,13 +100,17 @@ class RoboAdvisorResultView(DetailView, ServicePaymentMixin):
 		return context
 
 
-class RoboAdvisorUserResultsListView(ListView):
+class RoboAdvisorUserResultsListView(LoginRequiredMixin, ListView):
 	model = RoboAdvisorUserServiceActivity
 	template_name = "roboadvisor/own-results.html"
 	context_object_name = "services"
 
 	def get_queryset(self):
-		return super().get_queryset().filter(user = self.request.user)
+		return super().get_queryset().filter(
+			Q(status = constants.FINISED) |
+			Q(status = constants.NOT_PAYED),
+			user = self.request.user			
+		)
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)

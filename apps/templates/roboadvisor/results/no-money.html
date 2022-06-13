@@ -1,3 +1,4 @@
+{% load static i18n extra %}
 <div class="card-header">
     Parece que te faltan <b>{{difference}}</b> créditos
 </div>
@@ -7,13 +8,13 @@
         Puedes conseguir estos créditos sencillamente con las siguientes opciones:
         <ul>
             <li>
-                <a href="{% url 'preguntas_respuestas:list_questions' %}?utm_source=invfin&utm_medium=webapp&utm_content=need-payment-robo-service">Aporta tu ayuda con una respuesta o haciendo una pregunta</a>
+                <a href="{% url 'preguntas_respuestas:list_questions' %}{% utm 'robo-results-no-money', 'questions' %}">Aporta tu ayuda con una respuesta o haciendo una pregunta</a>
             </li>
             <li>
-                <a href="{% url 'users:user_inicio' %}?utm_source=invfin&utm_medium=webapp&utm_content=need-payment-robo-service">Invita un amigo</a>
+                <a href="{% url 'users:user_inicio' %}{% utm 'robo-results-no-money', 'invite' %}">Invita un amigo</a>
             </li>
             <li>
-                <a href="{% url 'escritos:glosario' %}?utm_source=invfin&utm_medium=webapp&utm_content=need-payment-robo-service">Comparte o mejora un término</a>
+                <a href="{% url 'escritos:glosario' %}{% utm 'robo-results-no-money', 'terms' %}">Comparte o mejora un término</a>
             </li>
         </ul>
     </div>

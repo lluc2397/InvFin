@@ -1,12 +1,123 @@
 from django.contrib import admin
 from django.contrib.sessions.models import Session
+
+from import_export.admin import ImportExportActionModelAdmin
+from import_export.resources import ModelResource
+
+from apps.general.utils import ExportCsv
+
 from .models import (
     Visiteur,
     MetaParameters,
     MetaParametersHistorial,
     VisiteurJourney,
-    UsersJourney
+    UsersJourney,
+    Promotion,
+    PromotionCampaign,
+    VisiteurUserRelation,
+    VisiteurCompanyVisited,
+    UserCompanyVisited,
+    VisiteurPublicBlogVisited,
+    UserPublicBlogVisited,
+    VisiteurQuestionVisited,
+    UserQuestionVisited,
+    VisiteurTermVisited,
+    UserTermVisited,
 )
+
+class BaseModelVisitedAdmin(admin.ModelAdmin):
+    list_display = [
+        'user',
+        'model_visited',
+        'visit',
+        'date',
+    ]
+
+
+@admin.register(VisiteurCompanyVisited)
+class VisiteurCompanyVisitedAdmin(BaseModelVisitedAdmin):
+    pass
+
+
+@admin.register(UserCompanyVisited)
+class UserCompanyVisitedAdmin(BaseModelVisitedAdmin):
+    pass
+
+
+@admin.register(VisiteurPublicBlogVisited)
+class VisiteurPublicBlogVisitedAdmin(BaseModelVisitedAdmin):
+    pass
+
+
+@admin.register(UserPublicBlogVisited)
+class UserPublicBlogVisitedAdmin(BaseModelVisitedAdmin):
+    pass
+
+
+@admin.register(VisiteurQuestionVisited)
+class VisiteurQuestionVisitedAdmin(BaseModelVisitedAdmin):
+    pass
+
+
+@admin.register(UserQuestionVisited)
+class UserQuestionVisitedAdmin(BaseModelVisitedAdmin):
+    pass
+
+
+@admin.register(VisiteurTermVisited)
+class VisiteurTermVisitedAdmin(BaseModelVisitedAdmin):
+    pass
+
+
+@admin.register(UserTermVisited)
+class UserTermVisitedAdmin(BaseModelVisitedAdmin):
+    pass
+
+
+@admin.register(PromotionCampaign)
+class PromotionCampaignAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'title',
+        'slug',
+        'start_date',
+        'end_date',
+    ]
+
+
+@admin.register(Promotion)
+class PromotionAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'title',
+        'slug',
+        'prize',
+        'has_prize',
+        'shareable_url',
+        'redirect_to',
+        'medium',
+        'web_promotion_type',
+        'web_location',
+        'social_media',
+        'publication_date',
+        'campaign_related',
+        'reuse',
+        'times_to_reuse',
+        'clicks_by_user',
+        'clicks_by_not_user',
+        ]
+
+
+
+@admin.register(VisiteurUserRelation)
+class VisiteurUserRelationAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'user',
+        'visiteur',
+        'date',
+        ]
+
 
 @admin.register(Session)
 class SessionAdmin(admin.ModelAdmin):
@@ -15,8 +126,17 @@ class SessionAdmin(admin.ModelAdmin):
     list_display = ['session_key', '_session_data', 'expire_date']
 
 
+class VisiteurJourneyResource(ModelResource):
+    chunk_size = 10000
+    class Meta:
+        model = VisiteurJourney
+
+
+
 @admin.register(VisiteurJourney)
-class VisiteurJourneyAdmin(admin.ModelAdmin):
+class VisiteurJourneyAdmin(ImportExportActionModelAdmin):
+    actions = ["export_as_csv"]
+    resource_class = VisiteurJourneyResource
     list_display = [
         'user',
         'date',
@@ -36,7 +156,8 @@ class UsersJourneyAdmin(admin.ModelAdmin):
 
 
 @admin.register(Visiteur)
-class VisiteurAdmin(admin.ModelAdmin):
+class VisiteurAdmin(admin.ModelAdmin, ExportCsv):
+    actions = ["export_as_csv"]
     list_display = [
         'id',
         'ip',

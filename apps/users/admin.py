@@ -9,8 +9,8 @@ from apps.users.forms import UserAdminChangeForm, UserAdminCreationForm
 from .models import (
     Profile,
     MetaProfile,
-    MetaProfileHistorial
-    )
+    MetaProfileHistorial,
+)
 
 User = get_user_model()
 
@@ -56,7 +56,7 @@ class ProfileAdmin(admin.ModelAdmin):
         'ref_code',
     ]
 
-    search_fields = ['user_username']
+    search_fields = ['user__username']
     
 
 @admin.register(MetaProfile)
@@ -75,9 +75,9 @@ class MetaProfileAdmin(admin.ModelAdmin):
         'time_zone',
         'postal_code',
         'continent_code',
-        'continent_name',
-        
+        'continent_name',        
     ]
+
 
 @admin.register(MetaProfileHistorial)
 class MetaProfileHistorialAdmin(admin.ModelAdmin):

@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 def journey(request):
-    current_path = request.META['PATH_INFO']
+    current_path = request.build_absolute_uri()
     comes_from = str(request.META.get('HTTP_REFERER'))
 
     if request.user.is_authenticated and request.user.username != 'Lucas':

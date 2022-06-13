@@ -1,5 +1,12 @@
 from django.shortcuts import redirect
-from django.views.generic import RedirectView
+from django.views.generic import (
+    ListView, 
+    DetailView, 
+    RedirectView,
+    View,
+    FormView,
+    TemplateView
+)
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 
@@ -8,7 +15,7 @@ from apps.public_blog.models import PublicBlog
 from apps.preguntas_respuestas.models import Question
 
 from .models import Promotion
-
+from .mixins import SEOViewMixin
 
 def redirect_old_urls(request, ques_slug=False, term_slug=False, publs_slug=False):
     if ques_slug == False and term_slug == False:
@@ -35,7 +42,7 @@ def redirect_old_urls(request, ques_slug=False, term_slug=False, publs_slug=Fals
             if old_url.exists():
                 redirect_to = old_url[0].get_absolute_url()
             else:
-                redirect_to = 'general:escritos'
+                redirect_to = 'escritos:glosario'
     return redirect(redirect_to)
         
 
@@ -60,3 +67,24 @@ def robots_txt(request):
         "Disallow: /junk/",
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
+
+
+class SEOListView(SEOViewMixin, ListView):
+    pass
+
+
+class SEODetailView(SEOViewMixin, DetailView):
+    pass
+
+
+class SEOView(SEOViewMixin, View):
+    pass
+
+
+class SEOFormView(SEOViewMixin, FormView):
+    pass
+
+
+class SEOTemplateView(SEOViewMixin, TemplateView):
+    pass
+

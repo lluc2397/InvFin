@@ -1,0 +1,36 @@
+{% load static i18n extra %}
+<div class="row align-items-center py-4">
+  <div class="col-lg-6 col-7">
+    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+        <ol class="breadcrumb breadcrumb-links breadcrumb-light">
+          <li class="breadcrumb-item">
+            <a href="{% url 'business:all_products' %}{% utm 'product' product.title %}">
+              <i class="fa-solid fa-square-poll-horizontal"></i>
+              Atrás
+            </a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            {{product.title}}
+          </li>
+        </ol>
+    </nav>
+  </div>
+  <div class="col-lg-6 col-5 text-right">
+   
+  </div>
+</div>
+<!-- Card stats -->
+<div class="row">
+  <div class="col-xl-3 col-md-6">
+    
+  </div>
+  <div class="col-xl-3 col-md-6">
+    
+  </div>
+  <div class="col-xl-3 col-md-6">
+    
+  </div>
+  <div class="col-xl-3 col-md-6">
+    
+  </div>
+</div>

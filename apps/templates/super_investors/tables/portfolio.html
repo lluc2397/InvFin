@@ -1,0 +1,53 @@
+{% load static i18n extra %}
+<div class="card">
+    <div class="card-header">
+        Portfolio
+    </div>
+    <div class="table-responsive">
+        <table class="table align-items-center">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Empresa</th>
+                    <th scope="col">Acciones en cartera</th>
+                    <th scope="col">Precio de compra</th>
+                    <th scope="col">% en cartera</th>
+                </tr>
+            </thead>
+            <tbody class="list">
+                {% for company in all_information.portfolio %}
+                <tr>
+                    <th scope="row">
+                        <div class="media align-items-center">
+                            {% if company.actual_company_info.ticker %}
+                            <a href="{% url 'screener:company' company.actual_company_info.ticker %}{% utm superinvestor.name company.actual_company_info.ticker %}"
+                            {% else %}
+                            <a href="#!"
+                            {% endif %} 
+                            class="avatar rounded-circle mr-3">
+                                <img alt="{{company.actual_company_info.ticker}}" src="{{company.actual_company_info.image}}">
+                            </a>
+                            <div class="media-body">
+                                {% if company.actual_company_info.ticker %}
+                                <a href="{% url 'screener:company' company.actual_company_info.ticker %}{% utm superinvestor.name company.actual_company_info.ticker %}"
+                                {% else %}
+                                <a href="#!"
+                                {% endif %} 
+                                class="name mb-0 text-sm">{{company.actual_company_info.full_name}}</a>
+                            </div>
+                        </div>
+                    </th>
+                    <td>
+                        {{company.shares}}
+                    </td>
+                    <td>
+                        ${{company.reported_price}} USD
+                    </td>
+                    <td class="budget">
+                        {{company.portfolio_weight}} %
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

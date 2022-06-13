@@ -3,8 +3,9 @@
 build:
 	docker-compose -f local.yml build $(ar)
 
-up-back:
+up-b:
 	docker-compose -f local.yml up $(ar) -d
+	docker-compose -f local.yml logs -f django
 
 up:
 	docker-compose -f local.yml up $(ar)
@@ -65,6 +66,10 @@ pdb_manage:
 	docker-compose -f local.yml stop django
 	docker-compose -f local.yml run --rm --service-ports django  ./manage.py $(ar) --settings=config.settings.local
 
+# requirements:
+# 	docker-compose run --rm essentialist.api /requirements.sh "temp_venv/bin/pip"
+# 	rm -rf temp_venv/
+
 # Postgres
 shell_db:
 	docker-compose -f local.yml exec postgres /bin/sh
@@ -78,8 +83,8 @@ backup:
 ls-backups:
 	docker-compose -f local.yml exec postgres backups
 
-cp-backups:
-	docker cp $(docker-compose -f local.yml ps -q postgres):/backups ./backups
+rt-backups:
+	docker cp docker-compose -f local.yml ps -q postgres:/backups ./backups
 
 restore:
 	docker-compose -f local.yml exec postgres restore $(ar)

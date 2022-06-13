@@ -1,5 +1,6 @@
 from django.contrib.gis.geoip2 import GeoIP2
 from django.conf import settings
+from django.urls import URLPattern, URLResolver
 
 from .models import (
     Visiteur
@@ -9,7 +10,8 @@ from django.contrib.sessions.models import Session
 
 class SeoInformation:
 
-    def get_client_ip(self, request):
+    @staticmethod
+    def get_client_ip(request):
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
             
@@ -25,7 +27,7 @@ class SeoInformation:
 
     def meta_information(self, request):
         g = GeoIP2()
-        ip = self.get_client_ip(request)
+        ip = SeoInformation.get_client_ip(request)
         if settings.DEBUG:
             ip = '162.158.50.77'
         meta = {
@@ -103,3 +105,23 @@ class SeoInformation:
         )
         request.session['visiteur_id'] = visiteur.id
         return visiteur
+
+
+
+
+# urlconf = __import__(settings.ROOT_URLCONF, {}, {}, [''])
+
+# def list_urls(lis, acc=None):
+#     if acc is None:
+#         acc = []
+#     if not lis:
+#         return
+#     l = lis[0]
+#     if isinstance(l, URLPattern):
+#         yield acc + [str(l.pattern)]
+#     elif isinstance(l, URLResolver):
+#         yield from list_urls(l.url_patterns, acc + [str(l.pattern)])
+#     yield from list_urls(lis[1:], acc)
+
+# for p in list_urls(urlconf.urlpatterns):
+#     print(''.join(p))

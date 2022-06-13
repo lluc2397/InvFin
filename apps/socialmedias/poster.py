@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
+from django.utils.html import strip_tags
 
 from apps.translate.google_trans_new import google_translator
 from apps.socialmedias.socialposter.facepy import Facebook
@@ -24,44 +25,39 @@ class SocialPosting:
             
             if model_type == 'preguntas_respuestas.question':# Quesiton
                 description = content.content
-                media_url = ''
                 title = content.title
             
             elif model_type == 'empresas.company':# Company:
                 title = content.name
-                description = content.description
-                media_url = content.image
+                description = f'{content.short_introduction} {content.description}'
 
             elif model_type == 'public_blog.publicblog':# Company:
                 title = content.title
                 description = content.resume
-                media_url = 'https://inversionesyfinanzas.xyz' + content.image
                 link = content.custom_url
 
             elif model_type == 'escritos.term':# term:
                 title = content.title
                 description = content.resume
-                media_url = 'https://inversionesyfinanzas.xyz' + content.image
             
-        if self.company_related:# News
+        elif self.company_related:# News
             content = self.company_related
             news = content.show_news[0]
             title = news['headline']
             description = news['summary']
             description = google_translator().translate(description, lang_src='en', lang_tgt='es')
-            media_url = ''
 
-        if not link:
+        if link is None:
             link = 'https://inversionesyfinanzas.xyz' + content.get_absolute_url()
 
-        return title, link, description, media_url
+        return strip_tags(title), link, strip_tags(description)
     
-    def share_content(self, post_type):
-        title, link, description, media_url = self.generate_content()
+    def share_content(self, post_type=3):
+        title, link, description = self.generate_content()
         fb_response = Facebook().post_on_facebook(title=title, caption=description, post_type=3, link=link)
         self.save_post(fb_response)
         
-        tw_response = Twitter().tweet(caption=description, post_type=3, media_url=media_url, link=link, title=title)
+        tw_response = Twitter().tweet(caption=description, post_type=3, link=link, title=title)
         self.save_post(tw_response)
 
     def save_post(self, data:dict):

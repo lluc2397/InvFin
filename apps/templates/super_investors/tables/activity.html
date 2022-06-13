@@ -1,0 +1,56 @@
+{% load static i18n extra %}
+    <div class="table-responsive">
+        <table class="table align-items-center">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Empresa</th>
+                    <th scope="col">Periodo</th>
+                    <th scope="col">Movimiento</th>
+                    <th scope="col">Cambio en acciones</th>
+                    <th scope="col">% cambio en acciones</th>
+                    <th scope="col">Cambio en cartera</th>
+                </tr>
+            </thead>
+            <tbody class="list">
+                {% for company in all_activity %}
+                <tr>
+                    <th scope="row">
+                        <div class="media align-items-center">
+                            {% if company.actual_company_info.ticker %}
+                            <a href="{% url 'screener:company' company.actual_company_info.ticker %}{% utm superinvestor.name company.actual_company_info.ticker %}"
+                            {% else %}
+                            <a href="#!"
+                            {% endif %} 
+                            class="avatar rounded-circle mr-3">
+                                <img alt="{{company.actual_company_info.ticker}}" src="{{company.actual_company_info.image}}">
+                            </a>
+                            <div class="media-body">
+                                {% if company.actual_company_info.ticker %}
+                                <a href="{% url 'screener:company' company.actual_company_info.ticker %}{% utm superinvestor.name company.actual_company_info.ticker %}"
+                                {% else %}
+                                <a href="#!"
+                                {% endif %} 
+                                class="name mb-0 text-sm">{{company.actual_company_info.full_name}}</a>
+                            </div>
+                        </div>
+                    </th>
+                    <td>
+                        {{company.period_related}}
+                    </td>
+                    <td class='text-{{company.movement_type.color}}'>
+                        {{company.movement_type.move}}
+                    </td>
+                    <td class='text-{{company.movement_type.color}}'>
+                        {{company.share_change}}
+                    </td>
+                    <td class='text-{{company.movement_type.color}}'>
+                        {{company.percentage_share_change}}%
+                    </td>
+                    <td class='text-{{company.movement_type.color}}'>
+                        {{company.portfolio_change}}%
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>

@@ -1,0 +1,78 @@
+{% extends "general/bases/base_content.html" %}
+{% load static i18n extra %}
+{% block header %}{% include "business/headers/inicio.html" %}{% endblock header%}
+
+{% block OnTopContent %}
+{% endblock OnTopContent%}
+
+{% block FirstCta %}
+<div class="col-12">
+    {% block FirstCtaContent %}
+    {% endblock FirstCtaContent %}
+</div>
+{% endblock FirstCta %}
+
+{% block FirstContent %}
+{% endblock FirstContent%}
+
+
+{% block ListContent %}
+{% for product in products %}
+{% if forloop.first %}
+<div class="col-12">
+    <div class="card bg-translucent-success shadow">
+{% else %}
+<div class="col-md-6 col-sm-12">
+    <div class="card">
+{% endif %}    
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="d-flex flex-column h-100">
+                        <a href="{{product.get_absolute_url}}{% utm 'all-products' product.title %}">
+                            <p class="h1 text-bold">
+                                {{product.title}}
+                            </p>
+                        </a>
+                       
+                        <h5 class="font-weight-bolder">
+                            <div class="d-flex">
+                                <spanclass="badge badge-info text-center mr-2">
+                                    <span class="font-weight-bolder" style="font-size: 10px">Última actualización: {{product.updated_at|date:"d.m.y"}}</span>
+                                </span>
+                            </div>
+                        </h5>
+                        <p>
+                            <a href="{{product.get_absolute_url}}{% utm 'all-products' product.title %}">
+                                {{product.description|safe}}
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                {% if product.image %}
+                <div class="col-lg-3 ms-auto text-center mt-5 mt-lg-0">
+                    <div class="bg-gradient-yellow border-radius-lg h-100 ">
+                        <img src="{{product.image}}" class="h-100 w-100 rounded top-0 d-lg-block d-none" alt="waves">                    
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock ListContent %}
+
+
+{% block MiddleCta %}
+<div class="col-12">
+    {% block MiddleCtaContent %}
+    {% endblock MiddleCtaContent %}
+</div>
+{% endblock MiddleCta%}
+
+{% block ListContinuation %}
+{% endblock ListContinuation %}
+
+{% block LastCta %}
+{% endblock LastCta %}

@@ -1,8 +1,9 @@
+{% load static i18n extra %}
 <meta name="robots" content="noindex,nofollow">
         <div class="row align-items-center py-4">
           <div class="col-lg-6 col-7">
             <h6 class="h2 d-inline-block mb-0">
-              Bienvenido {{request.user.username}}
+              {{meta_title}}
             </h6>
           </div>
           <div class="col-lg-6 col-5 text-right">
@@ -12,7 +13,6 @@
             {% if request.user.is_writter %}
             <a href="{% url 'public_blog:manage_blogs' request.user.username %}" class="btn btn-sm btn-neutral">Escritos</a>
             {% endif %}
-            <!-- <a href="{% url 'account_email' %}" class="btn btn-sm btn-neutral">E-Mail</a> -->
             <a href="{% url 'users:update' %}" class="btn btn-sm btn-neutral">Editar</a>
           </div>
         </div>

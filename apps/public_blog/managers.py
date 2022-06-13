@@ -1,5 +1,10 @@
-from apps.general.managers import BaseSharedManager
+import random
+
+from django.db.models import Manager
 
 
-class PublicBlogManager(BaseSharedManager):
-    pass
+class PublicBlogManager(Manager):
+    def get_random(self, query=None):
+        query = query if query else self.all()
+        models_list = list(query)
+        return random.choice(models_list)

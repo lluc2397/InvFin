@@ -1,9 +1,6 @@
 {% extends "general/bases/base_content.html" %}
-{% load static %}
-
+{% load static i18n extra %}
 {% block header %}{% include "glosario/header/inicio.html" %}{% endblock header%}
-
-
 {% block FirstCtaContent %}
 {% include "glosario/cta/inicio.html" %}
 {% endblock FirstCtaContent %}
@@ -15,7 +12,7 @@
         <div class="row">
             <div class="col-lg-9">
                 <div class="d-flex flex-column h-100">
-                    <a href="{{term.get_absolute_url}}">
+                    <a href="{{term.get_absolute_url}}{% utm 'glosario' term.title %}">
                         <p class="h1 mb-1 pt-2 text-bold">
                             {{term.title}}
                         </p>
@@ -30,10 +27,10 @@
                             {% endfor %}
                         </div>
                     </h5>
-                    <p class="mb-5"><a href="{{term.get_absolute_url}}">
+                    <p class="mb-5"><a href="{{term.get_absolute_url}}{% utm 'glosario' term.title %}">
                         {{term.resume}}
                     </a></p>
-                    <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="{{term.get_absolute_url}}">
+                    <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="{{term.get_absolute_url}}{% utm 'glosario' term.title %}">
                     Leer más
                     <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
                     </a>
@@ -48,8 +45,44 @@
     </div>
 </div>
 {% endfor %}
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center">
+     {% if page_obj.has_previous %}
+     <li class="page-item">
+        <a class="page-link" href="?page=1">1</a>
+     </li>
+    <li class="page-item">
+      <a href="?page={{ page_obj.previous_page_number }}" class="page-link">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% endif %}
+    {% if page_obj.number != 1 %}
+    <li class="page-item">
+     <a href="?page={{ page_obj.number|add:-1 }}" class="page-link">{{ page_obj.number|add:-1 }}</a>
+   </li>
+   {% endif %}
+     <li class="page-item active" aria-current="page">
+        <span class="page-link">{{ page_obj.number }}</span>
+     </li>
+     <li class="page-item">
+        <a href="?page={{ page_obj.number|add:1 }}" class="page-link">{{ page_obj.number|add:1 }}</a>
+      </li>
+    {% if page_obj.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    <li class="page-item">
+       <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Último</a>
+     </li>
+    {% endif %}
+  </ul>
+</nav>
 {% endblock LeftSide %}
 
 {% block RightSide %}
 {% include "glosario/side/inicio.html" %}
 {% endblock RightSide%}
+

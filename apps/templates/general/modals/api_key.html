@@ -1,0 +1,32 @@
+{% load static i18n extra %}
+<div class="modal fade" id="APIKeyModal" tabindex="-1" role="dialog" aria-labelledby="APIKeyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
+        <div class="modal-content bg-gradient-danger">
+            <div class="modal-header">
+                <h6 class="modal-title" id="modal-title-notification">Tu clave API</h6>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            {% if request.user.user_api_key != False %}
+            <input class="form-control" type="text" value="{{request.user.user_api_key}}" aria-label="{{request.user.user_api_key}}" readonly>
+            {% else %}
+            <form method="POST" action="{% url 'api:request_api_key' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="py-3 text-center">
+                        <i class="ni ni-bell-55 ni-3x"></i>
+                        <h4 class="heading mt-4">Coméntanos para qué quieres usar la API</h4>
+                        <div class="form-group">
+                            <textarea class="form-control" name="description" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-white">Empezar</button>                
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>

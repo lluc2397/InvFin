@@ -39,5 +39,4 @@ router.register("EficiencyRatio", EficiencyRatioViewSet, basename="EficiencyRati
 router.register("PriceToRatio", PriceToRatioViewSet, basename="PriceToRatio")
 
 
-app_name = "empresas"
 urlpatterns = router.urls

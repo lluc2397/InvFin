@@ -80,7 +80,6 @@ class BaseRoboAdvisorAPIView(GenericAPIView, CreateModelMixin, UpdateModelMixin)
             # session.modified = True
 
         client_side_data.update(user_activity)
-        print(client_side_data)
         # if ses in session:
         #     response = self.update(client_side_data)
         #     response(status=status.HTTP_200_OK)

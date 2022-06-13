@@ -1,4 +1,4 @@
-{% load static %}
+{% load static i18n extra %}
 <div class="card text-center">
     <div class="card-header">
         Contribuidores
@@ -23,23 +23,23 @@
             </div>
             
             <div class="col-12 mt-4">
-                <a href="https://www.facebook.com/sharer/sharer.php?u={{object.shareable_link}}?utm_source=facebook&utm_medium=shared&utm_content=term"  
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{object.shareable_link}}{% utm content='glosario' term=term medium='user-shared' source='facebook' campaign='website-shared' %}"  
                 target="_blank" class="btn btn-facebook btn-icon-only rounded-circle">
                     <span class="btn-inner--icon"><i class="fab fa-facebook"></i></span>
                 </a>
-                <a href="https://twitter.com/intent/tweet?text={{object.shareable_link}}?utm_source=twitter&utm_medium=shared&utm_content=term"  
+                <a href="https://twitter.com/intent/tweet?text={{object.shareable_link}}{% utm content='glosario' term=term medium='user-shared' source='facebook' campaign='website-shared' %}"  
                 target="_blank" class="btn btn-twitter btn-icon-only rounded-circle">
                     <span class="btn-inner--icon"><i class="fab fa-twitter"></i></span>
                 </a>
-                <a href="https://reddit.com/submit/?url={{object.shareable_link}}?utm_source=reddit&utm_medium=shared&utm_content=term"  
+                <a href="https://reddit.com/submit/?url={{object.shareable_link}}{% utm content='glosario' term=term medium='user-shared' source='facebook' campaign='website-shared' %}"  
                 target="_blank" class="btn btn-youtube btn-icon-only rounded-circle">
                     <span class="btn-inner--icon"><i class="fab fa-reddit"></i></span>
                 </a>
-                <a href="https://www.linkedin.com/shareArticle?url={{object.shareable_link}}?utm_source=linkedin&utm_medium=shared&utm_content=term"  
+                <a href="https://www.linkedin.com/shareArticle?url={{object.shareable_link}}{% utm content='glosario' term=term medium='user-shared' source='facebook' campaign='website-shared' %}"  
                 target="_blank" class="btn btn-facebook btn-icon-only rounded-circle">
                     <span class="btn-inner--icon"><i class="fab fa-linkedin"></i></span>
                 </a>
-                <a href="https://api.whatsapp.com/send?text={{object.shareable_link}}?utm_source=whatsapp&utm_medium=shared&utm_content=term"  
+                <a href="https://api.whatsapp.com/send?text={{object.shareable_link}}{% utm content='glosario' term=term medium='user-shared' source='facebook' campaign='website-shared' %}"  
                 target="_blank" class="btn btn-slack btn-icon-only rounded-circle">
                     <span class="btn-inner--icon"><i class="fab fa-whatsapp"></i></span>
                 </a>

@@ -1,4 +1,5 @@
 from cloudinary.models import CloudinaryField
+
 from django.contrib.auth.models import AbstractUser
 from django.contrib.sites.models import Site
 from django.db.models import (
@@ -21,7 +22,7 @@ from django_countries.fields import CountryField
 
 from apps.general.mixins import ResizeImageMixin
 
-from .manager import ProfileManager, UserExtraManager
+from .managers import ProfileManager, UserExtraManager
 
 
 DOMAIN = Site.objects.get_current().domain
@@ -76,6 +77,21 @@ class User(AbstractUser):
             full_name = self.username
         return full_name
     
+    # @property
+    # def has_api_key(self):
+    #     from apps.api.models import Key
+    #     key = Key.objects.filter(user=self, in_use=True)
+    #     if key.exists():
+    #         return key.first()
+
+    @property
+    def user_api_key(self):
+        from apps.api.models import Key
+        key = Key.objects.filter(user=self, in_use=True)
+        if key.exists() is True:
+            return key.first()
+        return False
+        
     @property
     def questions_asked(self):
         return self.question_set.all()
@@ -121,6 +137,11 @@ class User(AbstractUser):
     def fav_terms(self):
         fav_terms = self.favorites_terms.term.all()        
         return fav_terms
+    
+    @property
+    def fav_superinvestors(self):
+        fav_superinvestors = self.favorites_superinvestors.superinvestor.all()        
+        return fav_superinvestors
     
     @property
     def fav_writters(self):
@@ -204,16 +225,35 @@ class User(AbstractUser):
 
     def create_new_user(self, request):
         from allauth.account.utils import sync_user_email_addresses
+        from apps.seo.models import VisiteurUserRelation
 
-        sync_user_email_addresses(self)
-        self.create_profile(request)
-        self.create_meta_profile(request)
-        self.add_fav_lists()
+        try:
+            if 'visiteur_id' in request.session:
+                visiteur_id = request.session['visiteur_id']
+                VisiteurUserRelation.objects.create(user=self, visiteur_id=visiteur_id)
+        except Exception as e:
+            print('VisiteurUserRelation',e)
+        try:
+            sync_user_email_addresses(self)
+        except Exception as e:
+            print('sync_user_email_addresses',e)
+        try:
+            self.create_profile(request)
+        except Exception as e:
+            print('create_profile',e)
+        try:
+            self.create_meta_profile(request)
+        except Exception as e:
+            print('create_meta_profile',e)
+        try:
+            self.add_fav_lists()
+        except Exception as e:
+            print('add_fav_lists',e)
         return True
 
 
 class MetaProfile(Model):    
-    ip = CharField(max_length=10000, null=True, blank=True)
+    ip = CharField(max_length=50, null=True, blank=True)
     country_code = CharField(max_length=10000, null=True, blank=True)
     country_name = CharField(max_length=10000, null=True, blank=True)
     dma_code = CharField(max_length=10000, null=True, blank=True)

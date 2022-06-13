@@ -18,28 +18,28 @@
  <meta name="keywords" content="{{object.meta_info.meta_tags}}">
  <meta name="Description" content="{{object.meta_info.meta_desc|safe}}">
  <title>{{ object.meta_info.meta_title}}</title>
- <link rel=”canonical” href={{object.meta_info.meta_url}}>
+ <link rel=”canonical” href={{object.meta_info.meta_url}} />
  
  <!-- Twitter Card data -->
  <meta name="twitter:site" content="Inversiones & Finanzas">
  <meta name="twitter:title" content="{{ object.meta_info.meta_title}}">
  <meta name="twitter:description" content="{{object.meta_info.meta_desc|safe}}">
  <meta name="twitter:creator" content="{{object.meta_info.meta_author}}">
- <meta name="twitter:url" content="{{object.meta_info.meta_url}}">
+ <meta name="twitter:url" href="{{object.meta_info.meta_url}}">
  <meta name="twitter:card" content="summary">
- <meta name="twitter:image" content="{{object.meta_info.meta_image}}">
+ <meta name="twitter:image" href="{{object.meta_info.meta_image}}">
 
 
  <!-- Open Graph data -->
  <meta property="og:locale" content="es" />
  <meta property="og:title" content="{{ object.meta_info.meta_title }}" />
- <meta property="og:url" content="{{object.meta_info.meta_url}}" />
+ <meta property="og:url" href="{{object.meta_info.meta_url}}" />
  <meta property="og:description" content="{{object.meta_info.meta_desc|safe}}" />
  <meta property="og:site_name" content="Inversiones & Finanzas" />
  <meta name="author" content="{{object.meta_info.meta_author}}">
  <meta property="og:type" content="article">
- <meta name="image" property="og:image" content="{{object.meta_info.meta_image}}" />
- <meta property="og:image" content="{{object.meta_info.meta_image}}" />
+ <meta name="image" property="og:image" href="{{object.meta_info.meta_image}}" />
+ <meta property="og:image" href="{{object.meta_info.meta_image}}" />
  <meta property="article:author" content="{{object.meta_info.meta_author}}" />
  <meta property="article:section" content="{{object.meta_info.meta_category}}" />
  <meta property="article:tag" content="{{object.meta_info.meta_tags}}" />
@@ -51,7 +51,7 @@
  <meta itemprop="name" content="{{object.meta_info.meta_title}}">
  <meta itemprop="description" content="{{object.meta_info.meta_desc|safe}}">
 
- <meta itemprop="image" content="{{object.meta_info.meta_image}}">
+ <meta itemprop="image" href="{{object.meta_info.meta_image}}">
 
  <script type="application/ld+json">
     {{object.meta_info.schema_org|safe}}

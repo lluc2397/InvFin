@@ -1,6 +1,7 @@
 from pathlib import Path
 from django.contrib.messages import constants as messages
 import environ
+from imagekitio import ImageKit
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # invfin/
@@ -14,13 +15,18 @@ if READ_DOT_ENV_FILE:
 
 # GENERAL
 # ------------------------------------------------------------------------------
+PROTOCOL = 'http://'
+MAIN_DOMAIN = 'inversionesyfinanzas.xyz'
+CURRENT_DOMAIN = '0.0.0.0:8000'
+FULL_DOMAIN = f'{PROTOCOL}{CURRENT_DOMAIN}'
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env.bool("DJANGO_DEBUG", False)
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
 # In Windows, this must be set to your system time zone.
-TIME_ZONE = "UTC"
+TIME_ZONE = "CET"
 # https://docs.djangoproject.com/en/dev/ref/settings/#language-code
 LANGUAGE_CODE = "es-ES"
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
@@ -43,7 +49,6 @@ NUMBER_GROUPING = 3
 
 # Thousand separator symbol
 THOUSAND_SEPARATOR = "."
-
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -83,7 +88,6 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "django_celery_beat",
     "rest_framework",
-    "rest_framework.authtoken",
     "corsheaders",
     "ckeditor",
     "django_cleanup.apps.CleanupConfig",
@@ -107,7 +111,10 @@ LOCAL_APPS = [
     "apps.screener",
     "apps.cartera",
     "apps.roboadvisor",
-    "apps.socialmedias"
+    "apps.socialmedias",
+    "apps.api",
+    "apps.business",
+    # "apps.recsys"
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -243,7 +250,7 @@ SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_NAME = "sessionid"
 # Whether to save the session data on every request.
 SESSION_SAVE_EVERY_REQUEST = False
-
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-httponly
 CSRF_COOKIE_HTTPONLY = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-browser-xss-filter
@@ -349,18 +356,25 @@ SOCIALACCOUNT_FORMS = {"signup": "apps.users.forms.UserSocialSignupForm"}
 # django-rest-framework
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
+DRF_DEFAULT_RENDERER_CLASSES ='rest_framework.renderers.JSONRenderer'
+if DEBUG == True:
+    DRF_DEFAULT_RENDERER_CLASSES = 'rest_framework.renderers.BrowsableAPIRenderer'
+
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
-    ),
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "apps.api.authentication.KeyAuthentication",
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+    "DEFAULT_PERMISSION_CLASSES": ["apps.api.permissions.ReadOnly"],
+    'DEFAULT_VERSIONING_CLASS': "rest_framework.versioning.NamespaceVersioning",
+    'DEFAULT_RENDERER_CLASSES': [DRF_DEFAULT_RENDERER_CLASSES],
+    'DEFAULT_PARSER_CLASSES': ['rest_framework.parsers.JSONParser'],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination'
 }
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
 CORS_URLS_REGEX = r"^/api/.*$"
-CORS_URLS_REGEX = r"^/screener/.*$"
-
 
 
 # By Default swagger ui is available only to admin user. You can change permission classs to change that
@@ -371,14 +385,18 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
     "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
     "SERVERS": [
+        {"url": "http://0.0.0.0.:8000", "description": "Local Development server"},
         {"url": "https://127.0.0.1:8000", "description": "Local Development server"},
         {"url": "http://example.com:8000", "description": "Local Development server"},
         {"url": "https://inversionesyfinanzas.xyz", "description": "Production server"},
     ],
 }
-# Your stuff...
+# API versions
 # ------------------------------------------------------------------------------
+API_VERSION = {'CURRENT_VERSION': 'v1'}
 
+# Tags
+# ------------------------------------------------------------------------------
 MESSAGE_TAGS = {
     messages.DEBUG: 'debug',
     messages.INFO: 'info',
@@ -387,8 +405,12 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
 
+# GEOIP
+# ------------------------------------------------------------------------------
 GEOIP_PATH = str(ROOT_DIR / "geoip")
 
+# CKEditor
+# ------------------------------------------------------------------------------
 # CKEDITOR_BASEPATH = STATIC_ROOT+"/ckeditor/ckeditor/"
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
@@ -520,14 +542,38 @@ CKEDITOR_CONFIGS ={
     }
 }
 
-SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
+
+# FInancial data KEYS
+# ------------------------------------------------------------------------------
 FINHUB_TOKEN = env.str("FINHUB_TOKEN")
 FINPREP_KEY = env.str("FINPREP_KEY")
 
-#GOOGLE KEYS
+# GOOGLE KEYS
+# ------------------------------------------------------------------------------
 GOOGLE_RECAPTCHA_SECRET_KEY = env.str('GOOGLE_RECAPTCHA_SECRET_KEY')
 GOOGLE_RECAPTCHA_PUBLIC_KEY = env.str('GOOGLE_RECAPTCHA_PUBLIC_KEY')
+
+# FACEBOOK KEYS
+# ------------------------------------------------------------------------------
+OLD_FB_PAGE_ACCESS_TOKEN = env.str('OLD_FB_PAGE_ACCESS_TOKEN')
+NEW_FB_PAGE_ACCESS_TOKEN = env.str('NEW_FB_PAGE_ACCESS_TOKEN')
+FACEBOOK_APP_SECRET = env.str('FACEBOOK_APP_SECRET')
+OLD_FACEBOOK_ID = env.str('OLD_FACEBOOK_ID')
+NEW_FACEBOOK_ID = env.str('NEW_FACEBOOK_ID')
+FB_USER_ACCESS_TOKEN = env.str('FB_USER_ACCESS_TOKEN')
+
+# INSTAGRAM KEYS
+# ------------------------------------------------------------------------------
+INSTAGRAM_ID = env.str('INSTAGRAM_ID')
+
+# TWITTER KEYS
+# ------------------------------------------------------------------------------
+TWITTER_CONSUMER_KEY = env.str('TWITTER_CONSUMER_KEY')
+TWITTER_CONSUMER_SECRET = env.str('TWITTER_CONSUMER_SECRET')
+TWITTER_ACCESS_TOKEN = env.str('TWITTER_ACCESS_TOKEN')
+TWITTER_ACCESS_TOKEN_SECRET = env.str('TWITTER_ACCESS_TOKEN_SECRET')
+
 
 # List of compiled regular expression objects representing User-Agent strings
 # that are not allowed to visit any page, systemwide. Use this for bad
@@ -540,22 +586,20 @@ GOOGLE_RECAPTCHA_PUBLIC_KEY = env.str('GOOGLE_RECAPTCHA_PUBLIC_KEY')
 #         re.compile(r'^sohu-search'),
 #     ]
 
-#FACEBOOK KEYS
-OLD_FB_PAGE_ACCESS_TOKEN = env.str('OLD_FB_PAGE_ACCESS_TOKEN')
-NEW_FB_PAGE_ACCESS_TOKEN = env.str('NEW_FB_PAGE_ACCESS_TOKEN')
-FACEBOOK_APP_SECRET = env.str('FACEBOOK_APP_SECRET')
-OLD_FACEBOOK_ID = env.str('OLD_FACEBOOK_ID')
-NEW_FACEBOOK_ID = env.str('NEW_FACEBOOK_ID')
-FB_USER_ACCESS_TOKEN = env.str('FB_USER_ACCESS_TOKEN')
-#INSTAGRAM KEYS
-INSTAGRAM_ID = env.str('INSTAGRAM_ID')
+# IMAKIT
+# ------------------------------------------------------------------------------
+IMAGEKIT_PRIVATE_KEY = env.str('IMAGEKIT_PRIVATE_KEY')
+IMAGEKIT_PUBLIC_KEY = env.str('IMAGEKIT_PUBLIC_KEY')
+IMAGEKIT_URL_ENDPOINT = env.str('IMAGEKIT_URL_ENDPOINT')    
 
-#TWITTER KEYS
-TWITTER_CONSUMER_KEY = env.str('TWITTER_CONSUMER_KEY')
-TWITTER_CONSUMER_SECRET = env.str('TWITTER_CONSUMER_SECRET')
-TWITTER_ACCESS_TOKEN = env.str('TWITTER_ACCESS_TOKEN')
-TWITTER_ACCESS_TOKEN_SECRET = env.str('TWITTER_ACCESS_TOKEN_SECRET')
+IMAGE_KIT = ImageKit(
+    private_key = IMAGEKIT_PRIVATE_KEY,
+    public_key = IMAGEKIT_PUBLIC_KEY,
+    url_endpoint = IMAGEKIT_URL_ENDPOINT
+)
 
-#Stripe
+# STRIPE
+# ------------------------------------------------------------------------------
 STRIPE_PRIVATE = env.str('STRIPE_PRIVATE')
 STRIPE_PUBLIC = env.str('STRIPE_PUBLIC')
+WEBHOOK_SECRET = env.str('WEBHOOK_SECRET')

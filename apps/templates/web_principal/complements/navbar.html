@@ -1,8 +1,8 @@
-{% load static %}
+{% load static i18n extra %}
 <header class="header-global">
     <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg headroom py-lg-3 px-lg-6 navbar-light navbar-theme-primary">
         <div class="container">
-            <a class="navbar-brand @@logo_classes" href="{% url 'web:inicio' %}?utm_source=invfin&utm_medium=web&utm_content=navbar">
+            <a class="navbar-brand @@logo_classes" href="{% url 'web:inicio' %}{% utm "navbar" "inicio" "web-principal" %}">
                 <img class="navbar-brand-dark common" src="{% static 'general/assets/img/general/finanzaseinversiones.WebP' %}" height="35" alt="Logo light">
                 <img class="navbar-brand-light common" src="{% static 'general/assets/img/general/finanzaseinversiones.WebP' %}" height="35" alt="Logo dark">
             </a>
@@ -10,7 +10,7 @@
                 <div class="navbar-collapse-header">
                     <div class="row">
                         <div class="col-6 collapse-brand">
-                            <a href="{% url 'web:inicio' %}?utm_source=invfin&utm_medium=web&utm_content=navbar">
+                            <a href="{% url 'web:inicio' %}{% utm "navbar" "inicio" "web-principal" %}">
                                 <img src="{% static 'general/assets/img/general/finanzaseinversiones.WebP' %}" height="35" alt="Logo">
                             </a>
                         </div>
@@ -23,25 +23,28 @@
                 </div>
                 <ul class="navbar-nav navbar-nav-hover justify-content-center">
                     <li class="nav-item">
-                        <a href="{% url 'web:excel' %}?utm_source=invfin&utm_medium=web&utm_content=navbar" class="nav-link">Excel</a>
+                        <a href="{% url 'web:excel' %}{% utm "navbar" "excel" "web-principal" %}" class="nav-link">Excel</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{% url 'screener:screener_inicio' %}?utm_source=invfin&utm_medium=web&utm_content=navbar" class="nav-link">Empresas</a>
+                        <a href="{% url 'screener:screener_inicio' %}{% utm "navbar" "screener" "web-principal" %}" class="nav-link">Análisis Empresas</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{% url 'preguntas_respuestas:list_questions' %}?utm_source=invfin&utm_medium=web&utm_content=navbar" class="nav-link">Preguntas</a>
+                        <a href="{% url 'preguntas_respuestas:list_questions' %}{% utm "navbar" "Preguntas" "web-principal" %}" class="nav-link">Preguntas</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{% url 'escritos:glosario' %}?utm_source=invfin&utm_medium=web&utm_content=navbar" class="nav-link">Diccionario</a>
+                        <a href="{% url 'escritos:glosario' %}{% utm "navbar" "Diccionario" "web-principal" %}" class="nav-link">Diccionario</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{% url 'roboadvisor:roboadvisor' %}?utm_source=invfin&utm_medium=web&utm_content=navbar" class="nav-link">Roboadvisor</a>
+                        <a href="{% url 'roboadvisor:roboadvisor' %}{% utm "navbar" "Roboadvisor" "web-principal" %}" class="nav-link">Roboadvisor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'business:all_products' %}{% utm "navbar" "Herramientas" "web-principal" %}" class="nav-link">Herramientas</a>
                     </li>
                 </ul>
             </div>
             <div class="d-none d-lg-block @@cta_button_classes">
-                <!-- <a href="#" class="btn btn-md btn-docs btn-outline-white animate-up-2 mr-3"><i class="fas fa-th-large mr-2"></i>Herramientas</a> -->
-                <a href="{% url 'account_login' %}?utm_source=invfin&utm_medium=web&utm_content=navbar"  class="btn btn-md btn-invfin-gold animate-up-2"><i class="fas fa-paper-plane mr-2"></i>Entrar</a>
+                <a href="{% url 'screener:screener_inicio' %}{% utm "navbar" "visitar" "web-principal" %}"class="btn btn-md btn-docs btn-outline-white animate-up-2 mr-3"><i class="fas fa-th-large mr-2"></i>Visitar</a>
+                <a href="{% url 'account_login' %}{% utm "navbar" "direct" "web-principal" %}"  class="btn btn-md btn-invfin-gold animate-up-2"><i class="fas fa-paper-plane mr-2"></i>Entrar</a>
             </div>
             <div class="d-flex d-lg-none align-items-center">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_global"
