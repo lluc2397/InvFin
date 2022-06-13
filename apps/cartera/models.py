@@ -251,25 +251,43 @@ class Patrimonio(Model, ChartSerializer):
             'percentage_invested': percentage_invested,
         }
     
-    def sectors_invested(self, company):
+    def prepare_chart_data(self, main_key, main_dict):
         data = {
-            'labels': [
-                'Red',
-                'Blue',
-                'Yellow'
-            ],
-            'datasets': [{
-                'label': 'My First Dataset',
-                'data': [300, 50, 100],
-                'backgroundColor': [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 205, 86)'
-                ],
-                'hoverOffset': 4
-            }]
+            'labels': [],
+            'datasets': []
             }
-        # Crear un dict. Poner los sectores, industrias, etc y el número de veces que apreren
+        dataset = {
+                'label': main_key,
+                'data': [],
+                'backgroundColor': [],
+                'hoverOffset': 4
+            }
+
+        for key, value in main_dict.items():
+            data['labels'].append(key)
+            dataset['data'].append(value)
+            dataset['backgroundColor'].append("#"+''.join([random.choice('ABCDEF0123456789') for i in range(6)]))
+        
+        data['datasets'].append(dataset)
+
+        chart_data = {
+            'type': 'doughnut',
+            'data': data,
+            'options': {
+                'responsive': 'true',
+                'plugins': {
+                'legend': {
+                    'position': 'top',
+                },
+                'title': {
+                    'display': 'true',
+                    'text': main_key
+                }
+                }
+            }
+        }
+        
+        return chart_data
 
     def positions_information(self, total_invertido):
         positions_information = {
@@ -283,108 +301,35 @@ class Patrimonio(Model, ChartSerializer):
             'Países': {},
             'Mercados': {}
         }
-
-        sectors = {
-                'title': 'Sectores',
-                'data': {
-            'labels': [],
-            'datasets': [
-                
-            ]
-        },
-            }
-        industries = {
-                'title': 'Indústrias',
-                'data': {
-            'labels': [],
-            'datasets': [
-                {
-                'label': '',
-                'data': 0,
-                'backgroundColor': "#"+''.join([random.choice('ABCDEF0123456789') for i in range(6)]),
-                }
-            ]
-        },
-            }
-        countries = {
-                'title': 'Países',
-                'data': {
-            'labels': [],
-            'datasets': [
-                {
-                'label': '',
-                'data': 0,
-                'backgroundColor': "#"+''.join([random.choice('ABCDEF0123456789') for i in range(6)]),
-                }
-            ]
-        },
-            }
-        exchanges = {
-                'title': 'Mercados',
-                'data': {
-            'labels': [],
-            'datasets': [
-                {
-                'label': '',
-                'data': 0,
-                'backgroundColor': "#"+''.join([random.choice('ABCDEF0123456789') for i in range(6)]),
-                }
-            ]
-        },
-            }
         
         for empresa in self.assets.filter(is_stock=True):
             amount_invested = float(empresa.amount_invested)
             empresa = empresa.object
+            empresa_sector = empresa.sector.sector
+            empresa_industry = empresa.industry.industry
+            empresa_country = empresa.country.country
+            empresa_exchange = empresa.exchange.exchange
+
+            if empresa_sector not in segmentation['Sectores']:
+                segmentation['Sectores'][empresa_sector] = 1
+            else:
+                segmentation['Sectores'][empresa_sector] += 1
             
-            if empresa.sector.sector not in sectors['data']['labels']:
-                sectors['data']['labels'].append(empresa.sector.sector)
-                sectors['data']['datasets'].append(
-                    {
-                        'label': empresa.sector.sector,
-                        'data': 1,
-                        'backgroundColor': "#"+''.join([random.choice('ABCDEF0123456789') for i in range(6)]),
-                    }
-                )
+            if empresa_industry not in segmentation['Indústrias']:
+                segmentation['Indústrias'][empresa_industry] = 1
             else:
-                list(filter(lambda obj: obj['label'] == empresa.sector.sector, sectors['data']['datasets']))[0]['data'] += 1
+                segmentation['Indústrias'][empresa_industry] += 1
+            
+            if empresa_country not in segmentation['Países']:
+                segmentation['Países'][empresa_country] = 1
+            else:
+                segmentation['Países'][empresa_country] += 1
+            
+            if empresa_exchange not in segmentation['Mercados']:
+                segmentation['Mercados'][empresa_exchange] = 1
+            else:
+                segmentation['Mercados'][empresa_exchange] += 1
 
-            if empresa.country.country not in countries['data']['labels']:
-                countries['data']['labels'].append(empresa.country.country)
-                countries['data']['datasets'].append(
-                    {
-                        'label': empresa.country.country,
-                        'data': 1,
-                        'backgroundColor': "#"+''.join([random.choice('ABCDEF0123456789') for i in range(6)]),
-                    }
-                )
-            else:
-                list(filter(lambda obj: obj['label'] == empresa.country.country, countries['data']['datasets']))[0]['data'] += 1
-
-            if empresa.industry.industry not in industries['data']['labels']:
-                industries['data']['labels'].append(empresa.industry.industry)
-                industries['data']['datasets'].append(
-                    {
-                        'label': empresa.industry.industry,
-                        'data': 1,
-                        'backgroundColor': "#"+''.join([random.choice('ABCDEF0123456789') for i in range(6)]),
-                    }
-                )
-            else:
-                list(filter(lambda obj: obj['label'] == empresa.industry.industry, industries['data']['datasets']))[0]['data'] += 1
-
-            if empresa.exchange.exchange not in exchanges['data']['labels']:
-                exchanges['data']['labels'].append(empresa.exchange.exchange)
-                exchanges['data']['datasets'].append(
-                    {
-                        'label': empresa.exchange.exchange,
-                        'data': 1,
-                        'backgroundColor': "#"+''.join([random.choice('ABCDEF0123456789') for i in range(6)]),
-                    }
-                )
-            else:
-                list(filter(lambda obj: obj['label'] == empresa.exchange.exchange, exchanges['data']['datasets']))[0]['data'] += 1
-          
             empresa_info = {
                 'name': empresa.name,
                 'ticker': empresa.ticker,
@@ -393,11 +338,10 @@ class Patrimonio(Model, ChartSerializer):
             }
             positions_information['empresas'].append(empresa_info)
 
-        positions_information['segmentation'].extend([sectors, industries, countries, exchanges])
-        for content in positions_information['segmentation']:
-            for index, data in enumerate(content['data']['datasets']):
-                if data['label'] == '':
-                    del content['data']['datasets'][index]
+        for key, value in segmentation.items():
+            chart_data = self.prepare_chart_data(key, value)
+            positions_information['segmentation'].append(chart_data)
+        
         return positions_information
     
     @property

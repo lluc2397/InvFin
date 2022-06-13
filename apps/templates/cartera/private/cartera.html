@@ -16,33 +16,17 @@
     <div class="col-lg-6 col-sm-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="h3 mb-0">{{segment.title}}</h5>
+                <h5 class="h3 mb-0">{{segment.options.title.text}}</h5>
              </div>
           <div class="card-body">
             <div class="chart-canvas">
-                <canvas id="doughnut-{{segment.title}}"></canvas>
+                <canvas id="doughnut-{{forloop.counter}}"></canvas>
             </div>            
           </div>                                                
         </div>
     </div>
     <script>
-        
-        new Chart(document.querySelector('#doughnut-{{segment.title}}'), {
-            type: 'doughnut',
-            data: {{segment.data|safe}},
-            options: {
-                responsive: true,
-                plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: '{{segment.title}}'
-                }
-                }
-            },
-        });
+        new Chart(document.querySelector('#doughnut-{{forloop.counter}}'), {{segment|safe}});
     </script>
     {% endfor %}
     <div class="col-12">
