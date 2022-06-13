@@ -29,6 +29,7 @@ User = get_user_model()
 class Customer(Model):
     user = OneToOneField(User, on_delete=SET_NULL, null=True)
     created_at = DateTimeField(auto_now_add=True)
+    # stripe_id = CharField(max_length=500, null=True, blank=True, unique=True, db_index=True)
     stripe_id = CharField(max_length=500, null=True, blank=True)
 
     class Meta:
@@ -102,6 +103,8 @@ class ProductComplementary(Model):
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(null=True, blank=True)
     extras = JSONField(default=EXTRAS)
+    purchase_result = CharField(max_length=300, blank=True, choices=constants.PURCHASE_RESULT)
+    product_result = CharField(max_length=300, blank=True, default='')
 
     class Meta:
         verbose_name = 'Product complementary'
@@ -127,14 +130,14 @@ class ProductComplementary(Model):
     
     @property
     def payment(self):
-        payment = self.payment_type
+        payment = self.payment_type[1]
         if self.payment_type == constants.TYPE_SUBSCRIPTION:
             payment = f'{constants.PAYMENT_TYPE[0][1]} {self.subscription_type}'
         return payment
     
     @property
     def payment_link(self):
-        return self.payment_links.filter(for_website=True).first().link
+        return reverse('business:create_checkout', kwargs={"pk": self.pk})
 
 
 class ProductSubscriber(Model):    
@@ -226,11 +229,12 @@ class ProductComplementaryPaymentLink(Model):
         blank=True,
         related_name="promotion_link_payment"
     )
+    title = CharField(max_length=500, null=True, blank=True)
     link = CharField(max_length=500, null=True, blank=True)
     stripe_id = CharField(max_length=500, null=True, blank=True)
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(null=True, blank=True)
-    for_website = BooleanField(default=True)
+    for_website = BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Product complementary payment link'

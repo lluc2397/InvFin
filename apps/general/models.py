@@ -17,6 +17,8 @@ User = get_user_model()
 
 from apps.general.bases import BaseEmail, BaseGenericModels
 
+from .constants import NOTIFICATIONS_TYPE
+
 
 class EscritosClassification(Model):
     name = CharField(max_length=500,null = True, blank=True, unique = True)
@@ -106,20 +108,9 @@ class Currency(Model):
         return str(self.currency)
 
 
-class NotificationsType(Model):
-    name = CharField(max_length=500)
-
-    class Meta:
-        verbose_name = "Notification type"
-        db_table = "notifications_types"
-
-    def __str__(self, *args, **kwargs):
-        return self.name
-
-
 class Notification(BaseGenericModels):
     user = ForeignKey(User, on_delete=CASCADE)
-    notification_type = ForeignKey(NotificationsType, on_delete=CASCADE)
+    notification_type = CharField(max_length=500, choices=NOTIFICATIONS_TYPE)
     is_seen = BooleanField(default=False)
 
     class Meta:

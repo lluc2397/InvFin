@@ -225,15 +225,30 @@ class User(AbstractUser):
 
     def create_new_user(self, request):
         from allauth.account.utils import sync_user_email_addresses
-        from apps.seo.models import VisiteurUserRelation, Visiteur
+        from apps.seo.models import VisiteurUserRelation
 
-        if 'visiteur_id' in request.session:
-            visiteur_id = request.session['visiteur_id']
-            VisiteurUserRelation.objects.create(user=self, visiteur_id=visiteur_id)
-        sync_user_email_addresses(self)
-        self.create_profile(request)
-        self.create_meta_profile(request)
-        self.add_fav_lists()
+        try:
+            if 'visiteur_id' in request.session:
+                visiteur_id = request.session['visiteur_id']
+                VisiteurUserRelation.objects.create(user=self, visiteur_id=visiteur_id)
+        except Exception as e:
+            print('VisiteurUserRelation',e)
+        try:
+            sync_user_email_addresses(self)
+        except Exception as e:
+            print('sync_user_email_addresses',e)
+        try:
+            self.create_profile(request)
+        except Exception as e:
+            print('create_profile',e)
+        try:
+            self.create_meta_profile(request)
+        except Exception as e:
+            print('create_meta_profile',e)
+        try:
+            self.add_fav_lists()
+        except Exception as e:
+            print('add_fav_lists',e)
         return True
 
 

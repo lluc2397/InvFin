@@ -9,15 +9,14 @@ import stripe
 
 from .models import (
     StripeWebhookResponse, 
-    ProductComplementary, 
-    Product,
-    Customer
+    
 )
 
 stripe.api_key = settings.STRIPE_PRIVATE
 
 STRIPE_PUBLIC_KEY = settings.STRIPE_PUBLIC
 EMAIL_DEFAULT = settings.EMAIL_DEFAULT
+
 
 @csrf_exempt
 def stripe_webhook(request):
@@ -35,6 +34,7 @@ def stripe_webhook(request):
     except stripe.error.SignatureVerificationError as e:
         # Invalid signature
         return HttpResponse(status=400)
+    
     StripeWebhookResponse.objects.create(
         stripe_id=event['id'],
         full_response=event
@@ -53,16 +53,21 @@ def stripe_webhook(request):
     
     if event["type"] == "payment_intent.succeeded":
         intent = event['data']['object']
-
         stripe_customer_id = intent["customer"]
         stripe_customer = stripe.Customer.retrieve(stripe_customer_id)
         customer_email = stripe_customer['email']
 
-        user = User.objects.get_or_create_quick_user(request, customer_email)
-        Customer.objects.get_or_create(user=user, stripe_id=stripe_customer_id)
+        # print(event)
+        # user = User.objects.get_or_create_quick_user(request, customer_email)
+        # print('*'*100)
+        # print(user)
+        # customer = Customer.objects.get_or_create(user=user, stripe_id=stripe_customer_id)
+        # print('*'*100)
+        # print(customer)
+        # save_transaction(customer, stripe_response, customer, product_complementary)
 
-        send_mail('Solicitud recibida',
-		f'{intent}' ,
+        send_mail('Compra realizada',
+		f'{event}' ,
 		EMAIL_DEFAULT,
 		[EMAIL_DEFAULT],)
 

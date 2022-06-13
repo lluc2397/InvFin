@@ -149,7 +149,7 @@ def get_activity(superinvestor):
                   not_registered_company = True
               else:
                 not_registered_company = True
-            superinvestor_activity = SuperinvestorActivity.objects.create(
+            superinvestor_activity, created = SuperinvestorActivity.objects.get_or_create(
               superinvestor_related=superinvestor,
               period_related=period,
               company=company,            
@@ -160,6 +160,8 @@ def get_activity(superinvestor):
             continue
 
           elif clase[0] == 'buy' or clase[0] == 'sell':
+            if not created:
+              continue
             movement = None
             is_new = False
             if 'Add' in info or 'Buy' in info:
@@ -186,6 +188,8 @@ def get_activity(superinvestor):
               superinvestor_activity.save(update_fields=['share_change'])
               continue # share change
         else:
+          if not created:
+            continue
           superinvestor_activity.portfolio_change=info
           superinvestor_activity.save(update_fields=['portfolio_change'])
           continue

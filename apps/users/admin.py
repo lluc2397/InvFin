@@ -56,7 +56,7 @@ class ProfileAdmin(admin.ModelAdmin):
         'ref_code',
     ]
 
-    search_fields = ['user_username']
+    search_fields = ['user__username']
     
 
 @admin.register(MetaProfile)

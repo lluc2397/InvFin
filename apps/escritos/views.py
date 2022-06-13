@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.conf import settings
 from django.views.generic import (
 	ListView,

@@ -1,14 +1,14 @@
-from apps.business.models import (
-    Customer,
-    Product,
-    TransactionHistorial,
-    ProductComplementary,
-    ProductDiscount,
-    ProductComplementaryPaymentLink
-)
 from django.utils import timezone
 from django.template.defaultfilters import slugify
 
+from apps.api.models import Key
+from apps.business.models import (
+    Product,
+    TransactionHistorial,
+    ProductDiscount,
+    ProductComplementaryPaymentLink,
+    ProductSubscriber
+)
 from apps.business.stripe_management import StripeManagement
 from apps.business import constants
 
@@ -85,3 +85,22 @@ class BusinessSignal:
     @classmethod
     def product_discount_pre_save(cls, sender, instance: ProductDiscount, **kwargs):
         stripe = StripeManagement()
+    
+    @classmethod
+    def transaction_post_save(cls, sender, instance: TransactionHistorial, **kwargs):
+        user = instance.customer.user
+        if instance.product_complementary.purchase_result == constants.ADD_CREDITS:
+            user.update_credits(int(instance.product_complementary.product_result))
+        elif instance.product_complementary.purchase_result == constants.SHARE_EXCEL:
+            pass
+        #Create something to invite the user to purchase a subscription to get unlimited credits
+        elif instance.product_complementary.purchase_result == constants.ILIMITED_CREDITS:
+            subscription = ProductSubscriber.objects.create(
+                product=instance.product,
+                product_complementary=instance.product_complementary,
+                subscriber=user
+            )
+            Key.objects.create(
+                user=user,
+                subscription=subscription
+            )
