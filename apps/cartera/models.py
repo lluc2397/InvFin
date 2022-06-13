@@ -15,7 +15,6 @@ from django.db.models import (
     DecimalField
 )
 
-from decimal import Decimal
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
@@ -28,6 +27,9 @@ from apps.etfs.models import (
 
 from django.contrib.auth import get_user_model
 User = get_user_model()    
+
+import random
+from decimal import Decimal
 
 
 class Asset(Model):
@@ -249,20 +251,157 @@ class Patrimonio(Model, ChartSerializer):
             'percentage_invested': percentage_invested,
         }
     
-    def empresas_en_cartera(self, total_invertido):
-        empresas_en_cartera = {'empresas': []}
-        for empresa in self.assets.filter(is_stock=True).only('name', 'ticker'):
+    def sectors_invested(self, company):
+        data = {
+            'labels': [
+                'Red',
+                'Blue',
+                'Yellow'
+            ],
+            'datasets': [{
+                'label': 'My First Dataset',
+                'data': [300, 50, 100],
+                'backgroundColor': [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)'
+                ],
+                'hoverOffset': 4
+            }]
+            }
+        # Crear un dict. Poner los sectores, industrias, etc y el número de veces que apreren
+
+    def positions_information(self, total_invertido):
+        positions_information = {
+            'empresas': [],
+            'segmentation': []
+        }
+
+        segmentation = {
+            'Sectores' : {},
+            'Indústrias': {},
+            'Países': {},
+            'Mercados': {}
+        }
+
+        sectors = {
+                'title': 'Sectores',
+                'data': {
+            'labels': [],
+            'datasets': [
+                
+            ]
+        },
+            }
+        industries = {
+                'title': 'Indústrias',
+                'data': {
+            'labels': [],
+            'datasets': [
+                {
+                'label': '',
+                'data': 0,
+                'backgroundColor': "#"+''.join([random.choice('ABCDEF0123456789') for i in range(6)]),
+                }
+            ]
+        },
+            }
+        countries = {
+                'title': 'Países',
+                'data': {
+            'labels': [],
+            'datasets': [
+                {
+                'label': '',
+                'data': 0,
+                'backgroundColor': "#"+''.join([random.choice('ABCDEF0123456789') for i in range(6)]),
+                }
+            ]
+        },
+            }
+        exchanges = {
+                'title': 'Mercados',
+                'data': {
+            'labels': [],
+            'datasets': [
+                {
+                'label': '',
+                'data': 0,
+                'backgroundColor': "#"+''.join([random.choice('ABCDEF0123456789') for i in range(6)]),
+                }
+            ]
+        },
+            }
+        
+        for empresa in self.assets.filter(is_stock=True):
+            amount_invested = float(empresa.amount_invested)
+            empresa = empresa.object
+            
+            if empresa.sector.sector not in sectors['data']['labels']:
+                sectors['data']['labels'].append(empresa.sector.sector)
+                sectors['data']['datasets'].append(
+                    {
+                        'label': empresa.sector.sector,
+                        'data': 1,
+                        'backgroundColor': "#"+''.join([random.choice('ABCDEF0123456789') for i in range(6)]),
+                    }
+                )
+            else:
+                list(filter(lambda obj: obj['label'] == empresa.sector.sector, sectors['data']['datasets']))[0]['data'] += 1
+
+            if empresa.country.country not in countries['data']['labels']:
+                countries['data']['labels'].append(empresa.country.country)
+                countries['data']['datasets'].append(
+                    {
+                        'label': empresa.country.country,
+                        'data': 1,
+                        'backgroundColor': "#"+''.join([random.choice('ABCDEF0123456789') for i in range(6)]),
+                    }
+                )
+            else:
+                list(filter(lambda obj: obj['label'] == empresa.country.country, countries['data']['datasets']))[0]['data'] += 1
+
+            if empresa.industry.industry not in industries['data']['labels']:
+                industries['data']['labels'].append(empresa.industry.industry)
+                industries['data']['datasets'].append(
+                    {
+                        'label': empresa.industry.industry,
+                        'data': 1,
+                        'backgroundColor': "#"+''.join([random.choice('ABCDEF0123456789') for i in range(6)]),
+                    }
+                )
+            else:
+                list(filter(lambda obj: obj['label'] == empresa.industry.industry, industries['data']['datasets']))[0]['data'] += 1
+
+            if empresa.exchange.exchange not in exchanges['data']['labels']:
+                exchanges['data']['labels'].append(empresa.exchange.exchange)
+                exchanges['data']['datasets'].append(
+                    {
+                        'label': empresa.exchange.exchange,
+                        'data': 1,
+                        'backgroundColor': "#"+''.join([random.choice('ABCDEF0123456789') for i in range(6)]),
+                    }
+                )
+            else:
+                list(filter(lambda obj: obj['label'] == empresa.exchange.exchange, exchanges['data']['datasets']))[0]['data'] += 1
+          
             empresa_info = {
-                'name': empresa.object.name,
-                'ticker': empresa.object.ticker,
-                'amount_invested': empresa.amount_invested,
-                'percentage_invested': ((empresa.amount_invested / total_invertido) * 100) if total_invertido !=0 else 0}
-            empresas_en_cartera['empresas'].append(empresa_info)
-        return empresas_en_cartera
+                'name': empresa.name,
+                'ticker': empresa.ticker,
+                'amount_invested': amount_invested,
+                'percentage_invested': ((amount_invested / total_invertido) * 100) if total_invertido !=0 else 0
+            }
+            positions_information['empresas'].append(empresa_info)
+
+        positions_information['segmentation'].extend([sectors, industries, countries, exchanges])
+        for content in positions_information['segmentation']:
+            for index, data in enumerate(content['data']['datasets']):
+                if data['label'] == '':
+                    del content['data']['datasets'][index]
+        return positions_information
     
     @property
     def balance_sheet(self):
-        patrimoine = self.patrimoine
-        total_invertido = float(patrimoine['income_invested'])
-        empresas_en_cartera = self.empresas_en_cartera(total_invertido)
-        return empresas_en_cartera.update(patrimoine)
+        income_invested = self.cantidad_total_invertida(self.ingresos_totales['total'])
+        total_invertido = float(income_invested['total'])
+        return self.positions_information(total_invertido)

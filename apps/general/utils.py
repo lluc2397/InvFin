@@ -6,6 +6,7 @@ from django.template.defaultfilters import slugify
 import binascii
 import os
 import csv
+import random
 
 from apps.public_blog.models import WritterProfile
 
@@ -39,6 +40,18 @@ class ChartSerializer:
             chartData['fields'].append(comparaison_dict)
         
         return chartData
+
+    def generate_portfolio_charts(self):
+        data = {
+            'labels': [],
+            'datasets': [
+                {
+                'label': '',
+                'data': 0,
+                'backgroundColor': "#"+''.join([random.choice('ABCDEF0123456789') for i in range(6)]),
+                }
+            ]
+        }
 
 
 class HostChecker:
