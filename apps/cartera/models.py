@@ -275,6 +275,7 @@ class Patrimonio(Model, ChartSerializer):
             'data': data,
             'options': {
                 'responsive': 'true',
+                'maintainAspectRatio': 'false',
                 'plugins': {
                 'legend': {
                     'position': 'top',

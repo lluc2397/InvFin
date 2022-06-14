@@ -1292,8 +1292,6 @@ class CompanyExtended(Model, ChartSerializer):
             ]}
         return er_json, cf
     
-
-    
     def comparing_efficiency_ratios_json(self, limit):
         comparing_json, cf = self.efficiency_ratios_json(limit)
         chartData = self.generate_json(comparing_json)
@@ -1370,9 +1368,7 @@ class CompanyExtended(Model, ChartSerializer):
                     'values': [data.price_tangible_assets for data in cf]},
             ]}
         return cf_json, cf
-    
-
-    
+      
     def comparing_price_to_ratios_json(self, limit):
         comparing_json, cf = self.price_to_ratios_json(limit)
         chartData = self.generate_json(comparing_json)
@@ -1382,8 +1378,6 @@ class CompanyExtended(Model, ChartSerializer):
         }
         return data, cf
 
-
-    
     def important_ratios(self, limit):
         comparing_rentability_ratios_json, rentability_ratios = self.comparing_rentability_ratios_json(limit)
         comparing_liquidity_ratios_json, liquidity_ratios = self.comparing_liquidity_ratios_json(limit)
@@ -1415,8 +1409,6 @@ class CompanyExtended(Model, ChartSerializer):
             'margins': margins,
         }
         return ratios, query_ratios
-    
-
     
     def secondary_ratios(self, limit):
         comparing_efficiency_ratios_json, efficiency_ratios = self.comparing_efficiency_ratios_json(limit)
@@ -1465,7 +1457,6 @@ class CompanyExtended(Model, ChartSerializer):
             'fcf_ratios': fcf_ratios,
         }
         return ratios, query_ratios
-    
     
     def calculate_current_ratios(
             self,
@@ -1684,8 +1675,7 @@ class CompanyExtended(Model, ChartSerializer):
             # 'average_margin':average_margin,
             # 'average_fcf_margin':average_fcf_margin
         }
-
-    
+  
     def complete_info(self, limit=10):        
         comparing_income_json, all_inc_statements = self.comparing_income_json(limit)
         comparing_balance_json, all_balance_sheets = self.comparing_balance_json(limit)
