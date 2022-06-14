@@ -72,8 +72,8 @@ class Superinvestor(Model):
         top_holdings = sorted(portfolio, key=lambda x : x.portfolio_weight)
         sectors_invested = set()
         for company in portfolio:
-            if company.not_registered_company == False:
-                sectors_invested.add(company.company.sector)
+            sectors_invested.add(company.company_sector)
+                
             
         num_sectors = len(sectors_invested)
         return {
@@ -167,6 +167,13 @@ class BaseSuperinvestorHoldingsInformation(Model):
             actual_company_info['image'] = None
             actual_company_info['ticker'] = None
         return actual_company_info
+    
+    @property
+    def company_sector(self):
+        sector = None
+        if self.company:
+            sector = self.company.sector
+        return sector
 
 
 class SuperinvestorActivity(BaseSuperinvestorHoldingsInformation):
