@@ -12,6 +12,22 @@
 <div class="row">
     <div class="col-12">
     </div>
+    <div class="col-12">
+        <div hx-trigger="load" hx-get="{% url 'cartera:return_balance_table' %}" hx-target="this">
+            <div class="card">
+                <div class="card-header">
+                    <!-- Title -->
+                    <h5 class="h3 mb-0">Información de tus empresas</h5>
+                </div>
+                
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                    </div>
+                    Cargando...
+                </div>
+            </div>
+        </div>
+    </div>
     {% for segment in money.segmentation %}
     <div class="col-lg-6 col-sm-12">
         <div class="card">
@@ -28,21 +44,6 @@
         new Chart(document.querySelector('#doughnut-{{forloop.counter}}'), content{{forloop.counter}});
     </script>
     {% endfor %}
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <!-- Title -->
-                <h5 class="h3 mb-0">Empresas</h5>
-            </div>
-            <div hx-trigger="load" hx-get="{% url 'cartera:return_balance_table' %}" hx-target="this">
-                <div class="text-center">
-                    <div class="spinner-border" role="status">
-                    </div>
-                    Cargando...
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 {% endwith %}
 {% endblock content %}

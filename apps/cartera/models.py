@@ -289,8 +289,49 @@ class Patrimonio(Model, ChartSerializer):
         }
         
         return chart_data
+    
+    @property
+    def overall_portfolio_information(self):
+        income_invested = self.cantidad_total_invertida(self.ingresos_totales['total'])
+        total_invertido = float(income_invested['total'])
+        overall_portfolio_information = {
+            'positions': [],
+            # 'average_cash_conversion_ratio': 0,
+            'average_roce': 0,
+            'average_gross_margin': 0,
+            'average_net_income_margin': 0,
+            'average_interestCoverage': 0,
+            'average_roic': 0,
+            'average_price_earnings': 0,
+            'average_current_ratio': 0,
+            'average_quick_ratio': 0,
+        }
+        
+        for asset in self.assets.filter(is_stock=True):
+            amount_invested = float(asset.amount_invested)
+            empresa = asset.object
+            ratios = empresa.calculate_current_ratios()
+            percentage_invested = ((amount_invested / total_invertido) * 100) if total_invertido !=0 else 0
 
-    def positions_information(self, total_invertido):
+            # overall_portfolio_information['average_cash_conversion_ratio'] += ratios.average * percentage_invested
+            overall_portfolio_information['average_roce'] += (ratios['average_roce'] * percentage_invested) / 100
+            overall_portfolio_information['average_gross_margin'] += (ratios['average_gross_margin'] * percentage_invested) / 100
+            overall_portfolio_information['average_net_income_margin'] += (ratios['average_net_income_margin'] * percentage_invested) / 100
+            overall_portfolio_information['average_interestCoverage'] += (ratios['average_interestCoverage'] * percentage_invested) / 100
+            overall_portfolio_information['average_roic'] += (ratios['average_roic'] * percentage_invested) / 100
+            overall_portfolio_information['average_price_earnings'] += (ratios['average_price_earnings'] * percentage_invested) / 100
+            overall_portfolio_information['average_current_ratio'] += (ratios['average_current_ratio'] * percentage_invested) / 100
+            overall_portfolio_information['average_quick_ratio'] += (ratios['average_quick_ratio'] * percentage_invested) / 100
+
+            overall_portfolio_information['positions'].append({
+                'empresa': empresa,
+                'amount_invested': amount_invested,
+                'percentage_invested': percentage_invested,
+                'company_valuation': ratios,
+            })
+        return overall_portfolio_information
+
+    def positions_segmentation_information(self, total_invertido):
         positions_information = {
             'empresas': [],
             'segmentation': []
@@ -349,4 +390,4 @@ class Patrimonio(Model, ChartSerializer):
     def balance_sheet(self):
         income_invested = self.cantidad_total_invertida(self.ingresos_totales['total'])
         total_invertido = float(income_invested['total'])
-        return self.positions_information(total_invertido)
+        return self.positions_segmentation_information(total_invertido)

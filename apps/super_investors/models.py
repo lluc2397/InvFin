@@ -72,7 +72,7 @@ class Superinvestor(Model):
         top_holdings = sorted(portfolio, key=lambda x : x.portfolio_weight)
         sectors_invested = set()
         for company in portfolio:
-            if company.not_registered_company:
+            if not company:
                 continue
             sectors_invested.add(company.company.sector)
         num_sectors = len(sectors_invested)

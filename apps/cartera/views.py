@@ -56,4 +56,6 @@ class InicioCashflowView(DefaultCateraView):
 
 
 def return_balance_table(request):
-    return render(request, 'cartera/tables/balance.html', {})
+    user = request.user
+    overall_portfolio_information = user.user_patrimoine.overall_portfolio_information
+    return render(request, 'cartera/tables/balance.html', {'overall_portfolio_information': overall_portfolio_information})

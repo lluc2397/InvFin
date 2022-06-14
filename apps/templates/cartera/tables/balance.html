@@ -1,20 +1,89 @@
-<div class="table-responsive ">
-    <table class="table table-borderless">
-        <thead class="thead-light">
-            <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Canditad</th>
-                <th scope="col">Fecha</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for data in money.incomes_and_spends %}
-            <tr>
-                <td>{{data.name}}</td>
-                <td>{{data.amount|floatformat:2}} {{data.currency}}</td>
-                <td>{{data.date}}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div> 
+{% load static i18n extra %}
+<div class="card">
+    <div class="card-header">
+        <!-- Title -->
+        <h5 class="h3 mb-0">Información general de tu portfolio</h5>
+    </div>
+    <div class="table-responsive ">
+        <table class="table table-borderless">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">ROCE</th>
+                    <th scope="col">ROIC</th>
+                    <th scope="col">Gross margin</th>
+                    <th scope="col">Net margin</th>
+                    <th scope="col">Current ratio</th>
+                    <th scope="col">Quick ratio</th>
+                    <th scope="col">Interest coverage</th>
+                    <th scope="col">PER</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{overall_portfolio_information.average_roce|floatformat:2}} %</td>
+                    <td>{{overall_portfolio_information.average_roic|floatformat:2}} %</td>
+                    <td>{{overall_portfolio_information.average_gross_margin|floatformat:2}} %</td>
+                    <td>{{overall_portfolio_information.average_net_income_margin|floatformat:2}} %</td>
+                    <td>{{overall_portfolio_information.average_current_ratio|floatformat:2}}</td>
+                    <td>{{overall_portfolio_information.average_quick_ratio|floatformat:2}}</td>
+                    <td>{{overall_portfolio_information.average_interestCoverage|floatformat:2}}</td>
+                    <td>{{overall_portfolio_information.average_price_earnings|floatformat:2}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <!-- Title -->
+        <h5 class="h3 mb-0">Información de tus empresas</h5>
+    </div>
+    <div class="table-responsive ">
+        <table class="table table-borderless">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Empresa</th>
+                    <th scope="col">Canditad invertida</th>
+                    <th scope="col">Porcentage del portfolio</th>
+                    <th scope="col">ROCE</th>
+                    <th scope="col">ROIC</th>
+                    <th scope="col">Gross margin</th>
+                    <th scope="col">Net margin</th>
+                    <th scope="col">Current ratio</th>
+                    <th scope="col">Quick ratio</th>
+                    <th scope="col">Interest coverage</th>
+                    <th scope="col">PER</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for position_information in overall_portfolio_information.positions %}
+                <tr>
+                    <td>
+                        <div class="media align-items-center">
+                            <a href="{% url 'screener:company' position_information.empresa.ticker %}{% utm 'balance-sheet' position_information.empresa.ticker %}"
+                                class="avatar rounded-circle mr-3">
+                                <img alt="{{position_information.empresa.ticker}}" src="{{position_information.empresa.image}}">
+                            </a>
+                            <div class="media-body">
+                                <a href="{% url 'screener:company' position_information.empresa.ticker %}{% utm utm 'balance-sheet' position_information.empresa.ticker %}"
+                                class="name mb-0 text-sm">{{position_information.empresa.name}}</a>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{position_information.amount_invested|floatformat:2}}</td>
+                    <td>{{position_information.percentage_invested|floatformat:2}} %</td>
+                    <td>{{position_information.company_valuation.average_roce|floatformat:2}} %</td>
+                    <td>{{position_information.company_valuation.average_roic|floatformat:2}} %</td>
+                    <td>{{position_information.company_valuation.average_gross_margin|floatformat:2}} %</td>
+                    <td>{{position_information.company_valuation.average_net_income_margin|floatformat:2}} %</td>
+                    <td>{{position_information.company_valuation.average_current_ratio|floatformat:2}}</td>
+                    <td>{{position_information.company_valuation.average_quick_ratio|floatformat:2}}</td>
+                    <td>{{position_information.company_valuation.average_interestCoverage|floatformat:2}}</td>
+                    <td>{{position_information.company_valuation.average_price_earnings|floatformat:2}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

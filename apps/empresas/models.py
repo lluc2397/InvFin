@@ -293,6 +293,10 @@ class CashflowStatement(Model):
 
     def __str__(self):
         return self.company.ticker + str(self.date)
+    
+    @property
+    def cash_conversion_ratio(self):
+        return self.fcf / self.net_income if self.net_income != 0 else 0
 
 class RentabilityRatio(Model):
     date = IntegerField(default=0)
