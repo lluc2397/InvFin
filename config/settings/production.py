@@ -12,8 +12,8 @@ from .base import env
 # GENERAL
 # ------------------------------------------------------------------------------
 PROTOCOL = 'https://'
-CURRENT_DOMAIN = 'inversionesyfinanzas.xyz'
-
+CURRENT_DOMAIN = MAIN_DOMAIN
+FULL_DOMAIN = f'{PROTOCOL}{CURRENT_DOMAIN}'
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
