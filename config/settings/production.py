@@ -12,7 +12,7 @@ from .base import env
 # GENERAL
 # ------------------------------------------------------------------------------
 PROTOCOL = 'https://'
-CURRENT_DOMAIN = MAIN_DOMAIN
+CURRENT_DOMAIN = 'inversionesyfinanzas.xyz'
 
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key

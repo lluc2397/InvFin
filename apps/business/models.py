@@ -130,7 +130,7 @@ class ProductComplementary(Model):
     
     @property
     def payment(self):
-        payment = self.payment_type[1]
+        payment = constants.PAYMENT_TYPE[1][1]
         if self.payment_type == constants.TYPE_SUBSCRIPTION:
             payment = f'{constants.PAYMENT_TYPE[0][1]} {self.subscription_type}'
         return payment

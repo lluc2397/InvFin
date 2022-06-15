@@ -14,7 +14,7 @@ class AllSuperinvestorsView(SEOListView):
     meta_tags = 'empresas, inversiones, analisis de empresas, invertir'
 
     def get_queryset(self):
-        return super().get_queryset()
+        return super().get_queryset().order_by('name')
 
 
 class SuperinvestorView(SEODetailView):
