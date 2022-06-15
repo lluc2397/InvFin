@@ -10,8 +10,11 @@ up-b:
 up:
 	docker-compose -f local.yml up $(ar)
 
+buildsemi:
+	docker-compose -f semiprod.yml build
+
 upsemi:
-	docker-compose -f semiprod.yml up $(ar)
+	docker-compose -f semiprod.yml up nginx django
 
 stop:
 	docker-compose -f local.yml stop

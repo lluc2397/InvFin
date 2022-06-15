@@ -167,6 +167,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
                         self.company.updated = True
                         self.company.last_update = datetime.now()
                         self.company.save(update_fields=['updated', 'last_update'])
+                        print('updated', self.company)
                     except Exception as e:
                         self.company.has_error = True
                         self.company.error_message = e
@@ -186,9 +187,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
         least_recent_date = least_recent_date['asOfDate'].max().value // 10**9 # normalize time
         least_recent_year = datetime.fromtimestamp(least_recent_date).year
         if least_recent_year != self.company.most_recent_year:
-            print('need update', self.company)
             return 'need update'
-        print('already updated', self.company)
         return 'updated'
     
     def generate_current_data(

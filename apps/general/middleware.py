@@ -1,68 +1,76 @@
-from apps.general.utils import HostChecker
+import operator
+import logging
+import re
 
-class HostMiddleware:
-    def __init__(self, get_response):
-        self.get_response = get_response
-        # One-time configuration and initialization.
+from django.conf import settings
+from django.utils.cache import patch_vary_headers
+from django.utils.deprecation import MiddlewareMixin
 
-    def __call__(self, request):
-        # Code to be executed for each request before
-        # the view (and later middleware) are called.
-        
-        # if HostChecker.correct_host(request) == False:
-        #     current_domain = Site.objects.get_current().domain
-        #     print(request.get_full_path_info())
-        #     print('*'*100)
+from .utils import get_domain
 
-        response = self.get_response(request)
+logger = logging.getLogger(__name__)
+lower = operator.methodcaller('lower')
 
-        # Code to be executed for each request/response after
-        # the view is called.
+UNSET = object()
+
+
+class SubdomainMiddleware(MiddlewareMixin):
+    """
+    A middleware class that adds a ``subdomain`` attribute to the current request.
+    """
+    def get_domain_for_request(self, request):
+        """
+        Returns the domain that will be used to identify the subdomain part
+        for this request.
+        """
+        return get_domain()
+
+    def process_request(self, request):
+        """
+        Adds a ``subdomain`` attribute to the ``request`` parameter.
+        """
+        domain, host = map(lower,
+            (self.get_domain_for_request(request), request.get_host()))
+
+        pattern = r'^(?:(?P<subdomain>.*?)\.)?%s(?::.*)?$' % re.escape(domain)
+        matches = re.match(pattern, host)
+
+        if matches:
+            request.subdomain = matches.group('subdomain')
+        else:
+            request.subdomain = None
+            logger.warning('The host %s does not belong to the domain %s, '
+                'unable to identify the subdomain for this request',
+                request.get_host(), domain)
+
+
+class SubdomainURLRoutingMiddleware(SubdomainMiddleware):
+    """
+    A middleware class that allows for subdomain-based URL routing.
+    """
+    def process_request(self, request):
+        """
+        Sets the current request's ``urlconf`` attribute to the urlconf
+        associated with the subdomain, if it is listed in
+        ``settings.SUBDOMAIN_URLCONFS``.
+        """
+        super(SubdomainURLRoutingMiddleware, self).process_request(request)
+
+        subdomain = getattr(request, 'subdomain', UNSET)
+
+        if subdomain is not UNSET:
+            urlconf = settings.SUBDOMAIN_URLCONFS.get(subdomain)
+            if urlconf is not None:
+                logger.debug("Using urlconf %s for subdomain: %s",
+                    repr(urlconf), repr(subdomain))
+                request.urlconf = urlconf
+
+    def process_response(self, request, response):
+        """
+        Forces the HTTP ``Vary`` header onto requests to avoid having responses
+        cached across subdomains.
+        """
+        if getattr(settings, 'FORCE_VARY_ON_HOST', True):
+            patch_vary_headers(response, ('Host',))
 
         return response
-
-class SubdomainMiddleware:
-    """ Make the subdomain publicly available to classes """
-    
-    def process_request(self, request):
-        domain_parts = request.get_host().split('.')
-        if (len(domain_parts) > 2):
-            subdomain = domain_parts[0]
-            if (subdomain.lower() == 'www'):
-                subdomain = None
-            domain = '.'.join(domain_parts[1:])
-        else:
-            subdomain = None
-            domain = request.get_host()
-        
-        request.subdomain = subdomain
-        request.domain = domain
-
-# class SubdomainMiddleware(object):
-#     """
-#     A middleware class that adds a ``subdomain`` attribute to the current request.
-#     """
-#     def get_domain_for_request(self, request):
-#         """
-#         Returns the domain that will be used to identify the subdomain part
-#         for this request.
-#         """
-#         return get_domain()
-
-#     def process_request(self, request):
-#         """
-#         Adds a ``subdomain`` attribute to the ``request`` parameter.
-#         """
-#         domain, host = map(lower,
-#             (self.get_domain_for_request(request), request.get_host()))
-
-#         pattern = r'^(?:(?P<subdomain>.*?)\.)?%s(?::.*)?$' % re.escape(domain)
-#         matches = re.match(pattern, host)
-
-#         if matches:
-#             request.subdomain = matches.group('subdomain')
-#         else:
-#             request.subdomain = None
-#             logger.warning('The host %s does not belong to the domain %s, '
-#                 'unable to identify the subdomain for this request',
-#                 request.get_host(), domain)
