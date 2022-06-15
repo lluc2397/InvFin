@@ -7,10 +7,14 @@ from .models import Superinvestor, SuperinvestorActivity
 
 class AllSuperinvestorsView(SEOListView):
     model = Superinvestor
+    paginate_by = 5
     context_object_name = "superinvestors"
     meta_title = "Las carteras de los mejores inversores del mundo"
     meta_description = "Descubre todas las carteras de los mejores inversores del mundo entero"
     meta_tags = 'empresas, inversiones, analisis de empresas, invertir'
+
+    def get_queryset(self):
+        return super().get_queryset()
 
 
 class SuperinvestorView(SEODetailView):

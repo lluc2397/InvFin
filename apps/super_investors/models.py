@@ -57,15 +57,15 @@ class Superinvestor(Model):
         all_history = self.history.prefetch_related(
             'period_related', 'company'
             ).all()
-        all_companies = self.history.order_by().values(
+        all_companies = all_history.order_by().values(
             'company', 'company_name'
             ).distinct('company', 'company_name')
         portfolio = []
         for company in all_companies:
             query_company_history = self.history.filter(**company)
-            
-            if query_company_history.last().shares != 0:
-                portfolio.append(query_company_history.last())
+            last_query_company_history = query_company_history.last()
+            if last_query_company_history.shares != 0:
+                portfolio.append(last_query_company_history)
         
         total_number_of_holdings = len(portfolio)
         portfolio_value = sum(position.total_value for position in portfolio)
