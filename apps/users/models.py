@@ -1,7 +1,7 @@
 from cloudinary.models import CloudinaryField
 
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from django.contrib.sites.models import Site
 from django.db.models import (
     CASCADE,
     SET_NULL,
@@ -24,8 +24,9 @@ from apps.general.mixins import ResizeImageMixin
 
 from .managers import ProfileManager, UserExtraManager
 
-
-DOMAIN = Site.objects.get_current().domain
+PROTOCOL = settings.PROTOCOL
+CURRENT_DOMAIN = settings.CURRENT_DOMAIN
+FULL_DOMAIN = settings.FULL_DOMAIN
 
 
 class User(AbstractUser):
@@ -51,12 +52,12 @@ class User(AbstractUser):
         url = self.get_absolute_url()
         if self.is_writter:
             host_name = self.writter_profile.host_name
-            url = f'https://{host_name}.{DOMAIN}'
+            url = f'{PROTOCOL}://{host_name}.{CURRENT_DOMAIN}'
         return url
     
     @property
     def shareable_link(self):
-        return f'https://{DOMAIN}/invitacion/{self.user_profile.ref_code}'
+        return f'{FULL_DOMAIN}/invitacion/{self.user_profile.ref_code}'
     
     @property
     def has_investor_profile(self):
