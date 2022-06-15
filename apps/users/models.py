@@ -52,7 +52,7 @@ class User(AbstractUser):
         url = self.get_absolute_url()
         if self.is_writter:
             host_name = self.writter_profile.host_name
-            url = f'{PROTOCOL}://{host_name}.{CURRENT_DOMAIN}'
+            url = f'{PROTOCOL}{host_name}.{CURRENT_DOMAIN}'
         return url
     
     @property
