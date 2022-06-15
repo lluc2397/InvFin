@@ -7,7 +7,8 @@ from apps.general.models import Currency
 from apps.translate.google_trans_new import google_translator
 from apps.empresas.models import (
     TopInstitutionalOwnership,
-    InstitutionalOrganization
+    InstitutionalOrganization,
+    CompanyUpdateLog
 )
 
 from .ratios import CalculateCompanyFinancialRatios
@@ -87,16 +88,20 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
             })
             self.company.remote_image_imagekit = imagekit_url
             self.company.save(update_fields=['remote_image_imagekit'])
+            e = None
         except Exception as e:
             print(e)
+        CompanyUpdateLog.objects.create_log(self.company, 'save_logo_remotely', e)
 
     def add_description(self):
         try:
             self.company.description = google_translator().translate(self.company.description, lang_src='en', lang_tgt='es')
             self.company.description_translated = True
             self.company.save(update_fields=['description_translated', 'description'])
+            e = None
         except Exception as e:
             print(e)
+        CompanyUpdateLog.objects.create_log(self.company, 'add_description', e)
 
     def general_update(self):        
         if self.company.has_logo is False:
@@ -146,6 +151,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
                     operation_risk_ratio = self.calculate_operation_risk_ratio(all_data)
                     rentability_ratios = self.calculate_rentability_ratios(all_data)
                 except Exception as e:
+                    CompanyUpdateLog.objects.create_log(self.company, 'first_step_financial_update', e)
                     self.company.has_error = True
                     self.company.error_message = e
                     self.company.save(update_fields=['has_error', 'error_message'])
@@ -168,6 +174,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
                         self.company.last_update = datetime.now()
                         self.company.save(update_fields=['updated', 'last_update'])
                     except Exception as e:
+                        CompanyUpdateLog.objects.create_log(self.company, 'second_step_financial_update', e)
                         self.company.has_error = True
                         self.company.error_message = e
                         self.company.save(update_fields=['has_error', 'error_message'])
@@ -177,6 +184,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
                 self.company.save(update_fields=['date_updated'])
                 update_company_financials_task.delay()
         except Exception as e:
+            CompanyUpdateLog.objects.create_log(self.company, 'last_step_financial_update', e)
             self.company.has_error = True
             self.company.error_message = e
             self.company.save(update_fields=['has_error', 'error_message'])
@@ -186,9 +194,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
         least_recent_date = least_recent_date['asOfDate'].max().value // 10**9 # normalize time
         least_recent_year = datetime.fromtimestamp(least_recent_date).year
         if least_recent_year != self.company.most_recent_year:
-            print('need update', self.company)
             return 'need update'
-        print('already updated', self.company)
         return 'updated'
     
     def generate_current_data(
@@ -402,22 +408,25 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
         df = self.yq_company.institution_ownership
         df = df.reset_index()
         df = df.drop(columns=['symbol','row','maxAge'])
-        for index, data in df.iterrows():
-            institution, _ = InstitutionalOrganization.objects.get_or_create(
-                name=data['organization']
-            )
-            if TopInstitutionalOwnership.objects.filter(
-                year=data['reportDate'],
-                company=self.company,
-                organization=institution,
-            ).exists():
-                continue
-            TopInstitutionalOwnership.objects.create(
-                date=data['reportDate'][:4],
-                year=data['reportDate'],
-                company=self.company,
-                organization=institution,
-                percentage_held=data['pctHeld'],
-                position=data['position'],
-                value=data['value']
-            )
+        try:
+            for index, data in df.iterrows():
+                institution, _ = InstitutionalOrganization.objects.get_or_create(
+                    name=data['organization']
+                )
+                if TopInstitutionalOwnership.objects.filter(
+                    year=data['reportDate'],
+                    company=self.company,
+                    organization=institution,
+                ).exists():
+                    continue
+                TopInstitutionalOwnership.objects.create(
+                    date=data['reportDate'][:4],
+                    year=data['reportDate'],
+                    company=self.company,
+                    organization=institution,
+                    percentage_held=data['pctHeld'],
+                    position=data['position'],
+                    value=data['value']
+                )
+        except Exception as e:
+            CompanyUpdateLog.objects.create_log(self.company, 'institutional_ownership', e)

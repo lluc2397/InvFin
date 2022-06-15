@@ -17,7 +17,7 @@ from django.urls import reverse
 
 from django.contrib.auth import get_user_model
 
-from .managers import CompanyManager
+from .managers import CompanyManager, CompanyUpdateLogManager
 from apps.empresas.company.extension import CompanyExtended
 
 User = get_user_model()
@@ -153,6 +153,25 @@ class CompanyStockPrice(Model):
 
     def __str__(self):
         return str(self.company_related.ticker)
+
+
+class CompanyUpdateLog(Model):
+    company = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True, related_name="company_log_historial")
+    date = DateTimeField(auto_now=True)
+    where = CharField(max_length=250)
+    had_error = BooleanField(default=False)
+    error_message = TextField(default='')
+    objects = CompanyUpdateLogManager()
+
+    class Meta:
+        get_latest_by = 'date'
+        ordering = ['-date']
+        verbose_name = "Company updates logs"
+        verbose_name_plural = "Company updates logs"
+        db_table = "assets_companies_updates_logs"
+
+    def __str__(self):
+        return str(self.company.ticker)
 
 
 class IncomeStatement(Model):
