@@ -133,7 +133,7 @@ class Company(CompanyExtended):
             {current_ratios['cagr']} % en los últimos 10 años.\
             Actualmente la empresa genera {last_income_statement.revenue} {currency}\
             con gastos elevándose a {last_income_statement.cost_of_revenue} {currency}\
-            {current_ratios['current_price']}{current_ratios['current_currency']} y {current_ratios['average_shares_out']}\
+            {current_ratios['current_price']}{currency} y {current_ratios['average_shares_out']}\
             acciones en circulación la empresa tiene una capitalización bursátil de {current_ratios['marketcap']} {current_ratios['current_price']}"
         return intro
 
