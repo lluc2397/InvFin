@@ -54,7 +54,7 @@ class Twitter:
             pagination = f'[{part}/{parts}]'
             if part == 0:
                 text_part = f"""
-                {media_url} {title} {pagination} #{hashtag1.name} #{hashtag2.name} #{hashtag3.name}
+                {title} {pagination} #{hashtag1.name} #{hashtag2.name} #{hashtag3.name}
                 """
                 response = twitter_api.update_status(text_part)
                 twitter_post = {
@@ -70,10 +70,9 @@ class Twitter:
             else:
                 current_position = 177*part
             last_position = current_position + 177
-            extra = f'... {pagination}'
             if part == parts:
                 last_position = current_position + 186
-                extra = f'{pagination}'
+            extra = f'{pagination}'
             
             content = caption[current_position: last_position]
             text_part = f'{content} {extra}'
