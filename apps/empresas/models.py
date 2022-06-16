@@ -129,12 +129,12 @@ class Company(CompanyExtended):
         current_ratios = self.calculate_current_ratios()
         last_income_statement = current_ratios['last_income_statement']
         currency = last_income_statement.reported_currency
-        intro = f"{self.ticker} ha tenido un crecimiento en sus ingresos del \
-            {current_ratios['cagr']} % en los últimos 10 años.\
-            Actualmente la empresa genera {last_income_statement.revenue} {currency}\
-            con gastos elevándose a {last_income_statement.cost_of_revenue} {currency}\
-            {current_ratios['current_price']}{currency} y {current_ratios['average_shares_out']}\
-            acciones en circulación la empresa tiene una capitalización bursátil de {current_ratios['marketcap']} {current_ratios['current_price']}"
+        intro = f"{self.ticker} ha tenido un crecimiento en sus ingresos del\
+            {round(current_ratios['cagr'], 2)} % en los últimos 10 años.\
+            Actualmente la empresa genera {round(last_income_statement.revenue, 2)}{currency}\
+            con gastos elevándose a {round(last_income_statement.cost_of_revenue, 2)}{currency}\
+            {round(current_ratios['current_price'], 2)}{currency} y {current_ratios['average_shares_out']}\
+            acciones en circulación la empresa tiene una capitalización bursátil de {round(current_ratios['marketcap'], 2)} {current_ratios['current_price']}"
         return intro
 
 

@@ -21,6 +21,7 @@ CURRENT_DOMAIN = '0.0.0.0:8000'
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env.bool("DJANGO_DEBUG", False)
+
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
@@ -355,19 +356,20 @@ SOCIALACCOUNT_FORMS = {"signup": "apps.users.forms.UserSocialSignupForm"}
 # django-rest-framework
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
-DRF_DEFAULT_RENDERER_CLASSES ='rest_framework.renderers.JSONRenderer'
-if DEBUG == True:
-    DRF_DEFAULT_RENDERER_CLASSES = 'rest_framework.renderers.BrowsableAPIRenderer'
+
+DRF_DEFAULT_RENDERER_CLASSES = ['rest_framework.renderers.JSONRenderer']
+if DEBUG:
+    DRF_DEFAULT_RENDERER_CLASSES = ['rest_framework.renderers.BrowsableAPIRenderer', 'rest_framework.renderers.JSONRenderer']
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "apps.api.authentication.KeyAuthentication",
         'rest_framework.authentication.SessionAuthentication',
+        "apps.api.authentication.KeyAuthentication",
         'rest_framework.authentication.BasicAuthentication',
     ],
+    'DEFAULT_RENDERER_CLASSES': DRF_DEFAULT_RENDERER_CLASSES,
     "DEFAULT_PERMISSION_CLASSES": ["apps.api.permissions.ReadOnly"],
     'DEFAULT_VERSIONING_CLASS': "rest_framework.versioning.NamespaceVersioning",
-    'DEFAULT_RENDERER_CLASSES': [DRF_DEFAULT_RENDERER_CLASSES],
     'DEFAULT_PARSER_CLASSES': ['rest_framework.parsers.JSONParser'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination'
 }

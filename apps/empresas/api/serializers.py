@@ -30,21 +30,43 @@ class ExchangeOrganisationSerializer(ModelSerializer):
 
     class Meta:
         model = ExchangeOrganisation
-        exclude = ['id']
+        exclude = ['id', 'order']
 
 
 class ExchangeSerializer(ModelSerializer):
 
     class Meta:
         model = Exchange
-        exclude = ['id']
+        exclude = ['id', 'main_org']
 
 
 class CompanySerializer(ModelSerializer):
+    exchange = StringRelatedField(many=False)
+    currency = StringRelatedField(many=False)
+    industry = StringRelatedField(many=False)
+    sector = StringRelatedField(many=False)
+    country = StringRelatedField(many=False)
 
     class Meta:
         model = Company
-        exclude = ['id']
+        exclude = [
+            'id',
+            'is_adr',
+            'is_fund',
+            'is_etf',
+            'no_incs',
+            'no_bs',
+            'no_cfs',
+            'description_translated',
+            'has_logo',
+            'updated',
+            'last_update',
+            'date_updated',
+            'has_error',
+            'error_message',
+            'remote_image_imagekit',
+            'remote_image_cloudinary',
+        ]
 
 
 class CompanyStockPriceSerializer(ModelSerializer):

@@ -6,6 +6,9 @@ from rest_framework import status
 from rest_framework.viewsets import ViewSet
 
 from apps.empresas.api.serializers import (
+    ExchangeSerializer,
+    CompanySerializer,
+
     IncomeStatementSerializer,
     BalanceSheetSerializer,
     CashflowStatementSerializer,
@@ -25,6 +28,15 @@ User = get_user_model()
 
 from django.apps import apps
 from apps.api.views import BaseAPIView
+
+
+class AllExchangesAPIView(BaseAPIView):
+    serializer_class = ExchangeSerializer
+
+
+class CompanySerializerAPIView(BaseAPIView):
+    serializer_class = CompanySerializer
+
 
 class CompanyBaseViewSet(ViewSet):
 

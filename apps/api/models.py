@@ -12,10 +12,8 @@ from django.db.models import (
     BooleanField,
     PositiveIntegerField,
     Q,
-    JSONField,
     IntegerField
 )
-from django.contrib.sites.models import Site
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
@@ -26,8 +24,9 @@ from apps.business.models import ProductSubscriber
 
 from .managers import KeyManager
 
+from ckeditor.fields import RichTextField
 
-DOMAIN = Site.objects.get_current().domain
+FULL_DOMAIN = settings.FULL_DOMAIN
 
 User = get_user_model()
 API_version = settings.API_VERSION['CURRENT_VERSION']
@@ -147,7 +146,7 @@ class Endpoint(Model):
     order = IntegerField(default=0)
     description = TextField(blank=True, default='')
     url_example = CharField(max_length=250, blank=True)
-    response_example = JSONField(default=dict, blank=True)    
+    response_example = RichTextField(default='', blank=True)    
     date_created = DateTimeField(auto_now_add=True)
     is_premium = BooleanField(default=False)
     is_available = BooleanField(default=True)
@@ -178,7 +177,7 @@ class Endpoint(Model):
     
     @property
     def final_url(self):
-        return f'https://{DOMAIN}/api/{self.version}/{self.url}/'
+        return f'{FULL_DOMAIN}/api/{self.version}/{self.url}/'
     
     @property
     def continuation_url(self):

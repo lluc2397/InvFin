@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.apps import apps
+from django.conf import settings
 from django.views.generic import ListView
 	
 from rest_framework.response import Response
@@ -20,6 +21,7 @@ from .models import (
     EndpointsCategory
 )
 from .serializers import AuthKeySerializer
+
 
 
 class ObtainAuthKey(APIView):
