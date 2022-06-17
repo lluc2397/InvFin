@@ -1,12 +1,20 @@
 from django.urls import path
 
-# from .views import 
+from .views import (
+    AllExchangesAPIView,
+    CompleteCompanyAPIView,
+    BasicCompanyAPIView,
+    CompanyIncomeStatementAPIView,
+    CompanyBalanceSheetAPIView,
+    CompanyCashflowStatementAPIView
+)
 
 urlpatterns = [
     
-    # path('diccionario-financiero/', GlosarioView.as_view(), name='glosario'),
-
-    # path('definicion/<slug>/', TermDetailsView.as_view(), name='single_term'),
-
-    # path('correction/<pk>', TermCorrectionView.as_view(), name='correction_term'),
+    path('lista-exchanges/', AllExchangesAPIView.as_view()),
+    path('empresa-completa/', CompleteCompanyAPIView.as_view()),
+    path('empresa-basico/', BasicCompanyAPIView.as_view()),
+    path('estado-resultados/', CompanyIncomeStatementAPIView.as_view()),
+    path('balance-general/', CompanyBalanceSheetAPIView.as_view()),
+    path('estado-flujo-efectivo/', CompanyCashflowStatementAPIView.as_view()),
 ]

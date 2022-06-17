@@ -1,106 +1,87 @@
 from django.contrib.auth import get_user_model
 
-from rest_framework.response import Response
-from rest_framework import status
+from apps.api.views import BaseAPIView
+from apps.api.pagination import StandardResultPagination 
 
-from rest_framework.viewsets import ViewSet
-
+from apps.empresas.models import (
+    Exchange
+)
 from apps.empresas.api.serializers import (
     ExchangeSerializer,
     CompanySerializer,
-
+    BasicCompanySerializer,
     IncomeStatementSerializer,
     BalanceSheetSerializer,
-    CashflowStatementSerializer,
-    RentabilityRatioSerializer,
-    LiquidityRatioSerializer,
-    MarginRatioSerializer,
-    FreeCashFlowRatioSerializer,
-    PerShareValueSerializer,
-    NonGaapSerializer,
-    OperationRiskRatioSerializer,
-    EnterpriseValueRatioSerializer,
-    CompanyGrowthSerializer,
-    EficiencyRatioSerializer,
-    PriceToRatioSerializer)
+    CashflowStatementSerializer
+)
 
 User = get_user_model()
-
-from django.apps import apps
-from apps.api.views import BaseAPIView
 
 
 class AllExchangesAPIView(BaseAPIView):
     serializer_class = ExchangeSerializer
+    queryset = Exchange
+    pagination_class = StandardResultPagination
 
 
-class CompanySerializerAPIView(BaseAPIView):
+class BasicCompanyAPIView(BaseAPIView):
+    serializer_class = BasicCompanySerializer
+    query_name = ['ticker']
+
+
+class CompleteCompanyAPIView(BaseAPIView):
     serializer_class = CompanySerializer
+    custom_query = ()
+    query_name = ['ticker']
+
+    def get_object(self):
+        ticker = self.request.query_params.get(self.query_name[0]).upper()
+        return self.serializer_class.Meta.model.objects.prefetch_related(
+            'inc_statements',
+            'balance_sheets',
+            'cf_statements',
+            'rentability_ratios',
+            'liquidity_ratios',
+            'margins',
+            'fcf_ratios',
+            'per_share_values',
+            'non_gaap_figures',
+            'operation_risks_ratios',
+            'ev_ratios',
+            'growth_rates',
+            'efficiency_ratios',
+            'price_to_ratios'
+        ).only(
+            'ticker',
+            'name',
+            'sector',
+            'website',
+            'state',
+            'country',
+            'ceo',
+            'image',
+            'city',
+            'employees',
+            'address',
+            'zip_code',
+            'cik',
+            'cusip',
+            'isin',
+            'description',
+            'ipoDate',
+        ).get(ticker=ticker), True
 
 
-class CompanyBaseViewSet(ViewSet):
-
-    def list(self, request):
-        model = self.serializer_class.Meta.model
-        queryset = model.objects.filter(company__ticker = request.GET['ticker'])[:10]
-        serializer = self.serializer_class(queryset, many=True)
-        return Response(serializer.data)
-
-
-class IncomeStatementViewSet(CompanyBaseViewSet):
+class CompanyIncomeStatementAPIView(BaseAPIView):
     serializer_class = IncomeStatementSerializer
+    query_name = ['ticker']
 
 
-class BalanceSheetViewSet(CompanyBaseViewSet):
+class CompanyBalanceSheetAPIView(BaseAPIView):
     serializer_class = BalanceSheetSerializer
+    query_name = ['ticker']
 
 
-class CashflowStatementViewSet(CompanyBaseViewSet):
+class CompanyCashflowStatementAPIView(BaseAPIView):
     serializer_class = CashflowStatementSerializer
-
-
-class RentabilityRatioViewSet(CompanyBaseViewSet):
-    serializer_class = RentabilityRatioSerializer
-
-
-class LiquidityRatioViewSet(CompanyBaseViewSet):
-    serializer_class = LiquidityRatioSerializer
-
-
-class MarginRatioViewSet(CompanyBaseViewSet):
-    serializer_class = MarginRatioSerializer
-
-
-class FreeCashFlowRatioViewSet(CompanyBaseViewSet):
-    serializer_class = FreeCashFlowRatioSerializer
-
-
-class PerShareValueViewSet(CompanyBaseViewSet):
-    serializer_class = PerShareValueSerializer
-
-
-class NonGaapViewSet(CompanyBaseViewSet):
-    serializer_class = NonGaapSerializer
-
-
-class OperationRiskRatioViewSet(CompanyBaseViewSet):
-    serializer_class = OperationRiskRatioSerializer
-
-
-class EnterpriseValueRatioViewSet(CompanyBaseViewSet):
-    serializer_class = EnterpriseValueRatioSerializer
-
-
-class CompanyGrowthViewSet(CompanyBaseViewSet):
-    serializer_class = CompanyGrowthSerializer
-
-
-class EficiencyRatioViewSet(CompanyBaseViewSet):
-    serializer_class = EficiencyRatioSerializer
-
-
-class PriceToRatioViewSet(CompanyBaseViewSet):
-    serializer_class = PriceToRatioSerializer
-
-
-
+    query_name = ['ticker']

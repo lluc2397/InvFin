@@ -17,7 +17,8 @@ if READ_DOT_ENV_FILE:
 # ------------------------------------------------------------------------------
 PROTOCOL = 'http://'
 MAIN_DOMAIN = 'inversionesyfinanzas.xyz'
-CURRENT_DOMAIN = '0.0.0.0:8000'
+# CURRENT_DOMAIN = '0.0.0.0:8000'
+CURRENT_DOMAIN = 'example.com:8000'
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env.bool("DJANGO_DEBUG", False)
@@ -371,8 +372,17 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ["apps.api.permissions.ReadOnly"],
     'DEFAULT_VERSIONING_CLASS': "rest_framework.versioning.NamespaceVersioning",
     'DEFAULT_PARSER_CLASSES': ['rest_framework.parsers.JSONParser'],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination'
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # 'DEFAULT_THROTTLE_CLASSES': [
+    #     'example.throttles.BurstRateThrottle',
+    #     'example.throttles.SustainedRateThrottle'
+    # ],
+    # 'DEFAULT_THROTTLE_RATES': {
+    #     'burst': '60/min',
+    #     'sustained': '1000/day'
+    # }
 }
+
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
 CORS_URLS_REGEX = r"^/api/.*$"

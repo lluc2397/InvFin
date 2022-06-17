@@ -1,7 +1,6 @@
 from rest_framework.serializers import (
     StringRelatedField,
-    ModelSerializer,
-    FloatField
+    ModelSerializer
 )
 
 from apps.empresas.models import (
@@ -34,13 +33,14 @@ class ExchangeOrganisationSerializer(ModelSerializer):
 
 
 class ExchangeSerializer(ModelSerializer):
+    country = StringRelatedField(many=False)
 
     class Meta:
         model = Exchange
         exclude = ['id', 'main_org']
 
 
-class CompanySerializer(ModelSerializer):
+class BasicCompanySerializer(ModelSerializer):
     exchange = StringRelatedField(many=False)
     currency = StringRelatedField(many=False)
     industry = StringRelatedField(many=False)
@@ -78,6 +78,7 @@ class CompanyStockPriceSerializer(ModelSerializer):
 
 class IncomeStatementSerializer(ModelSerializer):
     reported_currency = StringRelatedField(many=False)
+    company = StringRelatedField(many=False)
 
     class Meta:        
         model = IncomeStatement
@@ -86,6 +87,7 @@ class IncomeStatementSerializer(ModelSerializer):
 
 class BalanceSheetSerializer(ModelSerializer):
     reported_currency = StringRelatedField(many=False)
+    company = StringRelatedField(many=False)
 
     class Meta:
         model = BalanceSheet
@@ -94,6 +96,7 @@ class BalanceSheetSerializer(ModelSerializer):
 
 class CashflowStatementSerializer(ModelSerializer):
     reported_currency = StringRelatedField(many=False)
+    company = StringRelatedField(many=False)
     
     class Meta:
         model = CashflowStatement
@@ -101,6 +104,7 @@ class CashflowStatementSerializer(ModelSerializer):
 
 
 class RentabilityRatioSerializer(ModelSerializer):
+    company = StringRelatedField(many=False)
 
     class Meta:
         model = RentabilityRatio
@@ -108,6 +112,7 @@ class RentabilityRatioSerializer(ModelSerializer):
 
 
 class LiquidityRatioSerializer(ModelSerializer):
+    company = StringRelatedField(many=False)
 
     class Meta:
         model = LiquidityRatio
@@ -115,6 +120,7 @@ class LiquidityRatioSerializer(ModelSerializer):
 
 
 class MarginRatioSerializer(ModelSerializer):
+    company = StringRelatedField(many=False)
 
     class Meta:
         model = MarginRatio
@@ -122,6 +128,7 @@ class MarginRatioSerializer(ModelSerializer):
 
 
 class FreeCashFlowRatioSerializer(ModelSerializer):
+    company = StringRelatedField(many=False)
 
     class Meta:
         model = FreeCashFlowRatio
@@ -129,6 +136,7 @@ class FreeCashFlowRatioSerializer(ModelSerializer):
 
 
 class PerShareValueSerializer(ModelSerializer):
+    company = StringRelatedField(many=False)
 
     class Meta:
         model = PerShareValue
@@ -136,6 +144,7 @@ class PerShareValueSerializer(ModelSerializer):
 
 
 class NonGaapSerializer(ModelSerializer):
+    company = StringRelatedField(many=False)
 
     class Meta:
         model = NonGaap
@@ -143,6 +152,7 @@ class NonGaapSerializer(ModelSerializer):
 
 
 class OperationRiskRatioSerializer(ModelSerializer):
+    company = StringRelatedField(many=False)
 
     class Meta:
         model = OperationRiskRatio
@@ -150,6 +160,7 @@ class OperationRiskRatioSerializer(ModelSerializer):
 
 
 class EnterpriseValueRatioSerializer(ModelSerializer):
+    company = StringRelatedField(many=False)
 
     class Meta:
         model = EnterpriseValueRatio
@@ -157,6 +168,7 @@ class EnterpriseValueRatioSerializer(ModelSerializer):
 
 
 class CompanyGrowthSerializer(ModelSerializer):
+    company = StringRelatedField(many=False)
 
     class Meta:
         model = CompanyGrowth
@@ -164,6 +176,7 @@ class CompanyGrowthSerializer(ModelSerializer):
 
 
 class EficiencyRatioSerializer(ModelSerializer):
+    company = StringRelatedField(many=False)
 
     class Meta:
         model = EficiencyRatio
@@ -171,9 +184,46 @@ class EficiencyRatioSerializer(ModelSerializer):
 
 
 class PriceToRatioSerializer(ModelSerializer):
+    company = StringRelatedField(many=False)
 
     class Meta:
         model = PriceToRatio
         exclude = ['id', 'year']
 
 
+class CompanySerializer(BasicCompanySerializer):
+    inc_statements = IncomeStatementSerializer(many=True)
+    balance_sheets = BalanceSheetSerializer(many=True)
+    cf_statements = CashflowStatementSerializer(many=True)
+    rentability_ratios = RentabilityRatioSerializer(many=True)
+    liquidity_ratios = LiquidityRatioSerializer(many=True)
+    margins = MarginRatioSerializer(many=True)
+    fcf_ratios = FreeCashFlowRatioSerializer(many=True)
+    per_share_values = PerShareValueSerializer(many=True)
+    non_gaap_figures = NonGaapSerializer(many=True)
+    operation_risks_ratios = OperationRiskRatioSerializer(many=True)
+    ev_ratios = EnterpriseValueRatioSerializer(many=True)
+    growth_rates = CompanyGrowthSerializer(many=True)
+    efficiency_ratios = EficiencyRatioSerializer(many=True)
+    price_to_ratios = PriceToRatioSerializer(many=True)
+
+    class Meta:
+        model = Company
+        exclude = [
+            'id',
+            'is_adr',
+            'is_fund',
+            'is_etf',
+            'no_incs',
+            'no_bs',
+            'no_cfs',
+            'description_translated',
+            'has_logo',
+            'updated',
+            'last_update',
+            'date_updated',
+            'has_error',
+            'error_message',
+            'remote_image_imagekit',
+            'remote_image_cloudinary',
+        ]

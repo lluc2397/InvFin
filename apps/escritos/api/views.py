@@ -13,7 +13,6 @@ class AllTermsAPIView(BaseAPIView):
     serializer_class = AllTermsSerializer
     custom_queryset = Term.objects.clean_terms()
     pagination_class = StandardResultPagination
-    pagination_class.default_limit=50
 
 
 class TermAPIView(BaseAPIView):

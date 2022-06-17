@@ -1,8 +1,7 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.apps import apps
-from django.conf import settings
 from django.views.generic import ListView
 	
 from rest_framework.response import Response
@@ -21,7 +20,6 @@ from .models import (
     EndpointsCategory
 )
 from .serializers import AuthKeySerializer
-
 
 
 class ObtainAuthKey(APIView):
@@ -94,6 +92,7 @@ obtain_auth_key = ObtainAuthKey.as_view()
 class BaseAPIView(APIView):
     model = None
     custom_queryset = None
+    custom_query = None
     serializer_class = None
     query_name = []
     fk_lookup_model = None
@@ -126,11 +125,13 @@ class BaseAPIView(APIView):
         return obj
 
     def get_object(self):
+        if self.custom_query:
+            return self.custom_query[0], self.custom_query[1]
         if self.model:
             return self.model, False
         if self.custom_queryset:
             return self.custom_queryset, True
-        if not self.model and not self.custom_queryset:
+        if not self.model and not self.custom_queryset and not self.custom_query:
             return self.serializer_class.Meta.model, False
 
     def final_responses(self, serializer, api_key, queryset, path, ip):
@@ -139,7 +140,7 @@ class BaseAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(
-                {'Búsqueda incorrecta': 'Lo siento ha habido un problema de nuestro lado'},
+                {'Búsqueda incorrecta': 'Lo siento ha habido un problema'},
                 status=status.HTTP_503_SERVICE_UNAVAILABLE)
         
     def find_query_value(self, query_dict):
@@ -155,8 +156,12 @@ class BaseAPIView(APIView):
         query_dict = request.GET.dict()
         api_key = query_dict.pop('api_key')
         query_param, query_value = self.find_query_value(query_dict)
+        if query_param == 'ticker':
+            query_value = query_value.upper()
         if many is False:            
             if query_value:
+                if self.custom_query:
+                    queryset = model
                 try:
                     queryset = model.objects.get(**{query_param: query_value})
                 except model.DoesNotExist:
