@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.utils.html import strip_tags
+from django.utils.html import format_html
 
 from apps.translate.google_trans_new import google_translator
 from apps.socialmedias.socialposter.facepy import Facebook
@@ -50,7 +51,7 @@ class SocialPosting:
         if link is None:
             link = 'https://inversionesyfinanzas.xyz' + content.get_absolute_url()
 
-        return strip_tags(title), link, strip_tags(description)
+        return format_html(title), link, format_html(description)
     
     def share_content(self, post_type=3):
         title, link, description = self.generate_content()

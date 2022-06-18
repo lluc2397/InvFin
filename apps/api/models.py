@@ -20,7 +20,9 @@ from django.utils.translation import gettext_lazy as _
 from apps.escritos.models import Term
 from apps.empresas.models import Company
 from apps.general.utils import UniqueCreator
+from apps.general.mixins import BaseToAll
 from apps.business.models import ProductSubscriber
+from apps.super_investors.models import Superinvestor
 
 from .managers import KeyManager
 
@@ -31,7 +33,7 @@ FULL_DOMAIN = settings.FULL_DOMAIN
 User = get_user_model()
 API_version = settings.API_VERSION['CURRENT_VERSION']
 
-class Key(Model):
+class Key(BaseToAll):
     user = ForeignKey(User, on_delete=CASCADE, related_name="api_key")
     ip = CharField(max_length=50, null=True, blank=True)
     key = CharField(_("Key"), max_length=40, primary_key=True)
@@ -66,9 +68,13 @@ class Key(Model):
 
     def __str__(self):
         return self.key
+    
+    @property
+    def has_subscription(self):
+        return bool(self.subscription)
 
 
-class ReasonKeyRequested(Model):
+class ReasonKeyRequested(BaseToAll):
     user = ForeignKey(User, on_delete=CASCADE)
     created = DateTimeField(_("Created"), auto_now_add=True)
     description = TextField()
@@ -82,7 +88,7 @@ class ReasonKeyRequested(Model):
         return f'{self.user}'
 
 
-class BaseRequestAPI(Model):
+class BaseRequestAPI(BaseToAll):
     ip = CharField(max_length=50)
     key = ForeignKey(Key, on_delete=CASCADE)
     user = ForeignKey(User, on_delete=CASCADE)
@@ -121,6 +127,15 @@ class TermRequestAPI(BaseRequestAPI):
         verbose_name = "Term requested"
         verbose_name_plural = "Terms requested"
         db_table = "api_terms_requested"
+
+
+class SuperinvestorRequestAPI(BaseRequestAPI):
+    search = ForeignKey(Superinvestor, on_delete=SET_NULL, null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Superinvestor requested"
+        verbose_name_plural = "Superinvestors requested"
+        db_table = "api_superinvestor_requested"
 
 
 class EndpointsCategory(Model):

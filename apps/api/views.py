@@ -96,9 +96,9 @@ class BaseAPIView(APIView):
     serializer_class = None
     query_name = []
     fk_lookup_model = None
+    limited = False
 
-    def save_request(self, api_key, queryset, path, ip):
-        key = Key.objects.get(key=api_key)
+    def save_request(self, key, queryset, path, ip):
         queryed_model = self.serializer_class.Meta.model.__name__
         if 'Term' not in queryed_model and queryed_model != 'PublicBlog':
             queryed_model = 'Company'
@@ -131,6 +131,8 @@ class BaseAPIView(APIView):
             return self.model, False
         if self.custom_queryset:
             return self.custom_queryset, True
+        if self.queryset:
+            return self.queryset, True
         if not self.model and not self.custom_queryset and not self.custom_query:
             return self.serializer_class.Meta.model, False
 
@@ -151,24 +153,31 @@ class BaseAPIView(APIView):
                 break
         return query_param, query_value
     
+    def check_limitation(self, key, queryset):
+        if key.has_subscription is False:
+            queryset = queryset[:10]
+        return queryset
+    
     def get(self, request):
         model, many = self.get_object()
         query_dict = request.GET.dict()
         api_key = query_dict.pop('api_key')
+        key = Key.objects.get(key=api_key)
         query_param, query_value = self.find_query_value(query_dict)
         if query_param == 'ticker':
             query_value = query_value.upper()
         if many is False:            
             if query_value:
                 if self.custom_query:
-                    queryset = model
-                try:
-                    queryset = model.objects.get(**{query_param: query_value})
-                except model.DoesNotExist:
-                    return Response({
-                            'Búsqueda incorrecta': 'Tu búsqueda no ha devuelto ningún resultado'
-                        }, 
-                        status=status.HTTP_404_NOT_FOUND)
+                    queryset = model.get(**{query_param: query_value})
+                else:
+                    try:
+                        queryset = model.objects.get(**{query_param: query_value})
+                    except model.DoesNotExist:
+                        return Response({
+                                'Búsqueda incorrecta': 'Tu búsqueda no ha devuelto ningún resultado'
+                            }, 
+                            status=status.HTTP_404_NOT_FOUND)
             else:
                 return Response({
                             'Búsqueda incorrecta': 'No has introducido ninguna búsqueda',
@@ -178,11 +187,16 @@ class BaseAPIView(APIView):
             if self.fk_lookup_model:
                 queryset = model.objects.filter(**{f'{self.fk_lookup_model}': query_value})
             else:
-                queryset = model
+                if self.custom_queryset:
+                    queryset = model
+                else:
+                    queryset = model.objects.all()
+        if self.limited:
+            queryset = self.check_limitation(key, queryset)
         serializer = self.serializer_class(queryset, many=many)
         return self.final_responses(
             serializer, 
-            api_key, 
+            key, 
             queryset, 
             request.build_absolute_uri(), 
             SeoInformation.get_client_ip(request)

@@ -52,7 +52,7 @@
                         {% for endpoint in category.endpoints.all %}
                         <li class="nav-item">
                             <a class="nav-link" href="#{{endpoint.slug}}">
-                            <i class="fa-solid fa-square-poll-horizontal text-primary"></i>
+                              {{category.icon|safe}}
                             <span class="nav-link-text">
                                 {{endpoint.title}}
                                 {% if endpoint.is_new %}

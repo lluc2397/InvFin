@@ -27,7 +27,7 @@ class ResizeImageMixin:
         imageField.save(random_name, file, save=False)
 
 
-class CommonMixin(Model):
+class BaseToAll(Model):
     class Meta:
         abstract = True
 
@@ -38,6 +38,11 @@ class CommonMixin(Model):
     @property
     def object_name(self):
         return self._meta.object_name
+
+
+class CommonMixin(BaseToAll):
+    class Meta:
+        abstract = True
     
     @property
     def related_comments(self):

@@ -5,6 +5,66 @@ from django.db.models import Manager
 
 class CompanyManager(Manager):
 
+    def only_essential(self):
+        return self.only(
+            'ticker',
+            'name',
+            'sector',
+            'website',
+            'state',
+            'country',
+            'ceo',
+            'image',
+            'city',
+            'employees',
+            'address',
+            'zip_code',
+            'cik',
+            'cusip',
+            'isin',
+            'description',
+            'ipoDate',
+        )
+
+    def prefetch_historical_data(self):
+        return self.prefetch_related(
+            'inc_statements',
+            'balance_sheets',
+            'cf_statements',
+            'rentability_ratios',
+            'liquidity_ratios',
+            'margins',
+            'fcf_ratios',
+            'per_share_values',
+            'non_gaap_figures',
+            'operation_risks_ratios',
+            'ev_ratios',
+            'growth_rates',
+            'efficiency_ratios',
+            'price_to_ratios'
+        )
+    
+    def fast_full(self):
+        return self.prefetch_historical_data().only(
+            'ticker',
+            'name',
+            'sector',
+            'website',
+            'state',
+            'country',
+            'ceo',
+            'image',
+            'city',
+            'employees',
+            'address',
+            'zip_code',
+            'cik',
+            'cusip',
+            'isin',
+            'description',
+            'ipoDate',
+        )
+
     def get_random(self, query=None):
         query = query if query else self.all()
         models_list = list(query)

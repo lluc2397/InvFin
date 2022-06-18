@@ -1,6 +1,7 @@
 from rest_framework.serializers import (
     StringRelatedField,
-    ModelSerializer
+    ModelSerializer,
+    SerializerMethodField
 )
 
 from apps.empresas.models import (
@@ -192,20 +193,20 @@ class PriceToRatioSerializer(ModelSerializer):
 
 
 class CompanySerializer(BasicCompanySerializer):
-    inc_statements = IncomeStatementSerializer(many=True)
-    balance_sheets = BalanceSheetSerializer(many=True)
-    cf_statements = CashflowStatementSerializer(many=True)
-    rentability_ratios = RentabilityRatioSerializer(many=True)
-    liquidity_ratios = LiquidityRatioSerializer(many=True)
-    margins = MarginRatioSerializer(many=True)
-    fcf_ratios = FreeCashFlowRatioSerializer(many=True)
-    per_share_values = PerShareValueSerializer(many=True)
-    non_gaap_figures = NonGaapSerializer(many=True)
-    operation_risks_ratios = OperationRiskRatioSerializer(many=True)
-    ev_ratios = EnterpriseValueRatioSerializer(many=True)
-    growth_rates = CompanyGrowthSerializer(many=True)
-    efficiency_ratios = EficiencyRatioSerializer(many=True)
-    price_to_ratios = PriceToRatioSerializer(many=True)
+    inc_statements = SerializerMethodField()
+    balance_sheets = SerializerMethodField()
+    cf_statements = SerializerMethodField()
+    rentability_ratios = SerializerMethodField()
+    liquidity_ratios = SerializerMethodField()
+    margins = SerializerMethodField()
+    fcf_ratios = SerializerMethodField()
+    per_share_values = SerializerMethodField()
+    non_gaap_figures = SerializerMethodField()
+    operation_risks_ratios = SerializerMethodField()
+    ev_ratios = SerializerMethodField()
+    growth_rates = SerializerMethodField()
+    efficiency_ratios = SerializerMethodField()
+    price_to_ratios = SerializerMethodField()
 
     class Meta:
         model = Company
@@ -227,3 +228,91 @@ class CompanySerializer(BasicCompanySerializer):
             'remote_image_imagekit',
             'remote_image_cloudinary',
         ]
+    
+    def slicing(self) -> int:
+        return 10
+
+    def get_inc_statements(self, obj):
+        limit = self.slicing()
+        queryset = obj.inc_statements.all()[:limit]
+        return IncomeStatementSerializer(queryset, many=True).data
+
+
+    def get_balance_sheets(self, obj):
+        limit = self.slicing()
+        queryset = obj.balance_sheets.all()[:limit]
+        return BalanceSheetSerializer(queryset, many=True).data
+
+
+    def get_cf_statements(self, obj):
+        limit = self.slicing()
+        queryset = obj.cf_statements.all()[:limit]
+        return CashflowStatementSerializer(queryset, many=True).data
+
+
+    def get_rentability_ratios(self, obj):
+        limit = self.slicing()
+        queryset = obj.rentability_ratios.all()[:limit]
+        return RentabilityRatioSerializer(queryset, many=True).data
+
+
+    def get_liquidity_ratios(self, obj):
+        limit = self.slicing()
+        queryset = obj.liquidity_ratios.all()[:limit]
+        return LiquidityRatioSerializer(queryset, many=True).data
+
+
+    def get_margins(self, obj):
+        limit = self.slicing()
+        queryset = obj.margins.all()[:limit]
+        return MarginRatioSerializer(queryset, many=True).data
+
+
+    def get_fcf_ratios(self, obj):
+        limit = self.slicing()
+        queryset = obj.fcf_ratios.all()[:limit]
+        return FreeCashFlowRatioSerializer(queryset, many=True).data
+
+
+    def get_per_share_values(self, obj):
+        limit = self.slicing()
+        queryset = obj.per_share_values.all()[:limit]
+        return PerShareValueSerializer(queryset, many=True).data
+
+
+    def get_non_gaap_figures(self, obj):
+        limit = self.slicing()
+        queryset = obj.non_gaap_figures.all()[:limit]
+        return NonGaapSerializer(queryset, many=True).data
+
+
+    def get_operation_risks_ratios(self, obj):
+        limit = self.slicing()
+        queryset = obj.operation_risks_ratios.all()[:limit]
+        return OperationRiskRatioSerializer(queryset, many=True).data
+
+
+    def get_ev_ratios(self, obj):
+        limit = self.slicing()
+        queryset = obj.ev_ratios.all()[:limit]
+        return EnterpriseValueRatioSerializer(queryset, many=True).data
+
+
+    def get_growth_rates(self, obj):
+        limit = self.slicing()
+        queryset = obj.growth_rates.all()[:limit]
+        return CompanyGrowthSerializer(queryset, many=True).data
+
+
+    def get_efficiency_ratios(self, obj):
+        limit = self.slicing()
+        queryset = obj.efficiency_ratios.all()[:limit]
+        return EficiencyRatioSerializer(queryset, many=True).data
+
+
+    def get_price_to_ratios(self, obj):
+        limit = self.slicing()
+        queryset = obj.price_to_ratios.all()[:limit]
+        return PriceToRatioSerializer(queryset, many=True).data
+
+

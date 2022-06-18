@@ -251,6 +251,14 @@ class User(AbstractUser):
         except Exception as e:
             print('add_fav_lists',e)
         return True
+    
+    @property
+    def app_label(self):
+        return self._meta.app_label
+    
+    @property
+    def object_name(self):
+        return self._meta.object_name
 
 
 class MetaProfile(Model):    
@@ -272,6 +280,14 @@ class MetaProfile(Model):
     class Meta:
         verbose_name = "Meta profile info"
         db_table = "meta_profile_info"
+    
+    @property
+    def app_label(self):
+        return self._meta.app_label
+    
+    @property
+    def object_name(self):
+        return self._meta.object_name
 
 
 class MetaProfileHistorial(Model):
@@ -313,3 +329,11 @@ class Profile(Model, ResizeImageMixin):
     def transform_photo(self, img):
         self.resize(img, (400, 400))
         self.save()
+    
+    @property
+    def app_label(self):
+        return self._meta.app_label
+    
+    @property
+    def object_name(self):
+        return self._meta.object_name

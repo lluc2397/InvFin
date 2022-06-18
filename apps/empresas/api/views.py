@@ -4,7 +4,11 @@ from apps.api.views import BaseAPIView
 from apps.api.pagination import StandardResultPagination 
 
 from apps.empresas.models import (
-    Exchange
+    Exchange,
+    Company,
+    CashflowStatement,
+    IncomeStatement,
+    BalanceSheet,
 )
 from apps.empresas.api.serializers import (
     ExchangeSerializer,
@@ -31,57 +35,29 @@ class BasicCompanyAPIView(BaseAPIView):
 
 class CompleteCompanyAPIView(BaseAPIView):
     serializer_class = CompanySerializer
-    custom_query = ()
+    custom_query = (Company.objects.fast_full(), False)
     query_name = ['ticker']
-
-    def get_object(self):
-        ticker = self.request.query_params.get(self.query_name[0]).upper()
-        return self.serializer_class.Meta.model.objects.prefetch_related(
-            'inc_statements',
-            'balance_sheets',
-            'cf_statements',
-            'rentability_ratios',
-            'liquidity_ratios',
-            'margins',
-            'fcf_ratios',
-            'per_share_values',
-            'non_gaap_figures',
-            'operation_risks_ratios',
-            'ev_ratios',
-            'growth_rates',
-            'efficiency_ratios',
-            'price_to_ratios'
-        ).only(
-            'ticker',
-            'name',
-            'sector',
-            'website',
-            'state',
-            'country',
-            'ceo',
-            'image',
-            'city',
-            'employees',
-            'address',
-            'zip_code',
-            'cik',
-            'cusip',
-            'isin',
-            'description',
-            'ipoDate',
-        ).get(ticker=ticker), True
 
 
 class CompanyIncomeStatementAPIView(BaseAPIView):
     serializer_class = IncomeStatementSerializer
+    limited = True
     query_name = ['ticker']
+    custom_queryset = IncomeStatement
+    fk_lookup_model = 'company__ticker'
 
 
 class CompanyBalanceSheetAPIView(BaseAPIView):
     serializer_class = BalanceSheetSerializer
+    limited = True
+    custom_queryset = BalanceSheet
     query_name = ['ticker']
+    fk_lookup_model = 'company__ticker'
 
 
 class CompanyCashflowStatementAPIView(BaseAPIView):
     serializer_class = CashflowStatementSerializer
+    limited = True
+    custom_queryset = CashflowStatement
     query_name = ['ticker']
+    fk_lookup_model = 'company__ticker'

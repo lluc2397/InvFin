@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.urls import reverse
+from django.utils.html import format_html
 
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
@@ -9,15 +11,25 @@ from .models import(
     CompanyRequestAPI,
     TermRequestAPI,
     Endpoint,
-    EndpointsCategory
+    EndpointsCategory,
+    SuperinvestorRequestAPI
 )
-
+            
 
 @admin.register(Key)
 class KeyAdmin(admin.ModelAdmin):
-    list_display = ['key', 'user', 'created']
+    list_display = ['key', 'user_link', 'created']
     ordering = ['-created']
     search_fields = ['user_username']
+
+    def user_link(self, obj):
+        field = getattr(obj, 'user')
+        object_name = field.object_name.lower()
+        app_name = field.app_label
+        args = field.id
+        link = reverse(f'admin:{app_name}_{object_name}_change', args=(args,))
+        return format_html(f'<a target="_blank" href="{link}">{field}</a>')
+    user_link.short_description = 'user'
 
 
 @admin.register(ReasonKeyRequested)
@@ -43,9 +55,14 @@ class TermRequestAPIAdmin(BaseRequestAPIAdmin):
     pass
 
 
+@admin.register(SuperinvestorRequestAPI)
+class SuperinvestorRequestAPIAdmin(BaseRequestAPIAdmin):
+    pass
+
+
 @admin.register(EndpointsCategory)
 class EndpointsCategoryAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'order']
+    list_display = ['id', 'title', 'order', 'icon']
     list_editable = list_display[1:]
 
 
