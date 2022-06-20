@@ -15,14 +15,18 @@ from django.db.models import (
     Model,
     OneToOneField,
     TextField,
+    PositiveBigIntegerField
 )
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 
 from apps.general.mixins import ResizeImageMixin
 
-from .managers import ProfileManager, UserExtraManager
+from .constants import MOVEMENTS, MOVE_SOURCES
+from .managers import ProfileManager, UserExtraManager, CreditHistorialManager
 
 PROTOCOL = settings.PROTOCOL
 CURRENT_DOMAIN = settings.CURRENT_DOMAIN
@@ -77,13 +81,6 @@ class User(AbstractUser):
         else:
             full_name = self.username
         return full_name
-    
-    # @property
-    # def has_api_key(self):
-    #     from apps.api.models import Key
-    #     key = Key.objects.filter(user=self, in_use=True)
-    #     if key.exists():
-    #         return key.first()
 
     @property
     def user_api_key(self):
@@ -152,7 +149,7 @@ class User(AbstractUser):
             return [writter.user for writter in fav_writters]
         return []
     
-    def update_credits(self, number_of_credits):
+    def update_credits(self, number_of_credits):        
         self.user_profile.creditos += number_of_credits
         self.user_profile.save()
 
@@ -337,3 +334,29 @@ class Profile(Model, ResizeImageMixin):
     @property
     def object_name(self):
         return self._meta.object_name
+
+
+class CreditUsageHistorial(Model):
+    user = ForeignKey(User, on_delete=SET_NULL, null=True, related_name='credits_historial')
+    content_type = ForeignKey(ContentType, on_delete=CASCADE)
+    object_id = PositiveBigIntegerField(null=True, blank=True)
+    object = GenericForeignKey("content_type", "object_id")
+    date = DateTimeField(auto_now_add=True)
+    amount = IntegerField()
+    initial = IntegerField()
+    final = IntegerField()
+    movement = IntegerField(choices=MOVEMENTS)
+    move_source = CharField(max_length=100, choices=MOVE_SOURCES)
+    objects = CreditHistorialManager()
+    has_enought_credits = BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Users credits historial"
+        db_table = "user_credits_historial"
+    
+    def __str__(self) -> str:
+        return self.user.full_name
+    
+    @property
+    def credits_needed(self):
+        return self.final

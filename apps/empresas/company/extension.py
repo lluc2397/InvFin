@@ -1075,7 +1075,7 @@ class CompanyExtended(Model, ChartSerializer):
         return ev_ratios
 
     def ev_ratios_json(self, limit):
-        cf = self.all_ev_ratios(limit)        
+        cf = self.all_ev_ratios(limit)
         cf_json = {
             'labels': [data.date for data in cf],
             'fields': [
@@ -1458,34 +1458,18 @@ class CompanyExtended(Model, ChartSerializer):
         }
         return ratios, query_ratios
     
-    def calculate_current_ratios(
-            self,
-            all_balance_sheets:list=None,
-            all_per_share:list=None,
-            all_margins:list=None,
-            all_inc_statements:list=None,
-            all_efficiency_ratios:list=None,
-            all_growth_rates:list=None,
-            all_per_share_values:list=None,
-            all_price_to_ratios:list=None,
-            all_liquidity_ratios:list=None,
-            all_rentablity_ratios:list=None,
-            all_operation_risks_ratios:list=None,
-        ) -> dict:
-        current_price = RetreiveCompanyData(self.ticker).get_current_price()['current_price']
-
-        all_balance_sheets = all_balance_sheets if all_balance_sheets else self.all_balance_sheets(10) 
-        all_per_share = all_per_share if all_per_share else self.all_per_share_values(10) 
-        all_margins = all_margins if all_margins else self.all_margins(10) 
-        all_inc_statements = all_inc_statements if all_inc_statements else self.all_income_statements(10)
-        all_efficiency_ratios = all_efficiency_ratios if all_efficiency_ratios else self.all_efficiency_ratios(10)
-        all_growth_rates = all_growth_rates if all_growth_rates else self.all_growth_rates(10)
-        all_per_share_values = all_per_share_values if all_per_share_values else self.all_per_share_values(10)
-        all_price_to_ratios = all_price_to_ratios if all_price_to_ratios else self.all_price_to_ratios(10)
-        all_liquidity_ratios = all_liquidity_ratios if all_liquidity_ratios else self.all_liquidity_ratios(10)
-        all_rentablity_ratios = all_rentablity_ratios if all_rentablity_ratios else self.all_rentablity_ratios(10)
-        all_operation_risks_ratios = all_operation_risks_ratios if all_operation_risks_ratios else self.all_operation_risks_ratios(10)
-
+    def calculate_averages(
+        self,
+        all_margins: list = None,
+        all_efficiency_ratios: list = None,
+        all_growth_rates: list = None,
+        all_per_share_values: list = None,
+        all_price_to_ratios: list = None,
+        all_liquidity_ratios: list = None,
+        all_rentablity_ratios: list = None,
+        all_operation_risks_ratios: list = None,
+        all_ev_ratios: list = None
+    ) -> dict:
         # Operation risk
         average_asset_coverage_ratio = all_operation_risks_ratios.aggregate(average_asset_coverage_ratio=Avg('asset_coverage_ratio'))
         average_cashFlowCoverageRatios = all_operation_risks_ratios.aggregate(average_cashFlowCoverageRatios=Avg('cashFlowCoverageRatios'))
@@ -1563,7 +1547,129 @@ class CompanyExtended(Model, ChartSerializer):
         average_quick_ratio = all_liquidity_ratios.aggregate(average_quick_ratio=Avg('quick_ratio'))
         average_operating_cashflow_ratio = all_liquidity_ratios.aggregate(average_operating_cashflow_ratio=Avg('operating_cashflow_ratio'))
         average_debt_to_equity = all_liquidity_ratios.aggregate(average_debt_to_equity=Avg('debt_to_equity'))
+        # Enterprise value
+        average_ev_fcf = all_ev_ratios.aggregate(average_ev_fcf=Avg('ev_fcf'))
+        average_ev_operating_cf = all_ev_ratios.aggregate(average_ev_operating_cf=Avg('ev_operating_cf'))
+        average_ev_sales = all_ev_ratios.aggregate(average_ev_sales=Avg('ev_sales'))
+        average_company_equity_multiplier = all_ev_ratios.aggregate(average_company_equity_multiplier=Avg('company_equity_multiplier'))
+        average_ev_multiple = all_ev_ratios.aggregate(average_ev_multiple=Avg('ev_multiple'))
+              
+        return {
+            **average_sales_ps,
+            **average_book_ps,
+            **average_tangible_ps,
+            **average_fcf_ps,
+            **average_eps,
+            **average_cash_ps,
+            **average_operating_cf_ps,
+            **average_capex_ps,
+            **average_total_assets_ps,
+            **average_price_book,
+            **average_price_cf,
+            **average_price_earnings,
+            **average_price_earnings_growth,
+            **average_price_sales,
+            **average_price_total_assets,
+            **average_price_fcf,
+            **average_price_operating_cf,
+            **average_price_tangible_assets,
+            **average_asset_turnover,
+            **average_inventory_turnover,
+            **average_fixed_asset_turnover,
+            **average_payables_turnover,
+            **average_cash_conversion_cycle,
+            **average_days_inventory_outstanding,
+            **average_days_payables_outstanding,
+            **average_days_sales_outstanding,
+            **average_fcf_to_operating_cf,
+            **average_operating_cycle,
+            **average_revenue_growth,
+            **average_cost_revenue_growth,
+            **average_operating_expenses_growth,
+            **average_net_income_growth,
+            **average_shares_buyback,
+            **average_eps_growth,
+            **average_fcf_growth,
+            **average_owners_earnings_growth,
+            **average_capex_growth,
+            **average_rd_expenses_growth,
+            **average_gross_margin,
+            **average_ebitda_margin,
+            **average_net_income_margin,
+            **average_fcf_margin,
+            **average_fcf_equity_to_net_income,
+            **average_unlevered_fcf_to_net_income,
+            **average_unlevered_fcf_ebit_to_net_income,
+            **average_owners_earnings_to_net_income,
+            **average_roa,
+            **average_roe,
+            **average_roc,
+            **average_roce,
+            **average_rota,
+            **average_roic,
+            **average_nopatroic,
+            **average_rogic,
+            **average_cash_ratio,
+            **average_current_ratio,
+            **average_quick_ratio,
+            **average_operating_cashflow_ratio,
+            **average_debt_to_equity,
+            **average_asset_coverage_ratio,
+            **average_cashFlowCoverageRatios,
+            **average_cash_coverage,
+            **average_debt_service_coverage,
+            **average_interestCoverage,
+            **average_operating_cashflow_ratio,
+            **average_debtRatio,
+            **average_longTermDebtToCapitalization,
+            **average_totalDebtToCapitalization,
+            **average_ev_fcf,
+            **average_ev_operating_cf,
+            **average_ev_sales,
+            **average_company_equity_multiplier,
+            **average_ev_multiple,
+        }
+    
+    def calculate_current_ratios(
+            self,
+            all_balance_sheets: list = None,
+            all_per_share: list = None,
+            all_margins: list = None,
+            all_inc_statements: list = None,
+            all_efficiency_ratios: list = None,
+            all_growth_rates: list = None,
+            all_per_share_values: list = None,
+            all_price_to_ratios: list = None,
+            all_liquidity_ratios: list = None,
+            all_rentablity_ratios: list = None,
+            all_operation_risks_ratios: list = None,
+            all_ev_ratios: list = None,
+        ) -> dict:
+        current_price = RetreiveCompanyData(self.ticker).get_current_price()['current_price']
 
+        all_balance_sheets = all_balance_sheets if all_balance_sheets else self.all_balance_sheets(10) 
+        all_per_share = all_per_share if all_per_share else self.all_per_share_values(10) 
+        all_margins = all_margins if all_margins else self.all_margins(10) 
+        all_inc_statements = all_inc_statements if all_inc_statements else self.all_income_statements(10)
+        all_efficiency_ratios = all_efficiency_ratios if all_efficiency_ratios else self.all_efficiency_ratios(10)
+        all_growth_rates = all_growth_rates if all_growth_rates else self.all_growth_rates(10)
+        all_per_share_values = all_per_share_values if all_per_share_values else self.all_per_share_values(10)
+        all_price_to_ratios = all_price_to_ratios if all_price_to_ratios else self.all_price_to_ratios(10)
+        all_liquidity_ratios = all_liquidity_ratios if all_liquidity_ratios else self.all_liquidity_ratios(10)
+        all_rentablity_ratios = all_rentablity_ratios if all_rentablity_ratios else self.all_rentablity_ratios(10)
+        all_operation_risks_ratios = all_operation_risks_ratios if all_operation_risks_ratios else self.all_operation_risks_ratios(10)
+        all_ev_ratios = all_ev_ratios if all_ev_ratios else self.all_ev_ratios(10)
+        averages = self.calculate_averages(
+            all_margins,
+            all_efficiency_ratios,
+            all_growth_rates,
+            all_per_share_values,
+            all_price_to_ratios,
+            all_liquidity_ratios,
+            all_rentablity_ratios,
+            all_operation_risks_ratios,
+            all_ev_ratios
+        )
         last_balance_sheet = all_balance_sheets[0]
         last_per_share = all_per_share[0]
         last_margins = all_margins[0]
@@ -1712,7 +1818,6 @@ class CompanyExtended(Model, ChartSerializer):
         else: 
             ps_lvl = 3
 
-
         if pfcf > 30 or pfcf < 0: 
             pfcf_lvl = 1 
         elif pfcf < 30 and pfcf > 15: 
@@ -1763,74 +1868,7 @@ class CompanyExtended(Model, ChartSerializer):
             'last_per_share':last_per_share,
             'last_margins':last_margins,
             'last_income_statement':last_income_statement,
-            **average_sales_ps,
-            **average_book_ps,
-            **average_tangible_ps,
-            **average_fcf_ps,
-            **average_eps,
-            **average_cash_ps,
-            **average_operating_cf_ps,
-            **average_capex_ps,
-            **average_total_assets_ps,
-            **average_price_book,
-            **average_price_cf,
-            **average_price_earnings,
-            **average_price_earnings_growth,
-            **average_price_sales,
-            **average_price_total_assets,
-            **average_price_fcf,
-            **average_price_operating_cf,
-            **average_price_tangible_assets,
-            **average_asset_turnover,
-            **average_inventory_turnover,
-            **average_fixed_asset_turnover,
-            **average_payables_turnover,
-            **average_cash_conversion_cycle,
-            **average_days_inventory_outstanding,
-            **average_days_payables_outstanding,
-            **average_days_sales_outstanding,
-            **average_fcf_to_operating_cf,
-            **average_operating_cycle,
-            **average_revenue_growth,
-            **average_cost_revenue_growth,
-            **average_operating_expenses_growth,
-            **average_net_income_growth,
-            **average_shares_buyback,
-            **average_eps_growth,
-            **average_fcf_growth,
-            **average_owners_earnings_growth,
-            **average_capex_growth,
-            **average_rd_expenses_growth,
-            **average_gross_margin,
-            **average_ebitda_margin,
-            **average_net_income_margin,
-            **average_fcf_margin,
-            **average_fcf_equity_to_net_income,
-            **average_unlevered_fcf_to_net_income,
-            **average_unlevered_fcf_ebit_to_net_income,
-            **average_owners_earnings_to_net_income,
-            **average_roa,
-            **average_roe,
-            **average_roc,
-            **average_roce,
-            **average_rota,
-            **average_roic,
-            **average_nopatroic,
-            **average_rogic,
-            **average_cash_ratio,
-            **average_current_ratio,
-            **average_quick_ratio,
-            **average_operating_cashflow_ratio,
-            **average_debt_to_equity,
-            **average_asset_coverage_ratio,
-            **average_cashFlowCoverageRatios,
-            **average_cash_coverage,
-            **average_debt_service_coverage,
-            **average_interestCoverage,
-            **average_operating_cashflow_ratio,
-            **average_debtRatio,
-            **average_longTermDebtToCapitalization,
-            **average_totalDebtToCapitalization,
+            **averages            
         }
   
     def complete_info(self, limit=10):        

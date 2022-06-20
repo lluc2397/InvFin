@@ -26,11 +26,18 @@ from apps.business import constants
 User = get_user_model()
 
 
-class Customer(Model):
+class StripeFields(Model):
+    stripe_id = CharField(max_length=500, null=True, blank=True)
+    for_testing = BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+
+class Customer(StripeFields):
     user = OneToOneField(User, on_delete=SET_NULL, null=True)
     created_at = DateTimeField(auto_now_add=True)
     # stripe_id = CharField(max_length=500, null=True, blank=True, unique=True, db_index=True)
-    stripe_id = CharField(max_length=500, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Customer'
@@ -41,10 +48,9 @@ class Customer(Model):
         return self.user.username
 
 
-class Product(Model):
+class Product(StripeFields):
     title = CharField(max_length=300)
     slug = SlugField(max_length=300, null=True, blank=True)
-    stripe_id = CharField(max_length=500, null=True, blank=True)
     description = RichTextField(null=True, blank=True)
     image = CharField(max_length=500, null=True, blank=True)
     video = CharField(max_length=500, null=True, blank=True)
@@ -60,13 +66,13 @@ class Product(Model):
         db_table = 'business_products'
 
     def __str__(self):
-        return self.title
+        return f'{self.title} {self.id}'
 
     def get_absolute_url(self):
         return reverse("business:product", kwargs={"slug": self.slug})
     
 
-class ProductComplementary(Model):
+class ProductComplementary(StripeFields):
     EXTRAS = dict(
    title="¿Qué incluye?",
    include=[
@@ -94,7 +100,6 @@ class ProductComplementary(Model):
     slug = SlugField(max_length=300, null=True, blank=True)
     price = FloatField(null=True, blank=True)
     payment_type = CharField(max_length=300, blank=True, choices=constants.PAYMENT_TYPE)
-    stripe_id = CharField(max_length=500, null=True, blank=True)
     description = RichTextField(null=True, blank=True)
     is_active = BooleanField(default=True)
     currency = ForeignKey(Currency, on_delete=SET_NULL, null=True)
@@ -182,7 +187,7 @@ class ProductComment(BaseComment):
         return self.content_related.title
 
 
-class ProductDiscount(Model):
+class ProductDiscount(StripeFields):
     product = ForeignKey(
         Product, 
         on_delete=SET_NULL, 
@@ -217,7 +222,7 @@ class ProductDiscount(Model):
         return self.product.title
 
 
-class ProductComplementaryPaymentLink(Model):
+class ProductComplementaryPaymentLink(StripeFields):
     product_complementary = ForeignKey(ProductComplementary,
         on_delete=CASCADE,
         null=True,
@@ -231,7 +236,6 @@ class ProductComplementaryPaymentLink(Model):
     )
     title = CharField(max_length=500, null=True, blank=True)
     link = CharField(max_length=500, null=True, blank=True)
-    stripe_id = CharField(max_length=500, null=True, blank=True)
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(null=True, blank=True)
     for_website = BooleanField(default=False)
@@ -280,7 +284,7 @@ class TransactionHistorial(Model):
         return self.product.title
 
 
-class StripeWebhookResponse(Model):
+class StripeWebhookResponse(StripeFields):
     product = ForeignKey(
         Product, 
         on_delete=SET_NULL, 
@@ -300,7 +304,6 @@ class StripeWebhookResponse(Model):
     )
     full_response = JSONField(default=dict)
     created_at = DateTimeField(auto_now_add=True)
-    stripe_id = CharField(max_length=500, null=True, blank=True)
 
     class Meta:
         verbose_name = "Stripe webhook response"

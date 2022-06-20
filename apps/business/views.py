@@ -31,6 +31,10 @@ class ProductsListView(SEOListView):
     context_object_name = 'products'
     ordering = ['-visits']
 
+    def get_queryset(self):
+        for_testing = settings.DEBUG is True and settings.CURRENT_DOMAIN != settings.MAIN_DOMAIN
+        return super().get_queryset().filter(is_active=True, for_testing=for_testing)
+
 
 class ProductDetailView(SEODetailView):
     model = Product

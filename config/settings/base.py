@@ -17,8 +17,8 @@ if READ_DOT_ENV_FILE:
 # ------------------------------------------------------------------------------
 PROTOCOL = 'http://'
 MAIN_DOMAIN = 'inversionesyfinanzas.xyz'
-# CURRENT_DOMAIN = '0.0.0.0:8000'
-CURRENT_DOMAIN = 'example.com:8000'
+CURRENT_DOMAIN = '0.0.0.0:8000'
+# CURRENT_DOMAIN = 'example.com:8000'
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env.bool("DJANGO_DEBUG", False)

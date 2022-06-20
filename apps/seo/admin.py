@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.contrib.sessions.models import Session
+from django.urls import reverse
+from django.utils.html import format_html
 
 from import_export.admin import ImportExportActionModelAdmin
 from import_export.resources import ModelResource
@@ -138,21 +140,41 @@ class VisiteurJourneyAdmin(ImportExportActionModelAdmin):
     actions = ["export_as_csv"]
     resource_class = VisiteurJourneyResource
     list_display = [
-        'user',
+        'id',
+        'user_link',
         'date',
         'current_path',
         'comes_from'
         ]
+
+    def user_link(self, obj):
+        field = getattr(obj, 'user')
+        object_name = field.object_name.lower()
+        app_name = field.app_label
+        args = field.id
+        link = reverse(f'admin:{app_name}_{object_name}_change', args=(args,))
+        return format_html(f'<a target="_blank" href="{link}">{field}</a>')
+    user_link.short_description = 'user'
 
 
 @admin.register(UsersJourney)
 class UsersJourneyAdmin(admin.ModelAdmin):
     list_display = [
-        'user',
+        'id',
+        'user_link',
         'date',
         'current_path',
         'comes_from'
         ]
+    
+    def user_link(self, obj):
+        field = getattr(obj, 'user')
+        object_name = field.object_name.lower()
+        app_name = field.app_label
+        args = field.id
+        link = reverse(f'admin:{app_name}_{object_name}_change', args=(args,))
+        return format_html(f'<a target="_blank" href="{link}">{field}</a>')
+    user_link.short_description = 'user'
 
 
 @admin.register(Visiteur)

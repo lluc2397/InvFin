@@ -62,8 +62,11 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
             self.company.image = self.yf_company.info['logo_url']
             self.company.has_logo = True
             self.company.save(update_fields=['has_logo', 'image'])
+            e = 'all right'
         except Exception as e:
             print(e)
+        finally:
+            CompanyUpdateLog.objects.create_log(self.company, 'add_logo', e)
     
     def save_logo_remotely(self):        
         try:
@@ -88,20 +91,22 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
             })
             self.company.remote_image_imagekit = imagekit_url
             self.company.save(update_fields=['remote_image_imagekit'])
-            e = None
+            e = 'all right'
         except Exception as e:
             print(e)
-        CompanyUpdateLog.objects.create_log(self.company, 'save_logo_remotely', e)
+        finally:
+            CompanyUpdateLog.objects.create_log(self.company, 'save_logo_remotely', e)
 
     def add_description(self):
         try:
             self.company.description = google_translator().translate(self.company.description, lang_src='en', lang_tgt='es')
             self.company.description_translated = True
             self.company.save(update_fields=['description_translated', 'description'])
-            e = None
+            e = 'all right'
         except Exception as e:
             print(e)
-        CompanyUpdateLog.objects.create_log(self.company, 'add_description', e)
+        finally:
+            CompanyUpdateLog.objects.create_log(self.company, 'add_description', e)
 
     def general_update(self):        
         if self.company.has_logo is False:
@@ -112,6 +117,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
             self.save_logo_remotely()
     
     def financial_update(self):
+        e = 'all right'
         try:
             if self.check_last_filing() == 'need update':
                 try:
@@ -151,10 +157,10 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
                     operation_risk_ratio = self.calculate_operation_risk_ratio(all_data)
                     rentability_ratios = self.calculate_rentability_ratios(all_data)
                 except Exception as e:
-                    CompanyUpdateLog.objects.create_log(self.company, 'first_step_financial_update', e)
                     self.company.has_error = True
                     self.company.error_message = e
                     self.company.save(update_fields=['has_error', 'error_message'])
+                
                 else:
                     try:
                         self.create_current_stock_price(price = current_data['currentPrice'])
@@ -178,16 +184,21 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
                         self.company.has_error = True
                         self.company.error_message = e
                         self.company.save(update_fields=['has_error', 'error_message'])
+                    finally:
+                        CompanyUpdateLog.objects.create_log(self.company, 'first_step_financial_update', e)
+                finally:
+                    CompanyUpdateLog.objects.create_log(self.company, 'first_step_financial_update', e)
             else:
                 from apps.empresas.tasks import update_company_financials_task
                 self.company.date_updated = True
                 self.company.save(update_fields=['date_updated'])
                 update_company_financials_task.delay()
         except Exception as e:
-            CompanyUpdateLog.objects.create_log(self.company, 'last_step_financial_update', e)
             self.company.has_error = True
             self.company.error_message = e
             self.company.save(update_fields=['has_error', 'error_message'])
+        finally:
+            CompanyUpdateLog.objects.create_log(self.company, 'last_step_financial_update', e)
 
     def check_last_filing(self):
         least_recent_date = self.yq_company.balance_sheet()

@@ -129,13 +129,13 @@ class Company(CompanyExtended):
         current_ratios = self.calculate_current_ratios()
         last_income_statement = current_ratios['last_income_statement']
         currency = last_income_statement.reported_currency
-        intro = f"{self.ticker} ha tenido un crecimiento en sus ingresos del\
-            {round(current_ratios['cagr'], 2)} % en los últimos 10 años.\
-            Actualmente la empresa genera {round(last_income_statement.revenue, 2)}{currency}\
-            con gastos elevándose a {round(last_income_statement.cost_of_revenue, 2)}{currency}\
-            {round(current_ratios['current_price'], 2)}{currency} y {current_ratios['average_shares_out']}\
-            acciones en circulación la empresa tiene una capitalización bursátil de {round(current_ratios['marketcap'], 2)} {current_ratios['current_price']}"
-        return intro
+        return f"{self.ticker} ha tenido un crecimiento en sus ingresos del \
+        {round(current_ratios['cagr'], 2)}% anualizado durante los últimos 10 años. \
+        Actualmente la empresa genera {round(last_income_statement.revenue, 2)}{currency}\
+        con gastos elevándose a {round(last_income_statement.cost_of_revenue, 2)}{currency}.\
+        La empresa cotiza a {round(current_ratios['current_price'], 2)}{currency} por acción, con \
+        {current_ratios['average_shares_out']} acciones en circulación la empresa obtiene una capitalización \
+        bursátil de {round(current_ratios['marketcap'], 2)}{currency}"
 
 
 class CompanyStockPrice(Model):
@@ -160,7 +160,7 @@ class CompanyUpdateLog(Model):
     date = DateTimeField(auto_now=True)
     where = CharField(max_length=250)
     had_error = BooleanField(default=False)
-    error_message = TextField(default='')
+    error_message = TextField(default='', null=True)
     objects = CompanyUpdateLogManager()
 
     class Meta:

@@ -1,5 +1,5 @@
+from django.conf import settings
 from django.utils import timezone
-
 from django.template.defaultfilters import slugify
 
 from apps.api.models import Key
@@ -13,11 +13,13 @@ from apps.business.models import (
 from apps.business.stripe_management import StripeManagement
 from apps.business import constants
 
+from apps.users import constants as credits_constants
+from apps.users.models import CreditUsageHistorial
+
 class BusinessSignal:
     @classmethod
     def generate_content(cls, instance):
         prod = getattr(instance, 'product', None)
-
         if prod:
             description = prod.description
         else:
@@ -36,6 +38,7 @@ class BusinessSignal:
             BusinessSignal.generate_content(instance)
             stripe_product = stripe.create_product(instance.title, instance.description, instance.is_active)
             instance.stripe_id = stripe_product['id']
+            
         else:
             stripe_product = stripe.update_product(
                 instance.stripe_id, 
@@ -91,7 +94,12 @@ class BusinessSignal:
     def transaction_post_save(cls, sender, instance: TransactionHistorial, **kwargs):
         user = instance.customer.user
         if instance.product_complementary.purchase_result == constants.ADD_CREDITS:
-            user.update_credits(int(instance.product_complementary.product_result))
+            CreditUsageHistorial.objects.update_credits(
+                user, 
+                int(instance.product_complementary.product_result), 
+                credits_constants.BOUGHT_CREDITS, 
+                instance.product_complementary
+            )
         elif instance.product_complementary.purchase_result == constants.SHARE_EXCEL:
             pass
         #Create something to invite the user to purchase a subscription to get unlimited credits
