@@ -132,13 +132,15 @@
         <div class="col-xl-6 col-sm-12">
             <button class="form-control" id="{{endpoint.id}}" style="background-color: #dfdfdfaf;word-break: break-all;" onclick="copyToClipboard('#{{endpoint.id}}')"
             data-bs-toggle="popover" data-bs-placement="top" 
-            data-bs-content="Copiar">{{endpoint.final_url}}?api_key={{key}}{{endpoint.continuation_url}}</button>
+            data-bs-content="Copiar"><strong>{{endpoint.final_url}}?api_key={{key}}{{endpoint.continuation_url}}</strong></button>
           <p class="mt-4">
-            {{endpoint.description}}
+            <b>{{endpoint.description}}</b>
           </p>
         </div>
         <div class="col-xl-6 col-sm-12">
-          <textarea style="height: 300px; font-size: 12px;background-color: #dfdfdfaf;" class="col-xl-9 col-sm-12 form-control" readonly>{{ endpoint.response_example | safe | striptags }}</textarea>
+          <textarea style="height: 300px; font-size: 12px;background-color: #dfdfdfaf; color: black" class="col-xl-9 col-sm-12 form-control" readonly>
+            {{ endpoint.response_example | safe | striptags | pprint }}
+          </textarea>
         </div>
       </div>
       {% endif %}

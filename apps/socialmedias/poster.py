@@ -27,6 +27,8 @@ class SocialPosting:
             if model_type == 'preguntas_respuestas.question':# Quesiton
                 description = content.content
                 title = content.title
+                description = strip_tags(format_html(description))
+                title = strip_tags(format_html(title))
             
             elif model_type == 'empresas.company':# Company:
                 title = content.name
@@ -47,11 +49,12 @@ class SocialPosting:
             title = news['headline']
             description = news['summary']
             description = google_translator().translate(description, lang_src='en', lang_tgt='es')
+            title = google_translator().translate(title, lang_src='en', lang_tgt='es')
 
         if link is None:
             link = 'https://inversionesyfinanzas.xyz' + content.get_absolute_url()
 
-        return format_html(title), link, format_html(description)
+        return title, link, description
     
     def share_content(self, post_type=3):
         title, link, description = self.generate_content()

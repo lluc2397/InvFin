@@ -22,9 +22,15 @@ class UserAdmin(ImportExportModelAdmin, auth_admin.UserAdmin):
     form = UserAdminChangeForm
     add_form = UserAdminCreationForm
     fieldsets = (
-        (None, {"fields": ("username", "password")}),
-        (_("Type"), {"fields": ("is_writter", "just_newsletter")}),
-        (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
+        (
+            None, {"fields": ("username", "password")}
+        ),
+        (
+            _("Type"), {"fields": ("is_writter", "just_newsletter")}
+        ),
+        (
+            _("Personal info"), {"fields": ("first_name", "last_name", "email")}
+        ),
         (
             _("Permissions"),
             {

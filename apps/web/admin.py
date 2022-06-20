@@ -13,7 +13,7 @@ class WebsiteEmailTrackAdmin(admin.ModelAdmin):
 
 @admin.register(WebsiteEmail)
 class WebsiteEmailAdmin(admin.ModelAdmin):
-    list_display = ["id", "title", "type_related", "sent", "date_to_send"]
+    list_display = ["id", "title", "opening_rate", "type_related", "sent", "date_to_send"]
     list_editable = ['type_related', "date_to_send"]
 
 

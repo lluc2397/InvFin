@@ -41,7 +41,7 @@ class Twitter:
         json_response = response._json
         return json_response['id']
     
-    def create_thread(self, title, media_url, caption, tweet_len, hashtags):
+    def create_thread(self, title, caption, tweet_len, hashtags):
         post_type = 8 # Thread
         twitter_api = self.do_authenticate()
         parts = int(math.ceil(tweet_len / 186))
@@ -117,7 +117,7 @@ class Twitter:
             if post_type == 3 or post_type == 4:
                 tweet_len = len(tweet)
                 if tweet_len > 186:
-                    post_response = self.create_thread(title, media_url, caption, tweet_len, hashtags)
+                    post_response = self.create_thread(title, caption, tweet_len, hashtags)
                 else:
                     post_response = self.tweet_text(tweet)
             
