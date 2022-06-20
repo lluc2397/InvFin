@@ -347,8 +347,8 @@ class CreditUsageHistorial(Model):
     final = IntegerField()
     movement = IntegerField(choices=MOVEMENTS)
     move_source = CharField(max_length=100, choices=MOVE_SOURCES)
-    objects = CreditHistorialManager()
     has_enought_credits = BooleanField(default=True)
+    objects = CreditHistorialManager()
 
     class Meta:
         verbose_name = "Users credits historial"

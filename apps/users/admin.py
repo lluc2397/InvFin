@@ -10,6 +10,7 @@ from .models import (
     Profile,
     MetaProfile,
     MetaProfileHistorial,
+    CreditUsageHistorial
 )
 
 User = get_user_model()
@@ -86,4 +87,19 @@ class MetaProfileHistorialAdmin(admin.ModelAdmin):
         'user',
         'date',
         'meta_info'
+    ]
+
+
+@admin.register(CreditUsageHistorial)
+class CreditUsageHistorialAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'user',
+        'date',
+        'amount',
+        'initial',
+        'final',
+        'movement',
+        'move_source',
+        'has_enought_credits',
     ]

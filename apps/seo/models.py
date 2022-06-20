@@ -59,6 +59,14 @@ class Visiteur(Model):
     def __str__(self):
         return str(self.id)
     
+    @property
+    def app_label(self):
+        return self._meta.app_label
+    
+    @property
+    def object_name(self):
+        return self._meta.object_name
+    
 
 class MetaParameters(Model):
     meta_title = CharField(max_length=999,null=True, blank=True)

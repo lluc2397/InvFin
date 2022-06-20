@@ -1,7 +1,8 @@
-from django.db.models import Model, Avg
-
 import math
+import operator
 from statistics import mean
+
+from django.db.models import Model, Avg
 
 from apps.general.utils import ChartSerializer
 from apps.empresas.valuations import discounted_cashflow
@@ -1630,6 +1631,42 @@ class CompanyExtended(Model, ChartSerializer):
             **average_ev_multiple,
         }
     
+    def to_size_ratios(
+        self, 
+        name: str, 
+        current: float, 
+        average: float, 
+        min_low: int, 
+        max_low: int,
+        max_high: int,
+        min_high_operator: operator = operator.le,
+    ) -> dict:
+        valuation_result = {
+            'name': name,
+            'current_value': current,
+            'average_value': average,
+        }
+        if current > max_high or min_high_operator(current, 0):
+            valuation_result['current_veredict'] = 'Sobrevalorado'
+            valuation_result['current_color'] = 'danger'
+        elif current < max_low and current > min_low: 
+            valuation_result['current_veredict'] = 'Neutral'
+            valuation_result['current_color'] = 'warning'
+        else: 
+            valuation_result['current_veredict'] = 'Infravalorado'
+            valuation_result['current_color'] = 'success'
+        
+        if current > average + 3: 
+            valuation_result['average_veredict'] = 'Sobrevalorado'
+            valuation_result['average_color'] = 'danger'
+        elif current < average + 3:
+            valuation_result['average_veredict'] = 'Infravalorado'
+            valuation_result['average_color'] = 'success'
+        else:
+            valuation_result['average_veredict'] = 'Neutral'
+            valuation_result['average_color'] = 'warning'
+        return valuation_result
+
     def calculate_current_ratios(
             self,
             all_balance_sheets: list = None,
@@ -1644,7 +1681,7 @@ class CompanyExtended(Model, ChartSerializer):
             all_rentablity_ratios: list = None,
             all_operation_risks_ratios: list = None,
             all_ev_ratios: list = None,
-        ) -> dict:
+    ) -> dict:
         current_price = RetreiveCompanyData(self.ticker).get_current_price()['current_price']
 
         all_balance_sheets = all_balance_sheets if all_balance_sheets else self.all_balance_sheets(10) 
@@ -1762,101 +1799,127 @@ class CompanyExtended(Model, ChartSerializer):
         )
         safety_margin_opt = ((fair_value / current_price)-1)*100 if current_price !=0 else 0
 
-        if per > 30 or per <= 0: 
-            per_lvl = 1 
-        elif per < 30 and per > 15: 
-            per_lvl = 2 
-        else: 
-            per_lvl = 3
 
-        if pb > 3 or pb <= 0: 
-            pb_lvl = 1 
-        elif pb < 3 and pb > 2: 
-            pb_lvl = 2 
-        else: 
-            pb_lvl = 3
+        most_used_ratios = [
+        {
+            'name': 'PER',
+            'current': per,
+            'average': averages.pop('average_price_earnings'),
+            'min_low': 15,
+            'max_low': 30,
+            'max_high': 30,
+            'min_high_operator': operator.le
+        },
+        {
+            'name': 'PB',
+            'current': pb,
+            'average': averages.pop('average_price_book'),
+            'min_low': 2,
+            'max_low': 3,
+            'max_high': 3,
+            'min_high_operator': operator.le
+        },
+        {
+            'name': 'PS',
+            'current': ps,
+            'average': averages.pop('average_price_sales'),
+            'min_low': 2,
+            'max_low': 4,
+            'max_high': 4,
+            'min_high_operator': operator.le
+        },
+        {
+            'name': 'PFCF',
+            'current': pfcf,
+            'average': averages.pop('average_price_fcf'),
+            'min_low': 15,
+            'max_low': 30,
+            'max_high': 30,
+            'min_high_operator': operator.eq
+        },
+        {
+            'name': 'PEG',
+            'current': peg,
+            'average': averages.pop('average_price_earnings_growth'),
+            'min_low': 1,
+            'max_low': 2,
+            'max_high': 2,
+            'min_high_operator': operator.le
+        },
+        {
+            'name': 'Precio Activos Totales',
+            'current': pas,
+            'average': averages.pop('average_price_total_assets'),
+            'min_low': 2,
+            'max_low': 3,
+            'max_high': 6,
+            'min_high_operator': operator.le
+        },
+        {
+            'name': 'Precio Activos Tangibles',
+            'current': pta,
+            'average': averages.pop('average_price_tangible_assets'),
+            'min_low': 2,
+            'max_low': 3,
+            'max_high': 3,
+            'min_high_operator': operator.le
+        },
+        {
+            'name': 'Precio Efectivo',
+            'current': pcps,
+            'average': averages.pop('average_price_cf'),
+            'min_low': 2,
+            'max_low': 5,
+            'max_high': 10,
+            'min_high_operator': operator.le
+        },
+        {
+            'name': 'Precio Flujo efectivo operativo',
+            'current': pocf,
+            'average': averages.pop('average_price_operating_cf'),
+            'min_low': 10,
+            'max_low': 18,
+            'max_high': 25,
+            'min_high_operator': operator.le
+        },
+        {
+            'name': 'EV/EBITDA',
+            'current': evebitda,
+            'average': averages.pop('average_ev_multiple'),
+            'min_low': 15,
+            'max_low': 30,
+            'max_high': 30,
+            'min_high_operator': operator.le
+        },
+        {
+            'name': 'EV/SALES',
+            'current': evsales,
+            'average': averages.pop('average_ev_sales'),
+            'min_low': 1,
+            'max_low': 4,
+            'max_high': 4,
+            'min_high_operator': operator.le
+        }]
 
-        if pas > 6 or pas <= 0: 
-            pas_lvl = 1 
-        elif pas < 3 and pas > 2: 
-            pas_lvl = 2 
-        else: 
-            pas_lvl = 3
-
-        if pta > 3 or pta <= 0: 
-            pta_lvl = 1 
-        elif pta < 3 and pta > 2: 
-            pta_lvl = 2 
-        else: 
-            pta_lvl = 3
-
-        if pcps > 10 or pcps <= 0: 
-            pcps_lvl = 1 
-        elif pcps < 5 and pcps > 2: 
-            pcps_lvl = 2 
-        else: 
-            pcps_lvl = 3
-
-        if pocf > 25 or pocf <= 0: 
-            pocf_lvl = 1 
-        elif pocf < 18 and pocf > 10: 
-            pocf_lvl = 2 
-        else: 
-            pocf_lvl = 3
-
-        if peg > 2 or peg <= 0: 
-            peg_lvl = 1 
-        elif peg < 2 and peg > 1: 
-            peg_lvl = 2 
-        else: 
-            peg_lvl = 3
-
-        if ps > 4 or ps <= 0: 
-            ps_lvl = 1 
-        elif ps < 4 and ps > 2: 
-            ps_lvl = 2 
-        else: 
-            ps_lvl = 3
-
-        if pfcf > 30 or pfcf < 0: 
-            pfcf_lvl = 1 
-        elif pfcf < 30 and pfcf > 15: 
-            pfcf_lvl = 2 
-        else: 
-            pfcf_lvl = 3
-
-        if evebitda > 30 or evebitda <= 0: 
-            evebitd_lvl = 1 
-        elif evebitda < 30 and evebitda > 15: 
-            evebitd_lvl = 2 
-        else: 
-            evebitd_lvl = 3
-
-        if evsales > 4 or evsales <= 0: 
-            evsales_lvl = 1 
-        elif evsales < 4 and evsales > 1: 
-            evsales_lvl = 2 
-        else: 
-            evsales_lvl = 3
+        most_used_ratios = [self.to_size_ratios(**valuation) for valuation in most_used_ratios]
 
         return {
-            'pfcf':pfcf, 'pfcf_lvl':pfcf_lvl,
-            'pas':pas, 'pas_lvl':pas_lvl,
-            'pta':pta, 'pta_lvl':pta_lvl,
-            'pcps':pcps, 'pcps_lvl':pcps_lvl,
-            'pocf':pocf, 'pocf_lvl':pocf_lvl,
-            'per':per, 'per_lvl':per_lvl,
-            'pb':pb,  'pb_lvl':pb_lvl,    
-            'peg':peg,'peg_lvl':peg_lvl,
-            'ps':ps, 'ps_lvl':ps_lvl,
+            'most_used_ratios':most_used_ratios,
+            'pfcf':pfcf,
+            'pas':pas,
+            'pta':pta,
+            'pcps':pcps,
+            'pocf':pocf,
+            'per':per, 
+            'pb':pb,
+            'peg':peg,
+            'ps':ps, 
             'fair_value':fair_value,
             'ev':ev,
             'marketcap':marketcap,
             'cagr':cagr,
-            'evebitda':evebitda, 
-            'evebitd_lvl':evebitd_lvl,
-            'evsales':evsales, 
-            'evsales_lvl':evsales_lvl,
+            'evebitda':evebitda,
+            'evsales':evsales,
             'gramvalu':gramvalu,
             'sharesbuyback':sharesbuyback,
             'safety_margin_pes':safety_margin_pes, 

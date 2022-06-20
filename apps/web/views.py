@@ -104,8 +104,11 @@ class ExcelView(TemplateView):
 
 class CreateWebEmailView(CreateView):
     form_class = WebEmailForm
-    
     template_name = 'web_principal/mandar_emails.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
 
     def get_success_url(self) -> str:
         return reverse("users:user_inicio")

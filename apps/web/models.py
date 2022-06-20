@@ -47,6 +47,13 @@ class WebsiteEmail(BaseNewsletter):
 
     def __str__(self) -> str:
         return self.title
+    
+    @property
+    def opening_rate(self):
+        all_emails = self.email_related.all()
+        all_opened = self.email_related.filter(opened=True).count()
+        rate = all_emails / all_opened if all_opened != 0 else 0
+        return rate
 
 
 class WebsiteEmailTrack(BaseEmail):

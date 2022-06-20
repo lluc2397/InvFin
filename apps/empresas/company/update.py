@@ -93,7 +93,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
             self.company.save(update_fields=['remote_image_imagekit'])
             e = 'all right'
         except Exception as e:
-            print(e)
+            e = e
         finally:
             CompanyUpdateLog.objects.create_log(self.company, 'save_logo_remotely', e)
 
@@ -104,7 +104,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
             self.company.save(update_fields=['description_translated', 'description'])
             e = 'all right'
         except Exception as e:
-            print(e)
+            e = e
         finally:
             CompanyUpdateLog.objects.create_log(self.company, 'add_description', e)
 
@@ -157,6 +157,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
                     operation_risk_ratio = self.calculate_operation_risk_ratio(all_data)
                     rentability_ratios = self.calculate_rentability_ratios(all_data)
                 except Exception as e:
+                    e = e
                     self.company.has_error = True
                     self.company.error_message = e
                     self.company.save(update_fields=['has_error', 'error_message'])
@@ -180,6 +181,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
                         self.company.last_update = datetime.now()
                         self.company.save(update_fields=['updated', 'last_update'])
                     except Exception as e:
+                        e = e
                         CompanyUpdateLog.objects.create_log(self.company, 'second_step_financial_update', e)
                         self.company.has_error = True
                         self.company.error_message = e
@@ -194,6 +196,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
                 self.company.save(update_fields=['date_updated'])
                 update_company_financials_task.delay()
         except Exception as e:
+            e = e
             self.company.has_error = True
             self.company.error_message = e
             self.company.save(update_fields=['has_error', 'error_message'])
@@ -420,6 +423,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
         df = df.reset_index()
         df = df.drop(columns=['symbol','row','maxAge'])
         try:
+            e = 'all right'
             for index, data in df.iterrows():
                 institution, _ = InstitutionalOrganization.objects.get_or_create(
                     name=data['organization']
@@ -440,4 +444,6 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
                     value=data['value']
                 )
         except Exception as e:
+            e = e
+        finally:
             CompanyUpdateLog.objects.create_log(self.company, 'institutional_ownership', e)
