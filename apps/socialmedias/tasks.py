@@ -1,3 +1,5 @@
+import random
+
 from config import celery_app
 
 from apps.escritos.models import Term
@@ -26,7 +28,8 @@ def socialmedia_share_company():
 @celery_app.task()
 def socialmedia_share_news():
     post_type = 6
-    company_related = Company.objects.random_complete_companies_by_main_exchange('Estados Unidos')
+    market = random.choice(['Estados Unidos', 'México'])
+    company_related = Company.objects.random_complete_companies_by_main_exchange(market)
     SocialPosting(NewsSharedHistorial, company_related=company_related).share_content(post_type)
 
 
