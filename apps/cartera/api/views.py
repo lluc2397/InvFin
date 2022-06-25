@@ -47,7 +47,7 @@ class AddPositionMovementView(DefaultCreationView):
     form_class = PositionMovementForm
 
     def get_form_kwargs(self):
-        kwargs = super(AddPositionMovementView, self).get_form_kwargs()
+        kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user # pass the 'user' in kwargs
         return kwargs
 
