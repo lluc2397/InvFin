@@ -44,6 +44,38 @@
         new Chart(document.querySelector('#doughnut-{{forloop.counter}}'), content{{forloop.counter}});
     </script>
     {% endfor %}
+    <div>
+        <div class='card'>
+            <div class="table-responsive ">
+                <table class="table table-borderless">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Nombre</th>                            
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Movimiento</th>
+                            <th scope="col">Canditad</th>
+                            <th scope="col">Precio unitario</th>
+                            <th scope="col">Comisión</th>
+                            <th scope="col">Precio total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in money.positons_moves %}
+                        <tr>
+                            <td>{{data.asset_related}}</td>                            
+                            <td>{{data.date}}</td>
+                            <td>{{data.movement}}</td>
+                            <td>{{data.quantity}}</td>
+                            <td>{{data.price|floatformat:2}} {{data.currency}}</td>
+                            <td>{{data.fee|floatformat:2}}</td>
+                            <td>{{data.movement_cost|floatformat:2}} {{data.currency}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 {% endwith %}
 {% endblock content %}

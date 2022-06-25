@@ -138,8 +138,8 @@
           </p>
         </div>
         <div class="col-xl-6 col-sm-12">
-          <textarea style="height: 300px; font-size: 12px;background-color: #dfdfdfaf; color: black" class="col-xl-9 col-sm-12 form-control" readonly>
-            {{ endpoint.response_example | safe | striptags | pprint }}
+          <textarea style="height: 300px; font-size: 12px;background-color: #dfdfdfaf; color: black" class="form-control" readonly>
+            {{ endpoint.example | safe }}
           </textarea>
         </div>
       </div>

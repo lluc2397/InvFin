@@ -147,8 +147,8 @@ class CompanyStockPrice(Model):
     class Meta:
         get_latest_by = 'date'
         ordering = ['-date']
-        verbose_name = "Company stock price"
-        verbose_name_plural = "Company stock prices"
+        verbose_name = "Stock price"
+        verbose_name_plural = "Stock prices"
         db_table = "assets_companies_stock_prices"
 
     def __str__(self):
@@ -166,8 +166,8 @@ class CompanyUpdateLog(Model):
     class Meta:
         get_latest_by = 'date'
         ordering = ['-date']
-        verbose_name = "Company updates logs"
-        verbose_name_plural = "Company updates logs"
+        verbose_name = "Logs"
+        verbose_name_plural = "Logs"
         db_table = "assets_companies_updates_logs"
 
     def __str__(self):

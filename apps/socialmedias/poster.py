@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
-from django.utils.html import strip_tags
-from django.utils.html import format_html
+from django.utils.html import strip_tags, format_html
 
 from apps.translate.google_trans_new import google_translator
 from apps.socialmedias.socialposter.facepy import Facebook

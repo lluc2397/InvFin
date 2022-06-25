@@ -1,6 +1,9 @@
+import json
+
 from django.conf import settings
 from datetime import datetime, timedelta, time, date
 from django.template.defaultfilters import slugify
+from django.utils.html import strip_tags, format_html
 from django.db.models import (
     Model,
     CharField,
@@ -12,6 +15,7 @@ from django.db.models import (
     BooleanField,
     PositiveIntegerField,
     Q,
+    JSONField,
     IntegerField
 )
 from django.contrib.auth import get_user_model
@@ -161,7 +165,7 @@ class Endpoint(Model):
     order = IntegerField(default=0)
     description = TextField(blank=True, default='')
     url_example = CharField(max_length=250, blank=True)
-    response_example = RichTextField(default='', blank=True)    
+    response_example = RichTextField(default='', blank=True)
     date_created = DateTimeField(auto_now_add=True)
     is_premium = BooleanField(default=False)
     is_available = BooleanField(default=True)
@@ -169,6 +173,7 @@ class Endpoint(Model):
     version = CharField(max_length=3, blank=True, default=API_version)
     date_deprecated = DateTimeField(blank=True, null=True)
     price = IntegerField(default=0)
+    response_example_json = JSONField(blank=True, null=True)
 
     class Meta:
         verbose_name = "Endpoint"
@@ -201,3 +206,7 @@ class Endpoint(Model):
     @property
     def is_new(self):
         return (self.date_created.date() - date.today()).days < 3
+    
+    @property
+    def example(self):
+        return json.dumps(self.response_example_json ,indent=4, sort_keys=True, ensure_ascii=False)

@@ -27,7 +27,7 @@ class DefaultCateraView(LoginRequiredMixin, TemplateView):
         patrimoine = Patrimonio.objects.get_or_create(user=user)[0]
         context["patrimonio"] = patrimoine
         initial = {'currency': patrimoine.default_currency}
-            
+
         context["cashflowform"] = CashflowMoveForm(initial=initial)
         context["defcurrencyform"] = DefaultCurrencyForm(initial=initial)
 

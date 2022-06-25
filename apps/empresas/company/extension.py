@@ -1804,7 +1804,7 @@ class CompanyExtended(Model, ChartSerializer):
         {
             'name': 'PER',
             'current': per,
-            'average': averages.pop('average_price_earnings'),
+            'average': averages.get('average_price_earnings'),
             'min_low': 15,
             'max_low': 30,
             'max_high': 30,
@@ -1813,7 +1813,7 @@ class CompanyExtended(Model, ChartSerializer):
         {
             'name': 'PB',
             'current': pb,
-            'average': averages.pop('average_price_book'),
+            'average': averages.get('average_price_book'),
             'min_low': 2,
             'max_low': 3,
             'max_high': 3,
@@ -1822,7 +1822,7 @@ class CompanyExtended(Model, ChartSerializer):
         {
             'name': 'PS',
             'current': ps,
-            'average': averages.pop('average_price_sales'),
+            'average': averages.get('average_price_sales'),
             'min_low': 2,
             'max_low': 4,
             'max_high': 4,
@@ -1831,7 +1831,7 @@ class CompanyExtended(Model, ChartSerializer):
         {
             'name': 'PFCF',
             'current': pfcf,
-            'average': averages.pop('average_price_fcf'),
+            'average': averages.get('average_price_fcf'),
             'min_low': 15,
             'max_low': 30,
             'max_high': 30,
@@ -1840,7 +1840,7 @@ class CompanyExtended(Model, ChartSerializer):
         {
             'name': 'PEG',
             'current': peg,
-            'average': averages.pop('average_price_earnings_growth'),
+            'average': averages.get('average_price_earnings_growth'),
             'min_low': 1,
             'max_low': 2,
             'max_high': 2,
@@ -1849,7 +1849,7 @@ class CompanyExtended(Model, ChartSerializer):
         {
             'name': 'Precio Activos Totales',
             'current': pas,
-            'average': averages.pop('average_price_total_assets'),
+            'average': averages.get('average_price_total_assets'),
             'min_low': 2,
             'max_low': 3,
             'max_high': 6,
@@ -1858,7 +1858,7 @@ class CompanyExtended(Model, ChartSerializer):
         {
             'name': 'Precio Activos Tangibles',
             'current': pta,
-            'average': averages.pop('average_price_tangible_assets'),
+            'average': averages.get('average_price_tangible_assets'),
             'min_low': 2,
             'max_low': 3,
             'max_high': 3,
@@ -1867,7 +1867,7 @@ class CompanyExtended(Model, ChartSerializer):
         {
             'name': 'Precio Efectivo',
             'current': pcps,
-            'average': averages.pop('average_price_cf'),
+            'average': averages.get('average_price_cf'),
             'min_low': 2,
             'max_low': 5,
             'max_high': 10,
@@ -1876,7 +1876,7 @@ class CompanyExtended(Model, ChartSerializer):
         {
             'name': 'Precio Flujo efectivo operativo',
             'current': pocf,
-            'average': averages.pop('average_price_operating_cf'),
+            'average': averages.get('average_price_operating_cf'),
             'min_low': 10,
             'max_low': 18,
             'max_high': 25,
@@ -1885,7 +1885,7 @@ class CompanyExtended(Model, ChartSerializer):
         {
             'name': 'EV/EBITDA',
             'current': evebitda,
-            'average': averages.pop('average_ev_multiple'),
+            'average': averages.get('average_ev_multiple'),
             'min_low': 15,
             'max_low': 30,
             'max_high': 30,
@@ -1894,7 +1894,7 @@ class CompanyExtended(Model, ChartSerializer):
         {
             'name': 'EV/SALES',
             'current': evsales,
-            'average': averages.pop('average_ev_sales'),
+            'average': averages.get('average_ev_sales'),
             'min_low': 1,
             'max_low': 4,
             'max_high': 4,

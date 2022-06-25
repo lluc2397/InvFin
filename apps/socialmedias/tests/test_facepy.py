@@ -80,6 +80,7 @@ class FacePosterTest(TestCase):
     def test_question(self):
         question = Question.objects.get_random()
         question_poster = SocialPosting(QuestionSharedHistorial, question).generate_content()
+        print(question_poster)
         question_response= question.title, 'https://inversionesyfinanzas.xyz' + question.get_absolute_url(), question.content, None
         self.assertEqual(question_poster, question_response)
 
@@ -96,11 +97,11 @@ class FacePosterTest(TestCase):
         self.assertEqual(company_poster, company_response)
         title, link, description, media_url = company_poster
         print(description)
-        fb_response = Facebook(test_page_id, test_page_token).post_on_facebook(title=title, caption=description, post_type=3, link=link, media_url=media_url)
-        print(fb_response)
-
+        
     def test_news(self):
         company = Company.objects.get_random()
         title, link, description, media_url = SocialPosting(NewsSharedHistorial, company_related=company).generate_content()
         
-    
+    # def test_posting(self):
+    #     fb_response = Facebook(test_page_id, test_page_token).post_on_facebook(title=title, caption=description, post_type=3, link=link, media_url=media_url)
+    #     print(fb_response)

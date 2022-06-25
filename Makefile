@@ -3,6 +3,9 @@
 build:
 	docker-compose -f local.yml build $(ar)
 
+restart:
+	docker-compose -f local.yml restart $(ar)
+
 up-b:
 	docker-compose -f local.yml up -d django
 	docker-compose -f local.yml logs -f django
@@ -98,7 +101,7 @@ new-test:
 	docker-compose -f local.yml run --rm django python -u manage.py test $(ar) --noinput --settings=config.settings.test
 
 test:
-	docker-compose -f local.yml run --rm django python -u manage.py test $(ar) --noinput --keepdb --settings=config.settings.test
+	docker-compose -f local.yml run --rm django python -u manage.py test $(ar) --noinput --keepdb --settings=config.settings.local
 
 pytest:
 	docker-compose -f local.yml run --rm django pytest

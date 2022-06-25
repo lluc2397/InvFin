@@ -78,10 +78,14 @@ class PositionMovement(Model):
     
     @property
     def movement_cost(self):
-        total = (self.price * self.quantity) - self.fee
+        total = (self.price * self.quantity) + self.fee
         if self.move_type == 2:
             total = total * (-1)
         return total
+    
+    @property
+    def movement(self):
+        return 'Compra' if self.move_type == 1 else 'Venta'
 
 
 class CashflowMovementCategory(Model):
@@ -334,7 +338,8 @@ class Patrimonio(Model, ChartSerializer):
     def positions_segmentation_information(self, total_invertido):
         positions_information = {
             'empresas': [],
-            'segmentation': []
+            'segmentation': [],
+            'positons_moves': PositionMovement.objects.filter(user=self.user)
         }
 
         segmentation = {

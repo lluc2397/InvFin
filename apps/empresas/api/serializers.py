@@ -50,23 +50,29 @@ class BasicCompanySerializer(ModelSerializer):
 
     class Meta:
         model = Company
-        exclude = [
-            'id',
-            'is_adr',
-            'is_fund',
-            'is_etf',
-            'no_incs',
-            'no_bs',
-            'no_cfs',
-            'description_translated',
-            'has_logo',
-            'updated',
-            'last_update',
-            'date_updated',
-            'has_error',
-            'error_message',
-            'remote_image_imagekit',
-            'remote_image_cloudinary',
+        fields = [
+            'ticker',
+            'name',
+            'currency',
+            'industry',
+            'sector',
+            'website',
+            'state',
+            'country',
+            'ceo',
+            'image',
+            'city',
+            'employees',
+            'address',
+            'zip_code',
+            'cik',
+            'exchange',
+            'cusip',
+            'isin',
+            'description',
+            'ipoDate',
+            'beta',
+            'last_div',
         ]
 
 

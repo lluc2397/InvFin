@@ -1,5 +1,8 @@
+import json
+
 from django import template
 from django.contrib.auth.models import Group
+from django.utils.html import strip_tags, format_html
 
 from datetime import datetime
 
@@ -29,3 +32,11 @@ def add_utms(content='', term='', medium='webapp', source='invfin', campaign='we
     utm_content = f'utm_content={content}'
     utm_term = f'utm_term={term}'
     return f'?{utm_source}&{utm_medium}&{utm_content}&{utm_campaign}&{utm_term}'
+
+
+@register.simple_tag(name='clean_json')
+def api_json_example(example):
+    print(type(example))
+    parsed = json.loads(example)
+    print(parsed)
+    return json.dumps(example, indent=4, sort_keys=True)

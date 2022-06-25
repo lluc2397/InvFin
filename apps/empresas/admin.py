@@ -23,12 +23,26 @@ from .models import (
     CompanyStockPrice,
     NonGaap,
     TopInstitutionalOwnership,
-    InstitutionalOrganization
+    InstitutionalOrganization,
+    CompanyUpdateLog
 )
 
 
 IMAGEKIT_URL_ENDPOINT = settings.IMAGEKIT_URL_ENDPOINT
 IMAGE_KIT = settings.IMAGE_KIT
+
+
+@admin.register(CompanyUpdateLog)
+class CompanyUpdateLogAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'company',
+        'date',
+        'where',
+        'had_error',
+        'error_message'
+    ]
+    search_fields = ['company__name']
 
 
 @admin.register(InstitutionalOrganization)

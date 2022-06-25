@@ -131,10 +131,14 @@ class BaseAPIView(APIView):
             return self.model, False
         if self.custom_queryset:
             return self.custom_queryset, True
-        if self.queryset:
-            return self.queryset, True
+        try:
+            if self.queryset:
+                return self.queryset, True
+        except:
+            pass
         if not self.model and not self.custom_queryset and not self.custom_query:
             return self.serializer_class.Meta.model, False
+        
 
     def final_responses(self, serializer, api_key, queryset, path, ip):
         if status.is_success:
