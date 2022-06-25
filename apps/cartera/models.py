@@ -68,7 +68,7 @@ class PositionMovement(Model):
     fee = DecimalField ("Comisión", max_digits=100, decimal_places=2, default=0)
 
     class Meta:        
-        ordering = ['date']
+        ordering = ['-date']
         verbose_name = "Position movement"
         verbose_name_plural = "Position movements"
         db_table = "cartera_movements"
@@ -113,7 +113,7 @@ class CashflowMovement(Model):
 
     class Meta:
         abstract = True      
-        ordering = ['date']
+        ordering = ['-date']
     
     def __str__(self):
         return self.name
