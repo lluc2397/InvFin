@@ -1,16 +1,7 @@
-from rest_framework.generics import GenericAPIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.mixins import (
-    CreateModelMixin,
-    UpdateModelMixin
-)
-from rest_framework.response import Response
-from rest_framework import status
-
 from django.http import HttpResponseRedirect
 from django.views.generic import FormView
+from django.views.generic.edit import BaseFormView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -27,15 +18,21 @@ from ..forms import (
 )
 
 
-class DefaultCreationView(LoginRequiredMixin, SuccessMessageMixin, FormView):
+class DefaultCreationView(LoginRequiredMixin, BaseFormView):
+    template_name = 'cartera/modals/main_modals.html'
     success_message = 'Guardado correctamente'
 
     def get_success_url(self) -> str:
         return self.request.META.get('HTTP_REFERER')
     
+    def successful_return(self):
+        if self.success_message:
+            messages.success(self.request, self.success_message)
+        return HttpResponseRedirect(self.get_success_url())
+    
     def form_valid(self, form):
         form.save(self.request)
-        return super().form_valid(form)
+        return self.successful_return()
 
 
 class AddDefaultCurrencyView(DefaultCreationView):
