@@ -1,6 +1,5 @@
 {% load static %}
 {% load crispy_forms_tags %}
-
 <div class="modal fade" id="AssetsMovementsModal" tabindex="-1" role="dialog" aria-labelledby="AssetsMovementsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-danger modal-lg modal-dialog-centered modal-" role="document">
         <div class="modal-content bg-gradient-info">
@@ -34,21 +33,3 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    $(function () {
-    $("#datepicker").datepicker({
-        icons: {
-            time: "fa fa-clock",
-            date: "fa fa-calendar-day",
-            up: "fa fa-chevron-up",
-            down: "fa fa-chevron-down",
-            previous: 'fa fa-chevron-left',
-            next: 'fa fa-chevron-right',
-            today: 'fa fa-screenshot',
-            clear: 'fa fa-trash',
-            close: 'fa fa-remove'
-          },
-      format: 'DD/MM/YYYY',
-    });
-  });
-</script>

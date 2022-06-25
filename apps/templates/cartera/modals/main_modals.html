@@ -4,6 +4,7 @@
 <script type="text/javascript" src="{% static 'general/assets/vendor/bootstrap-datetimepicker.js' %}"></script>
 <link rel="stylesheet" href="{% static 'general/assets/vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
 
+
 {% include "cartera/modals/cashflowmoves.html" %}
 {% include "cartera/modals/asset_movement.html" %}
 {% include "cartera/modals/new_asset.html" %}
@@ -12,20 +13,20 @@
 {% include "cartera/modals/objectives.html" %}
 
 <script type="text/javascript">
-    $(function () {
-    $(".datepicker").datepicker({
-        icons: {
-            time: "fa fa-clock",
-            date: "fa fa-calendar-day",
-            up: "fa fa-chevron-up",
-            down: "fa fa-chevron-down",
-            previous: 'fa fa-chevron-left',
-            next: 'fa fa-chevron-right',
-            today: 'fa fa-screenshot',
-            clear: 'fa fa-trash',
-            close: 'fa fa-remove'
-          },
-      format: 'DD/MM/YYYY',
-    });
+  $(function () {
+  $(".datetimepicker1").datetimepicker({
+      icons: {
+          time: "fa fa-clock",
+          date: "fa fa-calendar-day",
+          up: "fa fa-chevron-up",
+          down: "fa fa-chevron-down",
+          previous: 'fa fa-chevron-left',
+          next: 'fa fa-chevron-right',
+          today: 'fa fa-screenshot',
+          clear: 'fa fa-trash',
+          close: 'fa fa-remove'
+        },
+    format: 'DD/MM/YYYY',
   });
+});
 </script>

@@ -33,7 +33,7 @@ User = get_user_model()
 class BaseAssetMoveForm(Form):
     price = DecimalField(label='Precio unitario')
     date = DateField(label='Fecha', initial=datetime.date.today,
-    widget = DateInput(attrs={'class':'datepicker'}))
+    widget = DateInput(attrs={'class':'datetimepicker1'}))
     quantity = IntegerField(label='Cantidad')
     currency = ModelChoiceField(label='Divisa', queryset=Currency.objects.all())
     observacion = CharField(widget=Textarea, required=False, label='Descripción')
@@ -89,7 +89,7 @@ class PositionMovementForm(ModelForm, BaseAssetMoveForm):
 
 class FinancialObjectifForm(ModelForm):
     date_to_achieve = DateField(label='Fecha', initial=datetime.date.today,
-    widget = DateInput(attrs={'class':'datepicker'}))
+    widget = DateInput(attrs={'class':'datetimepicker1'}))
 
     class Meta:
         model = FinancialObjectif
@@ -138,7 +138,7 @@ class CashflowMoveForm(Form):
     amount = DecimalField(label='Cantidad')
     description = CharField(widget=Textarea, required=False, label='Descripción')
     date = DateField(label='Fecha', initial=datetime.date.today,
-    widget = DateInput(attrs={'class':'datepicker'}))
+    widget = DateInput(attrs={'class':'datetimepicker1'}))
     currency = ModelChoiceField(label='Divisa', queryset=Currency.objects.all())
     is_recurrent = BooleanField(label='¿Es recurrente?', required=False)
 
