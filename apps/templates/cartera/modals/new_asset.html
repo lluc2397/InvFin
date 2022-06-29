@@ -1,43 +1,19 @@
-{% load static %}
-{% load crispy_forms_tags %}
+{% extends 'cartera/modals/base_modal.html' %}
+{% load static extra humanize i18n crispy_forms_tags %}
 
+{% block mainForm %}
+<form method="POST" hx-post="{% url 'cartera:save_new_asset_movement' %}"
+    hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' class="modal-content">
+{% endblock mainForm %}
 
-<div class="modal fade" id="NewAssetModal" tabindex="-1" role="dialog" aria-labelledby="NewAssetModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-danger modal-lg modal-dialog-centered modal-" role="document">
-        <div class="modal-content bg-gradient-info">
-            <div class="modal-header">
-                <h6 class="modal-title" id="modal-title-notification">Añade un nuevo activo</h6>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <form method="POST" action="{% url 'cartera:save_new_asset_movement' %}">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <div class="py-3 text-center">
-                        <i class="ni ni-bell-55 ni-3x"></i>
-                        {% for field in form %}
-                        {% if field.errors %}
-                        <div class="alert alert-danger" role="alert">
-                        {{ field.errors|striptags }}
-                        </div>
-                        {% endif %}
-                        {% endfor %}
-                        <div class="col-12 mb-1">
-                            <label class="form-label">
-                                Selecciona la empresa que quieras
-                              </label>
-                            {% include "general/search/search-companies.html" %}
-                        </div>                        
-                        {{ new_asset_form|crispy }}
-                  
-                    </div>
-                </div>
-                <div class="modal-footer text-center">
-                    <button type="submit" class="btn btn-white">Guardar</button>                
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+{% block formTitle %}Añade un nuevo activo{% endblock formTitle %}
 
+{% block formContent %}
+<div class="col-12 mb-1">
+    <label class="form-label">
+        Selecciona la empresa que quieras
+        </label>
+    {% include "general/search/search-companies.html" %}
+</div>                        
+{{ form|crispy }}
+{% endblock formContent %}

@@ -5,11 +5,7 @@
 {% block MasterBody %}
 {% block body %}{% endblock body%}
 {% block modal %}
-{% include "general/modals/become_writter.html" %}
-{% include "general/modals/rep_explanation.html" %}
-{% include "general/modals/credits_explanation.html" %}
-{% include "general/modals/user_required.html" %}
-{% include "general/modals/api_key.html" %}
+{% include "general/modals/shared_modals.html" %}
 {% endblock modal %}
 {% block javascript %}{% include "general/complements/scripts.html" %}{% endblock javascript %}
 {% block extra_javascript %}{% endblock extra_javascript %}

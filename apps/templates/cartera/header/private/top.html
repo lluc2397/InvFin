@@ -19,36 +19,7 @@
                 Atajos
             </button>
             <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                <li>
-                    <a class="dropdown-item" data-bs-toggle="modal" 
-                        data-bs-target="#CashflowMovementModal" href="#!">
-                        Movimientos de caja
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item" data-bs-toggle="modal" 
-                        data-bs-target="#AssetsMovementsModal" href="#!">
-                        Posiciones activos
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item" data-bs-toggle="modal" 
-                        data-bs-target="#NewAssetModal" href="#!">
-                        Nuevo activo
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item" data-bs-toggle="modal" 
-                        data-bs-target="#DefaultCurrencyModal" href="#!">
-                        Divisa
-                    </a>
-                </li>
-                <!-- <li>
-                    <a class="dropdown-item" data-bs-toggle="modal" 
-                        data-bs-target="#ObjectivesModal" href="#!">
-                        Objetivos
-                    </a>
-                </li> -->
+                {% include 'cartera/header/private/dropdowns.html' %}
             </ul>
         </div>
     </div>

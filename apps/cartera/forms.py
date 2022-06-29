@@ -30,12 +30,15 @@ from apps.general.models import Currency
 User = get_user_model()
 
 
-class BaseAssetMoveForm(Form):
+class BaseForm(Form):
+    currency = ModelChoiceField(label='Divisa', queryset=Currency.objects.all())
+
+
+class BaseAssetMoveForm(BaseForm):
     price = DecimalField(label='Precio unitario')
     date = DateField(label='Fecha', initial=datetime.date.today,
     widget = DateInput(attrs={'class':'datetimepicker1'}))
     quantity = IntegerField(label='Cantidad')
-    currency = ModelChoiceField(label='Divisa', queryset=Currency.objects.all())
     observacion = CharField(widget=Textarea, required=False, label='Descripción')
     fee = DecimalField(label='Comisión', initial=0)
 
@@ -124,22 +127,19 @@ class AddCategoriesForm(ModelForm):
         return model
 
 
-class DefaultCurrencyForm(Form):
-    currency = ModelChoiceField(label='Divisa', queryset=Currency.objects.all())
-
+class DefaultCurrencyForm(BaseForm):
     def save(self, request):
         request.user.user_patrimoine.default_currency = self.cleaned_data['currency']
         request.user.user_patrimoine.save()
 
 
-class CashflowMoveForm(Form):
+class CashflowMoveForm(BaseForm):
     move_type = ChoiceField(choices=[(0, 'Ingreso'), (1, 'Gasto')], label='Moviemiento')
     name = CharField(label='Nombre')
     amount = DecimalField(label='Cantidad')
     description = CharField(widget=Textarea, required=False, label='Descripción')
     date = DateField(label='Fecha', initial=datetime.date.today,
     widget = DateInput(attrs={'class':'datetimepicker1'}))
-    currency = ModelChoiceField(label='Divisa', queryset=Currency.objects.all())
     is_recurrent = BooleanField(label='¿Es recurrente?', required=False)
 
     def save(self, request):

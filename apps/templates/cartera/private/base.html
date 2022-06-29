@@ -1,5 +1,5 @@
 {% extends "general/bases/main_base.html" %}
-{% load static i18n extra %}
+{% load static extra humanize i18n %}
 {% block extra %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -13,7 +13,32 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script src="{% static 'general/assets/js/screener.js' %}"></script>
 {% endblock extra %}
-{% block modal %}
+
+{% block javascript %}
 {{ block.super }}
-{% include "cartera/modals/main_modals.html" %}
-{% endblock modal %}
+<script>
+;(function () {
+  const modal = new bootstrap.Modal(document.getElementById("FinancialModal"))
+
+  htmx.on("htmx:afterSwap", (e) => {
+    // Response targeting #dialog => show the modal
+    if (e.detail.target.id == "FinancialModalDialog") {
+      modal.show()
+    }
+  })
+
+  htmx.on("htmx:beforeSwap", (e) => {
+    // Empty response targeting #dialog => hide the modal
+    if (e.detail.target.id == "FinancialModalDialog" && !e.detail.xhr.response) {
+      modal.hide()
+      e.detail.shouldSwap = false
+    }
+  })
+
+  // Remove dialog content after hiding
+  htmx.on("hidden.bs.modal", () => {
+    document.getElementById("FinancialModalDialog").innerHTML = ""
+  })
+})()
+</script>
+{% endblock javascript %}

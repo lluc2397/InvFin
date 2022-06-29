@@ -6,15 +6,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import (
 	Patrimonio
 )
-from .forms import (
-    CashflowMoveForm,
-    DefaultCurrencyForm,
-    AddCategoriesForm,
-    FinancialObjectifForm,
-    AddNewAssetForm,
-    PositionMovementForm
-)
-
 User = get_user_model()
 
 
@@ -26,16 +17,6 @@ class DefaultCateraView(LoginRequiredMixin, TemplateView):
         user = self.request.user
         patrimoine = Patrimonio.objects.get_or_create(user=user)[0]
         context["patrimonio"] = patrimoine
-        initial = {'currency': patrimoine.default_currency}
-
-        context["cashflowform"] = CashflowMoveForm(initial=initial)
-        context["defcurrencyform"] = DefaultCurrencyForm(initial=initial)
-
-        context["asset_movement_form"] = PositionMovementForm(user=user, initial=initial)
-        context["new_asset_form"] = AddNewAssetForm(initial=initial)
-
-        context["add_categories_form"] = AddCategoriesForm()
-        context["add_financial_objective_form"] = FinancialObjectifForm()
         context["meta_title"] = self.meta_title
         return context
 
