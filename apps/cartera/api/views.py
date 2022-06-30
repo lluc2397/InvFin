@@ -1,6 +1,5 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import FormView
-from django.views.generic.edit import BaseFormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.contrib import messages
@@ -21,15 +20,14 @@ from ..forms import (
 class BaseFinancialFormView(LoginRequiredMixin, FormView):
     success_message = 'Guardado correctamente'
 
-    def successful_return(self, redirect_to):
+    def successful_return(self):
         if self.success_message:
             messages.success(self.request, self.success_message)
-        return HttpResponseRedirect(redirect_to)
-    
+        return HttpResponse(status=204, headers={'HX-Trigger': 'showMessageSuccess'})
+
     def form_valid(self, form):
         form.save(self.request)
-        redirect_to = self.request.POST.get('redirection')
-        return self.successful_return(redirect_to)
+        return self.successful_return()
 
 
 class CurrencyInitial(BaseFinancialFormView):
@@ -78,7 +76,7 @@ class AddNewAssetView(CurrencyInitial):
         ticker = empresa_ticker[:-1]
         empresa_busqueda = Company.objects.get(ticker = ticker)
         form.save(self.request, empresa_busqueda)
-        return HttpResponseRedirect(self.get_success_url())
+        return self.successful_return()
 
 
 @login_required(login_url='login')

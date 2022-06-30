@@ -11,14 +11,16 @@
     {% endblock sidebar%}
     <div class="main-content" id="panel">
         {% block navbar %}{% include "general/navbar/navbar.html" %}{% endblock navbar%}
-        {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            {% endfor %}
-        {% endif %}
+        <div hx-trigger="load, showMessageSuccess from:body">
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
         {% block TopHeader %}
         <div class="header pb-6">
             <div class="container-fluid">
