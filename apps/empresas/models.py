@@ -2,7 +2,7 @@ from django.db.models import (
     Model,
     CharField,
     SET_NULL,
-    CASCADE,
+    JSONField,
     ForeignKey,
     TextField,
     DateTimeField,
@@ -602,7 +602,7 @@ class InstitutionalOrganization(Model):
 
 class TopInstitutionalOwnership(Model):
     date = IntegerField(default=0)
-    year = DateField(blank=True, null=True) 
+    year = DateField(blank=True, null=True)
     company = ForeignKey(
         Company, on_delete=SET_NULL, null=True, 
         blank=True, related_name="top_institutional_ownership"
@@ -624,7 +624,3 @@ class TopInstitutionalOwnership(Model):
 
     def __str__(self):
         return self.company.ticker + str(self.date)
-
-
-
-

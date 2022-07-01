@@ -120,12 +120,24 @@ class CompanyDetailsView(SEODetailView):
                 ticker=ticker
             )            
         return response
+    
+    def save_company_in_session(self, empresa):
+        if 'companies_visited' not in self.request.session:
+            companies_visited = self.request.session['companies_visited'] = []
+        else:
+            companies_visited = self.request.session['companies_visited']
+        tickers = [ticker['ticker'] for ticker in companies_visited]
+        if empresa.ticker not in tickers:
+            companies_visited.append(
+                {'ticker': empresa.ticker, 'img': empresa.image}
+            )
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         empresa = self.object
         UpdateCompany(empresa).general_update()
-        self.request.session['screener'] = empresa.id
+        self.save_company_in_session(empresa)
         context["meta_desc"] = f'Estudia a fondo la empresa {empresa.name}. Más de 30 años de información, noticias, análisis FODA y mucho más'
         context["meta_tags"] = f'finanzas, blog financiero, blog el financiera, invertir, {empresa.name}, {empresa.ticker}'
         context["meta_title"] = f'Análisis completo de {empresa.name}'

@@ -1,0 +1,18 @@
+{% load static i18n extra %}
+{% if companies_visited %}
+<div class="nav-wrapper position-sticky" style="top: 4rem; z-index: 999">
+    <ul class="nav nav-pills justify-content-center" id="tabs-icons-text" role="tablist">
+      {% for company in companies_visited %}
+        <li class="nav-item">
+          <a class="nav-link mb-sm-3 mb-md-0 d-flex" role="tab"
+            href="{% url 'screener:company' company.ticker %}{% utm 'top-navbar' company.ticker %}">
+            <span class="avatar avatar-xs rounded-circle mr-2">
+              <img alt="{{company.ticker}}" src="{{company.img}}">
+            </span>
+            {{company.ticker}}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+</div>
+{% endif %}

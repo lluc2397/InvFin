@@ -224,6 +224,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "apps.users.context_processors.allauth_settings",
                 "apps.users.context_processors.users_notifications",
+                "apps.users.context_processors.user_companies_visited",
                 "apps.public_blog.context_processors.keep_email",
                 "apps.seo.context_processors.journey",
                 "apps.seo.context_processors.debug",

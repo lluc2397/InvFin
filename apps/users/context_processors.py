@@ -21,3 +21,8 @@ def allauth_settings(request):
     }
 
 
+def user_companies_visited(request):
+    companies_visited = [] 
+    if 'companies_visited' in request.session:
+        companies_visited = request.session['companies_visited']
+    return {'companies_visited': companies_visited}

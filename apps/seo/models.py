@@ -31,7 +31,7 @@ User = get_user_model()
 #     old_url
 #     new_url
 
-
+# from django.contrib.sessions.models import Session
 
 class Visiteur(Model):
     ip = CharField(max_length=50, null=True, blank=True)

@@ -11,6 +11,7 @@
     {% endblock sidebar%}
     <div class="main-content" id="panel">
         {% block navbar %}{% include "general/navbar/navbar.html" %}{% endblock navbar%}
+        {% include 'general/navbar/historial-sub-navbar.html' %}
         <div hx-trigger="load, showMessageSuccess from:body">
             {% if messages %}
                 {% for message in messages %}
