@@ -60,6 +60,12 @@ class Exchange(Model):
 
 
 class Company(CompanyExtended):
+    DEFAULT_CHECKINGS = {
+        'has_institutionals':{
+            'state': 'no',
+            'time': ''
+        }
+    }
     ticker = CharField(max_length=30, unique=True, db_index=True)
     name = CharField(max_length=700, null=True, blank=True)
     currency = ForeignKey("general.Currency", on_delete=SET_NULL, null=True, blank=True)
@@ -96,9 +102,11 @@ class Company(CompanyExtended):
     date_updated = BooleanField(default=False)
     has_error = BooleanField(default=False)
     error_message = TextField( null=True, blank=True)
-    objects = CompanyManager()
     remote_image_imagekit = CharField(max_length=500 , default='', blank=True)
     remote_image_cloudinary = CharField(max_length=500 , default='', blank=True)
+    checkings = JSONField(default=DEFAULT_CHECKINGS)
+
+    objects = CompanyManager()
 
     class Meta:        
         verbose_name = "Company"

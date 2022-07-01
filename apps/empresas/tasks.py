@@ -1,4 +1,5 @@
 from config import celery_app
+from datetime import datetime
 
 from django.conf import settings
 from django.db.models import Q
@@ -6,6 +7,25 @@ from django.core.mail import send_mail
 
 from .models import Company
 from .company.update import UpdateCompany
+
+
+@celery_app.task()
+def update_institutionals_info_company_task():
+    org_name = 'Estados Unidos'
+    companies_without_info = Company.objects.clean_companies_by_main_exchange(org_name)
+    intento = 0
+    for company in companies_without_info:
+        if intento == 5:
+            return
+        if company.checkings['has_institutionals']['state'] == 'no':
+            update = UpdateCompany(company).institutional_ownership
+            if update == 'all right':
+                intento += 1
+                dt = datetime.now()
+                ts = datetime.timestamp(dt)
+                company.checkings['has_institutionals']['state'] == 'yes'
+                company.checkings['has_institutionals']['time'] = ts
+                company.save(update_fields=['checkings'])
 
 
 @celery_app.task()

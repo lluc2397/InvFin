@@ -447,3 +447,4 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
             log_message = e
         finally:
             CompanyUpdateLog.objects.create_log(self.company, 'institutional_ownership', log_message)
+            return log_message
