@@ -45,6 +45,7 @@ class SeoInformation:
         visiteur.session_id = request.session.session_key
         visiteur.save()
         request.session['visiteur_id'] = visiteur.id
+        request.session.modified = True
         return visiteur
 
 
@@ -104,6 +105,7 @@ class SeoInformation:
             HTTP_USER_AGENT = seo['http_user_agent']
         )
         request.session['visiteur_id'] = visiteur.id
+        request.session.modified = True
         return visiteur
 
 
