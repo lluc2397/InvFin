@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib import admin
 from django.conf import settings
 
@@ -141,6 +143,15 @@ def update_has_logo(modeladmin, request, queryset):
             query.save(update_fields=['has_logo'])
 
 
+@admin.action(description='Add new checking')
+def update_has_logo(modeladmin, request, queryset):
+    for query in queryset:
+        state = 'no'
+        if query.remote_image_imagekit or query.remote_image_cloudinary:
+            state = 'yes'
+        query.modify_checkings('has_meta_image', state)
+        
+
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
     actions = [save_remote_imagekit, update_has_logo, do_general_update]
@@ -162,7 +173,7 @@ class CompanyAdmin(admin.ModelAdmin):
         'description_translated',
         'has_logo',
         'has_error',
-        'exchange__main_org',
+        'exchange__main_org'
     ]
     list_editable = [
         'no_incs',
@@ -172,6 +183,8 @@ class CompanyAdmin(admin.ModelAdmin):
         'has_logo',
     ]
     search_fields = ['name', 'ticker']
+
+    
       
 
 @admin.register(CompanyGrowth)

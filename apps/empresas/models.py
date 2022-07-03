@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db.models import (
     Model,
     CharField,
@@ -125,6 +127,17 @@ class Company(CompanyExtended):
         return f'{self.ticker} {self.name}'
     
     @property
+    def has_meta_image(self):
+        if (
+            'has_meta_image' in self.checkings and 
+            self.check_checkings('has_meta_image')
+        ):
+            return True
+        if self.remote_image_imagekit or self.remote_image_cloudinary:
+            return True
+        return False
+    
+    @property
     def meta_image(self):
         return self.remote_image_imagekit if self.remote_image_imagekit else self.remote_image_cloudinary
     
@@ -144,6 +157,26 @@ class Company(CompanyExtended):
         f"La empresa cotiza a {round(current_ratios['current_price'], 2)}{currency} por acción, con "
         f"{current_ratios['average_shares_out']} acciones en circulación la empresa obtiene una capitalización "
         f"bursátil de {round(current_ratios['marketcap'], 2)}{currency}")
+    
+    def check_checkings(self, main_dict: str):
+        status = self.checkings[main_dict]['state']
+        if status == 'no':
+            return False
+        return True
+    
+    def modify_checkings(self, main_dict: str, dict_state: str):
+        dt = datetime.now()
+        ts = datetime.timestamp(dt)
+        self.checkings.update(
+            {
+                main_dict: 
+                {
+                    'state': dict_state,
+                    'time': ts
+                }
+            }
+        )
+        self.save(update_fields=['checkings'])
 
 
 class CompanyStockPrice(Model):

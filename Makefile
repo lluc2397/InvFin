@@ -3,6 +3,9 @@
 build:
 	docker-compose -f local.yml build $(ar)
 
+reboot:
+	$(MAKE) stop && $(MAKE) up-b
+
 restart:
 	docker-compose -f local.yml restart $(ar)
 

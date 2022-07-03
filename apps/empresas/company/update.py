@@ -95,6 +95,10 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
         except Exception as e:
             log_message = e
         finally:
+            state = 'no'
+            if log_message == 'all right':
+                state = 'yes'
+            self.company.modify_checkings('has_meta_image', state)
             CompanyUpdateLog.objects.create_log(self.company, 'save_logo_remotely', log_message)
 
     def add_description(self):

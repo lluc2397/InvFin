@@ -2,7 +2,6 @@ import random
 
 from django.db.models import Manager
 
-
 class CompanyManager(Manager):
 
     def only_essential(self):
@@ -103,7 +102,8 @@ class CompanyManager(Manager):
     
     def random_clean_company_by_main_exchange(self, name=None):
         companies = self.clean_companies_by_main_exchange(name)
-        return self.get_random(companies)
+        company = self.get_random(companies)
+        return company
     
     def random_complete_companies_by_main_exchange(self, name=None):
         companies = self.complete_companies_by_main_exchange(name)

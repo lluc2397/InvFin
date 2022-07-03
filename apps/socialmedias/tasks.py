@@ -22,6 +22,8 @@ from .models import (
 def socialmedia_share_company():
     post_type = 6
     content_shared = Company.objects.random_complete_companies_by_main_exchange('Estados Unidos')
+    if content_shared.has_meta_image is False:
+        UpdateCompany(content_shared).save_logo_remotely()
     SocialPosting(CompanySharedHistorial, content_shared=content_shared).share_content(post_type)
 
 
@@ -30,6 +32,8 @@ def socialmedia_share_news():
     post_type = 6
     market = random.choice(['Estados Unidos', 'México'])
     company_related = Company.objects.random_complete_companies_by_main_exchange(market)
+    if company_related.has_meta_image is False:
+        UpdateCompany(company_related).save_logo_remotely()
     SocialPosting(NewsSharedHistorial, company_related=company_related).share_content(post_type)
 
 

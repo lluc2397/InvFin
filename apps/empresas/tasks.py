@@ -21,11 +21,7 @@ def update_institutionals_info_company_task():
             update = UpdateCompany(company).institutional_ownership
             if update == 'all right':
                 intento += 1
-                dt = datetime.now()
-                ts = datetime.timestamp(dt)
-                company.checkings['has_institutionals']['state'] == 'yes'
-                company.checkings['has_institutionals']['time'] = ts
-                company.save(update_fields=['checkings'])
+                company.modify_checkings('has_meta_image', 'yes')
 
 
 @celery_app.task()
@@ -43,7 +39,8 @@ def save_remote_images_company_task():
     companies_without_info = Company.objects.filter(has_logo=True, exchange__main_org__name='Estados Unidos')
     if companies_without_info.exists():
         company = companies_without_info.first()
-        return UpdateCompany(company).save_logo_remotely()
+        if company.has_meta_image is False:
+            return UpdateCompany(company).save_logo_remotely()
     else:
         return send_mail('No companies left', 'All companies have images', settings.EMAIL_DEFAULT, [settings.EMAIL_DEFAULT])
 
