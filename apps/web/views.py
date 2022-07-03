@@ -12,29 +12,40 @@ import urllib
 
 from apps.web.models import WebsiteLegalPage
 from apps.public_blog.models import WritterProfile
-from apps.public_blog.views import writter_profile_view
 from apps.general.utils import HostChecker
-from apps.seo.mixins import SEOViewMixin
+from apps.seo.views import SEOTemplateView
 
 from .forms import ContactForm, WebEmailForm
 
 
-class HomePage(SEOViewMixin, TemplateView):
-    template_name = 'web_principal/inicio.html'
+class HomePage(SEOTemplateView):    
+    def render_to_response(self, context, **response_kwargs):
+        writter = HostChecker(self.request).return_writter()
+        if writter:
+            context.update(
+                {
+            "meta_desc": writter.user_profile.bio,
+            "meta_title": writter.full_name,
+            "meta_img": writter.foto,
+            "current_profile": writter
+        }
+            )
+            template_name = 'profile/public/profile.html'
+        else:
+            escritores = WritterProfile.objects.all()
+            context['escritor1'] = escritores[0]
+            context['escritor2'] = escritores[1]
+            context['escritor3'] = escritores[2]
+            template_name = 'web_principal/inicio.html'
 
-    def get(self, request, *args, **kwargs):
-        host = HostChecker(request).check_writter()
-        if host != False:
-            return writter_profile_view(request, host)
-        return super().get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        escritores = WritterProfile.objects.all()
-        context['escritor1'] = escritores[0]
-        context['escritor2'] = escritores[1]
-        context['escritor3'] = escritores[2]
-        return context
+        response_kwargs.setdefault('content_type', self.content_type)
+        return self.response_class(
+            request=self.request,
+            template=[template_name],
+            context=context,
+            using=self.template_engine,
+            **response_kwargs
+        )
 
 
 class LegalPages(DetailView):

@@ -112,11 +112,11 @@ class PublicBlog(BaseEscrito):
         db_table = "blog_post"
     
     def get_absolute_url(self):
-        return reverse ('public_blog:blog_details', kwargs={"slug": self.slug})
+        return reverse('public_blog:blog_details', kwargs={"slug": self.slug})
     
     @property
     def custom_url(self):
-        return f"https://{self.author.custom_url}/p/{self.slug}"
+        return f'{self.author.custom_url}{self.get_absolute_url()}'
     
     @property
     def has_newsletter(self):

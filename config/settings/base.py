@@ -17,8 +17,8 @@ if READ_DOT_ENV_FILE:
 # ------------------------------------------------------------------------------
 PROTOCOL = 'http://'
 MAIN_DOMAIN = 'inversionesyfinanzas.xyz'
-CURRENT_DOMAIN = '0.0.0.0:8000'
-# CURRENT_DOMAIN = 'example.com'
+#CURRENT_DOMAIN = '0.0.0.0:8000'
+CURRENT_DOMAIN = 'example.com:8000'
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env.bool("DJANGO_DEBUG", False)
@@ -604,11 +604,3 @@ IMAGE_KIT = ImageKit(
 STRIPE_PRIVATE = env.str('STRIPE_PRIVATE')
 STRIPE_PUBLIC = env.str('STRIPE_PUBLIC')
 WEBHOOK_SECRET = env.str('WEBHOOK_SECRET')
-
-# SUBDOMIANS
-# ------------------------------------------------------------------------------
-SUBDOMAIN_URLCONFS = {
-    # None: 'myproject.urls.frontend',  # no subdomain, e.g. ``example.com``
-    # 'www': 'myproject.urls.frontend',
-    '*': 'apps.public_blog.urls',
-}

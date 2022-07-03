@@ -3,10 +3,15 @@ import logging
 import re
 
 from django.conf import settings
+from django.urls import reverse, resolve
+from django.http import HttpResponseRedirect
 from django.utils.cache import patch_vary_headers
 from django.utils.deprecation import MiddlewareMixin
 
-from .utils import get_domain
+from apps.public_blog.urls import urlpatterns
+
+from .utils import HostChecker
+
 
 logger = logging.getLogger(__name__)
 lower = operator.methodcaller('lower')
@@ -23,7 +28,7 @@ class SubdomainMiddleware(MiddlewareMixin):
         Returns the domain that will be used to identify the subdomain part
         for this request.
         """
-        return get_domain()
+        return HostChecker(request).current_site_domain()
 
     def process_request(self, request):
         """
@@ -39,9 +44,6 @@ class SubdomainMiddleware(MiddlewareMixin):
             request.subdomain = matches.group('subdomain')
         else:
             request.subdomain = None
-            logger.warning('The host %s does not belong to the domain %s, '
-                'unable to identify the subdomain for this request',
-                request.get_host(), domain)
 
 
 class SubdomainURLRoutingMiddleware(SubdomainMiddleware):
@@ -49,21 +51,20 @@ class SubdomainURLRoutingMiddleware(SubdomainMiddleware):
     A middleware class that allows for subdomain-based URL routing.
     """
     def process_request(self, request):
-        """
-        Sets the current request's ``urlconf`` attribute to the urlconf
-        associated with the subdomain, if it is listed in
-        ``settings.SUBDOMAIN_URLCONFS``.
-        """
         super(SubdomainURLRoutingMiddleware, self).process_request(request)
 
         subdomain = getattr(request, 'subdomain', UNSET)
+        if subdomain is not UNSET and subdomain is not None:
+            current_url_name = resolve(request.path_info).url_name
+            if (
+                current_url_name in [url_name.name for url_name in urlpatterns]
+                or current_url_name == 'inicio'
+            ):
+                return
 
-        if subdomain is not UNSET:
-            urlconf = settings.SUBDOMAIN_URLCONFS.get(subdomain)
-            if urlconf is not None:
-                logger.debug("Using urlconf %s for subdomain: %s",
-                    repr(urlconf), repr(subdomain))
-                request.urlconf = urlconf
+            inicial_path = settings.FULL_DOMAIN
+            full_path = request.get_full_path_info()
+            return HttpResponseRedirect(f'{inicial_path}{full_path}')
 
     def process_response(self, request, response):
         """
@@ -72,5 +73,4 @@ class SubdomainURLRoutingMiddleware(SubdomainMiddleware):
         """
         if getattr(settings, 'FORCE_VARY_ON_HOST', True):
             patch_vary_headers(response, ('Host',))
-
         return response

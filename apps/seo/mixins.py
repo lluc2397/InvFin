@@ -70,7 +70,7 @@ class SEOViewMixin:
             "meta_tags": self.get_meta_tags(),
             "meta_title": self.get_meta_title(instance),
             "meta_url": self.get_meta_url(),
-            "meta_img": self.get_meta_image()
+            "meta_img": self.get_meta_image(instance)
         }
 
     def get_context_data(self, **kwargs):

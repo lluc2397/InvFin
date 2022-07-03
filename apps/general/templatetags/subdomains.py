@@ -1,6 +1,6 @@
 from django.template import Library
 
-from ..utils import reverse
+from ..utils import HostChecker
 
 
 register = Library()
@@ -19,4 +19,4 @@ def url(context, view, subdomain=UNSET, *args, **kwargs):
     elif subdomain == '':
         subdomain = None
 
-    return reverse(view, subdomain=subdomain, args=args, kwargs=kwargs)
+    return HostChecker(request).reverse(view, subdomain=subdomain, args=args, kwargs=kwargs)
