@@ -180,6 +180,7 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
                         self.company.updated = True
                         self.company.last_update = datetime.now()
                         self.company.save(update_fields=['updated', 'last_update'])
+                        print('updated', self.company)
                     except Exception as e:
                         log_message = e
                         CompanyUpdateLog.objects.create_log(self.company, 'second_step_financial_update', log_message)

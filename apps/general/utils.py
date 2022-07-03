@@ -1,7 +1,10 @@
 from django.http import HttpResponse
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.template.defaultfilters import slugify
+import functools
+from urllib.parse import urlunparse
+from django.conf import settings
+from django.urls import reverse as simple_reverse
 
 import binascii
 import os
@@ -54,28 +57,6 @@ class ChartSerializer:
         }
 
 
-class HostChecker:
-    def __init__(self, request) -> None:
-        self.request = request
-        self.host = self.request.get_host().split('.')[0]
-        self.current_domain = FULL_DOMAIN
-    
-
-    def check_writter(self):
-        if WritterProfile.objects.filter(host_name = self.host).exists():
-            return self.host
-        else:
-            return False
-    
-    def check_host(self):
-        if self.host != self.current_domain and self.host != "www":
-            return False
-    
-    def correct_host(self):
-        if self.check_host() == False and self.check_writter == False:
-            return FULL_DOMAIN
-
-
 class ExportCsv:
     def export_as_csv(self, request, queryset):
         meta = self.model._meta
@@ -113,3 +94,73 @@ class UniqueCreator:
     def generate_slug(cls, value=None, extra:int = 0):
         extra += 1
         return slugify(value + str(extra))
+
+
+class HostChecker:
+    def __init__(self, request) -> None:
+        self.request = request
+        self.host = self.request.get_host().split('.')[0]
+        self.urlconf = 'apps.public_blog.urls'
+        #: :func:`reverse` bound to insecure (non-HTTPS) URLs scheme
+        self.insecure_reverse = functools.partial(self.reverse, scheme='http')
+
+        #: :func:`reverse` bound to secure (HTTPS) URLs scheme
+        self.secure_reverse = functools.partial(self.reverse, scheme='https')
+
+        #: :func:`reverse` bound to be relative to the current scheme
+        self.relative_reverse = functools.partial(self.reverse, scheme='')
+
+    def check_writter(self):
+        return WritterProfile.objects.filter(host_name = self.host).exists()
+    
+    def return_writter(self):
+        if self.check_writter():
+            return WritterProfile.objects.get(host_name = self.host).user
+
+    def current_site_domain(self):
+        domain = settings.CURRENT_DOMAIN
+
+        prefix = 'www.'
+        if getattr(settings, 'REMOVE_WWW_FROM_DOMAIN', False) \
+                and domain.startswith(prefix):
+            domain = domain.replace(prefix, '', 1)
+
+        return domain
+
+    def urljoin(self, domain, path=None, scheme=None):
+        """
+        Joins a domain, path and scheme part together, returning a full URL.
+        :param domain: the domain, e.g. ``example.com``
+        :param path: the path part of the URL, e.g. ``/example/``
+        :param scheme: the scheme part of the URL, e.g. ``http``, defaulting to the
+            value of ``settings.DEFAULT_URL_SCHEME``
+        :returns: a full URL
+        """
+        if scheme is None:
+            scheme = getattr(settings, 'DEFAULT_URL_SCHEME', 'http')
+
+        return urlunparse((scheme, domain, path or '', None, None, None))
+
+    def reverse(self, viewname, subdomain=None, scheme=None, args=None, kwargs=None,
+                current_app=None):
+        """
+        Reverses a URL from the given parameters, in a similar fashion to
+        :meth:`django.core.urlresolvers.reverse`.
+        :param viewname: the name of URL
+        :param subdomain: the subdomain to use for URL reversing
+        :param scheme: the scheme to use when generating the full URL
+        :param args: positional arguments used for URL reversing
+        :param kwargs: named arguments used for URL reversing
+        :param current_app: hint for the currently executing application
+        """
+        urlconf = settings.SUBDOMAIN_URLCONFS.get(subdomain, settings.ROOT_URLCONF)
+
+        domain = self.get_domain()
+        if subdomain is not None:
+            domain = '%s.%s' % (subdomain, domain)
+
+        path = simple_reverse(viewname, urlconf=urlconf, args=args, kwargs=kwargs,
+                                current_app=current_app)
+        return self.urljoin(domain, path, scheme=scheme)
+
+

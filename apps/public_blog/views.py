@@ -1,18 +1,18 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages
-from django.http.response import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.views.generic import (
 	ListView,
-	TemplateView,
 	DetailView,
 	UpdateView,
-	CreateView)
+	CreateView
+)
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 
+from apps.general.utils import HostChecker
 from apps.general.forms import DefaultNewsletterForm 
 from apps.general.tasks import prepare_notifications_task
 
@@ -25,14 +25,8 @@ from .models import (
 
 from .forms import PublicBlogForm
 
+
 User = get_user_model()
-
-def writter_profile_view(request, host_name):
-	template_name = 'profile/public/profile.html'
-	context = {}
-	context['current_profile'] = WritterProfile.objects.get(host_name = host_name).user
-
-	return render(request, template_name, context)
 
 
 def following_management_view(request):

@@ -57,15 +57,6 @@ def stripe_webhook(request):
         stripe_customer = stripe.Customer.retrieve(stripe_customer_id)
         customer_email = stripe_customer['email']
 
-        # print(event)
-        # user = User.objects.get_or_create_quick_user(request, customer_email)
-        # print('*'*100)
-        # print(user)
-        # customer = Customer.objects.get_or_create(user=user, stripe_id=stripe_customer_id)
-        # print('*'*100)
-        # print(customer)
-        # save_transaction(customer, stripe_response, customer, product_complementary)
-
         send_mail('Compra realizada',
 		f'{event}' ,
 		EMAIL_DEFAULT,
