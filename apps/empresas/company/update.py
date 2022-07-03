@@ -70,11 +70,14 @@ class UpdateCompany(CalculateCompanyFinancialRatios):
     
     def save_logo_remotely(self):        
         try:
+            sector = 'Sin-sector'
+            if self.company.sector.sector:
+                sector = f'{self.company.sector.sector}'
             imagekit_url = IMAGE_KIT.upload_file(
                 file= self.company.image, # required
                 file_name= f"{self.company.ticker}.webp", # required
                 options= {
-                    "folder" : f"/companies/{self.company.sector.sector}/",
+                    "folder" : f"/companies/{sector}/",
                 "tags": [
                     self.company.ticker, self.company.exchange.exchange, 
                     self.company.country.country, self.company.sector.sector, 
