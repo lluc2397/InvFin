@@ -29,6 +29,21 @@ from apps.general.bases import BaseFavoritesHistorial
 
 from . import constants
 
+
+class CompanyInformationBought(Model):
+    user = ForeignKey(User, on_delete=SET_NULL, null=True, blank=True)
+    company = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True)
+    date = DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Acción comprada"
+        verbose_name_plural = "Acciones compradas"
+        db_table = "favorites_stocks_boughts"
+
+    def __str__(self):
+        return f'{self.user.username} - {self.asset.name} - {self.id}'
+
+
 class FavoritesStocksHistorial(BaseFavoritesHistorial):
     asset = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True)
 

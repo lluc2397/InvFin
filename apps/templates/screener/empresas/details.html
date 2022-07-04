@@ -2,9 +2,6 @@
 {% load static extra %}
 
 {% block TopHeader %}
-<link rel="stylesheet" href="{% static 'general/assets/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}">
-<link rel="stylesheet" href="{% static 'general/assets/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css' %}">
-<link rel="stylesheet" href="{% static 'general/assets/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css' %}">
 {% include "screener/headers/empresa_header.html" %}
 {% endblock TopHeader%}
 {% block MainContent %}
@@ -28,7 +25,22 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   left:0px;
   background-color:#fff;
 }
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
 
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(121, 121, 121);
+  border-radius: 10px;
+}
 .chart-canvas{height: 600px !important;}
 </style>
 <div class="col-12">
@@ -82,7 +94,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endwith %}
 <div class="modal fade" id="NecesitasMembresiaModal" tabindex="-1" 
   role="dialog" aria-labelledby="NecesitasMembresiaModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-success modal-dialog-centered modal-" role="document">
+  <div class="modal-dialog modal-success modal-dialog-centered modal-xl" role="document">
       <div class="modal-content bg-gradient-success">
           <div class="modal-header">
               <h6 class="modal-title" id="modal-title-notification">Descubre toda la historia de la empresa</h6>
@@ -90,8 +102,12 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
                   <span aria-hidden="true">×</span>
               </button>
           </div>
+          {% if request.user.is_authenticated and request.user.user_profile.creditos >= 10 %}
+          {% include "screener/modals/buy-company-info.html" %}
+          {% else %}
           <div class="modal-body">
-            <p>No tienes suficientes créditos.
+            <p>
+              <b>No tienes suficientes créditos.
                 <br>
                 Los créditos son monedas que puedes usar en la web para tener accesos privilegiados, puedes conseguir más créditos:                    
                 <ul>
@@ -99,14 +115,18 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
                     <li>Haciendo preguntas</li>
                     <li>Colaborando en el glosario</li>
                     <li>Contribuyendo en las empresas</li>
+                    <li>Adquiriendo créditos</li>
                 </ul>
+              </b>
             </p>
             <div class="col-12">
                 <a class="btn btn-youtube" href="{% url 'preguntas_respuestas:list_questions' %}{% utm 'screener' the_company.ticker %}" >Preguntas</a>
                 <a class="btn btn-slack" href="{% url 'escritos:glosario' %}{% utm 'screener' the_company.ticker %}" >Glosario</a>
                 <a class="btn btn-danger" href="{% url 'screener:screener_inicio' %}{% utm 'screener' the_company.ticker %}" >Empresas</a>
+                <a class="btn btn-danger" href="{% url 'business:all_products' %}{% utm 'screener' the_company.ticker %}" >Créditos</a>
             </div>
         </div>
+          {% endif %}          
       </div>
   </div>
 </div>
@@ -139,13 +159,3 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 })()
 </script>
 {% endblock javascript %}
-{% block extra_javascript %}
-<script src="{% static 'general/assets/vendor/datatables.net/js/jquery.dataTables.min.js' %}"></script>
-<script src="{% static 'general/assets/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
-<script src="{% static 'general/assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
-<script src="{% static 'general/assets/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js' %}"></script>
-<script src="{% static 'general/assets/vendor/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
-<script src="{% static 'general/assets/vendor/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
-<script src="{% static 'general/assets/vendor/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
-<script src="{% static 'general/assets/vendor/datatables.net-select/js/dataTables.select.min.js' %}" ></script>
-{% endblock extra_javascript %}

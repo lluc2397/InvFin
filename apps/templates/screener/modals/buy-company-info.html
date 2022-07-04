@@ -1,0 +1,18 @@
+{% load static i18n extra %}
+<div class="modal-body">
+    <div class="py-3 text-center">
+        <i class="ni ni-bell-55 ni-3x"></i>
+        <h4 class="heading mt-4">¿Quieres desbloquear más información acerca de la empresa?</h4>
+        <div class="form-group">
+            <p>
+                <b>
+                Tienes pocos créditos, ¿quieres conseguir algunos más antes de conseguir más información acerca de la empresa?
+                </b>
+            </p>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <a class="btn btn-white" href="{% url 'screener:buy_company_info' %}{% utm 'screener' the_company.ticker %}&company_id={{the_company.id}}">Desbloquear empresa</a>
+    <a class="btn btn-white" href="{% url 'business:all_products' %}{% utm 'screener' the_company.ticker %}">Más Créditos</a>
+</div>

@@ -7,7 +7,8 @@ from .views import (
     CompanyDetailsView,
     EtfDetailsView,
     AllYahooScreenersView,
-    YahooScreenerView
+    YahooScreenerView,
+    BuyCompanyInfo
 )
 
 from .api.urls import urlpatterns
@@ -32,6 +33,8 @@ urlpatterns = [
 
     path('todas-las-mejores-listas/', AllYahooScreenersView.as_view(), name="all_yahoo_screeners"),
     path('lista-de/<slug>/', YahooScreenerView.as_view(), name="yahoo_screener"),
+
+    path('buy-company-info', BuyCompanyInfo.as_view(), name="buy_company_info"),
 ] + urlpatterns
 
 # for serializer in list_of_serializers:

@@ -1,8 +1,11 @@
 import uuid
 import secrets
 import string
+
 from django.contrib.auth import models, login
 from django.db.models import Manager, Model
+
+from .constants import ADD, REDUCE
 
 
 class UserExtraManager(models.BaseUserManager):
@@ -52,16 +55,17 @@ class ProfileManager(Manager):
 
 class CreditHistorialManager(Manager):
 
-    def check_enought_credits(self, user: Model, amount: int):
-        return user.user_profile.creditos >= amount
+    def check_enought_credits(self, user: Model, amount: int) -> bool:
+        return bool(user.user_profile.creditos >= amount)
     
-    def update_credits(self, user: Model, amount: int, move_source: str, extra_objects: Model = None) -> Model:
-        movement = 1
-        check_credits = True
-        if amount > 0:
-            check_credits = self.check_enought_credits
-            movement = 2
-            final = user.user_profile.creditos - amount
+    def update_credits(self, user: Model, amount: int, move_source: str, movement: int = ADD, extra_objects: Model = None):
+
+        enought_credits = True
+        if movement == REDUCE:
+            enought_credits = self.check_enought_credits(user, amount)
+            amount = -amount
+        
+        final = user.user_profile.creditos + amount
         creadits_transaction = {
             'user': user,
             'amount': amount,
@@ -69,12 +73,12 @@ class CreditHistorialManager(Manager):
             'move_source': move_source,
             'initial': user.user_profile.creditos,
             'final': final,
-            'has_enought_credits': check_credits
+            'has_enought_credits': enought_credits
         }
         if extra_objects:
             creadits_transaction['object'] = extra_objects
         self.create(**creadits_transaction)
-        if check_credits is False:
+        if enought_credits is False:
             return f"No tienes bastantes créditos, todavía te faltan {final}"
         user.update_credits(amount)
 

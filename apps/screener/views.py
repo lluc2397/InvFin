@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, RedirectView
 from django.contrib import messages
 
 from apps.empresas.models import (
@@ -10,8 +10,12 @@ from apps.empresas.models import (
 from apps.etfs.models import Etf
 from apps.empresas.company.update import UpdateCompany
 from apps.seo.views import SEOListView, SEODetailView
+from apps.users.models import CreditUsageHistorial
+from apps.users import constants as users_constants
 
-from .models import YahooScreener
+from .models import YahooScreener, CompanyInformationBought
+
+
 
 class ScreenerInicioView(SEOListView):
     model = ExchangeOrganisation
@@ -145,9 +149,13 @@ class CompanyDetailsView(SEODetailView):
         company_is_fav = False
         limit_years = 10
         has_bought = False
-        if self.request.user.is_authenticated:
-            if empresa.ticker in self.request.user.fav_stocks.only('ticker'):
+        user = self.request.user
+        if user.is_authenticated:
+            if empresa.ticker in user.fav_stocks.only('ticker'):
                 company_is_fav = True
+            if CompanyInformationBought.objects.filter(user=user, company=empresa).exists():
+                limit_years = 0
+                has_bought = True
         
         context['has_bought'] = has_bought
         context['company_is_fav'] = company_is_fav
@@ -161,6 +169,22 @@ class CompanyDetailsView(SEODetailView):
             return redirect(reverse('screener:screener_inicio'))
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
+
+
+class BuyCompanyInfo(RedirectView):
+    def get(self, request, *args, **kwargs):
+        company = Company.objects.get(id=self.request.GET['company_id'])
+        user = request.user
+        CreditUsageHistorial.objects.update_credits(
+            user, 10, users_constants.BOUGHT_COMPANY_INFO, users_constants.REDUCE, company
+        )
+        CompanyInformationBought.objects.create(user=user, company=company)
+        messages.success(
+            request, 
+            f'Descubre toda la historia financiera de {company.name}, '
+            'ya que conoces la empresa no olvides hacer un análisis FODA'
+        )
+        return redirect(reverse('screener:company', kwargs={'ticker': company.ticker}))
 
 
 class EtfDetailsView(DetailView):
