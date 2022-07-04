@@ -131,7 +131,7 @@ class CompanyDetailsView(SEODetailView):
             companies_visited.append(
                 {'ticker': empresa.ticker, 'img': empresa.image}
             )
-            self.session.modified = True
+            self.request.session.modified = True
 
 
     def get_context_data(self, **kwargs):
