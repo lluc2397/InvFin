@@ -16,6 +16,7 @@ from apps.business import constants
 from apps.users import constants as credits_constants
 from apps.users.models import CreditUsageHistorial
 
+
 class BusinessSignal:
     @classmethod
     def generate_content(cls, instance):
@@ -96,7 +97,8 @@ class BusinessSignal:
         if instance.product_complementary.purchase_result == constants.ADD_CREDITS:
             CreditUsageHistorial.objects.update_credits(
                 user, 
-                int(instance.product_complementary.product_result), 
+                int(instance.product_complementary.product_result),
+                credits_constants.ADD,
                 credits_constants.BOUGHT_CREDITS, 
                 instance.product_complementary
             )

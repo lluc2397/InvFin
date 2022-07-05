@@ -45,27 +45,31 @@
                 <span class="nav-link-text">Herramientas</span>
               </a>
             </li>
-            <li class="nav-item">
+            {% comment %} <li class="nav-item">
               <a class="nav-link" href="{% url 'api:api_documentation' %}{% utm 'sidebar' 'API' %}">
                 <i class="fa-solid fa-laptop-code text-primary"></i>
                 <span class="nav-link-text">API Documentación</span>
               </a>
-            </li>
+            </li> {% endcomment %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'super_investors:all_superinvestors' %}{% utm 'sidebar' 'SuperInversores' %}">
                 <i class="fa-solid fa-laptop-file text-primary"></i>
-                <span class="nav-link-text">SuperInversores</span>
+                <span class="nav-link-text">
+                  Carteras de
+                  <br>
+                  SuperInversores
+                </span>
               </a>
             </li>
             <hr class="my-3">
             <h6 class="navbar-heading pl-4 text-muted">
-              <span class="docs-normal">Favoritos</span>
+              <span class="docs-normal">Tus Favoritos</span>
             </h6>
             {% block favorites %}
             {% endblock favorites %}
             <hr class="my-3">
             <h6 class="navbar-heading pl-4 text-muted">
-              <span class="docs-normal">Historial</span>
+              <span class="docs-normal">Tu Historial</span>
             </h6>
             <li class="nav-item">
               <a class="nav-link"

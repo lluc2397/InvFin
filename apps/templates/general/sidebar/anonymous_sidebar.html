@@ -1,5 +1,21 @@
 {% extends "general/sidebar/sidebar.html" %}
-{% block FavoritesStocks %}
+{% load static i18n extra %}
+
+{% block favorites %}
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'account_signup' %}">
+    <i class="fa-solid fa-user-plus"></i>
+    <span class="nav-link-text text-xs">
+      Únete para comentar y recibir
+      <br>
+      noticias de tus empresas
+      <br>
+      y superinversores favoritos.
+    </span>
+  </a>
+</li>
+{% endblock favorites %}
+{% comment %} {% block FavoritesStocks %}
 <li class="nav-item">
   <a href="{% url 'screener:screener_inicio' %}" class="nav-link">
     <span class="sidenav-mini-icon"> E </span>
@@ -38,5 +54,5 @@
    </span>
   </a>
 </li>
-{% endblock FavoritesTerms %}
+{% endblock FavoritesTerms %} {% endcomment %}
 
