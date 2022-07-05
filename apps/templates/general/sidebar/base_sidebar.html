@@ -68,6 +68,7 @@
             {% block favorites %}
             {% endblock favorites %}
             <hr class="my-3">
+            {% if request.user.is_authenticated %}
             <h6 class="navbar-heading pl-4 text-muted">
               <span class="docs-normal">Tu Historial</span>
             </h6>
@@ -96,6 +97,7 @@
                 <span class="nav-link-text">Comentarios</span>
               </a>
             </li>
+            {% endif %}
           </ul>
         </div>
       </div>
