@@ -8,7 +8,8 @@ from .views import (
     EtfDetailsView,
     AllYahooScreenersView,
     YahooScreenerView,
-    BuyCompanyInfo
+    BuyCompanyInfo,
+    CompanyLookUpView
 )
 
 from .api.urls import urlpatterns
@@ -33,6 +34,8 @@ urlpatterns = [
 
     path('todas-las-mejores-listas/', AllYahooScreenersView.as_view(), name="all_yahoo_screeners"),
     path('lista-de/<slug>/', YahooScreenerView.as_view(), name="yahoo_screener"),
+
+    path('buscar-empresa', CompanyLookUpView.as_view(), name="company_lookup"),
 
     path('buy-company-info', BuyCompanyInfo.as_view(), name="buy_company_info"),
 ] + urlpatterns

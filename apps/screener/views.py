@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, RedirectView
@@ -10,11 +11,20 @@ from apps.empresas.models import (
 from apps.etfs.models import Etf
 from apps.empresas.company.update import UpdateCompany
 from apps.seo.views import SEOListView, SEODetailView
+from apps.empresas.utils import company_searched
 from apps.users.models import CreditUsageHistorial
 from apps.users import constants as users_constants
 
 from .models import YahooScreener, CompanyInformationBought
 
+
+class CompanyLookUpView(RedirectView):
+    def get(self, request, *args, **kwargs):
+        
+        company = self.request.GET['stock']
+        path = company_searched(company, self.request)
+        print(path)
+        return HttpResponseRedirect(path)
 
 
 class ScreenerInicioView(SEOListView):
@@ -135,7 +145,9 @@ class CompanyDetailsView(SEODetailView):
             companies_visited.append(
                 {'ticker': empresa.ticker, 'img': empresa.image}
             )
-            self.request.session.modified = True
+        if len(companies_visited) > 10:
+            companies_visited.pop(0)
+        self.request.session.modified = True
 
 
     def get_context_data(self, **kwargs):
