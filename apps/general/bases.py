@@ -51,6 +51,7 @@ class BaseWrittenContent(CommonMixin):
         return self.title
     
     def add_tags(self, tags):
+        from apps.general.models import Tag
         for tag in tags:
             if tag == '':
                 continue
