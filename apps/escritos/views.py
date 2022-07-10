@@ -9,53 +9,44 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-
 import json
 import urllib
 
+from apps.seo.views import SEODetailView, SEOListView
+
 from .models import (
     Term,
-    TermContent,
-    TermCorrection
+    TermContent
 )
 
 from .forms import CreateCorrectionForm
 
-class GlosarioView(ListView):
+class GlosarioView(SEOListView):
 	model = Term
 	template_name = 'glosario/inicio.html'
 	ordering = ['title']
 	context_object_name = "terms"
 	paginate_by = 10
+	meta_description = 'Todos los términos y definiciones que necesitas conocer para invertir correctamente'
+	meta_tags = 'finanzas, blog financiero, blog el financiera, invertir'
+	meta_title = 'El diccionario que necesitas como inversor'
 
 	def get_queryset(self):
-		queryset = Term.objects.clean_terms()
-		return queryset
-
-	def get_context_data(self, **kwargs):
-		context = super().get_context_data(**kwargs)
-		context["meta_desc"] = 'Todos los términos y definiciones que encesitas conocer'
-		context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir'
-		context["meta_title"] = 'El diccionario que necesitas como inversor'
-		context["meta_url"] = '/diccionario-financiero/'
-		return context
+		return Term.objects.clean_terms()
 
 
-class TermDetailsView(DetailView):
+class TermDetailsView(SEODetailView):
 	model = Term
 	template_name = 'glosario/details.html'
 	context_object_name = "object"
 	slug_field = 'slug'
+	is_article = True
+	open_graph_type = 'article'
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		model = self.object
-		model.total_views += 1
-		model.save()
+		self.update_views(self.object)
 		return context
-
-
-# class CreateTermCorrectionView(SuccessMessageMixin, CreateView):
 
 
 class TermCorrectionView(CreateView):

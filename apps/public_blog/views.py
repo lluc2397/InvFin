@@ -12,7 +12,7 @@ from django.views.generic import (
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 
-from apps.general.utils import HostChecker
+from apps.seo.views import SEODetailView, SEOListView
 from apps.general.forms import DefaultNewsletterForm 
 from apps.general.tasks import prepare_notifications_task
 
@@ -33,13 +33,10 @@ def following_management_view(request):
 	if request.POST:
 		writter = request.POST['writter']
 		action = request.POST['what']
-
 		writter = User.objects.get(id = writter)
-	
 		follower = User.objects.get_or_create_quick_user(request, just_newsletter=True)
-		
 		update_follower = writter.update_followers(follower, action)
-
+		
 		if update_follower == 'already follower':
 			messages.success(request, f'Ya estás siguiendo a {writter.full_name}')
 			return redirect(request.META.get('HTTP_REFERER'))
@@ -61,37 +58,35 @@ def user_become_writter_view(request):
 		return redirect('users:update')
 
 
-class PublicBlogsListView(ListView):
+class PublicBlogsListView(SEOListView):
 	model = PublicBlog
 	template_name = 'public_blog/inicio.html'
 	ordering = ['-published_at']
 	context_object_name = "blogs"
+	meta_description = 'El blog donde tu también puedes escribir de forma libre'
+	meta_tags = 'finanzas, blog financiero, blog el financiera, invertir'
+	meta_title = 'Convíertete en escritor'
 
 	def get_queryset(self):
-		queryset = PublicBlog.objects.filter(status = 1)
-		return queryset
+		return PublicBlog.objects.filter(status = 1)
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		context['escritores'] = WritterProfile.objects.all()
-		context["meta_desc"] = 'El blog donde tu también puedes escribir de forma libre'
-		context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir'
-		context["meta_title"] = 'Convíertete en escritor'
-		context["meta_url"] = '/blog-financiero/'
 		return context
 
 
-class PublicBlogDetailsView(DetailView):
+class PublicBlogDetailsView(SEODetailView):
 	model = PublicBlog
 	template_name = 'public_blog/details.html'
 	context_object_name = "object"
 	slug_field = 'slug'
+	is_article = True
+	open_graph_type = 'article'
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		model = self.get_object()
-		model.total_views += 1
-		model.save()
+		self.update_views(self.get_object())	
 		return context
 
 

@@ -12,11 +12,11 @@ from apps.socialmedias.models import (
     BlogSharedHistorial,
     NewsSharedHistorial,
     TermSharedHistorial,
-    ProfileSharedHistorial,
     QuestionSharedHistorial
 )
 from ..poster import SocialPosting
 
+from .data import AAPL
 from .factories import (
     EmojiFactory,
     DefaultTilteFactory,
@@ -27,50 +27,8 @@ from .factories import (
 test_page_id = settings.NEW_FACEBOOK_ID
 test_page_token = settings.NEW_FB_PAGE_ACCESS_TOKEN
 
-class FacePosterTest(TestCase):
-    def setUp(self) -> None:
-        self.emoji = EmojiFactory()
-        self.def_title = DefaultTilteFactory()
-        self.hashtag = HashtagFactory(platform='twitter')
-        self.hashtag2 = HashtagFactory(platform='twitter')
-        self.hashtag3 = HashtagFactory(platform='twitter')
 
-        self.term = Term.objects.create(
-            title='term',
-            resume='resumen',
-        )
-        self.question = Question.objects.create(
-            title='question',
-            content='pregutna larga',
-        )
-        self.publicBlog = PublicBlog.objects.create(
-            title='public blog',
-            resume='blog resumido',
-            content='contenido largo del blog',
-        )
-        self.company = Company.objects.create(
-            name='Apple',
-            ticker='AAPL',
-            description='desc de prueba'
-        )
-        self.term2 = Term.objects.create(
-            title='term 2',
-            resume='resumen 2',
-        )
-        self.question2 = Question.objects.create(
-            title='question 2',
-            content='pregutna larga 2',
-        )
-        self.publicBlog2 = PublicBlog.objects.create(
-            title='public blog 2',
-            resume='blog resumido 2',
-            content='contenido largo del blog 2',
-        )
-        self.company2 = Company.objects.create(
-            name='Intel',
-            ticker='INTC'
-        )
-    
+class FacePosterTest(TestCase):    
     def test_blog(self):
         publicBlog = PublicBlog.objects.get_random()
         blog_poster = SocialPosting(BlogSharedHistorial, publicBlog).generate_content()
@@ -99,7 +57,7 @@ class FacePosterTest(TestCase):
         print(description)
         
     def test_news(self):
-        company = Company.objects.get_random()
+        company = Company.objects.create(**AAPL)
         title, link, description, media_url = SocialPosting(NewsSharedHistorial, company_related=company).generate_content()
         
     # def test_posting(self):

@@ -3,6 +3,9 @@
 build:
 	docker-compose -f local.yml build $(ar)
 
+clean-build:
+	docker-compose -f local.yml build --no-cache $(ar)
+
 reboot:
 	$(MAKE) stop && $(MAKE) up-b
 
@@ -26,7 +29,7 @@ stop:
 	docker-compose -f local.yml stop
 
 shell:
-	docker-compose -f local.yml exec -it $(ar) bash
+	docker-compose -f local.yml exec $(ar) /bin/bash
 
 # Django
 up-d:

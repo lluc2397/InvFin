@@ -12,7 +12,7 @@ from django.views.generic import (
 	CreateView,
 	UpdateView)
 
-from apps.general.models import Tag
+from apps.seo.views import SEODetailView, SEOListView
 from apps.general.tasks import prepare_notifications_task
 
 from .models import (
@@ -26,22 +26,19 @@ from .forms import (
 
 User = get_user_model()
 
-class QuestionsView(ListView):
+class QuestionsView(SEOListView):
 	model = Question
 	template_name = 'preguntas_respuestas/inicio.html'
 	context_object_name = "questions"
 	ordering = ['-created_at']
-
-	def get_context_data(self, **kwargs):
-		context = super().get_context_data(**kwargs)
-		context["meta_desc"] = 'Haz una pregunta o responde a la comunidad para conseguir premios increíbles'
-		context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir'
-		context["meta_title"] = 'Resuelve tus dudas o ayuda a otros'
-		context["meta_url"] = '/preguntas/'
-		return context
+	meta_description = 'Haz una pregunta o responde a la comunidad para conseguir premios increíbles'
+	meta_tags = 'finanzas, blog financiero, blog el financiera, invertir'
+	meta_title = 'Resuelve tus dudas o ayuda otros inversores y gana dinero'
+	is_article = True
+	open_graph_type = 'article'
 
 
-class QuestionDetailsView(DetailView):
+class QuestionDetailsView(SEODetailView):
 	model = Question
 	template_name = 'preguntas_respuestas/details.html'
 	context_object_name = "object"
@@ -49,11 +46,8 @@ class QuestionDetailsView(DetailView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		model = self.get_object()
-		model.total_views += 1
-		model.save()
+		self.update_views(self.get_object())
 		return context
-
 
 
 class CreateQuestionView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
@@ -73,7 +67,6 @@ class CreateQuestionView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 		return initial
 
 	def form_valid(self, form):
-		
 		form.instance.author = self.request.user
 		tags = self.request.POST['tags'].split(',')
 		selfanswer = self.request.POST['selfanswereditor']
@@ -135,7 +128,7 @@ def create_answer_view(request, slug):
 		question_related = question
 		)
 		question.is_answered = True
-		question.save()
+		question.save(update_fields=['is_answered'])
 		messages.success(request, 'Gracias por tu respuesta')
 		return redirect(question.get_absolute_url())
 
@@ -149,9 +142,9 @@ def accept_answer(request, question_id, answer_id):
 			question.is_answered = True
 		
 		question.has_accepted_answer = True
-		question.save()
+		question.save(update_fields=['is_answered', 'has_accepted_answer'])
 		answer.is_accepted = True
-		answer.save()
+		answer.save(update_fields=['is_accepted'])
 		answer.author.update_reputation(2)
 		messages.success(request, 'Gracias por tu ayuda')
 	return redirect(question.get_absolute_url())

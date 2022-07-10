@@ -22,6 +22,7 @@ User = get_user_model()
 stripe.api_key = settings.STRIPE_PRIVATE
 STRIPE_PUBLIC_KEY = settings.STRIPE_PUBLIC
 FULL_DOMAIN = settings.FULL_DOMAIN
+IS_TESTING = settings.DEBUG is True and settings.CURRENT_DOMAIN != settings.MAIN_DOMAIN
 
 
 class ProductsListView(SEOListView):
@@ -32,12 +33,18 @@ class ProductsListView(SEOListView):
     ordering = ['-visits']
 
     def get_queryset(self):
-        for_testing = settings.DEBUG is True and settings.CURRENT_DOMAIN != settings.MAIN_DOMAIN
-        return super().get_queryset().filter(is_active=True, for_testing=for_testing)
+        return super().get_queryset().filter(is_active=True, for_testing=IS_TESTING)
 
 
 class ProductDetailView(SEODetailView):
     model = Product
+
+    def get_object(self):
+        return self.model._default_manager.get(
+            slug=self.kwargs['slug'],
+            is_active=True, 
+            for_testing=IS_TESTING
+            )
 
     def get(self, request, *args, **kwargs) -> HttpResponse:
         product = self.get_object()

@@ -1,7 +1,4 @@
-from numpy import random
 import requests
-import sys
-import logging
 import datetime
 
 from django.conf import settings
@@ -17,6 +14,7 @@ from ..models import (
 INSTAGRAM_ID = settings.INSTAGRAM_ID
 PROD_FACEBOOK_ACCESS_TOKEN = settings.OLD_FB_PAGE_ACCESS_TOKEN
 PROD_FACEBOOK_PAGE_ID = settings.OLD_FACEBOOK_ID
+
 
 class Facebook():
     def __init__(self, page_id=PROD_FACEBOOK_PAGE_ID, page_access_token=PROD_FACEBOOK_ACCESS_TOKEN) -> None:
@@ -68,33 +66,31 @@ class Facebook():
         #     return token
 
     
-    def post_fb_video(self, video_url= "", description= "" , title= "", post_time='', post_now = False):
+    def post_fb_video(self, video_url= "", description= "" , title= "", post_time=datetime.datetime.now(), post_now = False):
         """
         Post_now is False if the post has to be scheduled, True to post it now
         """
-
         files = {'source': open(video_url, 'rb')}
         access_token = self.page_access_token
-        if post_now is True:
-            data ={
-                'access_token': access_token,
-                'title':title,
-                'description': description
-            }
 
-        else:
-            data ={
-                'access_token': access_token,
-                'published' : False,
-                'scheduled_publish_time': post_time,
-                'title': title,
-                'description': description
-            }
+        data = {
+            'access_token': access_token,
+            'title':title,
+            'description': description
+        }
+
+        if post_now is False:
+            data.update(
+                {
+                    'published' : False,
+                    'scheduled_publish_time': post_time
+                }
+            )
 
         return self._send_content('video', data, files)
 
     
-    def post_text(self, text= "", post_time= "", post_now = True, link=None, title=''):
+    def post_text(self, text= "", post_time=datetime.datetime.now(), post_now=True, link=None, title=''):
 
         if post_now is False:
             pass
@@ -112,7 +108,7 @@ class Facebook():
 
 
 
-    def post_image(self, description= "", photo_url= "", title= "", post_time=datetime.datetime.now(), post_now = False):
+    def post_image(self, description= "", photo_url= "", title= "", post_time=datetime.datetime.now(), post_now=False):
         data ={
             'access_token': self.page_access_token,
             'url': photo_url
@@ -175,7 +171,7 @@ class Facebook():
         if post_type == 1 or post_type == 5 or post_type == 7:
             content_type = 'video'
             video_url = ''
-            post_response = self.post_fb_video(video_url= video_url, description= caption, title= custom_title, post_now = True)
+            post_response = self.post_fb_video(video_url= video_url, description=caption, title= custom_title, post_now = True)
 
         elif post_type == 2 or post_type == 6:
             content_type = 'image'

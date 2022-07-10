@@ -1,14 +1,17 @@
+from django.conf import settings
 from django.db.models import Model, ImageField
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.core.files import File
 from django.core.files.base import ContentFile
-from django.contrib.sites.models import Site
 
 import uuid
 from bs4 import BeautifulSoup as bs
 from PIL import Image
 from io import BytesIO
+
+
+FULL_DOMAIN = settings.FULL_DOMAIN
 
 
 class ResizeImageMixin:
@@ -81,6 +84,7 @@ class CommonMixin(BaseToAll):
         user_already_upvoted = True if user in self.upvotes.all() else False
         user_already_downvoted = True if user in self.downvotes.all() else False
         vote_result = 0
+        update_fields = ['total_votes']
         if action == 'up' and user_already_upvoted == True or action == 'down' and user_already_downvoted == True:
             return vote_result
         if action == 'up':
@@ -88,39 +92,100 @@ class CommonMixin(BaseToAll):
                 self.downvotes.remove(user)
                 self.upvotes.add(user)
                 vote_result = 2
+                update_fields += ['downvotes', 'upvotes']
             elif user_already_upvoted == False:
                 self.upvotes.add(user)
                 vote_result = 1
+                update_fields += ['upvotes']
 
         elif action == 'down':
             if user_already_upvoted == True:
                 self.upvotes.remove(user)
                 self.downvotes.add(user)
                 vote_result = -2
+                update_fields += ['downvotes', 'upvotes']
             elif user_already_downvoted == False:
                 self.downvotes.add(user)
                 vote_result = -1
+                update_fields += ['downvotes']
         
         self.author.update_reputation(vote_result)
         self.total_votes += vote_result
-        self.save()
+        self.save(update_fields=update_fields)
         return vote_result
     
+    @property
+    def schema_org(self):
+        if self.object_name == 'Question':
+            schema_org = self.schema_org
+        else:
+            meta_url = f'{FULL_DOMAIN}/definicion/{self.slug}/'
+            if self.object_name == 'PublicBlog':
+                meta_url = f'{self.author.custom_url}/p/{self.slug}/'
+            schema_org = {
+                "@context": "https://schema.org",
+                "@type": "Article",
+                "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": f"{meta_url}"
+                },
+                "headline": f"{self.title}",
+                "image": f"{self.non_thumbnail_url}",
+                "datePublished": f"{self.published_at}",
+                "author": {
+                "@type": "Person",
+                "name": f"{self.author.full_name}"
+                },
+                "publisher": {
+                "@type": "Organization",
+                "name": "Inversiones & Finanzas",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "href=/static/general/assets/img/favicon/favicon.ico"
+                },
+                },
+            }
+        return schema_org
+
+    @property
+    def regularised_description(self):
+        if self.object_name == 'Question':
+            regularised_description = self.content
+
+        elif self.object_name == 'Company':
+            regularised_description = self.description
+
+        else:
+            regularised_description = self.resume
+
+        return regularised_description
+    
+    @property
+    def regularised_title(self):
+        if self.object_name == 'Question':
+            regularised_title = self.title
+
+        elif self.object_name == 'Company':
+            regularised_title = self.name
+
+        else:
+            regularised_title = self.title
+
+        return regularised_title
 
     @property
     def meta_info(self):
-        domain = Site.objects.get_current().domain
         meta_info = {}
         if self.object_name == 'Question':
-            meta_info['modified_time'] = self.author
-            meta_info['meta_image'] = ''
+            meta_info['modified_time'] = self.updated_at
+            meta_info['meta_image'] = self.author.foto
             meta_info['meta_title'] = self.title
             meta_info['meta_desc'] = self.content
-            meta_info['meta_url'] = f'https://{domain}/question/{self.slug}/'
-            meta_info['meta_tags'] = self.author
-            meta_info['meta_category'] = self.author
+            meta_info['meta_url'] = self.get_absolute_url()
+            meta_info['meta_tags'] = self.tags.all()
+            meta_info['meta_category'] = self.category
             meta_info['meta_author'] = self.author
-            meta_info['schema_org'] = self.ques_schema
+            meta_info['schema_org'] = self.schema_org
         else:
             try:
                 saved_meta = self.meta_information.parameter_settings
@@ -164,9 +229,8 @@ class BaseEscritosMixins(Model):
 
     def create_meta_information(self, type_content):
         from apps.seo.models import MetaParameters, MetaParametersHistorial
-        domain = Site.objects.get_current().domain
         
-        meta_url = f'https://{domain}/definicion/{self.slug}/'
+        meta_url = f'{FULL_DOMAIN}/definicion/{self.slug}/'
         if type_content == 'blog':
             meta_url = f'{self.author.custom_url}/p/{self.slug}/'            
             

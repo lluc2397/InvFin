@@ -63,7 +63,7 @@ class Question(BaseWrittenContent):
         )
 
     @property
-    def ques_schema(self):
+    def schema_org(self):
         ques_schema = {}
         ques_schema['@context'] = "https://schema.org"
         ques_schema['@type'] = "QAPage"

@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.contrib.sites.models import Site
+from django.conf import settings
 from django.utils.html import strip_tags, format_html
 
 from apps.translate.google_trans_new import google_translator
@@ -8,7 +8,8 @@ from apps.socialmedias.socialposter.tweetpy import Twitter
 
 
 User = get_user_model()
-DOMAIN = Site.objects.get_current().domain
+DOMAIN = settings.CURRENT_DOMAIN
+FULL_DOMAIN = settings.FULL_DOMAIN
 
 
 class SocialPosting:
@@ -51,7 +52,7 @@ class SocialPosting:
             title = google_translator().translate(title, lang_src='en', lang_tgt='es')
 
         if link is None:
-            link = 'https://inversionesyfinanzas.xyz' + content.get_absolute_url()
+            link = FULL_DOMAIN + content.get_absolute_url()
 
         return title, link, description
     

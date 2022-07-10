@@ -22,18 +22,16 @@
 <div class="col-12">
     <div class="card bg-translucent-success shadow">
 {% else %}
-<div class="col-md-6 col-sm-12">
+<div class="col-12">
     <div class="card">
 {% endif %}    
-        <div class="card-body">
+        <a href="{{product.get_absolute_url}}{% utm 'all-products' product.title %}" class="card-body">
             <div class="row">
                 <div class="col-lg-9">
                     <div class="d-flex flex-column h-100">
-                        <a href="{{product.get_absolute_url}}{% utm 'all-products' product.title %}">
-                            <p class="h1 text-bold">
-                                {{product.title}}
-                            </p>
-                        </a>
+                        <p class="h1 text-bold">
+                            {{product.title}}
+                        </p>
                        
                         <h5 class="font-weight-bolder">
                             <div class="d-flex">
@@ -43,9 +41,7 @@
                             </div>
                         </h5>
                         <p>
-                            <a href="{{product.get_absolute_url}}{% utm 'all-products' product.title %}">
-                                {{product.description|safe}}
-                            </a>
+                            {{product.description|safe}}
                         </p>
                     </div>
                 </div>
@@ -57,7 +53,7 @@
                 </div>
                 {% endif %}
             </div>
-        </div>
+        </a>
     </div>
 </div>
 {% endfor %}

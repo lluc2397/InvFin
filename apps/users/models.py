@@ -151,7 +151,7 @@ class User(AbstractUser):
     
     def update_credits(self, number_of_credits):        
         self.user_profile.creditos += number_of_credits
-        self.user_profile.save()
+        self.user_profile.save(update_fields=['creditos'])
 
     def update_followers(self, user, action):
         from apps.public_blog.models import FollowingHistorial
@@ -168,14 +168,14 @@ class User(AbstractUser):
                 writter_followers.followers.add(user)
                 #enviar email para avisar que tiene un nuevo seguidor
             
-            following_historial.save()
-            writter_followers.save()
+            following_historial.save(update_fields=['stop_following', 'started_following'])
+            writter_followers.save(update_fields=['followers'])
             
             return True       
     
     def update_reputation(self, points):
         self.user_profile.reputation_score += points
-        self.user_profile.save()
+        self.user_profile.save(update_fields=['reputation_score'])
 
     def create_meta_profile(self, request):
         from apps.seo.utils import SeoInformation
@@ -211,7 +211,7 @@ class User(AbstractUser):
         if user_recomending_id is not None:
             recommended_by_user = self.__class__.objects.get(id=user_recomending_id)
             user_profile.recommended_by = recommended_by_user
-            user_profile.save()
+            user_profile.save(update_fields=['recommended_by'])
         return True
 
     def add_fav_lists(self):
