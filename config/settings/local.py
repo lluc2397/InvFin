@@ -3,7 +3,6 @@ from .base import env
 
 # GENERAL
 # ------------------------------------------------------------------------------
-FULL_DOMAIN = f'{PROTOCOL}{CURRENT_DOMAIN}'
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = True

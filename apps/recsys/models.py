@@ -4,22 +4,23 @@ from django.db.models import (
     SET_NULL,
     ForeignKey,
     BooleanField,
-    CharField
+    CharField,
+    DateTimeField
 )
 from django.contrib.auth import get_user_model
 
-from apps.general.bases import BaseGenericModels
 from apps.seo import constants
-from apps.seo.models import VisiteurJourney, UsersJourney, Visiteur
+from apps.seo.models import Visiteur, Promotion
 from apps.empresas.models import Company
 from apps.escritos.models import Term
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog
+from apps.business.models import ProductComplementary
 
 User = get_user_model()
 
 
-class BaseModelRecommended(BaseGenericModels):
+class BaseModelRecommended(Model):
     EXPLANATION = {
         'tags': [
             {
@@ -39,6 +40,7 @@ class BaseModelRecommended(BaseGenericModels):
     clicked = BooleanField(default=False)
     recommendation_personalized = BooleanField(default=False)
     recommendation_explained = JSONField(default=dict)
+    date = DateTimeField(auto_now_add=True)
 
     class Meta:
         abstract = True
@@ -56,7 +58,6 @@ class BaseModelRecommended(BaseGenericModels):
 
 class BaseVisiteurModelRecommended(BaseModelRecommended):
     user = ForeignKey(Visiteur, on_delete=SET_NULL, null=True)
-    visit = ForeignKey(VisiteurJourney, on_delete=SET_NULL, null=True)
 
     class Meta:
         abstract = True
@@ -67,7 +68,6 @@ class BaseVisiteurModelRecommended(BaseModelRecommended):
 
 class BaseUserModelRecommended(BaseModelRecommended):
     user = ForeignKey(User, on_delete=SET_NULL, null=True)
-    visit = ForeignKey(UsersJourney, on_delete=SET_NULL, null=True)
     
     class Meta:
         abstract = True
@@ -138,3 +138,35 @@ class UserTermRecommended(BaseUserModelRecommended):
     class Meta:
         verbose_name = "Term visited by user"
         db_table = "recsys_terms_recommended_users"
+
+
+class VisiteurProductComplementaryRecommended(BaseVisiteurModelRecommended):
+    model_recommended = ForeignKey(ProductComplementary, on_delete=SET_NULL, null=True)
+
+    class Meta:
+        verbose_name = "Term visited by visiteur"
+        db_table = "recsys_product_complementary_recommended_visiteurs"
+    
+
+class UserProductComplementaryRecommended(BaseUserModelRecommended):
+    model_recommended = ForeignKey(ProductComplementary, on_delete=SET_NULL, null=True)
+
+    class Meta:
+        verbose_name = "Term visited by user"
+        db_table = "recsys_product_complementary_recommended_users"
+
+
+class VisiteurPromotionRecommended(BaseVisiteurModelRecommended):
+    model_recommended = ForeignKey(Promotion, on_delete=SET_NULL, null=True)
+
+    class Meta:
+        verbose_name = "Term visited by visiteur"
+        db_table = "recsys_promotion_recommended_visiteurs"
+    
+
+class UserPromotionRecommended(BaseUserModelRecommended):
+    model_recommended = ForeignKey(Promotion, on_delete=SET_NULL, null=True)
+
+    class Meta:
+        verbose_name = "Term visited by user"
+        db_table = "recsys_promotion_recommended_users"

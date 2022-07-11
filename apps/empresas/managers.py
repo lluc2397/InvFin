@@ -1,9 +1,13 @@
 import random
 
-from django.db.models import Manager
+from django.db.models import (
+    Manager,
+    Q,
+    F,
+    Count
+)
 
 class CompanyManager(Manager):
-
     def only_essential(self):
         return self.only(
             'ticker',
@@ -118,18 +122,40 @@ class CompanyManager(Manager):
             updated=False, 
             has_error=False
             )
+
+    def get_random_recommendations(self):
+        """
+        Based on most visited companies
+        """
     
-    def famous_companies(self):
-        big_names = [
-            'INTC',
-            'AAPL',
-            'GOOGL',
-            'META',
-            ''
-        ]
-    
-    def get_companies_user_likes(self, user):
-        pass
+    def related_companies(
+        self,
+        sector=None,
+        exchage=None,
+        industry=None,
+        country=None,
+    ):
+        if sector:
+            filtered = self.filter(
+            Q(sector__id__in=sector) |
+            Q(exchange__id__in=exchage) |
+            Q(industry__id__in=industry) |
+            Q(country__id__in=country),
+            no_incs = False,
+            no_bs = False,
+            no_cfs = False
+        )
+        else:
+            filtered = self.filter(
+            no_incs = False,
+            no_bs = False,
+            no_cfs = False
+        )
+        return filtered.annotate(
+            visited_by_user=Count('usercompanyvisited'),
+            visited_by_visiteur=Count('visiteurcompanyvisited'),
+            total_visits=F('visited_by_user') + F('visited_by_visiteur')
+        ).order_by('total_visits')
 
 
 class CompanyUpdateLogManager(Manager):

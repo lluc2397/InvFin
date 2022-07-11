@@ -143,7 +143,14 @@ class CompanyDetailsView(SEODetailView):
         tickers = [ticker['ticker'] for ticker in companies_visited]
         if empresa.ticker not in tickers:
             companies_visited.append(
-                {'ticker': empresa.ticker, 'img': empresa.image}
+                {
+                    'ticker': empresa.ticker, 
+                    'img': empresa.image,
+                    "sector_id": empresa.sector.id,
+                    "industry_id": empresa.industry.id,
+                    "country_id": empresa.country.id,
+                    "exchange_id": empresa.exchange.id,
+                }
             )
         if len(companies_visited) > 10:
             companies_visited.pop(0)

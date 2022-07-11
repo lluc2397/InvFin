@@ -42,6 +42,7 @@ urlpatterns = [
     path("", include("apps.seo.urls", namespace="seo")),
     path("", include("apps.roboadvisor.urls", namespace="roboadvisor")),
     path("", include("apps.business.urls", namespace="business")),
+    path("", include("apps.recsys.urls", namespace="recsys")),
 
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

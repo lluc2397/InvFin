@@ -1,0 +1,26 @@
+{% load static i18n extra %}
+<div class="col-12">                
+    <ul class="list-group list-group-flush list my--3">
+        <li class="list-group-item px-0">
+            {% for company in companies %}
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <img src="{{company.img}}" alt="{{company.ticker}}" />
+                    </div>
+                    <div class="col">
+                        <small>Ticker:</small>
+                        <h5 class="mb-0">{{company.ticker}}</h5>
+                    </div>
+                    <div class="col">
+                        <small>Visits:</small>
+                        <h5 class="mb-0">2500</h5>
+                    </div>
+                    <div class="col">
+                        <small>Bounce:</small>
+                        <h5 class="mb-0">30%</h5>
+                    </div>
+                </div>
+            {% endfor %}
+        </li>
+    </ul>
+</div>

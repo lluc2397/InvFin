@@ -119,7 +119,7 @@ class VisiteurJourney(Journey):
         db_table = "visits_historial_visiteurs"
     
 
-class UsersJourney(Journey):
+class UserJourney(Journey):
     user = ForeignKey(User, null = True, blank=True, on_delete=CASCADE)
 
     class Meta:
@@ -154,12 +154,6 @@ class PromotionCampaign(Model):
 
 
 class Promotion(Model):
-    MEDIUMS = [
-        ('ads', 'Ads'), 
-        ('email', 'Email'), 
-        ('invfin', 'Web'), 
-        ('social-media-posts', 'Social media posts')]
-
     title = CharField(max_length=600, blank=True)
     content = RichTextField()
     thumbnail = CharField(max_length=600, blank=True)
@@ -168,9 +162,10 @@ class Promotion(Model):
     has_prize = BooleanField(default=False)
     shareable_url = CharField(max_length=600, blank=True)
     redirect_to = CharField(max_length=600, blank=True)
-    medium = CharField(max_length=250, choices=MEDIUMS, blank=True)
+    medium = CharField(max_length=250, choices=constants.MEDIUMS, blank=True)
     web_promotion_type = CharField(max_length=250, choices=constants.WEP_PROMOTION_TYPE, blank=True)
     web_location = CharField(max_length=250, choices=constants.WEP_PROMOTION_LOCATION, blank=True)
+    web_place = CharField(max_length=250, choices=constants.WEP_PROMOTION_PLACE, blank=True)
     social_media = CharField(max_length=250, blank=True, choices=SOCIAL_MEDIAS)
     publication_date = DateTimeField(blank=True)
     campaign_related = ForeignKey(PromotionCampaign, on_delete=SET_NULL, null=True, blank=True)
@@ -224,14 +219,18 @@ class BaseVisiteurModelVisited(BaseModelVisited):
 
 class BaseUserModelVisited(BaseModelVisited):
     user = ForeignKey(User, on_delete=SET_NULL, null=True)
-    visit = ForeignKey(UsersJourney, on_delete=SET_NULL, null=True)
+    visit = ForeignKey(UserJourney, on_delete=SET_NULL, null=True)
     
     class Meta:
         abstract = True
 
 
 class VisiteurCompanyVisited(BaseVisiteurModelVisited):
-    model_visited = ForeignKey(Company, on_delete=SET_NULL, null=True)
+    model_visited = ForeignKey(
+        Company, 
+        on_delete=SET_NULL, 
+        null=True,
+    )
 
     class Meta:
         verbose_name = "Company visited by visiteur"
@@ -239,7 +238,11 @@ class VisiteurCompanyVisited(BaseVisiteurModelVisited):
     
 
 class UserCompanyVisited(BaseUserModelVisited):
-    model_visited = ForeignKey(Company, on_delete=SET_NULL, null=True)
+    model_visited = ForeignKey(
+        Company, 
+        on_delete=SET_NULL, 
+        null=True,
+    )
 
     class Meta:
         verbose_name = "Company visited by user"

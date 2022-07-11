@@ -13,7 +13,7 @@ from .models import (
     MetaParameters,
     MetaParametersHistorial,
     VisiteurJourney,
-    UsersJourney,
+    UserJourney,
     Promotion,
     PromotionCampaign,
     VisiteurUserRelation,
@@ -157,8 +157,8 @@ class VisiteurJourneyAdmin(ImportExportActionModelAdmin):
     user_link.short_description = 'user'
 
 
-@admin.register(UsersJourney)
-class UsersJourneyAdmin(admin.ModelAdmin):
+@admin.register(UserJourney)
+class UserJourneyAdmin(admin.ModelAdmin):
     list_display = [
         'id',
         'user_link',

@@ -1,11 +1,12 @@
 from .models import (
     VisiteurJourney,
-    UsersJourney
+    UserJourney
 )
 from .utils import SeoInformation
 from django.conf import settings
 from django.contrib.auth import get_user_model
 User = get_user_model()
+
 
 def journey(request):
     current_path = request.build_absolute_uri()
@@ -14,7 +15,7 @@ def journey(request):
     if not request_visiteur:
         setattr(request, 'visiteur', {'is_visiteur': False})
     if request.user.is_authenticated and request.user.username != 'Lucas':
-        UsersJourney.objects.create(user = request.user, current_path = current_path, comes_from = comes_from)
+        UserJourney.objects.create(user = request.user, current_path = current_path, comes_from = comes_from)
 
     if request.user.is_anonymous:
         try:
