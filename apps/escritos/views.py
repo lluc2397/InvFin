@@ -1,11 +1,8 @@
-from django.shortcuts import redirect
 from django.conf import settings
-from django.views.generic import (
-	ListView,
-	DetailView,
-	CreateView)
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.shortcuts import redirect
+from django.views.generic import CreateView, DetailView, ListView
 
 User = get_user_model()
 
@@ -14,12 +11,9 @@ import urllib
 
 from apps.seo.views import SEODetailView, SEOListView
 
-from .models import (
-    Term,
-    TermContent
-)
-
 from .forms import CreateCorrectionForm
+from .models import Term, TermContent
+
 
 class GlosarioView(SEOListView):
 	model = Term

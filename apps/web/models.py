@@ -1,13 +1,9 @@
-from django.db.models import (
-    Model,
-    CharField,
-    ForeignKey,
-    SET_NULL,
-)
-from django.template.defaultfilters import slugify
 from ckeditor.fields import RichTextField
+from django.db.models import SET_NULL, CharField, ForeignKey, Model
+from django.template.defaultfilters import slugify
 
 from apps.general.bases import BaseEmail, BaseNewsletter
+
 
 class WebsiteLegalPage(Model):
     title = CharField(max_length=8000)

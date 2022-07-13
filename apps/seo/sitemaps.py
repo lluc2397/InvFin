@@ -1,10 +1,9 @@
 from django.contrib.sitemaps import Sitemap
 
-from apps.public_blog.models import PublicBlog
-from apps.escritos.models import Term
 from apps.empresas.models import Company
-from apps.preguntas_respuestas.models import Question 
-
+from apps.escritos.models import Term
+from apps.preguntas_respuestas.models import Question
+from apps.public_blog.models import PublicBlog
 
 
 class PublicBlogSitemap(Sitemap):

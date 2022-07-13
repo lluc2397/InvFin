@@ -3,7 +3,7 @@ from django.urls import path
 from .views import (
     AllSuperinvestorsView,
     SuperinvestorView,
-    return_superinvestor_movements
+    return_superinvestor_movements,
 )
 
 app_name = "super_investors"

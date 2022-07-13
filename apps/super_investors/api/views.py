@@ -1,18 +1,13 @@
 from django.contrib.auth import get_user_model
 
+from apps.api.pagination import StandardResultPagination
 from apps.api.views import BaseAPIView
-from apps.api.pagination import StandardResultPagination 
 
-from ..models import (
-    Superinvestor,
-    SuperinvestorActivity,
-    SuperinvestorHistory
-)
-
+from ..models import Superinvestor, SuperinvestorActivity, SuperinvestorHistory
 from .serializers import (
     SuperinvestorActivitySerializer,
     SuperinvestorHistorySerializer,
-    SuperinvestorSerializer
+    SuperinvestorSerializer,
 )
 
 User = get_user_model()

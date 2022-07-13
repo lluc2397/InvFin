@@ -4,13 +4,12 @@ from .models import (
     Customer,
     Product,
     ProductComment,
-    TransactionHistorial,
     ProductComplementary,
-    ProductDiscount,
     ProductComplementaryPaymentLink,
-    StripeWebhookResponse
+    ProductDiscount,
+    StripeWebhookResponse,
+    TransactionHistorial,
 )
-
 
 
 class BaseStripeAdmin(admin.ModelAdmin):

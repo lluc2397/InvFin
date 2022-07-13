@@ -1,6 +1,6 @@
-import random
 import binascii
 import os
+import random
 
 from django.db.models import Manager
 from django.template.defaultfilters import slugify

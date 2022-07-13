@@ -2,30 +2,30 @@ from django.contrib import admin
 from django.contrib.sessions.models import Session
 from django.urls import reverse
 from django.utils.html import format_html
-
 from import_export.admin import ImportExportActionModelAdmin
 from import_export.resources import ModelResource
 
 from apps.general.utils import ExportCsv
 
 from .models import (
-    Visiteur,
     MetaParameters,
     MetaParametersHistorial,
-    VisiteurJourney,
-    UserJourney,
     Promotion,
     PromotionCampaign,
-    VisiteurUserRelation,
-    VisiteurCompanyVisited,
     UserCompanyVisited,
-    VisiteurPublicBlogVisited,
+    UserJourney,
     UserPublicBlogVisited,
-    VisiteurQuestionVisited,
     UserQuestionVisited,
-    VisiteurTermVisited,
     UserTermVisited,
+    Visiteur,
+    VisiteurCompanyVisited,
+    VisiteurJourney,
+    VisiteurPublicBlogVisited,
+    VisiteurQuestionVisited,
+    VisiteurTermVisited,
+    VisiteurUserRelation,
 )
+
 
 class BaseModelVisitedAdmin(admin.ModelAdmin):
     list_display = [

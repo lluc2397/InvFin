@@ -1,31 +1,30 @@
-from django.forms import (
-    BooleanField,
-    DateInput,
-    ModelForm,
-    ChoiceField,
-    Textarea,
-    ModelChoiceField,
-    ModelForm,
-    Form,
-    CharField,
-    DecimalField,
-    DateField,
-    IntegerField
-)
-from django.contrib.auth import get_user_model
-
 import datetime
 
-from .models import (
-    Income,
-    Spend,
-    PositionMovement,
-    CashflowMovementCategory,
-    FinancialObjectif,
-    Asset
+from django.contrib.auth import get_user_model
+from django.forms import (
+    BooleanField,
+    CharField,
+    ChoiceField,
+    DateField,
+    DateInput,
+    DecimalField,
+    Form,
+    IntegerField,
+    ModelChoiceField,
+    ModelForm,
+    Textarea,
 )
 
 from apps.general.models import Currency
+
+from .models import (
+    Asset,
+    CashflowMovementCategory,
+    FinancialObjectif,
+    Income,
+    PositionMovement,
+    Spend,
+)
 
 User = get_user_model()
 

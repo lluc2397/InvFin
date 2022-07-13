@@ -1,11 +1,6 @@
 from django.urls import path
-from .views import (
-    HomePage,
-    LegalPages,
-    ExcelView,
-    soporte_view,
-    CreateWebEmailView
-)
+
+from .views import CreateWebEmailView, ExcelView, HomePage, LegalPages, soporte_view
 
 app_name = "web"
 urlpatterns = [

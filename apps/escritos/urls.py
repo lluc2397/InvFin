@@ -1,10 +1,6 @@
 from django.urls import path
 
-from .views import (
-    TermDetailsView,
-    GlosarioView,
-    TermCorrectionView
-)
+from .views import GlosarioView, TermCorrectionView, TermDetailsView
 
 app_name = "escritos"
 urlpatterns = [

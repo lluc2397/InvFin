@@ -2,15 +2,12 @@ from django.urls import path
 
 from .views import (
     AddCashflowMoveView,
-    AddPositionMovementView,
-    AddDefaultCurrencyView,
-    AddNewAssetView,
     AddCategoriesView,
+    AddDefaultCurrencyView,
     AddFinancialObjectifView,
-    
-    
+    AddNewAssetView,
+    AddPositionMovementView,
 )
-
 
 urlpatterns = [
     path('new-cashflow-move/', AddCashflowMoveView.as_view(), name='save_cashflow_movement'),

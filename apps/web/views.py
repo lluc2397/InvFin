@@ -1,19 +1,16 @@
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from django.contrib import messages
-from django.conf import settings
-from django.views.generic import (
-    TemplateView,
-    CreateView,
-    DetailView)
-
 import json
 import urllib
 
-from apps.web.models import WebsiteLegalPage
-from apps.public_blog.models import WritterProfile
+from django.conf import settings
+from django.contrib import messages
+from django.shortcuts import redirect, render
+from django.urls import reverse
+from django.views.generic import CreateView, DetailView, TemplateView
+
 from apps.general.utils import HostChecker
+from apps.public_blog.models import WritterProfile
 from apps.seo.views import SEOTemplateView
+from apps.web.models import WebsiteLegalPage
 
 from .forms import ContactForm, WebEmailForm
 

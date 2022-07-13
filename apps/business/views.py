@@ -1,22 +1,16 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect
+import stripe
 from django.conf import settings
-from django.urls import reverse
-from django.views.generic import RedirectView
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect
+from django.urls import reverse
+from django.views.generic import RedirectView
 
-from apps.seo.views import SEOListView, SEODetailView, SEOTemplateView
 from apps.general.models import Currency
+from apps.seo.views import SEODetailView, SEOListView, SEOTemplateView
 
-from .models import (
-    Product, 
-    ProductComplementary, 
-    TransactionHistorial,
-    Customer
-)
-
-import stripe
+from .models import Customer, Product, ProductComplementary, TransactionHistorial
 
 User = get_user_model()
 stripe.api_key = settings.STRIPE_PRIVATE

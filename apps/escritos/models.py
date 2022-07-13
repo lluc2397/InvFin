@@ -1,27 +1,25 @@
-from django.db.models import (
-    Model,
-    CharField,
-    SET_NULL,
-    CASCADE,
-    ForeignKey,
-    TextField,
-    DateTimeField,
-    BooleanField,
-    PositiveIntegerField,
-    OneToOneField,
-    IntegerField,
-    ManyToManyField
-)
-from django.contrib.sites.models import Site
-from django.template.defaultfilters import slugify
+from ckeditor.fields import RichTextField
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
+from django.db.models import (
+    CASCADE,
+    SET_NULL,
+    BooleanField,
+    CharField,
+    DateTimeField,
+    ForeignKey,
+    IntegerField,
+    ManyToManyField,
+    Model,
+    OneToOneField,
+    PositiveIntegerField,
+    TextField,
+)
+from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.utils import timezone
 
-from ckeditor.fields import RichTextField
-
-from apps.general.bases import BaseEscrito, BaseComment, BaseFavoritesHistorial
-
+from apps.general.bases import BaseComment, BaseEscrito, BaseFavoritesHistorial
 
 from .managers import TermManager
 

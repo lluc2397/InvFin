@@ -1,14 +1,15 @@
 from django.db.models import (
-    Model,
-    CharField,
     SET_NULL,
+    CharField,
+    DateField,
     FloatField,
     ForeignKey,
+    Model,
     PositiveBigIntegerField,
-    DateField
 )
 
 from apps.empresas.models import Company, Exchange
+
 
 class Etf(Model):
     ticker = CharField(max_length=6000000)

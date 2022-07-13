@@ -1,15 +1,15 @@
 from django.contrib import admin
 
 from .models import (
+    BlogSharedHistorial,
+    CompanySharedHistorial,
     DefaultTilte,
     Emoji,
     Hashtag,
-    CompanySharedHistorial,
-    BlogSharedHistorial,
     NewsSharedHistorial,
-    TermSharedHistorial,
     ProfileSharedHistorial,
-    QuestionSharedHistorial
+    QuestionSharedHistorial,
+    TermSharedHistorial,
 )
 
 

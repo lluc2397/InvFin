@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from apps.seo.views import SEOListView, SEODetailView
+from apps.seo.views import SEODetailView, SEOListView
 
 from .models import Superinvestor, SuperinvestorActivity
 

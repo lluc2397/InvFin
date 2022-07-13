@@ -1,26 +1,28 @@
-from django.db.models import (
-    Model,
-    SET_NULL,
-    CASCADE,
-    ForeignKey,
-    DateTimeField,
-    BooleanField,
-    IntegerField,
-    ManyToManyField
-)
-from django.contrib.sites.models import Site
-from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
+from django.db.models import (
+    CASCADE,
+    SET_NULL,
+    BooleanField,
+    DateTimeField,
+    ForeignKey,
+    IntegerField,
+    ManyToManyField,
+    Model,
+)
+from django.urls import reverse
+
 User = get_user_model()
-
-from apps.general.bases import BaseWrittenContent, BaseComment
-from ckeditor.fields import RichTextField
-
-from apps.general.mixins import CommonMixin
 
 from itertools import chain
 
+from ckeditor.fields import RichTextField
+
+from apps.general.bases import BaseComment, BaseWrittenContent
+from apps.general.mixins import CommonMixin
+
 from .managers import QuestionManager
+
 
 class Question(BaseWrittenContent):
     content = RichTextField(config_name='writter')

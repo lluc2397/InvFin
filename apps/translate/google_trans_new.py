@@ -1,9 +1,14 @@
 
-import json, requests, random, re
-from urllib.parse import quote
-import urllib3
+import json
 import logging
-from .constant import LANGUAGES, DEFAULT_SERVICE_URLS
+import random
+import re
+from urllib.parse import quote
+
+import requests
+import urllib3
+
+from .constant import DEFAULT_SERVICE_URLS, LANGUAGES
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())

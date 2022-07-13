@@ -1,7 +1,8 @@
 from cloudinary.models import CloudinaryField
-
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import (
     CASCADE,
     SET_NULL,
@@ -14,19 +15,17 @@ from django.db.models import (
     IntegerField,
     Model,
     OneToOneField,
+    PositiveBigIntegerField,
     TextField,
-    PositiveBigIntegerField
 )
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 
 from apps.general.mixins import ResizeImageMixin
 
-from .constants import MOVEMENTS, MOVE_SOURCES
-from .managers import ProfileManager, UserExtraManager, CreditHistorialManager
+from .constants import MOVE_SOURCES, MOVEMENTS
+from .managers import CreditHistorialManager, ProfileManager, UserExtraManager
 
 PROTOCOL = settings.PROTOCOL
 CURRENT_DOMAIN = settings.CURRENT_DOMAIN
@@ -223,6 +222,7 @@ class User(AbstractUser):
 
     def create_new_user(self, request):
         from allauth.account.utils import sync_user_email_addresses
+
         from apps.seo.models import VisiteurUserRelation
 
         try:

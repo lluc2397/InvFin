@@ -1,11 +1,6 @@
-from django.forms import (
-    ModelForm,
-    CharField,
-    DateTimeField,
-    Form,
-    Textarea
-)
 from ckeditor.widgets import CKEditorWidget
+from django.forms import CharField, DateTimeField, Form, ModelForm, Textarea
+
 
 class DefaultNewsletterForm(Form):
     title = CharField()

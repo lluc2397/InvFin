@@ -6,12 +6,7 @@ from import_export.admin import ImportExportModelAdmin
 
 from apps.users.forms import UserAdminChangeForm, UserAdminCreationForm
 
-from .models import (
-    Profile,
-    MetaProfile,
-    MetaProfileHistorial,
-    CreditUsageHistorial
-)
+from .models import CreditUsageHistorial, MetaProfile, MetaProfileHistorial, Profile
 
 User = get_user_model()
 

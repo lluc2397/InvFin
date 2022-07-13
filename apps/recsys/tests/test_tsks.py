@@ -1,11 +1,9 @@
+from django.test import RequestFactory
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from django.test import RequestFactory
-
-from apps.users.tests.factories import UserFactory
 from apps.empresas.tests.factories import CompanyFactory
-
+from apps.users.tests.factories import UserFactory
 
 from ..tasks import clean_journeys
 

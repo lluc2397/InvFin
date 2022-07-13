@@ -4,15 +4,14 @@ from .views import (
     CompanyFODAListView,
     create_company_observation,
     get_company_news,
-    suggest_list_search_companies,
-    simple_valuation_view,
-    medium_valuation_view,
     get_company_price,
     get_company_valuation,
+    medium_valuation_view,
     retreive_top_lists,
-    retreive_yahoo_screener_info
+    retreive_yahoo_screener_info,
+    simple_valuation_view,
+    suggest_list_search_companies,
 )
-
 
 urlpatterns = [
     path('user-search-company/', suggest_list_search_companies, name="suggest_list_search_companies"),

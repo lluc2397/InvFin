@@ -1,21 +1,21 @@
 from django.forms import (
-    ModelForm,
     CharField,
     DateTimeField,
     Form,
     IntegerField,
+    ModelForm,
     Textarea,
-    TextInput
+    TextInput,
 )
 
 from .models import (
-    RoboAdvisorQuestionInvestorExperience,
     RoboAdvisorQuestionCompanyAnalysis,
     RoboAdvisorQuestionFinancialSituation,
-    RoboAdvisorQuestionRiskAversion,
+    RoboAdvisorQuestionInvestorExperience,
     RoboAdvisorQuestionPortfolioAssetsWeight,
-    RoboAdvisorQuestionStocksPortfolio,
     RoboAdvisorQuestionPortfolioComposition,
+    RoboAdvisorQuestionRiskAversion,
+    RoboAdvisorQuestionStocksPortfolio,
 )
 
 

@@ -1,10 +1,13 @@
-from config import celery_app
-
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 
-from apps.public_blog.models import PublicBlog, PublicBlogAsNewsletter, NewsletterFollowers
 from apps.general.tasks import enviar_email_task
+from apps.public_blog.models import (
+    NewsletterFollowers,
+    PublicBlog,
+    PublicBlogAsNewsletter,
+)
+from config import celery_app
 
 User = get_user_model()
 

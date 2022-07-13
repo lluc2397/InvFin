@@ -1,9 +1,10 @@
 from ..constants import *
 from ..models import (
-    InvestorProfile, 
-    TemporaryInvestorProfile,
+    InvestorProfile,
     RoboAdvisorQuestionInvestorExperience,
-    RoboAdvisorQuestionRiskAversion)
+    RoboAdvisorQuestionRiskAversion,
+    TemporaryInvestorProfile,
+)
 
 
 def get_investor_type(user, service_activity):

@@ -1,15 +1,15 @@
-from django.http import HttpResponse
-from django.contrib.auth import get_user_model
-from django.template.defaultfilters import slugify
-import functools
-from urllib.parse import urlunparse
-from django.conf import settings
-from django.urls import reverse as simple_reverse
-
 import binascii
-import os
 import csv
+import functools
+import os
 import random
+from urllib.parse import urlunparse
+
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.http import HttpResponse
+from django.template.defaultfilters import slugify
+from django.urls import reverse as simple_reverse
 
 from apps.public_blog.models import WritterProfile
 

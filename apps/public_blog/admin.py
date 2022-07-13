@@ -1,11 +1,13 @@
 from django.contrib import admin
+
 from .models import (
-    PublicBlog,
-    WritterProfile,
-    NewsletterFollowers,
-    PublicBlogAsNewsletter,
     FollowingHistorial,
-    PublicBlogComment)
+    NewsletterFollowers,
+    PublicBlog,
+    PublicBlogAsNewsletter,
+    PublicBlogComment,
+    WritterProfile,
+)
 
 
 @admin.register(NewsletterFollowers)

@@ -1,13 +1,11 @@
 from django.test import TestCase
 
-from .factories import (
-    CompanyFactory,
-    ExchangeFactory,
-    ExchangeOrganisationFactory
-)
-from .constants import *
-from apps.empresas.models import Company
 from apps.empresas.company.update import UpdateCompany
+from apps.empresas.models import Company
+
+from .constants import *
+from .factories import CompanyFactory, ExchangeFactory, ExchangeOrganisationFactory
+
 
 class CompanyManagersTest(TestCase):
     def setUp(self) -> None:

@@ -1,20 +1,18 @@
-from django.shortcuts import render,redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
+from itertools import chain
+
 from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import (
-    DetailView,
-    TemplateView)
+from django.views.generic import DetailView, TemplateView
 
 from apps.public_blog.forms import WritterProfileForm
 
 from .forms import UserForm, UserProfileForm
 from .models import Profile
-
-from itertools import chain
 
 User = get_user_model()
 

@@ -1,31 +1,28 @@
-from django.db.models import (
-    Model,
-    CharField,
-    SET_NULL,
-    OneToOneField,
-    ForeignKey,
-    TextField,
-    DateTimeField,
-    BooleanField,
-    PositiveIntegerField,
-    IntegerField,
-    ManyToManyField,
-    JSONField,
-    DateField,
-    DecimalField
-)
-
+from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import (
+    SET_NULL,
+    BooleanField,
+    CharField,
+    DateField,
+    DateTimeField,
+    DecimalField,
+    ForeignKey,
+    IntegerField,
+    JSONField,
+    ManyToManyField,
+    Model,
+    OneToOneField,
+    PositiveIntegerField,
+    TextField,
+)
 
-from apps.general.utils import ChartSerializer
 from apps.empresas.models import Company
+from apps.etfs.models import Etf
 from apps.general.models import Currency
+from apps.general.utils import ChartSerializer
 
-from apps.etfs.models import (
-    Etf)
-
-from django.contrib.auth import get_user_model
 User = get_user_model()    
 
 import random

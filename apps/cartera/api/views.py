@@ -1,19 +1,19 @@
-from django.http import HttpResponseRedirect, HttpResponse
-from django.views.generic import FormView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect
+from django.views.generic import FormView
 
 from apps.empresas.models import Company
 
 from ..forms import (
+    AddCategoriesForm,
+    AddNewAssetForm,
     CashflowMoveForm,
     DefaultCurrencyForm,
-    AddCategoriesForm,
     FinancialObjectifForm,
-    AddNewAssetForm,
-    PositionMovementForm
+    PositionMovementForm,
 )
 
 

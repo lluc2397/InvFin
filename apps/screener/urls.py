@@ -1,18 +1,17 @@
 from django.urls import path
 
-from .views import (
-    ScreenerInicioView,
-    CompanyScreenerInicioView,
-    EtfScreenerInicioView,
-    CompanyDetailsView,
-    EtfDetailsView,
-    AllYahooScreenersView,
-    YahooScreenerView,
-    BuyCompanyInfo,
-    CompanyLookUpView
-)
-
 from .api.urls import urlpatterns
+from .views import (
+    AllYahooScreenersView,
+    BuyCompanyInfo,
+    CompanyDetailsView,
+    CompanyLookUpView,
+    CompanyScreenerInicioView,
+    EtfDetailsView,
+    EtfScreenerInicioView,
+    ScreenerInicioView,
+    YahooScreenerView,
+)
 
 # from apps.screener.api.views import CompanyBaseAPIView
 

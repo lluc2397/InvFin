@@ -1,13 +1,13 @@
-from django.db.models import signals
 from django.conf import settings
+from django.db.models import signals
 
 from apps.business.models import (
     Customer,
     Product,
-    TransactionHistorial,
     ProductComplementary,
+    ProductComplementaryPaymentLink,
     ProductDiscount,
-    ProductComplementaryPaymentLink
+    TransactionHistorial,
 )
 from apps.business.signals.handlers import BusinessSignal
 

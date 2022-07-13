@@ -2,14 +2,13 @@ from django.urls import path
 
 from .views import (
     RoboAdvisorQuestionCompanyAnalysisAPIView,
-    RoboAdvisorQuestionStocksPortfolioAPIView,
     RoboAdvisorQuestionFinancialSituationAPIView,
     RoboAdvisorQuestionInvestorExperienceAPIView,
     RoboAdvisorQuestionPortfolioAssetsWeightAPIView,
     RoboAdvisorQuestionPortfolioCompositionAPIView,
-    RoboAdvisorQuestionRiskAversionAPIView
+    RoboAdvisorQuestionRiskAversionAPIView,
+    RoboAdvisorQuestionStocksPortfolioAPIView,
 )
-
 
 urlpatterns =[
     path('robo-step-analysis', RoboAdvisorQuestionCompanyAnalysisAPIView.as_view(), name='analysis'),

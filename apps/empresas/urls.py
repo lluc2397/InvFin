@@ -1,11 +1,6 @@
 from django.urls import path
 
-from .views import (
-    ExcelAPIIncome,
-    ExcelAPIBalance,
-    ExcelAPICashflow,
-    companies_searcher
-)
+from .views import ExcelAPIBalance, ExcelAPICashflow, ExcelAPIIncome, companies_searcher
 
 app_name = "empresas"
 urlpatterns = [

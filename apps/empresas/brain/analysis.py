@@ -1,6 +1,6 @@
-from ..models import Company
-
 import yfinance as yf
+
+from ..models import Company
 
 
 def simple_stock_analysis(empresa):

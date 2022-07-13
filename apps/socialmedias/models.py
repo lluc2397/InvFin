@@ -1,31 +1,27 @@
 from email.policy import default
-from django.db.models import (
-    Model,
-    CharField,
-    SET_NULL,
-    CASCADE,
-    ForeignKey,
-    DateTimeField,
-    PositiveIntegerField,
-    BooleanField,
-    TextField,
-    JSONField
-)
-from django.contrib.auth import get_user_model
 
 from ckeditor.fields import RichTextField
+from django.contrib.auth import get_user_model
+from django.db.models import (
+    CASCADE,
+    SET_NULL,
+    BooleanField,
+    CharField,
+    DateTimeField,
+    ForeignKey,
+    JSONField,
+    Model,
+    PositiveIntegerField,
+    TextField,
+)
 
+from apps.empresas.models import Company
 from apps.escritos.models import Term
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog, WritterProfile
-from apps.empresas.models import Company
 
-from .constants import SOCIAL_MEDIAS, POST_TYPE, FOR_MODEL
-from .managers import (
-    HashtagsManager,
-    EmojisManager,
-    TitlesManager
-)
+from .constants import FOR_MODEL, POST_TYPE, SOCIAL_MEDIAS
+from .managers import EmojisManager, HashtagsManager, TitlesManager
 
 User = get_user_model()
 

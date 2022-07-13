@@ -1,9 +1,9 @@
 from django.views.generic import TemplateView
 
-from apps.general.models import Sector, Industry, Country
-from apps.public_blog.models import PublicBlog
-from apps.escritos.models import Term
 from apps.empresas.models import Company, Exchange
+from apps.escritos.models import Term
+from apps.general.models import Country, Industry, Sector
+from apps.public_blog.models import PublicBlog
 from apps.seo import constants
 
 

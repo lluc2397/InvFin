@@ -1,21 +1,21 @@
+from django.contrib.auth import get_user_model
 from django.db.models import (
-    Model,
-    JSONField,
     SET_NULL,
-    ForeignKey,
     BooleanField,
     CharField,
-    DateTimeField
+    DateTimeField,
+    ForeignKey,
+    JSONField,
+    Model,
 )
-from django.contrib.auth import get_user_model
 
-from apps.seo import constants
-from apps.seo.models import Visiteur, Promotion
+from apps.business.models import ProductComplementary
 from apps.empresas.models import Company
 from apps.escritos.models import Term
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog
-from apps.business.models import ProductComplementary
+from apps.seo import constants
+from apps.seo.models import Promotion, Visiteur
 
 User = get_user_model()
 

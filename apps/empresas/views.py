@@ -1,16 +1,18 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-
 import json
 
-from django.http.response import HttpResponse
 from django.db.models import Q
+from django.http.response import HttpResponse
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .models import Company, IncomeStatement, BalanceSheet, CashflowStatement
-from .api.serializers import IncomeStatementSerializer, BalanceSheetSerializer, CashflowStatementSerializer
+from .api.serializers import (
+    BalanceSheetSerializer,
+    CashflowStatementSerializer,
+    IncomeStatementSerializer,
+)
 from .api.views import BaseAPIView
-
+from .models import BalanceSheet, CashflowStatement, Company, IncomeStatement
 
 key = 'olLKY2dEO1jgZ4FURM60o7B90NyF05'
 

@@ -279,6 +279,7 @@ apps/media/
 
 geoip
 
+temp_venv
 .env
 backups
 Notes

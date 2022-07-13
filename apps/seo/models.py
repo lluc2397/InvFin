@@ -1,28 +1,28 @@
+from ckeditor.fields import RichTextField
+from django.contrib.auth import get_user_model
 from django.db.models import (
-    Model,
-    CharField,
-    SET_NULL,
     CASCADE,
-    ForeignKey,
-    TextField,
-    DateTimeField,
+    SET_NULL,
     BooleanField,
-    ManyToManyField,
-    PositiveBigIntegerField,
+    CharField,
+    DateTimeField,
+    ForeignKey,
     JSONField,
-    SlugField
+    ManyToManyField,
+    Model,
+    PositiveBigIntegerField,
+    SlugField,
+    TextField,
 )
 from django.utils import timezone
-from django.contrib.auth import get_user_model
-
-from ckeditor.fields import RichTextField
 
 from apps.empresas.models import Company
 from apps.escritos.models import Term
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog
 from apps.socialmedias.constants import SOCIAL_MEDIAS
-from . import constants 
+
+from . import constants
 
 User = get_user_model()
 

@@ -1,12 +1,13 @@
-from config import celery_app
 from datetime import datetime
 
 from django.conf import settings
-from django.db.models import Q
 from django.core.mail import send_mail
+from django.db.models import Q
 
-from .models import Company
+from config import celery_app
+
 from .company.update import UpdateCompany
+from .models import Company
 
 
 @celery_app.task()

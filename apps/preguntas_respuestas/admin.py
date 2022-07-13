@@ -1,11 +1,6 @@
 from django.contrib import admin
-from .models import (
-    Question,
-    QuesitonComment,
-    Answer,
-    AnswerComment
-)
 
+from .models import Answer, AnswerComment, QuesitonComment, Question
 
 
 @admin.register(Question)

@@ -1,31 +1,14 @@
 from django.contrib.auth import get_user_model
-
-from rest_framework.generics import GenericAPIView
-
-from rest_framework.mixins import (
-    CreateModelMixin,
-    UpdateModelMixin
-)
-from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import CreateModelMixin, UpdateModelMixin
+from rest_framework.response import Response
 
 from apps.empresas.brain.analysis import simple_stock_analysis
 from apps.empresas.models import Company
 
-from .serializers import (
-    RoboAdvisorQuestionCompanyAnalysisSerializer,
-    RoboAdvisorQuestionFinancialSituationSerializer,
-    RoboAdvisorQuestionInvestorExperienceSerializer,
-    RoboAdvisorQuestionPortfolioAssetsWeightSerializer,
-    RoboAdvisorQuestionPortfolioCompositionSerializer,
-    RoboAdvisorQuestionRiskAversionSerializer,
-    RoboAdvisorQuestionStocksPortfolioSerializer
-)
-
+from ..constants import *
 from ..models import (
-    RoboAdvisorUserServiceStepActivity,
-    RoboAdvisorServiceStep,
-    RoboAdvisorUserServiceActivity,
     RoboAdvisorQuestionCompanyAnalysis,
     RoboAdvisorQuestionFinancialSituation,
     RoboAdvisorQuestionInvestorExperience,
@@ -33,10 +16,19 @@ from ..models import (
     RoboAdvisorQuestionPortfolioComposition,
     RoboAdvisorQuestionRiskAversion,
     RoboAdvisorQuestionStocksPortfolio,
-
+    RoboAdvisorServiceStep,
+    RoboAdvisorUserServiceActivity,
+    RoboAdvisorUserServiceStepActivity,
 )
-
-from ..constants import *
+from .serializers import (
+    RoboAdvisorQuestionCompanyAnalysisSerializer,
+    RoboAdvisorQuestionFinancialSituationSerializer,
+    RoboAdvisorQuestionInvestorExperienceSerializer,
+    RoboAdvisorQuestionPortfolioAssetsWeightSerializer,
+    RoboAdvisorQuestionPortfolioCompositionSerializer,
+    RoboAdvisorQuestionRiskAversionSerializer,
+    RoboAdvisorQuestionStocksPortfolioSerializer,
+)
 
 User = get_user_model()
 

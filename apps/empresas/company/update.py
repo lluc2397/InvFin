@@ -1,22 +1,21 @@
 import random
 import time
+from datetime import datetime
 
+import requests
+import yahooquery as yq
+import yfinance as yf
 from django.conf import settings
 
+from apps.empresas.models import (
+    CompanyUpdateLog,
+    InstitutionalOrganization,
+    TopInstitutionalOwnership,
+)
 from apps.general.models import Currency
 from apps.translate.google_trans_new import google_translator
-from apps.empresas.models import (
-    TopInstitutionalOwnership,
-    InstitutionalOrganization,
-    CompanyUpdateLog
-)
 
 from .ratios import CalculateCompanyFinancialRatios
-
-from datetime import datetime
-import requests
-import yfinance as yf
-import yahooquery as yq
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36',

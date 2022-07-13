@@ -1,30 +1,31 @@
-from django.db.models import (
-    Model,
-    CharField,
-    SET_NULL,
-    CASCADE,
-    ForeignKey,
-    TextField,
-    DateTimeField,
-    BooleanField,
-    PositiveIntegerField,
-    ImageField,
-    IntegerField,
-    ManyToManyField
-)
+from ckeditor.fields import RichTextField
+from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import (
+    CASCADE,
+    SET_NULL,
+    BooleanField,
+    CharField,
+    DateTimeField,
+    ForeignKey,
+    ImageField,
+    IntegerField,
+    ManyToManyField,
+    Model,
+    PositiveIntegerField,
+    TextField,
+)
+from django.template.defaultfilters import slugify
 from django.utils import timezone
-from ckeditor.fields import RichTextField
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-from django.template.defaultfilters import slugify
-from django.contrib.auth import get_user_model
+
 User = get_user_model()
 
 from ckeditor.fields import RichTextField
 
-from apps.general.mixins import CommonMixin, BaseEscritosMixins
+from apps.general.mixins import BaseEscritosMixins, CommonMixin
 
 
 class BaseWrittenContent(CommonMixin):

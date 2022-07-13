@@ -2,12 +2,11 @@ import stripe
 from django.conf import settings
 
 from apps.business.models import (
-    Customer, 
+    Customer,
     ProductComplementary,
-    ProductComplementaryPaymentLink
+    ProductComplementaryPaymentLink,
 )
 from apps.general.models import Currency
-
 
 STRIPE_PRIVATE = settings.STRIPE_PRIVATE
 STRIPE_PUBLIC = settings.STRIPE_PUBLIC

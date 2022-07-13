@@ -1,45 +1,45 @@
+from django.contrib.auth import get_user_model
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import (
-    Model,
-    SET_NULL,
     CASCADE,
-    ForeignKey,
-    DateTimeField,
+    SET_NULL,
     BooleanField,
+    CharField,
+    DateTimeField,
+    DecimalField,
+    ForeignKey,
     IntegerField,
     ManyToManyField,
-    DecimalField,
+    Model,
     OneToOneField,
-    CharField,
-    TextField,
     PositiveBigIntegerField,
-    PositiveIntegerField
+    PositiveIntegerField,
+    TextField,
 )
-from django.urls import reverse
-from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django.template.defaultfilters import slugify
+from django.urls import reverse
 
-from apps.general.models import Tag, Category, Currency
 from apps.empresas.models import Company
+from apps.general.models import Category, Currency, Tag
 
 from .constants import (
     HORIZON,
-    RISK_PROFILE,
     INVESTOR_TYPE,
-    ROBO_RESULTS,
-    ROBO_STEPS,
-    PERIODS,
     KNOWLEDGE,
-    OBJECTIFS,
     NUMBER_STOCKS,
-    SERVICE_STATUS,
-    VOLATILIDAD,
-    RESULTS,
-    PROFILE_VERY_AGRESIVE,
+    OBJECTIFS,
+    PERIODS,
     PROFILE_AGRESIVE,
     PROFILE_CONSERVATIVE,
     PROFILE_REGULAR,
-    PROFILE_VERY_CONSERVATIVE
+    PROFILE_VERY_AGRESIVE,
+    PROFILE_VERY_CONSERVATIVE,
+    RESULTS,
+    RISK_PROFILE,
+    ROBO_RESULTS,
+    ROBO_STEPS,
+    SERVICE_STATUS,
+    VOLATILIDAD,
 )
 
 User = get_user_model()

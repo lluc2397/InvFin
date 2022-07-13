@@ -1,24 +1,29 @@
-from django.shortcuts import render,redirect
-from django.contrib.auth.decorators import login_required
+import base64
+import json
+
+from django.apps import apps
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
+from django.http.response import HttpResponse, JsonResponse
+from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
-from django.apps import apps
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.utils import timezone
 from django.views.generic import ListView
-from django.http.response import JsonResponse, HttpResponse
-from django.db.models import Q
 
-import json
-import base64
-
-from apps.escritos.models import Term, FavoritesTermsHistorial, FavoritesTermsList
 from apps.empresas.models import Company
+from apps.escritos.models import FavoritesTermsHistorial, FavoritesTermsList, Term
 from apps.screener.models import FavoritesStocksHistorial
-from apps.super_investors.models import FavoritesSuperinvestorsHistorial, FavoritesSuperinvestorsList, Superinvestor
+from apps.super_investors.models import (
+    FavoritesSuperinvestorsHistorial,
+    FavoritesSuperinvestorsList,
+    Superinvestor,
+)
 
 from .models import Notification
+
 
 @login_required
 def create_comment_view(request, url_encoded):

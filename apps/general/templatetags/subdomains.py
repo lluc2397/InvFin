@@ -2,7 +2,6 @@ from django.template import Library
 
 from ..utils import HostChecker
 
-
 register = Library()
 
 UNSET = object()

@@ -1,12 +1,6 @@
-from django.forms import (
-    ModelForm,
-    ValidationError,
-    ModelForm,
-    Textarea,
-) 
-from .models import (
-    TermCorrection
-)
+from django.forms import ModelForm, Textarea, ValidationError
+
+from .models import TermCorrection
 
 
 class CreateCorrectionForm(ModelForm):

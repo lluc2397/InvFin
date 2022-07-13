@@ -1,9 +1,6 @@
 from django.urls import path
 
-from .views import (
-    ExplorationView,
-    CompaniesRecommendedSide
-)
+from .views import CompaniesRecommendedSide, ExplorationView
 
 app_name = "recsys"
 urlpatterns = [

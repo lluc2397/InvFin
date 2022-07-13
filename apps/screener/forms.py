@@ -1,7 +1,7 @@
 from django import forms
-from .models import (
-    UserCompanyObservation
-)
+
+from .models import UserCompanyObservation
+
 
 class UserCompanyObservationForm(forms.ModelForm):
     observation = forms.CharField(

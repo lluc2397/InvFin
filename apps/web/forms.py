@@ -1,18 +1,18 @@
+from ckeditor.widgets import CKEditorWidget
 from django.forms import (
-    Form,
     CharField,
-    EmailField,
-    Textarea,
-    ModelForm,
+    DateTimeField,
     DateTimeInput,
-    DateTimeField
+    EmailField,
+    Form,
+    ModelForm,
+    Textarea,
 )
 
-from ckeditor.widgets import CKEditorWidget
-
-from .tasks import send_website_email_task
 from apps.general.outils.emailing import EmailingSystem
+
 from .models import WebsiteEmail
+from .tasks import send_website_email_task
 
 
 class ContactForm(Form):

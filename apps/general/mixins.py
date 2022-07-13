@@ -1,15 +1,14 @@
-from django.conf import settings
-from django.db.models import Model, ImageField
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-from django.core.files import File
-from django.core.files.base import ContentFile
-
 import uuid
-from bs4 import BeautifulSoup as bs
-from PIL import Image
 from io import BytesIO
 
+from bs4 import BeautifulSoup as bs
+from django.conf import settings
+from django.core.files import File
+from django.core.files.base import ContentFile
+from django.db.models import ImageField, Model
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from PIL import Image
 
 FULL_DOMAIN = settings.FULL_DOMAIN
 

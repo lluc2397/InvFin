@@ -1,11 +1,10 @@
-from django.contrib.auth import get_user_model
 from django.conf import settings
-from django.utils.html import strip_tags, format_html
+from django.contrib.auth import get_user_model
+from django.utils.html import format_html, strip_tags
 
-from apps.translate.google_trans_new import google_translator
 from apps.socialmedias.socialposter.facepy import Facebook
 from apps.socialmedias.socialposter.tweetpy import Twitter
-
+from apps.translate.google_trans_new import google_translator
 
 User = get_user_model()
 DOMAIN = settings.CURRENT_DOMAIN

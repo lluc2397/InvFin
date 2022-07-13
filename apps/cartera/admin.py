@@ -1,12 +1,14 @@
 from django.contrib import admin
+
 from .models import (
-    PositionMovement,
-    Income,
-    Spend,
     Asset,
+    FinancialObjectif,
+    Income,
     Patrimonio,
-    FinancialObjectif
+    PositionMovement,
+    Spend,
 )
+
 
 @admin.register(PositionMovement)
 class PositionMovementAdmin(admin.ModelAdmin):

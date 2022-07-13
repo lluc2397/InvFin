@@ -1,18 +1,15 @@
-import tweepy
-import random
 import logging
 import math
+import random
+
+import tweepy
 from django.conf import settings
 
 site = 'https://inversionesyfinanzas.xyz'
 
 # logger = logging.getLogger('longs')
 
-from ..models import (
-    DefaultTilte,
-    Emoji,
-    Hashtag
-)
+from ..models import DefaultTilte, Emoji, Hashtag
 
 
 class Twitter:

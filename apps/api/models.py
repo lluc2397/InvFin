@@ -1,36 +1,35 @@
 import json
+from datetime import date, datetime, time, timedelta
 
+from ckeditor.fields import RichTextField
 from django.conf import settings
-from datetime import datetime, timedelta, time, date
-from django.template.defaultfilters import slugify
-from django.utils.html import strip_tags, format_html
+from django.contrib.auth import get_user_model
 from django.db.models import (
-    Model,
-    CharField,
-    SET_NULL,
     CASCADE,
-    ForeignKey,
-    TextField,
-    DateTimeField,
+    SET_NULL,
     BooleanField,
+    CharField,
+    DateTimeField,
+    ForeignKey,
+    IntegerField,
+    JSONField,
+    Model,
     PositiveIntegerField,
     Q,
-    JSONField,
-    IntegerField
+    TextField,
 )
-from django.contrib.auth import get_user_model
+from django.template.defaultfilters import slugify
+from django.utils.html import format_html, strip_tags
 from django.utils.translation import gettext_lazy as _
 
-from apps.escritos.models import Term
-from apps.empresas.models import Company
-from apps.general.utils import UniqueCreator
-from apps.general.mixins import BaseToAll
 from apps.business.models import ProductSubscriber
+from apps.empresas.models import Company
+from apps.escritos.models import Term
+from apps.general.mixins import BaseToAll
+from apps.general.utils import UniqueCreator
 from apps.super_investors.models import Superinvestor
 
 from .managers import KeyManager
-
-from ckeditor.fields import RichTextField
 
 FULL_DOMAIN = settings.FULL_DOMAIN
 

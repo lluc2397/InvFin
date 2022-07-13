@@ -1,16 +1,15 @@
 from django.contrib import admin
+
 from .models import (
     Category,
-    Tag,
-    Industry,
-    Sector,
     Country,
     Currency,
+    EmailNotification,
+    Industry,
     Notification,
-    EmailNotification
+    Sector,
+    Tag,
 )
-
-
 
 
 @admin.register(EmailNotification)    

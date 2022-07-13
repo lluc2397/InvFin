@@ -1,22 +1,21 @@
 from django.contrib.auth import get_user_model
 
+from apps.api.pagination import StandardResultPagination
 from apps.api.views import BaseAPIView
-from apps.api.pagination import StandardResultPagination 
-
-from apps.empresas.models import (
-    Exchange,
-    Company,
-    CashflowStatement,
-    IncomeStatement,
-    BalanceSheet,
-)
 from apps.empresas.api.serializers import (
-    ExchangeSerializer,
-    CompanySerializer,
-    BasicCompanySerializer,
-    IncomeStatementSerializer,
     BalanceSheetSerializer,
-    CashflowStatementSerializer
+    BasicCompanySerializer,
+    CashflowStatementSerializer,
+    CompanySerializer,
+    ExchangeSerializer,
+    IncomeStatementSerializer,
+)
+from apps.empresas.models import (
+    BalanceSheet,
+    CashflowStatement,
+    Company,
+    Exchange,
+    IncomeStatement,
 )
 
 User = get_user_model()

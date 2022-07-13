@@ -1,21 +1,18 @@
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, RedirectView
-from django.contrib import messages
+from django.views.generic import DetailView, ListView, RedirectView
 
-from apps.empresas.models import (
-    Company, 
-    ExchangeOrganisation
-)
-from apps.etfs.models import Etf
 from apps.empresas.company.update import UpdateCompany
-from apps.seo.views import SEOListView, SEODetailView
+from apps.empresas.models import Company, ExchangeOrganisation
 from apps.empresas.utils import company_searched
-from apps.users.models import CreditUsageHistorial
+from apps.etfs.models import Etf
+from apps.seo.views import SEODetailView, SEOListView
 from apps.users import constants as users_constants
+from apps.users.models import CreditUsageHistorial
 
-from .models import YahooScreener, CompanyInformationBought
+from .models import CompanyInformationBought, YahooScreener
 
 
 class CompanyLookUpView(RedirectView):

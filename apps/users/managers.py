@@ -1,8 +1,8 @@
-import uuid
 import secrets
 import string
+import uuid
 
-from django.contrib.auth import models, login
+from django.contrib.auth import login, models
 from django.db.models import Manager, Model
 
 from .constants import ADD, REDUCE

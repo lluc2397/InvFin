@@ -1,11 +1,12 @@
+import yahooquery as yq
 from django.core.management import BaseCommand
 from django.template.defaultfilters import slugify
 
-from ...models import YahooScreener
-from ... import constants
-
 from apps.translate.google_trans_new import google_translator
-import yahooquery as yq
+
+from ... import constants
+from ...models import YahooScreener
+
 
 class Command(BaseCommand):
 

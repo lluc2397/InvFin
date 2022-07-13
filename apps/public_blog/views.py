@@ -1,30 +1,22 @@
-from django.shortcuts import redirect, render
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from django.views.generic import (
-	ListView,
-	DetailView,
-	UpdateView,
-	CreateView
-)
-
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import redirect, render
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
-from apps.seo.views import SEODetailView, SEOListView
-from apps.general.forms import DefaultNewsletterForm 
+from apps.general.forms import DefaultNewsletterForm
 from apps.general.tasks import prepare_notifications_task
-
-from .models import (
-    PublicBlog,
-    WritterProfile,
-	PublicBlogAsNewsletter,
-	NewsletterFollowers
-)
+from apps.seo.views import SEODetailView, SEOListView
 
 from .forms import PublicBlogForm
-
+from .models import (
+    NewsletterFollowers,
+    PublicBlog,
+    PublicBlogAsNewsletter,
+    WritterProfile,
+)
 
 User = get_user_model()
 

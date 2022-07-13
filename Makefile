@@ -1,3 +1,5 @@
+BLACK_FOLDERS=apps
+
 .PHONY: requirements
 
 build:
@@ -78,9 +80,9 @@ pdb_manage:
 	docker-compose -f local.yml stop django
 	docker-compose -f local.yml run --rm --service-ports django  ./manage.py $(ar) --settings=config.settings.local
 
-# requirements:
-# 	docker-compose run --rm essentialist.api /requirements.sh "temp_venv/bin/pip"
-# 	rm -rf temp_venv/
+requirements:
+	docker-compose -f local.yml run django /requirements.sh "temp_venv/bin/pip"
+	docker-compose -f local.yml run django rm -rf temp_venv/
 
 # Postgres
 shell_db:
@@ -124,14 +126,14 @@ pycov:
 	docker-compose -f local.yml run --rm django coverage report
 
 # Style
-pep:
-	docker-compose -f local.yml run --rm django flake8
+flake:
+	docker-compose -f local.yml run django flake8 $(ar)
 
 isort:
-	docker-compose -f local.yml run --rm django isort -rc -y
+	docker-compose -f local.yml run django isort .
 
-isort_pep:
-	docker-compose -f local.yml run --rm django bash -c "isort -rc -y && flake8"
+black:
+	docker-compose -f local.yml run django black ${BLACK_FOLDERS}
 
-isort_check:
-	docker-compose -f local.yml run --rm django isort -rc -c
+format:
+	docker-compose -f local.yml run django flake8 && isort . && black ${BLACK_FOLDERS}

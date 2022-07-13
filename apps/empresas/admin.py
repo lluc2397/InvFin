@@ -1,34 +1,32 @@
 from datetime import datetime
 
-from django.contrib import admin
 from django.conf import settings
+from django.contrib import admin
 
 from .company.update import UpdateCompany
-
 from .models import (
-    CashflowStatement,
-    IncomeStatement,
     BalanceSheet,
+    CashflowStatement,
     Company,
     CompanyGrowth,
+    CompanyStockPrice,
+    CompanyUpdateLog,
     EficiencyRatio,
     EnterpriseValueRatio,
     Exchange,
     ExchangeOrganisation,
-    RentabilityRatio,
-    MarginRatio,
-    PriceToRatio,
-    LiquidityRatio,
-    OperationRiskRatio,
     FreeCashFlowRatio,
-    PerShareValue,
-    CompanyStockPrice,
-    NonGaap,
-    TopInstitutionalOwnership,
+    IncomeStatement,
     InstitutionalOrganization,
-    CompanyUpdateLog
+    LiquidityRatio,
+    MarginRatio,
+    NonGaap,
+    OperationRiskRatio,
+    PerShareValue,
+    PriceToRatio,
+    RentabilityRatio,
+    TopInstitutionalOwnership,
 )
-
 
 IMAGEKIT_URL_ENDPOINT = settings.IMAGEKIT_URL_ENDPOINT
 IMAGE_KIT = settings.IMAGE_KIT

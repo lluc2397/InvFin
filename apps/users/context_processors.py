@@ -1,6 +1,8 @@
 from django.conf import settings
-from apps.general.models import Notification
 from django.contrib.auth import get_user_model
+
+from apps.general.models import Notification
+
 User = get_user_model()
 
 

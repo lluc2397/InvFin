@@ -1,27 +1,27 @@
+from ckeditor.fields import RichTextField
+from django.contrib.auth import get_user_model
 from django.db.models import (
-    Model,
-    CharField,
-    SET_NULL,
     CASCADE,
-    OneToOneField,
-    ForeignKey,
-    SlugField,
+    SET_NULL,
+    BooleanField,
+    CharField,
     DateTimeField,
+    FloatField,
+    ForeignKey,
     IntegerField,
     JSONField,
-    FloatField,
-    BooleanField
+    Model,
+    OneToOneField,
+    SlugField,
 )
 from django.urls import reverse
-from django.contrib.auth import get_user_model
 
-from ckeditor.fields import RichTextField
-
+from apps.business import constants
 from apps.general.bases import BaseComment
 from apps.general.models import Currency
 from apps.seo.models import Promotion
+
 from .managers import ProductManager
-from apps.business import constants
 
 User = get_user_model()
 

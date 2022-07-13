@@ -1,10 +1,5 @@
-from rest_framework.serializers import (
-    StringRelatedField,
-    ModelSerializer,
-    FloatField
-)
+from rest_framework.serializers import FloatField, ModelSerializer, StringRelatedField
 
-from ..models import 
 
 class ExchangeOrganisationSerializer(ModelSerializer):
 

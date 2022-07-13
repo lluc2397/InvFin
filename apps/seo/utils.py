@@ -1,12 +1,10 @@
-from django.contrib.gis.geoip2 import GeoIP2
 from django.conf import settings
+from django.contrib.gis.geoip2 import GeoIP2
+from django.contrib.sessions.models import Session
 from django.urls import URLPattern, URLResolver
 
-from .models import (
-    Visiteur
-)
+from .models import Visiteur
 
-from django.contrib.sessions.models import Session
 
 class SeoInformation:
 

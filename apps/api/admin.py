@@ -1,20 +1,19 @@
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
-
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
-from .models import(
-    Key,
-    ReasonKeyRequested,
+from .models import (
     CompanyRequestAPI,
-    TermRequestAPI,
     Endpoint,
     EndpointsCategory,
-    SuperinvestorRequestAPI
+    Key,
+    ReasonKeyRequested,
+    SuperinvestorRequestAPI,
+    TermRequestAPI,
 )
-            
+
 
 @admin.register(Key)
 class KeyAdmin(admin.ModelAdmin):

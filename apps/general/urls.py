@@ -1,15 +1,15 @@
 from django.urls import path
 
 from .views import (
+    NotificationsListView,
+    coming_soon,
     create_comment_view,
     create_vote_view,
-    suggest_list_search,
-    search_results,
-    update_favorites,
-    coming_soon,
+    delete_notification,
     email_opened_view,
-    NotificationsListView,
-    delete_notification
+    search_results,
+    suggest_list_search,
+    update_favorites,
 )
 
 app_name = "general"

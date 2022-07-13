@@ -1,18 +1,16 @@
+from cloudinary.models import CloudinaryField
+from django.contrib.auth import get_user_model
 from django.db.models import (
-    Model,
-    CharField,
-    SET_NULL,
     CASCADE,
+    SET_NULL,
+    BooleanField,
+    CharField,
     ForeignKey,
     IntegerField,
-    BooleanField,
+    Model,
 )
-
 from django.template.defaultfilters import slugify
 
-from cloudinary.models import CloudinaryField
-
-from django.contrib.auth import get_user_model
 User = get_user_model()
 
 from apps.general.bases import BaseEmail, BaseGenericModels

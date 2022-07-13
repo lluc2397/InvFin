@@ -1,11 +1,10 @@
-from config import celery_app
 from django.apps import apps
 
-
 from apps.empresas.models import Company
+from apps.escritos.models import Term
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog
-from apps.escritos.models import Term
+from config import celery_app
 
 
 @celery_app.task()

@@ -1,26 +1,28 @@
-from django.db.models import (
-    CharField,
-    ForeignKey,
-    DateTimeField,
-    SET_NULL,
-    Model,
-    IntegerField,
-    CASCADE,
-    DateField,
-    BooleanField,
-    ManyToManyField,
-    OneToOneField
-)
-
 from ckeditor.fields import RichTextField
-from django.urls import reverse
-from django.db.models import Avg, Sum
 from django.contrib.auth import get_user_model
+from django.db.models import (
+    CASCADE,
+    SET_NULL,
+    Avg,
+    BooleanField,
+    CharField,
+    DateField,
+    DateTimeField,
+    ForeignKey,
+    IntegerField,
+    ManyToManyField,
+    Model,
+    OneToOneField,
+    Sum,
+)
+from django.urls import reverse
+
 User = get_user_model()
 
-from apps.general.bases import BaseEmail, BaseEscrito, BaseComment, BaseNewsletter
+from apps.general.bases import BaseComment, BaseEmail, BaseEscrito, BaseNewsletter
 
 from .managers import PublicBlogManager
+
 
 class WritterProfile(Model):
     user = OneToOneField(User, on_delete=SET_NULL, null=True, related_name="writter_profile")

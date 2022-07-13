@@ -1,5 +1,5 @@
 from rest_framework.response import Response
-from rest_framework.throttling import UserRateThrottle, BaseThrottle
+from rest_framework.throttling import BaseThrottle, UserRateThrottle
 from rest_framework.views import APIView
 
 # class RandomRateThrottle(BaseThrottle):

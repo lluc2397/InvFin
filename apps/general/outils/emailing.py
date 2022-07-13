@@ -1,8 +1,8 @@
+from django.apps import apps
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.mail import EmailMessage, send_mail
 from django.template.loader import render_to_string
-from django.conf import settings
-from django.apps import apps
-from django.contrib.auth import get_user_model
 
 User = get_user_model()
 

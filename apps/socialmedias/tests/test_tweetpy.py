@@ -1,26 +1,22 @@
 from django.test import TestCase
 
+from apps.empresas.models import Company
 from apps.escritos.models import Term
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog
-from apps.empresas.models import Company
-
-from apps.socialmedias.socialposter.tweetpy import Twitter
 from apps.socialmedias.models import (
-    CompanySharedHistorial,
     BlogSharedHistorial,
+    CompanySharedHistorial,
     NewsSharedHistorial,
-    TermSharedHistorial,
     ProfileSharedHistorial,
-    QuestionSharedHistorial
+    QuestionSharedHistorial,
+    TermSharedHistorial,
 )
-from ..poster import SocialPosting
+from apps.socialmedias.socialposter.tweetpy import Twitter
 
-from .factories import (
-    EmojiFactory,
-    DefaultTilteFactory,
-    HashtagFactory
-)
+from ..poster import SocialPosting
+from .factories import DefaultTilteFactory, EmojiFactory, HashtagFactory
+
 
 class PosterTest(TestCase):
     def setUp(self) -> None:

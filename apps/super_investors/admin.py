@@ -1,11 +1,6 @@
 from django.contrib import admin
 
-from .models import (
-    Superinvestor, 
-    SuperinvestorActivity, 
-    Period,
-    SuperinvestorHistory
-)
+from .models import Period, Superinvestor, SuperinvestorActivity, SuperinvestorHistory
 
 
 @admin.register(SuperinvestorHistory)

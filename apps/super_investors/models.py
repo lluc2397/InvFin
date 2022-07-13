@@ -1,21 +1,21 @@
-from django.db.models import (
-    Model,
-    CharField,
-    SET_NULL,
-    OneToOneField,
-    ManyToManyField,
-    ForeignKey,
-    DateTimeField,
-    DateField,
-    BooleanField,
-    PositiveIntegerField,
-    FloatField,
-    IntegerField,
-    TextField
-)
-from django.urls import reverse
-from django.template.defaultfilters import slugify
 from django.contrib.auth import get_user_model
+from django.db.models import (
+    SET_NULL,
+    BooleanField,
+    CharField,
+    DateField,
+    DateTimeField,
+    FloatField,
+    ForeignKey,
+    IntegerField,
+    ManyToManyField,
+    Model,
+    OneToOneField,
+    PositiveIntegerField,
+    TextField,
+)
+from django.template.defaultfilters import slugify
+from django.urls import reverse
 
 from apps.empresas.models import Company
 from apps.general.bases import BaseFavoritesHistorial

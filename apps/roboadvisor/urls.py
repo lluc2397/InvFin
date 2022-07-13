@@ -1,13 +1,13 @@
 from django.urls import path
-from .views import (
-    RoboAdvisorServicesListView,
-    RoboAdvisorServiceOptionView,
-    RoboAdvisorResultView,
-    RoboAdvisorUserResultsListView
-)
 
 from apps.roboadvisor.api.urls import urlpatterns
 
+from .views import (
+    RoboAdvisorResultView,
+    RoboAdvisorServiceOptionView,
+    RoboAdvisorServicesListView,
+    RoboAdvisorUserResultsListView,
+)
 
 app_name = "roboadvisor"
 

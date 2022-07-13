@@ -1,11 +1,12 @@
 from django.contrib import admin
+
 from .models import (
-    TermContent,
     Term,
+    TermContent,
     TermCorrection,
     TermsComment,
-    TermsRelatedToResume
-    )
+    TermsRelatedToResume,
+)
 
 
 @admin.action(description='Look for images')

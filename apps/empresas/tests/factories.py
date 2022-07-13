@@ -2,10 +2,10 @@ from factory import SubFactory
 from factory.django import DjangoModelFactory
 
 from apps.empresas.models import (
-    Company, 
-    IncomeStatement, 
-    ExchangeOrganisation, 
-    Exchange
+    Company,
+    Exchange,
+    ExchangeOrganisation,
+    IncomeStatement,
 )
 
 

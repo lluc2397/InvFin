@@ -1,16 +1,14 @@
 from django.conf import settings
-from django.core.mail import send_mail
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
 from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+
 User = get_user_model()
 
 import stripe
 
-from .models import (
-    StripeWebhookResponse, 
-    
-)
+from .models import StripeWebhookResponse
 
 stripe.api_key = settings.STRIPE_PRIVATE
 

@@ -1,16 +1,15 @@
 from django.urls import path
 
 from .views import (
+    CreatePublicBlogPostView,
     PublicBlogDetailsView,
     PublicBlogsListView,
     UpdateBlogNewsletterView,
-    user_become_writter_view,
-    CreatePublicBlogPostView,
     UpdatePublicBlogPostView,
-    following_management_view,
     WritterOwnBlogsListView,
     create_newsletter_for_blog,
-    UpdateBlogNewsletterView
+    following_management_view,
+    user_become_writter_view,
 )
 
 app_name = "public_blog"

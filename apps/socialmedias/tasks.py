@@ -1,22 +1,22 @@
 import random
 
-from config import celery_app
-
+from apps.empresas.company.update import UpdateCompany
+from apps.empresas.models import Company
 from apps.escritos.models import Term
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog, WritterProfile
-from apps.empresas.models import Company
-from apps.empresas.company.update import UpdateCompany
+from config import celery_app
 
-from .poster import SocialPosting
 from .models import (
-    CompanySharedHistorial,
     BlogSharedHistorial,
+    CompanySharedHistorial,
     NewsSharedHistorial,
-    TermSharedHistorial,
     ProfileSharedHistorial,
-    QuestionSharedHistorial
+    QuestionSharedHistorial,
+    TermSharedHistorial,
 )
+from .poster import SocialPosting
+
 
 @celery_app.task()
 def socialmedia_share_company():

@@ -1,29 +1,26 @@
 from django.test import TestCase
-
-from django.utils.safestring import mark_safe
 from django.utils.html import strip_tags
+from django.utils.safestring import mark_safe
 
+from apps.empresas.models import Company
 from apps.escritos.models import Term
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog
-from apps.empresas.models import Company
 from apps.socialmedias.models import (
-    CompanySharedHistorial,
     BlogSharedHistorial,
+    CompanySharedHistorial,
     NewsSharedHistorial,
-    TermSharedHistorial,
     ProfileSharedHistorial,
-    QuestionSharedHistorial
+    QuestionSharedHistorial,
+    TermSharedHistorial,
 )
-# from apps.public_blog.tests.factories
 
 from ..poster import SocialPosting
+from .factories import DefaultTilteFactory, EmojiFactory, HashtagFactory
 
-from .factories import (
-    EmojiFactory,
-    DefaultTilteFactory,
-    HashtagFactory
-)
+# from apps.public_blog.tests.factories
+
+
 
 
 class PosterTest(TestCase):

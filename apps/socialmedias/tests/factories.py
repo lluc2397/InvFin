@@ -1,11 +1,7 @@
 from factory import SubFactory
 from factory.django import DjangoModelFactory
 
-from apps.socialmedias.models import (
-    Emoji,
-    DefaultTilte,
-    Hashtag
-)
+from apps.socialmedias.models import DefaultTilte, Emoji, Hashtag
 
 
 class EmojiFactory(DjangoModelFactory):

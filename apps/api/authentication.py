@@ -1,6 +1,6 @@
+from rest_framework import status
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
-from rest_framework import status
 
 from .models import Key
 

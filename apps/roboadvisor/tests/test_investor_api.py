@@ -1,10 +1,9 @@
+from django.test import RequestFactory
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from django.test import RequestFactory
-
-from apps.users.tests.factories import UserFactory
 from apps.empresas.tests.factories import CompanyFactory
+from apps.users.tests.factories import UserFactory
 
 from ..api.views import (
     RoboAdvisorQuestionCompanyAnalysisAPIView,
@@ -13,15 +12,11 @@ from ..api.views import (
     RoboAdvisorQuestionPortfolioAssetsWeightAPIView,
     RoboAdvisorQuestionPortfolioCompositionAPIView,
     RoboAdvisorQuestionRiskAversionAPIView,
-    RoboAdvisorQuestionStocksPortfolioAPIView
+    RoboAdvisorQuestionStocksPortfolioAPIView,
 )
-
 from ..views import RoboAdvisorResultView
+from .factories import RoboAdvisorServiceFactory, RoboAdvisorServiceStepFactory
 
-from .factories import (
-    RoboAdvisorServiceFactory,
-    RoboAdvisorServiceStepFactory
-)
 
 class InvoicesAllAPITest(APITestCase):
     def setUp(self):

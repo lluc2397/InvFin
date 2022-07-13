@@ -1,9 +1,9 @@
 from datetime import datetime
 
 from apps.seo.models import UserCompanyVisited, VisiteurCompanyVisited
+from apps.seo.utils import SeoInformation
 
 from .models import Company
-from apps.seo.utils import SeoInformation
 
 
 def save_search(request, model_visited):

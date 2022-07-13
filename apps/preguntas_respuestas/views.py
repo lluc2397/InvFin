@@ -1,28 +1,16 @@
-from django.shortcuts import render,redirect
-from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import redirect, render
+from django.views.generic import CreateView, DetailView, ListView, UpdateView, View
 
-from django.views.generic import (
-	ListView,
-	View,
-	DetailView,
-	CreateView,
-	UpdateView)
-
-from apps.seo.views import SEODetailView, SEOListView
 from apps.general.tasks import prepare_notifications_task
+from apps.seo.views import SEODetailView, SEOListView
 
-from .models import (
-    Question,
-    Answer
-)
-
-from .forms import (
-	CreateQuestionForm
-)
+from .forms import CreateQuestionForm
+from .models import Answer, Question
 
 User = get_user_model()
 

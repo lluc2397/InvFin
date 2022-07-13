@@ -1,21 +1,22 @@
-from django.shortcuts import redirect
-from django.views.generic import (
-    ListView, 
-    DetailView, 
-    RedirectView,
-    View,
-    FormView,
-    TemplateView
-)
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect
+from django.views.generic import (
+    DetailView,
+    FormView,
+    ListView,
+    RedirectView,
+    TemplateView,
+    View,
+)
 
 from apps.escritos.models import Term, TermsRelatedToResume
-from apps.public_blog.models import PublicBlog
 from apps.preguntas_respuestas.models import Question
+from apps.public_blog.models import PublicBlog
 
-from .models import Promotion
 from .mixins import SEOViewMixin
+from .models import Promotion
+
 
 def redirect_old_urls(request, ques_slug=False, term_slug=False, publs_slug=False):
     if ques_slug == False and term_slug == False:

@@ -1,13 +1,8 @@
-from rest_framework.serializers import (
-    StringRelatedField,
-    ModelSerializer,
-    FloatField,
-    
-)
+from rest_framework.serializers import FloatField, ModelSerializer, StringRelatedField
 
 from ..models import (
+    InvestorProfile,
     RoboAdvisorQuestionCompanyAnalysis,
-    RoboAdvisorServiceStep,
     RoboAdvisorQuestionFinancialSituation,
     RoboAdvisorQuestionInvestorExperience,
     RoboAdvisorQuestionPortfolioAssetsWeight,
@@ -15,8 +10,8 @@ from ..models import (
     RoboAdvisorQuestionRiskAversion,
     RoboAdvisorQuestionStocksPortfolio,
     RoboAdvisorService,
+    RoboAdvisorServiceStep,
     TemporaryInvestorProfile,
-    InvestorProfile
 )
 
 

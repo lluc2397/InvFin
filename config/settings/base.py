@@ -1,6 +1,7 @@
 from pathlib import Path
-from django.contrib.messages import constants as messages
+
 import environ
+from django.contrib.messages import constants as messages
 from imagekitio import ImageKit
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent

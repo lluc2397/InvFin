@@ -1,10 +1,9 @@
 import json
+from datetime import datetime
 
 from django import template
 from django.contrib.auth.models import Group
-from django.utils.html import strip_tags, format_html
-
-from datetime import datetime
+from django.utils.html import format_html, strip_tags
 
 register = template.Library()
 

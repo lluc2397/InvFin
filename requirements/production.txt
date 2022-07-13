@@ -1,4 +1,4 @@
--r base.txt
+-r requirements.txt
 
 Collectfast==2.2.0  # https://github.com/antonagestam/collectfast
 sentry-sdk  # https://github.com/getsentry/sentry-python

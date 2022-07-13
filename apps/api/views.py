@@ -1,24 +1,19 @@
-from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.apps import apps
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 from django.views.generic import ListView
-	
-from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework import parsers, status
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.compat import coreapi, coreschema
+from rest_framework.response import Response
 from rest_framework.schemas import ManualSchema
 from rest_framework.schemas import coreapi as coreapi_schema
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.views import APIView
 
 from apps.seo.utils import SeoInformation
 
-from .models import (
-    Key, 
-    ReasonKeyRequested,
-    EndpointsCategory
-)
+from .models import EndpointsCategory, Key, ReasonKeyRequested
 from .serializers import AuthKeySerializer
 
 

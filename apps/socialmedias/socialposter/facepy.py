@@ -1,13 +1,9 @@
-import requests
 import datetime
 
+import requests
 from django.conf import settings
 
-from ..models import (
-    DefaultTilte,
-    Emoji,
-    Hashtag
-)
+from ..models import DefaultTilte, Emoji, Hashtag
 
 # logger = logging.getLogger('longs')
 

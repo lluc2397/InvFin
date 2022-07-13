@@ -1,29 +1,29 @@
 from rest_framework.serializers import (
-    StringRelatedField,
     ModelSerializer,
-    SerializerMethodField
+    SerializerMethodField,
+    StringRelatedField,
 )
 
 from apps.empresas.models import (
-    ExchangeOrganisation,
-    Exchange,
-    Company,
-    CompanyStockPrice,
-    IncomeStatement,
     BalanceSheet,
     CashflowStatement,
-    RentabilityRatio,
+    Company,
+    CompanyGrowth,
+    CompanyStockPrice,
+    EficiencyRatio,
+    EnterpriseValueRatio,
+    Exchange,
+    ExchangeOrganisation,
+    FreeCashFlowRatio,
+    IncomeStatement,
     LiquidityRatio,
     MarginRatio,
-    FreeCashFlowRatio,
-    PerShareValue,
     NonGaap,
     OperationRiskRatio,
-    EnterpriseValueRatio,
-    CompanyGrowth,
-    EficiencyRatio,
+    PerShareValue,
     PriceToRatio,
-    )
+    RentabilityRatio,
+)
 
 
 class ExchangeOrganisationSerializer(ModelSerializer):

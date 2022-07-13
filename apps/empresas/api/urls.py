@@ -2,11 +2,11 @@ from django.urls import path
 
 from .views import (
     AllExchangesAPIView,
-    CompleteCompanyAPIView,
     BasicCompanyAPIView,
-    CompanyIncomeStatementAPIView,
     CompanyBalanceSheetAPIView,
-    CompanyCashflowStatementAPIView
+    CompanyCashflowStatementAPIView,
+    CompanyIncomeStatementAPIView,
+    CompleteCompanyAPIView,
 )
 
 urlpatterns = [

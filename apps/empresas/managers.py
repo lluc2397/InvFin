@@ -1,11 +1,7 @@
 import random
 
-from django.db.models import (
-    Manager,
-    Q,
-    F,
-    Count
-)
+from django.db.models import Count, F, Manager, Q
+
 
 class CompanyManager(Manager):
     def only_essential(self):

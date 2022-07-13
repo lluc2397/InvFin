@@ -1,11 +1,9 @@
-import requests
-import yfinance as yf
-import yahooquery as yq
-
 from datetime import datetime
 
+import requests
+import yahooquery as yq
+import yfinance as yf
 from django.conf import settings
-
 
 FINHUB_TOKEN = settings.FINHUB_TOKEN
 

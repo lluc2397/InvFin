@@ -1,28 +1,22 @@
-from django.test import TestCase
 from django.conf import settings
+from django.test import TestCase
 
+from apps.empresas.models import Company
 from apps.escritos.models import Term
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog
-from apps.empresas.models import Company
-
-from apps.socialmedias.socialposter.facepy import Facebook
 from apps.socialmedias.models import (
-    CompanySharedHistorial,
     BlogSharedHistorial,
+    CompanySharedHistorial,
     NewsSharedHistorial,
+    QuestionSharedHistorial,
     TermSharedHistorial,
-    QuestionSharedHistorial
 )
+from apps.socialmedias.socialposter.facepy import Facebook
+
 from ..poster import SocialPosting
-
 from .data import AAPL
-from .factories import (
-    EmojiFactory,
-    DefaultTilteFactory,
-    HashtagFactory
-)
-
+from .factories import DefaultTilteFactory, EmojiFactory, HashtagFactory
 
 test_page_id = settings.NEW_FACEBOOK_ID
 test_page_token = settings.NEW_FB_PAGE_ACCESS_TOKEN

@@ -1,10 +1,6 @@
-from django.forms import (
-    ModelForm,
-    ChoiceField,
-    CharField,
-    Form
-)
-from .models import WritterProfile, PublicBlog
+from django.forms import CharField, ChoiceField, Form, ModelForm
+
+from .models import PublicBlog, WritterProfile
 
 
 class WritterProfileForm(ModelForm):

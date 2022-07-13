@@ -1,24 +1,23 @@
+import json
+
+import yahooquery as yq
 from django.contrib.auth import get_user_model
-from django.views.generic import ListView
-from django.http.response import JsonResponse, HttpResponse
 from django.db.models import Q
+from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.views.generic import ListView
 
 from apps.empresas.company.retreive_data import RetreiveCompanyData
-from apps.empresas.valuations import discounted_cashflow
 from apps.empresas.models import Company
+from apps.empresas.valuations import discounted_cashflow
 
+from ..forms import UserCompanyObservationForm
 from ..models import (
     UserCompanyObservation,
     UserScreenerMediumPrediction,
     UserScreenerSimplePrediction,
-    YahooScreener
+    YahooScreener,
 )
-from ..forms import UserCompanyObservationForm
-
-import json
-import yahooquery as yq
-
 
 User = get_user_model()
 

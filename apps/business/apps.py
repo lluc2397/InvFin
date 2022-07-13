@@ -6,4 +6,4 @@ class BusinessConfig(AppConfig):
     name = 'apps.business'
 
     def ready(self):
-        import apps.business.signals.signals # noqa
+        import apps.business.signals.signals  # noqa

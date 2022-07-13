@@ -1,26 +1,25 @@
 from datetime import datetime
 
+from django.contrib.auth import get_user_model
 from django.db.models import (
-    Model,
-    CharField,
     SET_NULL,
-    JSONField,
-    ForeignKey,
-    TextField,
-    DateTimeField,
     BooleanField,
-    PositiveIntegerField,
-    IntegerField,
+    CharField,
+    DateField,
+    DateTimeField,
     FloatField,
-    DateField
+    ForeignKey,
+    IntegerField,
+    JSONField,
+    Model,
+    PositiveIntegerField,
+    TextField,
 )
-
 from django.urls import reverse
 
-from django.contrib.auth import get_user_model
+from apps.empresas.company.extension import CompanyExtended
 
 from .managers import CompanyManager, CompanyUpdateLogManager
-from apps.empresas.company.extension import CompanyExtended
 
 User = get_user_model()
 

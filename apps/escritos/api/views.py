@@ -1,12 +1,8 @@
+from apps.api.pagination import StandardResultPagination
 from apps.api.views import BaseAPIView
-from apps.api.pagination import StandardResultPagination 
 from apps.escritos.models import Term, TermContent
 
-from .serializers import (
-    TermSerializer, 
-    TermContentSerializer,
-    AllTermsSerializer
-)
+from .serializers import AllTermsSerializer, TermContentSerializer, TermSerializer
 
 
 class AllTermsAPIView(BaseAPIView):

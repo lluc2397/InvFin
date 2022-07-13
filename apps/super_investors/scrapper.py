@@ -1,18 +1,13 @@
-from bs4 import BeautifulSoup as bs
-import requests
-import pandas as pd
 from datetime import datetime
 
+import pandas as pd
+import requests
+from bs4 import BeautifulSoup as bs
 from django.utils import timezone
 
 from apps.empresas.models import Company
 
-from .models import (
-    Superinvestor,
-    SuperinvestorActivity,
-    Period,
-    SuperinvestorHistory
-)
+from .models import Period, Superinvestor, SuperinvestorActivity, SuperinvestorHistory
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36',

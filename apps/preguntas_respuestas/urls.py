@@ -1,11 +1,12 @@
 from django.urls import path
+
 from .views import (
-    QuestionsView,
-    QuestionDetailsView,
     CreateQuestionView,
-    create_answer_view,
+    QuestionDetailsView,
+    QuestionsView,
+    UpdateQuestionView,
     accept_answer,
-    UpdateQuestionView
+    create_answer_view,
 )
 
 app_name = "preguntas_respuestas"

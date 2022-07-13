@@ -1,7 +1,7 @@
 from django.core.management import BaseCommand
 from django.db import connection
 
-from apps.socialmedias.models import Emoji, DefaultTilte, Hashtag
+from apps.socialmedias.models import DefaultTilte, Emoji, Hashtag
 
 IG_HASHTAGS = ["valueinvestor", "valueinvesting", "invertirenvenezuela", "invertirencolombia", "invertirenespaña", "invertirmejor®", 
  "ingresospasivos", "inversionista", "inversionesinteligente", "bolsas", "inversión"]

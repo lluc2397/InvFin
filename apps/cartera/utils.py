@@ -1,8 +1,4 @@
-from .models import (
-    PositionMovement,
-    Income,
-    Spend
-)
+from .models import Income, PositionMovement, Spend
 
 # class MovementsManagement:
 
@@ -28,4 +24,3 @@ from .models import (
 #             observacion = ,
 #             fee = ,
 #             )
-            

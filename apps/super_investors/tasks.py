@@ -1,10 +1,10 @@
+from django.conf import settings
+from django.core.mail import send_mail
+
 from config import celery_app
 
-from django.core.mail import send_mail
-from django.conf import settings
-
 from .models import Superinvestor, SuperinvestorActivity
-from .scrapper import get_investors_accronym, get_activity, get_historial
+from .scrapper import get_activity, get_historial, get_investors_accronym
 
 
 @celery_app.task()

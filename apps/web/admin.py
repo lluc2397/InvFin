@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import WebsiteLegalPage, WebsiteEmailTrack, WebsiteEmail, WebsiteEmailsType
+
+from .models import WebsiteEmail, WebsiteEmailsType, WebsiteEmailTrack, WebsiteLegalPage
+
 
 @admin.register(WebsiteLegalPage)
 class WebsiteLegalPageAdmin(admin.ModelAdmin):

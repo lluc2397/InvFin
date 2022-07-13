@@ -1,23 +1,20 @@
-from django.views.generic import ListView, DetailView
-from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-from .mixins import ServicePaymentMixin
-from .models import (
-    RoboAdvisorService,
-	RoboAdvisorUserServiceActivity
-)
-from .forms import (
-	RoboAdvisorQuestionInvestorExperienceForm,
-	RoboAdvisorQuestionCompanyAnalysisForm,
-	RoboAdvisorQuestionFinancialSituationForm,
-	RoboAdvisorQuestionPortfolioAssetsWeightForm,
-	RoboAdvisorQuestionPortfolioCompositionForm,
-	RoboAdvisorQuestionRiskAversionForm
-)
+from django.db.models import Q
+from django.views.generic import DetailView, ListView
 
 from . import constants
 from .brain.investor import get_investor_type
+from .forms import (
+    RoboAdvisorQuestionCompanyAnalysisForm,
+    RoboAdvisorQuestionFinancialSituationForm,
+    RoboAdvisorQuestionInvestorExperienceForm,
+    RoboAdvisorQuestionPortfolioAssetsWeightForm,
+    RoboAdvisorQuestionPortfolioCompositionForm,
+    RoboAdvisorQuestionRiskAversionForm,
+)
+from .mixins import ServicePaymentMixin
+from .models import RoboAdvisorService, RoboAdvisorUserServiceActivity
+
 # If user ask for a company recom and it doesn't have profile, recommend to tkae the test
 
 class RoboAdvisorServicesListView(ListView):

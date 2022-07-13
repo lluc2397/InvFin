@@ -2,10 +2,10 @@ import math
 import operator
 from statistics import mean
 
-from django.db.models import Model, Avg
+from django.db.models import Avg, Model
 
-from apps.general.utils import ChartSerializer
 from apps.empresas.valuations import discounted_cashflow
+from apps.general.utils import ChartSerializer
 
 from .retreive_data import RetreiveCompanyData
 

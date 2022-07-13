@@ -1,9 +1,9 @@
+import time
+
 from django.apps import apps
 from django.contrib.auth import get_user_model
 
-import time
-
-from .. import constants as NotificationsType 
+from .. import constants as NotificationsType
 from ..models import Notification
 
 User = get_user_model()

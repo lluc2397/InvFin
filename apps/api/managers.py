@@ -3,6 +3,7 @@ import os
 
 from django.db.models import Manager
 
+
 class KeyManager(Manager):
 
     def key_is_active(self, key):

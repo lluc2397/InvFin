@@ -1,31 +1,30 @@
-from django.urls import reverse
+from ckeditor.fields import RichTextField
+from django.contrib.auth import get_user_model
 from django.db.models import (
-    Model,
-    DateTimeField,
     SET_NULL,
     BooleanField,
-    ForeignKey,
-    OneToOneField,
-    FloatField,
-    IntegerField,
-    ManyToManyField,
     CharField,
+    DateTimeField,
+    FloatField,
+    ForeignKey,
+    IntegerField,
     JSONField,
+    ManyToManyField,
+    Model,
+    OneToOneField,
+    SlugField,
     TextField,
-    SlugField
 )
 from django.template.defaultfilters import slugify
+from django.urls import reverse
 
 from apps.empresas.models import Company
 from apps.etfs.models import Etf
 
-from ckeditor.fields import RichTextField
-
-from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from apps.general.models import Category, Tag
 from apps.general.bases import BaseFavoritesHistorial
+from apps.general.models import Category, Tag
 
 from . import constants
 

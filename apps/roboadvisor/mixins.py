@@ -3,8 +3,9 @@ import datetime
 from apps.users.constants import ROBOADVISOR_USAGE
 from apps.users.models import CreditUsageHistorial
 
-from .models import RoboAdvisorUserServiceActivity
 from .brain.investor import get_investor_type
+from .models import RoboAdvisorUserServiceActivity
+
 
 class ServicePaymentMixin:
     def get_service_activity(self):

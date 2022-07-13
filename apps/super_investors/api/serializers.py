@@ -1,14 +1,10 @@
 from rest_framework.serializers import (
-    StringRelatedField,
     ModelSerializer,
-    SerializerMethodField
+    SerializerMethodField,
+    StringRelatedField,
 )
 
-from ..models import (
-    Superinvestor,
-    SuperinvestorActivity,
-    SuperinvestorHistory
-)
+from ..models import Superinvestor, SuperinvestorActivity, SuperinvestorHistory
 
 
 class SuperinvestorSerializer(ModelSerializer):

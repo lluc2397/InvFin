@@ -1,17 +1,16 @@
-import operator
 import logging
+import operator
 import re
 
 from django.conf import settings
-from django.urls import reverse, resolve
 from django.http import HttpResponseRedirect
+from django.urls import resolve, reverse
 from django.utils.cache import patch_vary_headers
 from django.utils.deprecation import MiddlewareMixin
 
 from apps.public_blog.urls import urlpatterns
 
 from .utils import HostChecker
-
 
 logger = logging.getLogger(__name__)
 lower = operator.methodcaller('lower')

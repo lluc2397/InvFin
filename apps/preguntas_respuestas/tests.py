@@ -1,20 +1,19 @@
 import pytest
-from django.test import TestCase
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.messages.middleware import MessageMiddleware
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.http import HttpRequest, HttpResponseRedirect
-from django.test import RequestFactory
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
-from django.contrib.auth import get_user_model
+
 User = get_user_model()
 
 from apps.users.tests.factories import UserFactory
-from .views import (
-    CreateQuestionView
-)
+
+from .views import CreateQuestionView
 
 pytestmark = pytest.mark.django_db
 

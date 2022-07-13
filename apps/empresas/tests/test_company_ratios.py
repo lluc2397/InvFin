@@ -1,11 +1,12 @@
-from django.test import TestCase
-
 import time
 
-from .factories import CompanyFactory
-from .constants import *
+from django.test import TestCase
 
 from apps.empresas.company.update import UpdateCompany
+
+from .constants import *
+from .factories import CompanyFactory
+
 
 class ScrapCompanyInfoTest(TestCase):
     def setUp(self) -> None:

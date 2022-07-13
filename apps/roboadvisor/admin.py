@@ -2,21 +2,19 @@ from django.contrib import admin
 from django.forms import model_to_dict
 
 from .models import (
-    RoboAdvisorServiceStep,
-    RoboAdvisorService,
-    TemporaryInvestorProfile,
     InvestorProfile,
-
-    RoboAdvisorQuestionInvestorExperience,
     RoboAdvisorQuestionCompanyAnalysis,
     RoboAdvisorQuestionFinancialSituation,
-    RoboAdvisorQuestionRiskAversion,
+    RoboAdvisorQuestionInvestorExperience,
     RoboAdvisorQuestionPortfolioAssetsWeight,
-    RoboAdvisorQuestionStocksPortfolio,
     RoboAdvisorQuestionPortfolioComposition,
-
+    RoboAdvisorQuestionRiskAversion,
+    RoboAdvisorQuestionStocksPortfolio,
+    RoboAdvisorService,
+    RoboAdvisorServiceStep,
     RoboAdvisorUserServiceActivity,
-    RoboAdvisorUserServiceStepActivity
+    RoboAdvisorUserServiceStepActivity,
+    TemporaryInvestorProfile,
 )
 
 

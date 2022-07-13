@@ -8,7 +8,7 @@ from .models import (
     UserCompanyObservation,
     UserScreenerMediumPrediction,
     UserScreenerSimplePrediction,
-    YahooScreener
+    YahooScreener,
 )
 
 

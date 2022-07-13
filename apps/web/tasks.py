@@ -1,10 +1,11 @@
-from config import celery_app
-from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.utils import timezone
+
+from apps.general.tasks import enviar_email_task
+from config import celery_app
 
 from .models import WebsiteEmail
 
-from apps.general.tasks import enviar_email_task
 User = get_user_model()
 
 
