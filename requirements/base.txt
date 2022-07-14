@@ -29,15 +29,17 @@ yfinance
 
 # Django
 # ------------------------------------------------------------------------------
-django
-django-cors-headers
+django<4
+django-cors-headers<4
 django-environ
 gunicorn
 django-allauth
 django-crispy-forms
 crispy-bootstrap5
 django-redis
+
 # Django REST Framework
+# ------------------------------------------------------------------------------
 djangorestframework
 
 # Django extras
@@ -46,7 +48,8 @@ django-widget-tweaks
 django-ckeditor
 django-cleanup
 django-countries
-django-admin-honeypot
+# django-admin-honeypot
+django-admin-honeypot-updated-2021
 django-import-export
 geoip2
 psycopg2-binary # https://github.com/psycopg/psycopg2

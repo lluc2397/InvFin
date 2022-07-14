@@ -1,0 +1,26 @@
+{% load static i18n extra %}
+<div class="row align-items-center py-4">
+    <div class="col-lg-3 col-4">
+        <h6 class="h2 d-inline-block mb-0 mr-5">{{meta_title}}</h6>
+    </div>
+    <div class="col-lg-9 col-8 text-right">
+        <div class="btn-group" role="group" aria-label="Basic outlined example">
+            <a href="{% url 'cartera:cartera_inicio' %}{% utm 'cartera' 'inicio' 'Balance general' %}"
+                class="btn btn-outline-primary">
+                Balance general
+            </a>
+            <a href="{% url 'cartera:financials_inicio' %}{% utm 'cartera' 'inicio' 'Flujo de caja' %}"
+                class="btn btn-outline-primary">
+                Flujo de caja
+            </a>
+            <button id="btnGroupDrop1" type="button" 
+                class="btn btn-outline-primary dropdown-toggle"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                Atajos
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                {% include 'header/private/cartera_dropdowns.html' %}
+            </ul>
+        </div>
+    </div>
+</div>

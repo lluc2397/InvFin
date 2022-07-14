@@ -1,0 +1,41 @@
+{% extends "bases/main_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block extra %}
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+{% endblock extra %}
+{% block header %} <div class="mb-2"></div> {% endblock header%}
+{% block content %}
+<div class="row">
+  <div class="col-lg-4 col-md-12">
+    {% include "side/form_side.html" %}
+  </div>
+  <div class="col-lg-8 col-12-md">
+    <div class="card">
+      <form method="POST">
+        {% csrf_token %}
+        {{ form.media }}
+        {% for field in form %}
+        {% if field.errors %}
+        <div class="alert alert-danger" role="alert">
+        {{ field.errors|striptags }}
+        </div>
+        {% endif %}
+        {% endfor %}
+        <div class="card-body">
+          <h2 class="card-title">Título</h2>
+        <p class="card-text">Sé lo más específico posible. Imagina que estás haciendo la pregunta a alguien en concreto.</p>
+        {{form.title|as_crispy_field}}
+        <hr class="invis">
+        <h2 class="card-title">Contenido</h2>
+        <p class="card-text">Incluye toda la información que la comunidad pueda necesitar para poder responderte de la forma más exacta.</p>
+        
+        {{form.content}}
+          <div><button class="btn btn-slack col-12 mt-4" type="submit">Publicar pregunta</button></div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}

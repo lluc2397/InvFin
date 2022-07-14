@@ -1,0 +1,101 @@
+
+{% load extra %}
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+            Rellena todo los campos para calcular el valor intrínseco de la empresa
+        </div>
+        <div class="card-body">
+            <div class="row">
+           
+                    <div class="col-xl-4 col-sm-12">
+                        <div class="form-floating">
+                            <input value="0" type="text" class="form-control" id="opt_growth" placeholder="% crecimiento optimista" aria-required="true">
+                            <label for="opt_growth" class="form-floating">% crecimiento optimista</label>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-sm-12">
+                        <div class="form-floating">
+                            <input value="0" type="text" class="form-control" id="neu_growth" placeholder="% crecimiento neutral" aria-required="true">
+                            <label for="neu_growth" class="form-floating">% crecimiento neutral</label>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-sm-12">
+                        <div class="form-floating ">
+                            <input value="0" type="text" class="form-control" id="pes_growth" placeholder="% crecimiento pesimista" aria-required="true">
+                            <label for="pes_growth" class="form-floating">% crecimiento pesimista</label>
+                        </div>
+                    </div>
+                    <div class="col-12 mt-4" style="text-align: center;">                       
+                        <button onclick="Showresults()" id="evaluar" class="btn btn-warning" >Calcular</button>                     
+                    </div>
+            
+                <div class="col-xl-4 col-sm-12 mt-4" id="val_opt" style="display: none;">
+                    <div id="opt_valuation"></div>
+                </div>
+                <div class="col-xl-4 col-sm-12 mt-4" id="val_neu" style="display: none;">
+                    <div id="neu_valuation"></div>
+                </div>
+                <div class="col-xl-4 col-sm-12 mt-4" id="val_pes" style="display: none;">
+                    <div id="pes_valuation"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% csrf_token %}
+<div class="col-12 mt-4">
+    {% include "empresas/company_parts/predictions/complex_predictions.html" %}
+</div>
+
+  <script>
+     
+  
+  function Showresults() {
+
+    var opt_grow = document.querySelector("#opt_growth").value
+    var neu_grow = document.querySelector("#neu_growth").value
+    var pes_grow = document.querySelector("#pes_growth").value
+    var buyback = "{{the_company_price_related.sharesbuyback}}"
+    var comp = "{{the_company.id}}"
+
+    formData = JSON.stringify({
+        opt_grow : opt_grow,
+        neu_grow : neu_grow,
+        pes_grow : pes_grow,
+        comp : comp,
+        buyback : buyback,
+        })
+    
+    event.preventDefault();
+    $.ajax({
+        url: "{% url 'screener:simple_valuation_view' %}",
+        type: "POST",
+        dataType: "json",
+        data: formData,
+        headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        'X-CSRFToken': csrftoken,
+        
+        },
+        success: (data) => {
+        
+        var valone = document.getElementById("val_opt");
+        var valtwo = document.getElementById("val_neu");
+        var valthree = document.getElementById("val_pes");
+  
+        valone.style.display = "block";
+        valtwo.style.display = "block";
+        valthree.style.display = "block";
+        
+        $('#opt_valuation').append('<div class="form-floating mt-1"><input type="text" class="form-control" value="'+data.opt_valuation+'" readonly><label for="opt_growth" class="form-floating">Valoración optimista</label></div>');
+        $('#neu_valuation').append('<div class="form-floating mt-1"><input type="text" class="form-control" value="'+data.neu_valuation+'" readonly><label for="opt_growth" class="form-floating">Valoración neutral</label></div>');
+        $('#pes_valuation').append('<div class="form-floating mt-1"><input type="text" class="form-control" value="'+data.pes_valuation+'" readonly><label for="opt_growth" class="form-floating">Valoración pesimista</label></div>');
+  
+        
+        },
+      
+    });
+  }
+  
+  </script>

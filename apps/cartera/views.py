@@ -21,21 +21,21 @@ class DefaultCateraView(LoginRequiredMixin, TemplateView):
 
 
 class InicioCarteraView(DefaultCateraView):
-    template_name = "cartera/private/inicio.html"
+    template_name = "private/cartera_inicio.html"
     meta_title = 'Tu gestor patrimonial'
 
 
 class InicioPortfolioView(DefaultCateraView):
-    template_name = "cartera/private/cartera.html"
+    template_name = "private/cartera.html"
     meta_title = 'Tu cartera'
 
 
 class InicioCashflowView(DefaultCateraView):
-    template_name = "cartera/private/financials.html"
+    template_name = "private/financials.html"
     meta_title = 'Tus finanzas'
 
 
 def return_balance_table(request):
     user = request.user
     overall_portfolio_information = user.user_patrimoine.overall_portfolio_information
-    return render(request, 'cartera/tables/balance.html', {'overall_portfolio_information': overall_portfolio_information})
+    return render(request, 'tables/balance.html', {'overall_portfolio_information': overall_portfolio_information})

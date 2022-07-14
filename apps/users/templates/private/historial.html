@@ -1,0 +1,110 @@
+{% extends "bases/base_content.html" %}
+{% load static i18n extra %}
+{% block header %}{% include "header/private.html" %}{% endblock header%}
+
+{% block ListContent %}
+{% for object in content %}
+{% if slug == 'Comentarios' %}
+<div class="card-translucent bg-transparent">
+    <div class="card-body p-3">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex flex-column h-100">
+                    <a href="{{object.content_related.get_absolute_url}}">
+                        <p class="h1 mb-1 pt-2 text-bold">
+                            {{object.content_related.title}}
+                        </p>
+                    </a>
+                    
+                    <div class="d-flex">
+                        {% for tag in object.content_related.tags.all %}
+                        <a href="#" class="badge badge-info text-center mr-2">
+                            <span class="font-weight-bolder">{{tag.name}}</span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-2 mt-2">
+                        <a href="{{object.content_related.get_absolute_url}}">
+                            {{object.content_related.content|safe|truncatechars:200}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% elif slug == 'Aportes' %}
+<div class="card-translucent bg-transparent">
+    <div class="card-body p-3">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex flex-column h-100">
+                    <a href="{{object.content_related.get_absolute_url}}">
+                        <p class="h1 mb-1 pt-2 text-bold">
+                            {{object.title}}
+                        </p>
+                    </a>
+                    {% if object.is_approved %}
+                    <div style="width: 100%;text-align: center;" class="pt-1 pb-1" >
+                        <i class="fa fa-check-circle" style="color: green;font-size:36px;" ></i>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="d-flex">
+                        {% for tag in object.content_related.tags.all %}
+                        <a href="#" class="badge badge-info text-center mr-2">
+                            <span class="font-weight-bolder">{{tag.name}}</span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-2 mt-2">
+                        <a href="{{object.content_related.get_absolute_url}}">
+                            {{object.content|safe}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="card-translucent bg-transparent">
+    <div class="card-body p-3">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex flex-column h-100">
+                    <a href="{{object.get_absolute_url}}">
+                        <p class="h1 mb-1 pt-2 text-bold">
+                            {{object.company.name}}
+                        </p>
+                    </a>
+                    
+                    <div class="d-flex">
+                        <a href="#" class="badge badge-{{object.observation_info.color}} text-center mr-2">
+                            <span class="font-weight-bolder">{{object.observation_info.status}}</span>
+                        </a>
+                    </div>
+                    
+                    <div class="mb-2 mt-2">
+                        <a href="{{object.get_absolute_url}}">
+                            {{object.observation|safe}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% empty %}
+<div class="card-translucent bg-transparent">
+    <div class="card-body p-3">
+        Todavía no has hecho {{slug}}
+        <br>
+        <a href="" class="btn btn-success">Empieza a participar</a>
+    </div>
+</div>
+{% endfor %}
+{% endblock ListContent%}

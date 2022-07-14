@@ -52,7 +52,7 @@ def user_become_writter_view(request):
 
 class PublicBlogsListView(SEOListView):
 	model = PublicBlog
-	template_name = 'public_blog/inicio.html'
+	template_name = 'inicio.html'
 	ordering = ['-published_at']
 	context_object_name = "blogs"
 	meta_description = 'El blog donde tu también puedes escribir de forma libre'
@@ -70,7 +70,7 @@ class PublicBlogsListView(SEOListView):
 
 class PublicBlogDetailsView(SEODetailView):
 	model = PublicBlog
-	template_name = 'public_blog/details.html'
+	template_name = 'details.html'
 	context_object_name = "object"
 	slug_field = 'slug'
 	is_article = True
@@ -95,7 +95,7 @@ class WritterOnlyView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMix
 
 class WritterOwnBlogsListView(WritterOnlyView, DetailView):
 	model = User
-	template_name = 'public_blog/profile/manage_blogs.html'
+	template_name = 'profile/manage_blogs.html'
 	ordering = ['-published_at']
 	slug_field = 'username'
 
@@ -114,7 +114,7 @@ class CreatePublicBlogPostView(WritterOnlyView, CreateView):
 	model = PublicBlog
 	form_class = PublicBlogForm
 	success_message = 'Escrito creado'
-	template_name = 'public_blog/forms/manage_escrito.html'
+	template_name = 'forms/manage_escrito.html'
 
 	def get_context_data(self, **kwargs):
 		context = super(CreatePublicBlogPostView, self).get_context_data(**kwargs)
@@ -138,7 +138,7 @@ class UpdatePublicBlogPostView(WritterOnlyView, UpdateView):
 	model = PublicBlog
 	form_class = PublicBlogForm
 	success_message = 'Escrito actualizado'
-	template_name = 'public_blog/forms/manage_escrito.html'
+	template_name = 'forms/manage_escrito.html'
 
 	def get_success_url(self) -> str:
 		return redirect('public_blog:manage_blogs', kwargs={'slug':self.request.user.username})
@@ -186,7 +186,7 @@ def create_newsletter_for_blog(request, slug):
 			newsletter_form = DefaultNewsletterForm(request.POST)
 			messages.success(request, 'Newsletter creada')
 			return redirect('public_blog:manage_blogs', kwargs={'slug':user.username})
-		return render(request, 'public_blog/forms/create_newsletter.html', context)
+		return render(request, 'forms/create_newsletter.html', context)
 	else:
 		return redirect('public_blog:blog_details', kwargs={'slug':blog.slug})
 
@@ -195,7 +195,7 @@ class UpdateBlogNewsletterView(LoginRequiredMixin, UserPassesTestMixin, SuccessM
 	model = PublicBlogAsNewsletter
 	context_object_name = "newsletter_form"
 	success_message = 'Escrito actualizado'
-	template_name = 'public_blog/forms/update_newsletter.html'
+	template_name = 'forms/update_newsletter.html'
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)

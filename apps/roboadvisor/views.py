@@ -2,6 +2,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.views.generic import DetailView, ListView
 
+from apps.seo.views import SEOListView
+
 from . import constants
 from .brain.investor import get_investor_type
 from .forms import (
@@ -17,9 +19,9 @@ from .models import RoboAdvisorService, RoboAdvisorUserServiceActivity
 
 # If user ask for a company recom and it doesn't have profile, recommend to tkae the test
 
-class RoboAdvisorServicesListView(ListView):
+class RoboAdvisorServicesListView(SEOListView):
 	model = RoboAdvisorService
-	template_name = "roboadvisor/inicio.html"
+	template_name = "inicio.html"
 	context_object_name = "services"
 
 	def get_context_data(self, **kwargs):
@@ -27,7 +29,7 @@ class RoboAdvisorServicesListView(ListView):
 		context["meta_desc"] = 'IA para mejorar las inversiones'
 		context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir, roboadvisor'
 		context["meta_title"] = 'Tu consejero inteligente'
-		context["meta_url"] = '/roboadvisor/'
+		context["meta_url"] = '/'
 
 		if 'roborequest' in self.request.GET:
 			# Show banner to help starting to get credits and start roboadvisor
@@ -37,7 +39,7 @@ class RoboAdvisorServicesListView(ListView):
 
 class RoboAdvisorServiceOptionView(LoginRequiredMixin, DetailView):
 	model = RoboAdvisorService
-	template_name = "roboadvisor/details.html"
+	template_name = "details.html"
 	context_object_name = "service"
 
 	def prepare_forms(self, user, service):
@@ -81,7 +83,7 @@ class RoboAdvisorServiceOptionView(LoginRequiredMixin, DetailView):
 
 class RoboAdvisorResultView(DetailView, ServicePaymentMixin):
 	model = RoboAdvisorService
-	template_name = "roboadvisor/steps/result.html"
+	template_name = "steps/result.html"
 	context_object_name = "service"
 	
 	def get_context_data(self, **kwargs):
@@ -99,7 +101,7 @@ class RoboAdvisorResultView(DetailView, ServicePaymentMixin):
 
 class RoboAdvisorUserResultsListView(LoginRequiredMixin, ListView):
 	model = RoboAdvisorUserServiceActivity
-	template_name = "roboadvisor/own-results.html"
+	template_name = "own-results.html"
 	context_object_name = "services"
 
 	def get_queryset(self):

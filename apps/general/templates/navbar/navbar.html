@@ -1,0 +1,182 @@
+{% load static extra %}
+<nav class="navbar navbar-top sticky-top navbar-expand navbar-dark bg-white border-bottom">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <form class="navbar-search navbar-search-light form-inline mr-sm-3" id="navbar-search-main" action="{% url 'general:searcher'%}" method="POST">
+        {% csrf_token %}
+        <div class="form-group mb-0">
+          <div class="input-group input-group-alternative input-group-merge input-group ui-widgets">
+            <div class="input-group-prepend">
+              <button type="submit" class="input-group-text"><i class="fas fa-search"></i></button>
+            </div>
+            <input class="form-control" id="buscador" name="term" placeholder="Buscar" type="search">
+          </div>
+        </div>
+        <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </form>
+      <ul class="navbar-nav align-items-center  ml-md-auto ">
+        <li class="nav-item d-xl-none">
+          <div class="text-dark pr-3 sidenav-toggler sidenav-toggler" data-action="sidenav-pin" data-target="#sidenav-main">
+            <div class="sidenav-toggler-inner">
+              <i class="sidenav-toggler-line"></i>
+              <i class="sidenav-toggler-line"></i>
+              <i class="sidenav-toggler-line"></i>
+            </div>
+          </div>
+        </li>
+        <li class="nav-item d-sm-none">
+          <a class="nav-link" href="#!" data-action="search-show" data-target="#navbar-search-main">
+            <i class="text-dark fas fa-search"></i>
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link" href="#!" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="text-dark fas fa-bell"></i>
+            {% if count_notifications > 0 %}
+              <span class="badge badge-md badge-circle badge-floating badge-danger border-white">
+                {{count_notifications}}
+              </span>
+            {% endif %}
+          </a>          
+          <div class="dropdown-menu dropdown-menu-xl  dropdown-menu-right  py-0 overflow-hidden">
+            
+            <div class="px-3 py-3">
+              <h6 class="text-sm text-muted m-0">Tienes <strong class="text-primary">{{count_notifications}}</strong> notificaciones</h6>
+            </div>
+            {% include "notifications/notifications_dropdown.html" %}
+            
+            <a href="{% url 'general:notifications_list' %}" class="dropdown-item text-center text-primary font-weight-bold py-3">Ver todas</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link" href="#!" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="text-dark fas fa-th"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-dark bg-default  dropdown-menu-right ">
+            <div class="row shortcuts px-4">
+              <a href="{% url 'cartera:portfolio_inicio' %}{% utm 'navbar' 'Portfolio' %}" class="col-4 shortcut-item">
+                <span class="shortcut-media avatar rounded-circle bg-gradient-red">
+                  <i class="fas fa-hand-holding-usd"></i>
+                </span>
+                <small>Portfolio</small>
+              </a>
+              <a href="{% url 'screener:screener_inicio' %}{% utm 'navbar' 'Screener' %}" class="col-4 shortcut-item">
+                <span class="shortcut-media avatar rounded-circle bg-gradient-purple">
+                  <i class="fas fa-chart-area"></i>
+                </span>
+                <small>Screener</small>
+              </a>
+              <a href="{% url 'roboadvisor:roboadvisor' %}{% utm 'navbar' 'Roboadvisor' %}" class="col-4 shortcut-item">
+                <span class="shortcut-media avatar rounded-circle bg-gradient-info">
+                  <i class="fas fa-robot"></i>
+                </span>
+                <small>Roboadvisor</small>
+              </a>
+              <a href="{% url 'preguntas_respuestas:list_questions' %}{% utm 'navbar' 'Preguntas' %}" class="col-4 shortcut-item">
+                <span class="shortcut-media avatar rounded-circle bg-gradient-green">
+                  <i class="far fa-question-circle"></i>
+                </span>
+                <small>Preguntas</small>
+              </a>
+              <a href="{% url 'escritos:glosario' %}{% utm 'navbar' 'Diccionario' %}" class="col-4 shortcut-item">
+                <span class="shortcut-media avatar rounded-circle bg-gradient-orange">
+                  <i class="fas fa-book"></i>
+                </span>
+                <small>Diccionario</small>
+              </a>
+              <a href="{% url 'public_blog:blog_list' %}{% utm 'navbar' 'Blogs' %}" class="col-4 shortcut-item">
+                <span class="shortcut-media avatar rounded-circle bg-gradient-yellow">
+                  <i class="fas fa-newspaper"></i>
+                </span>
+                <small>Blogs</small>
+              </a>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <ul class="navbar-nav align-items-center  ml-auto ml-md-0 ">
+        <li class="nav-item dropdown">
+          {% if request.user.is_anonymous %}
+          <a class="nav-link pr-0" href="{% url 'account_signup' %}{% utm 'navbar' 'sign-up' %}" role="button" aria-haspopup="true" aria-expanded="false">
+            <div class="media align-items-center">
+              <span class="avatar avatar-sm rounded-circle">
+                <img alt="Image placeholder" src="{% static 'general/assets/img/general/inversorinteligente.WebP' %}">
+              </span>
+              <div class="media-body  ml-2  d-none d-lg-block">
+                <span class="mb-0 text-sm text-dark font-weight-bold">Únete</span>
+              </div>
+            </div>
+          </a>
+          {% else %}
+          <a class="nav-link pr-0" href="#!" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <div class="media align-items-center">
+              <span class="avatar avatar-sm rounded-circle">
+                <img alt="Image placeholder" src="{{request.user.user_profile.foto_perfil.url}}">
+              </span>
+              <div class="media-body  ml-2  d-none d-lg-block">
+                <span class="mb-0 text-sm text-dark font-weight-bold">{{request.user.username}}</span>
+              </div>
+            </div>
+          </a>
+          <div class="dropdown-menu  dropdown-menu-right ">
+            <div class="dropdown-header noti-title">
+              <h6 class="text-overflow m-0">Bienvenido</h6>
+            </div>            
+            <a href="{% url 'users:user_inicio' %}{% utm 'navbar' 'Perfil' %}" class="dropdown-item">
+              <i class="fas fa-user"></i>
+              <span>Perfil</span>
+            </a>
+            <a href="{% url 'users:update' %}{% utm 'navbar' 'Editar' %}" class="dropdown-item">
+              <i class="fas fa-cog"></i>
+              <span>Editar</span>
+            </a>
+            {% if request.user.is_writter %}
+            <a href="{% url 'public_blog:create_blog' %}{% utm 'navbar' 'Escribir' %}" class="dropdown-item">
+              {% else %}
+            <a href="#!" data-bs-toggle="modal" data-bs-target="#BecomingWritterModal" class="dropdown-item">
+              {% endif %}
+              <i class="fas fa-edit"></i>
+              <span>Escribir</span>
+            </a>
+            <a href="{% url 'preguntas_respuestas:create_question' %}{% utm 'navbar' 'Preguntar' %}" class="dropdown-item">
+              <i class="fas fa-question"></i>
+              <span>Preguntar</span>
+            </a>
+            <a href="{% url 'web:soporte' %}{% utm 'navbar' 'Soporte' %}" class="dropdown-item">
+              <i class="fas fa-info"></i>
+              <span>Soporte</span>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="#!" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#CreditsExplanationModal">
+              <i class="fas fa-coins"></i>
+              <span>Créditos</span>
+              <span class="badge badge-danger">{{request.user.user_profile.creditos}}</span>
+            </a>
+            <a href="#!" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#RepExplanationModal">
+              <i class="fas fa-award fa-fw"></i>
+              <span>Reputación</span>
+              <span class="badge badge-success">{{request.user.user_profile.reputation_score}}</span>
+            </a>
+            <a href="#!" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#APIKeyModal">
+              <i class="fas fa-key"></i>
+              <span>Clave API</span>
+            </a>
+          </div>
+          {% endif %}
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<script>
+  $(function() {
+    $("#buscador").autocomplete({
+      source: "{% url 'general:searcher_suggestions' %}",
+      minLength: 1,
+      appendTo: "#navbar-search-main"
+    });
+  });
+</script>

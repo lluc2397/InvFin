@@ -1,9 +1,0 @@
-{% extends 'cartera/modals/base_modal.html' %}
-{% load static i18n extra crispy_forms_tags %}
-
-{% block mainForm %}
-<form method="POST" hx-post="{% url 'cartera:save_new_objectif' %}"
-    hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' class="modal-content">
-{% endblock mainForm %}
-
-{% block formTitle %}Añade un nuevo objetivo o regla{% endblock formTitle %}

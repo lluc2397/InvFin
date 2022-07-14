@@ -1,0 +1,58 @@
+{% extends "sidebar/sidebar.html" %}
+{% load static i18n extra %}
+
+{% block favorites %}
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'account_signup' %}">
+    <i class="fa-solid fa-user-plus"></i>
+    <span class="nav-link-text text-xs">
+      Únete para comentar y recibir
+      <br>
+      noticias de tus empresas
+      <br>
+      y superinversores favoritos.
+    </span>
+  </a>
+</li>
+{% endblock favorites %}
+{% comment %} {% block FavoritesStocks %}
+<li class="nav-item">
+  <a href="{% url 'screener:screener_inicio' %}" class="nav-link">
+    <span class="sidenav-mini-icon"> E </span>
+    <span class="sidenav-normal btn btn-primary btn-sm">
+       Añade una empresa
+    </span>
+  </a>
+</li>
+{% endblock FavoritesStocks %}
+{% block FavoritesSuperinvestors %}
+<li class="nav-item">
+  <a href="{% url 'super_investors:all_superinvestors' %}" class="nav-link">
+    <span class="sidenav-mini-icon"> S </span>
+    <span class="sidenav-normal btn btn-primary btn-sm">
+      Sigue a un superinversor
+   </span>
+  </a>
+</li>
+{% endblock FavoritesSuperinvestors %}
+{% block FavoritesWritters %}
+<li class="nav-item">
+  <a href="{% url 'public_blog:blog_list' %}" class="nav-link">
+    <span class="sidenav-mini-icon"> W </span>
+    <span class="sidenav-normal btn btn-primary btn-sm">
+        Añade un escritor
+     </span>
+  </a>
+</li>
+{% endblock FavoritesWritters %}
+{% block FavoritesTerms %}
+<li class="nav-item">
+  <a href="{% url 'escritos:glosario' %}" class="nav-link">
+    <span class="sidenav-mini-icon"> T </span>
+    <span class="sidenav-normal btn btn-primary btn-sm">
+      Añade un término
+   </span>
+  </a>
+</li>
+{% endblock FavoritesTerms %} {% endcomment %}
+

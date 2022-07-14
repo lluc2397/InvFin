@@ -1,0 +1,13 @@
+{% load static i18n extra %}
+<div class="col-12">
+    <div class="p-4 p-md-5 mb-4 text-white card bg-gradient-success">
+        <div class="row">
+            <h1 class="display-4 text-white fst-italic">¿Ya sabes qué empresa buscas?</h1>
+            <form method="GET" action="{% url 'screener:company_lookup'%}">
+                <div class="text-center">
+                    {% include "search/search-companies.html" %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

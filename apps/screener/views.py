@@ -20,14 +20,13 @@ class CompanyLookUpView(RedirectView):
         
         company = self.request.GET['stock']
         path = company_searched(company, self.request)
-        print(path)
         return HttpResponseRedirect(path)
 
 
 class ScreenerInicioView(SEOListView):
     model = ExchangeOrganisation
     context_object_name = "organisations"
-    template_name = 'screener/inicio.html'
+    template_name = 'screener_inicio.html'
     meta_description = 'Estudia todos loas activos que quieras para ser el mejor inversor. Ten acceso a más de 30000 empresas y 30 años de información.'
     meta_tags = 'empresas, inversiones, analisis de empresas, invertir'
     meta_title = 'Más de 30 años de información financiera de cualquier activo'
@@ -40,7 +39,7 @@ class ScreenerInicioView(SEOListView):
 
 class CompanyScreenerInicioView(SEOListView):
     model = Company
-    template_name = 'screener/empresas/inicio.html'
+    template_name = 'empresas/inicio.html'
     context_object_name = "empresas"
     paginate_by = 50
     slug_url_kwarg = 'slug'
@@ -55,20 +54,20 @@ class CompanyScreenerInicioView(SEOListView):
         context = super().get_context_data(**kwargs)
         name = self.kwargs['slug']
         context["meta_title"] = f'Más de 30 años de información financiera de cualquier empresa de {name}'
-        context["meta_url"] = f'/screener/empresas-de/{name}/'
+        context["meta_url"] = f'/empresas-de/{name}/'
         return context
 
 
 class AllYahooScreenersView(SEOListView):
     model = YahooScreener
-    template_name = 'screener/yahoo-screeners/all-screeners.html'
+    template_name = 'yahoo-screeners/all-screeners.html'
     context_object_name = "screeners"
     meta_title = "Los mejores screeners"
 
 
 class YahooScreenerView(SEODetailView):
     model = YahooScreener
-    template_name = 'screener/yahoo-screeners/screener.html'
+    template_name = 'yahoo-screeners/screener.html'
     context_object_name = "screener"
     slug_url_kwarg = 'slug'
     slug_field = 'slug'
@@ -77,13 +76,13 @@ class YahooScreenerView(SEODetailView):
 
 class EtfScreenerInicioView(ListView):
     model = Etf
-    template_name = 'screener/etfs/inicio.html'
+    template_name = 'etfs/inicio.html'
     context_object_name = "etfs"
 
 
 class CompanyDetailsView(SEODetailView):
     model = Company
-    template_name = 'screener/empresas/details.html'
+    template_name = 'empresas/company_detail.html'
     context_object_name = "the_company"
     slug_field = 'ticker'
 
@@ -205,7 +204,7 @@ class BuyCompanyInfo(RedirectView):
 
 class EtfDetailsView(DetailView):
     model = Etf
-    template_name = 'screener/etfs/details.html'
+    template_name = 'etfs/details.html'
     context_object_name = "etf"
     slug_field = 'ticker'
 

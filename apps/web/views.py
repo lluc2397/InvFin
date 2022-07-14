@@ -33,7 +33,7 @@ class HomePage(SEOTemplateView):
             context['escritor1'] = escritores[0]
             context['escritor2'] = escritores[1]
             context['escritor3'] = escritores[2]
-            template_name = 'web_principal/inicio.html'
+            template_name = 'home_page.html'
 
         response_kwargs.setdefault('content_type', self.content_type)
         return self.response_class(
@@ -46,7 +46,7 @@ class HomePage(SEOTemplateView):
 
 
 class LegalPages(DetailView):
-    template_name = 'web_principal/legals.html'
+    template_name = 'legals.html'
     model = WebsiteLegalPage
     context_object_name = "object"
     slug_field = 'slug'
@@ -95,11 +95,11 @@ def soporte_view(request):
         messages.error(request, 'Ha habido un error')
         return redirect ('web:soporte')
 
-    return render(request, 'web_principal/soporte.html', context)
+    return render(request, 'soporte.html', context)
 
 
 class ExcelView(TemplateView):
-    template_name = 'web_principal/excel.html'
+    template_name = 'excel.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -112,7 +112,7 @@ class ExcelView(TemplateView):
 
 class CreateWebEmailView(CreateView):
     form_class = WebEmailForm
-    template_name = 'web_principal/mandar_emails.html'
+    template_name = 'mandar_emails.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

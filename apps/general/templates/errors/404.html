@@ -1,0 +1,19 @@
+{% extends "bases/base_errors.html" %}
+
+{% block mensaje %}
+
+<body>
+	<div id="notfound">
+		<div class="notfound">
+			<div class="notfound-404">
+				<h1>404</h1>
+			</div>
+			<h2>Ups la página ya no está</h2>
+			<p>Disculpa, quizás hayamos cambiando la página de sitio. No dudes en mandarnos un mensaje si necesitas encontrarla urgentemente.</p>
+			<a href="{% url 'users:user_inicio' %}">Regresar al perfil</a>
+		</div>
+	</div>
+</body>
+
+
+{% endblock mensaje %}

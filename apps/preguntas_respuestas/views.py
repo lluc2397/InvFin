@@ -16,7 +16,7 @@ User = get_user_model()
 
 class QuestionsView(SEOListView):
 	model = Question
-	template_name = 'preguntas_respuestas/inicio.html'
+	template_name = 'inicio.html'
 	context_object_name = "questions"
 	ordering = ['-created_at']
 	meta_description = 'Haz una pregunta o responde a la comunidad para conseguir premios increíbles'
@@ -28,7 +28,7 @@ class QuestionsView(SEOListView):
 
 class QuestionDetailsView(SEODetailView):
 	model = Question
-	template_name = 'preguntas_respuestas/details.html'
+	template_name = 'details.html'
 	context_object_name = "object"
 	slug_field = 'slug'
 
@@ -40,7 +40,7 @@ class QuestionDetailsView(SEODetailView):
 
 class CreateQuestionView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 	form_class = CreateQuestionForm
-	template_name = 'preguntas_respuestas/forms/create_question.html'
+	template_name = 'forms/create_question.html'
 	success_message = 'Pregunta creada'
 
 	def get_context_data(self, **kwargs):
@@ -74,7 +74,7 @@ class CreateQuestionView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
 class UpdateQuestionView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
 	model = Question
-	template_name = 'preguntas_respuestas/forms/update_question.html'
+	template_name = 'forms/update_question.html'
 	context_object_name = "question"
 	slug_field = 'slug'
 	fields = ["title", 'content']

@@ -1,0 +1,83 @@
+{% load static %}
+<!-- <script src="https://cdn.jsdelivr.net/npm/chartjs-gauge@0.3.0/dist/chartjs-gauge.min.js"></script>
+{% include "empresas/company_parts/valuations/price_valuations.html" %} -->
+{% with company_valuation as valuations %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                Valor de empresa
+            </div>
+            <div class="card-body">
+                <div class="table-responsive ">
+                    <table class="table table-borderless">                        
+                        <tbody>
+                            <tr>
+                                <th>Enterprise Value</th>
+                                <td>{{valuations.ev|floatformat:2}}</td>
+                                <th>CAGR</th> 
+                                <td class="pe-4">{{valuations.cagr|floatformat:2}}%</td>                               
+                            </tr>
+                            <tr>
+                                <th>Valoración tradicional</th>
+                                <td>{{valuations.gramvalu|floatformat:2}}</td>
+                                <th>Margen de seguridad</th>
+                                <td>{{valuations.safety_margin_pes|floatformat:2}}%</td>                               
+                            </tr>
+                            <tr>
+                                <th>Valoración DCF</th>
+                                <td>{{valuations.fair_value|floatformat:2}}</td>
+                                <th >Margen de seguridad</th>
+                                <td class="pe-4">{{valuations.safety_margin_opt|floatformat:2}}%</td>                               
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                Múltiplos de valoración
+            </div>
+            <div class="card-body">
+                <div class="table-responsive ">
+                    <table class="table table-borderless">
+                        <thead>
+                        <tr>
+                            <th width="20%"></th>
+                            <th colspan=2><strong>Actual</strong></th>
+                            <th colspan=2><strong>Promedio histórico</strong></th>
+                            {% comment %} <th width="12%">Promedio</th>
+                            <th width="12%"></th> {% endcomment %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for ratio in valuations.most_used_ratios %}
+                            <tr>
+                                <th>{{ratio.name}}</th>
+                                <td>{{ratio.current_value|floatformat:2}}</td>
+                                <td>
+                                    <div class="progress" id='revalorizacion' style="height: 20px;">
+                                        <div class="progress-bar bg-{{ratio.current_color}}" role="progressbar" style="width: 100%" 
+                                        aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">{{ratio.current_veredict}}</div>
+                                    </div>
+                                </td>
+                                <td>{{ratio.average_value|floatformat:2}}</td>
+                                <td>
+                                    <div class="progress" id='revalorizacion' style="height: 20px;">
+                                        <div class="progress-bar bg-{{ratio.average_color}}" role="progressbar" style="width: 100%" 
+                                        aria-valuenow="100"  aria-valuemin="0" aria-valuemax="100">{{ratio.average_veredict}}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>            
+        </div>        
+    </div>  
+</div>
+{% endwith %}

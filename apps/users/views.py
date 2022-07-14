@@ -19,7 +19,7 @@ User = get_user_model()
 
 class UserDetailView(LoginRequiredMixin, TemplateView):
 
-    template_name = 'profile/private/inicio.html'
+    template_name = 'private/inicio.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -31,7 +31,7 @@ class UserDetailView(LoginRequiredMixin, TemplateView):
 
 
 class UserPublicProfileDetailView(DetailView):
-    template_name = 'profile/public/profile.html'
+    template_name = 'public/profile.html'
     model = User
     slug_field = "username"
     slug_url_kwarg = "username"
@@ -104,11 +104,11 @@ def user_update_profile(request):
             
             }
    
-    return render(request, 'profile/private/settings.html', context)
+    return render(request, 'private/settings.html', context)
 
 
 class UserHistorialView(LoginRequiredMixin, TemplateView):
-    template_name = 'profile/private/historial.html'
+    template_name = 'private/historial.html'
 
     def meta_information(self, slug):
         return {

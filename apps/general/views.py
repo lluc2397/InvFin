@@ -172,7 +172,7 @@ def update_favorites(request):
 
 
 def coming_soon(request):
-	return render(request, 'general/complements/coming_soon.html')
+	return render(request, 'complements/coming_soon.html')
 
 
 def email_opened_view(request, uidb64):
@@ -191,7 +191,7 @@ def email_opened_view(request, uidb64):
 
 class NotificationsListView(LoginRequiredMixin, ListView):
 	model = Notification
-	template_name = 'general/notifications/notifications_page.html'
+	template_name = 'notifications/notifications_page.html'
 
 	def get_queryset(self):
 		notifications = Notification.objects.filter(user = self.request.user)

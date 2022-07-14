@@ -1,0 +1,57 @@
+{% extends "bases/base_content.html" %}
+{% load static i18n extra %}
+{% load crispy_forms_tags %}
+{% block header %}{% include "public_blog/header/manage_blogs.html" %}{% endblock header%}
+
+{% block FirstCta %}
+<div class="col-12">
+    {% block FirstCtaContent %}
+    {% endblock FirstCtaContent %}
+</div>
+{% endblock FirstCta %}
+
+{% block FirstContent %}
+{% for blog in blogs %}
+<div class="col-12">
+    <div class="card">
+        <!-- Card body -->
+        <div class="card-body">
+           <div class="row align-items-center">
+              <div class="col-auto">
+                 <!-- Avatar -->
+                 <a href="{% url 'public_blog:blog_details' blog.slug %}" class="avatar avatar-xl rounded">
+                 <img alt="blog" src="{{blog.image}}">
+                 </a>
+              </div>
+              <div class="col ml--2">
+                 <h4 class="mb-0">
+                    <a href="{% url 'public_blog:blog_details' blog.slug %}" >{{blog.title}}</a>
+                 </h4>
+                 <p class="text-sm text-muted mb-0">
+                  {{blog.resume}}
+                 </p>
+                 <p class="text-sm text-muted mt-2">
+                  <span class="me-2"><i class="fas fa-eye"></i> {{ blog.total_views }}  </span>
+                  <span class="me-2"><i style=" font-size: 16px;" class="far fa-comment"></i> {{ blog.number_comments }}</span>
+                  <span class="me-2"><i class="fas fa-star"></i> {{blog.total_votes}}</span>
+                  <span class="me-2"><i class="fas fa-envelope-open"></i> {{blog.opening_rate}}</span>
+                  <a href="#!" class="me-2" data-bs-toggle="modal" data-bs-target="#ShareContentModal"><i class="fas fa-share"></i></a>
+                  {% with object=blog content='term-writter-profile'%}
+                  {% include "modals/share_content.html" %}
+                  {% endwith %}
+                 </p>
+              </div>
+              <div class="col-auto">
+                 {% if blog.send_as_newsletter == True %}
+                 <a href="{% url 'public_blog:create_newsletter_blog' blog.slug %}" class="btn btn-sm btn-primary mb-1">Newsletter</a>
+                 <br>
+                 {% endif %}
+                 <a href="{% url 'public_blog:update_blog' blog.id %}" type="button" class="btn btn-sm btn-primary">Retocar</a>
+                 
+              </div>
+           </div>
+        </div>
+     </div>
+</div>
+{% endfor %}
+{% endblock FirstContent%}

@@ -1,0 +1,18 @@
+{% load static i18n extra crispy_forms_tags%}
+<div class="col-12">
+    <div class="row" hx-trigger="load, refreshObservationsCompany from:body" hx-get="{% url 'screener:list_foda' the_company.id %}" hx-target="this">
+      <div class="text-center">
+        <div class="spinner-border" role="status">
+        Cargando...
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary" hx-get="{% url 'screener:create_company_observation' %}?company_id={{the_company.id}}" hx-target="#dialog">
+        Comenta sobre la empresa
+    </button>
+    
+</div>
+
+<div id="CompanyObservationModal" class="modal">
+  <div id="dialog" class="modal-dialog" hx-target="this"></div>
+</div>

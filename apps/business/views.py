@@ -21,6 +21,7 @@ IS_TESTING = settings.DEBUG is True and settings.CURRENT_DOMAIN != settings.MAIN
 
 class ProductsListView(SEOListView):
     model = Product
+    template_name = 'product_list.html'
     meta_description = 'Las mejores herramientas para ser un mejor inversor, todo, al mejor precio, gratis.'
     meta_title = 'Las herramientas inteligentes para invertir como un experto'
     context_object_name = 'products'
@@ -32,6 +33,7 @@ class ProductsListView(SEOListView):
 
 class ProductDetailView(SEODetailView):
     model = Product
+    template_name = 'product_detail.html'
 
     def get_object(self):
         return self.model._default_manager.get(
@@ -96,7 +98,7 @@ class CheckoutRedirectView(RedirectView):
 
 
 class CreateUserFromCustomerRecentPurchase(SEOTemplateView):
-    template_name = 'business/post_purchase_waiting.html'
+    template_name = 'post_purchase_waiting.html'
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)

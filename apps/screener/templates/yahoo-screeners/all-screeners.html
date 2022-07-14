@@ -1,0 +1,17 @@
+{% extends "bases/base_content.html" %}
+{% load static i18n extra %}
+{% block header %}{% include "headers/screeners.html" %}{% endblock header%}
+{% block FirstCta %}
+{% endblock FirstCta %}
+
+{% block FirstContent %}
+{% include "cta/buscador_empresas.html" %}
+{% endblock FirstContent%}
+
+{% block ListContent %}
+<div class="row">
+{% for screener in screeners %}
+{% include "yahoo-screeners/screener-list.html" %}
+{% endfor %}
+</div>
+{% endblock ListContent %}

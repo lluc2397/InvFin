@@ -16,7 +16,7 @@ from .views import (
 urlpatterns = [
     path('user-search-company/', suggest_list_search_companies, name="suggest_list_search_companies"),
 
-    path('list-foda/<id>', CompanyFODAListView.as_view(), name="list_foda"),    
+    path('list-foda/<company_id>', CompanyFODAListView.as_view(), name="list_foda"),    
     path('get-company-news/<ticker>', get_company_news, name="return_company_news"),    
     path('retreive-company-price/<ticker>', get_company_price, name="get_company_price"),
     path('retreive-company-valuation/<ticker>', get_company_valuation, name="get_company_valuation"),

@@ -11,6 +11,11 @@ clean-build:
 reboot:
 	$(MAKE) stop && $(MAKE) up-b
 
+clean-start:
+	make requirements
+	docker-compose -f local.yml build $(ar)
+	start
+
 restart:
 	docker-compose -f local.yml restart $(ar)
 

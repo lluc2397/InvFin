@@ -1,0 +1,12 @@
+{% extends "bases/shared_source.html" %}
+{% block meta %}{% include "meta/meta.html" %}{% endblock meta%}
+{% block css %}{% include "complements/styling.html" %}{% endblock css%}
+
+{% block MasterBody %}
+{% block body %}{% endblock body%}
+{% block modal %}
+{% include "modals/shared_modals.html" %}
+{% endblock modal %}
+{% block javascript %}{% include "complements/scripts.html" %}{% endblock javascript %}
+{% block extra_javascript %}{% endblock extra_javascript %}
+{% endblock MasterBody %}

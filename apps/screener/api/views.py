@@ -24,30 +24,30 @@ User = get_user_model()
 
 class CompanyFODAListView(ListView):
     model = UserCompanyObservation
-    template_name = 'screener/empresas/company_parts/foda/foda_parts.html'
+    template_name = 'empresas/company_parts/foda/foda_parts.html'
     context_object_name = "foda_analysis"
 
     def get_queryset(self):
-        return UserCompanyObservation.objects.filter(company__id = self.kwargs['id'])
+        return UserCompanyObservation.objects.filter(company__id = self.kwargs['company_id'])
 
 
 def get_company_price(request, ticker):
     prices = RetreiveCompanyData(ticker).get_current_price()
-    return render(request, 'screener/headers/company_price.html', {
+    return render(request, 'headers/company_price.html', {
         'prices': prices,
     })
 
 
 def get_company_news(request, ticker):
     news = RetreiveCompanyData(ticker).get_news()
-    return render(request, 'screener/empresas/company_parts/resume/news.html', {
+    return render(request, 'empresas/company_parts/resume/news.html', {
         'show_news': news,
     })
 
 
 def get_company_valuation(request, ticker):
     company_valuation = Company.objects.get(ticker=ticker).calculate_current_ratios()
-    return render(request, 'screener/empresas/company_parts/valuations/response.html', {
+    return render(request, 'empresas/company_parts/valuations/response.html', {
         'company_valuation': company_valuation,
     })
 
@@ -57,7 +57,7 @@ def retreive_yahoo_screener_info(request, query):
     context = {
         'yahoo': yahoo[query]['quotes']
     }
-    return render(request, 'screener/yahoo-screeners/screener-data.html', context)
+    return render(request, 'yahoo-screeners/screener-data.html', context)
 
 
 def retreive_top_lists(request):
@@ -97,18 +97,16 @@ def retreive_top_lists(request):
         most_actives,
         day_losers
     ]
-    return render(request, 'screener/yahoo-screeners/top-lists.html', {
+    return render(request, 'yahoo-screeners/top-lists.html', {
         'gainers_actives_losers': gainers_actives_losers,
     })
 
 
 def create_company_observation(request):
+    company_id = request.GET['company_id']
     if request.method == 'POST':
-        company_id = request.session['screener']
         form = UserCompanyObservationForm(request.POST)
-
-        user = User.objects.get_or_create_quick_user(request)           
-        
+        user = User.objects.get_or_create_quick_user(request)
         if form.is_valid():
             model = form.save()
             model.user = user
@@ -120,8 +118,9 @@ def create_company_observation(request):
             return HttpResponse(status=500)
     else:
         form = UserCompanyObservationForm()
-    return render(request, 'screener/empresas/company_parts/foda/foda_modal.html', {
+    return render(request, 'empresas/company_parts/foda/foda_modal.html', {
         'form': form,
+        "company_id": company_id
     })
 
 

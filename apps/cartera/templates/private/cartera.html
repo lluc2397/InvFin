@@ -1,0 +1,81 @@
+{% extends "private/cartera_base.html" %}
+{% load static i18n extra %}
+{% block header %}
+{% include "header/cartera/main.html" %}
+{% endblock header%}
+
+{% block content %}
+{% with patrimonio.balance_sheet as money %}
+<style>
+    .chart-canvas{height: 450px !important;}
+</style>
+<div class="row">
+    <div class="col-12">
+    </div>
+    <div class="col-12">
+        <div hx-trigger="load" hx-get="{% url 'cartera:return_balance_table' %}" hx-target="this">
+            <div class="card">
+                <div class="card-header">
+                    <!-- Title -->
+                    <h5 class="h3 mb-0">Información de tus empresas</h5>
+                </div>
+                
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                    </div>
+                    Cargando...
+                </div>
+            </div>
+        </div>
+    </div>
+    {% for segment in money.segmentation %}
+    <div class="col-lg-6 col-sm-12">
+        <div class="card">
+            <div class="chart-canvas">
+                <canvas id="doughnut-{{forloop.counter}}"></canvas>
+            </div>
+        </div>
+    </div>
+    {{segment.options.title|safe}}
+    <script>
+        let content{{forloop.counter}} = {{segment|safe}}
+        content{{forloop.counter}}['options']['responsive'] = true
+        content{{forloop.counter}}['options']['maintainAspectRatio'] = false
+        new Chart(document.querySelector('#doughnut-{{forloop.counter}}'), content{{forloop.counter}});
+    </script>
+    {% endfor %}
+    <div>
+        <div class='card'>
+            <div class="table-responsive ">
+                <table class="table table-borderless">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Nombre</th>                            
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Movimiento</th>
+                            <th scope="col">Canditad</th>
+                            <th scope="col">Precio unitario</th>
+                            <th scope="col">Comisión</th>
+                            <th scope="col">Precio total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in money.positons_moves %}
+                        <tr>
+                            <td>{{data.asset_related}}</td>                            
+                            <td>{{data.date}}</td>
+                            <td>{{data.movement}}</td>
+                            <td>{{data.quantity}}</td>
+                            <td>{{data.price|floatformat:2}} {{data.currency}}</td>
+                            <td>{{data.fee|floatformat:2}}</td>
+                            <td>{{data.movement_cost|floatformat:2}} {{data.currency}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endwith %}
+{% endblock content %}

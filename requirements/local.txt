@@ -7,7 +7,7 @@ drf-spectacular
 Werkzeug[watchdog]
 ipdb
 
-watchgod=
+watchgod
 Collectfast
 django-widget-tweaks
 

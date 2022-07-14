@@ -1,0 +1,237 @@
+{% extends "bases/base_content.html" %}
+{% load static i18n extra %}
+{% block header %}
+{% include "header/details.html" %}
+<script src="https://unpkg.com/htmx.org@1.7.0" 
+    integrity="sha384-EzBXYPt0/T6gxNp0nuPtLkmRpmDBbjg6WmCUZRLXBBwYYmwAUxzlSGej0ARHX0Bo" 
+    crossorigin="anonymous" defer></script>
+{% endblock header%}
+
+{% block FirstCtaContent %}
+{% include "complements/details.html" %}
+{% endblock FirstCtaContent %}
+
+{% block FirstContent %}
+<!-- {% include "public_blog/complements/first_content.html" %} -->
+{% endblock FirstContent%}
+
+{% block ListContent %}
+<style>
+    .fondo-wait{
+      display: none;
+    }
+  
+    .fondo-wait.activo {
+      display: block;
+      background: rgba(148, 148, 148, 0.508);
+      position: fixed;
+      z-index: 99;
+      width: 100vw;
+      height: 100vh;
+      top: 0;
+      left: 0;
+  }
+  
+  .loader{
+    display: none;
+  }
+  .loader.activo {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 120%;
+    z-index: 100;
+    width: 120px;
+    height: 120px;
+    margin: -76px 0 0 -76px;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #1e7929;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+  }
+   /* Safari */
+   @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+{% with steps=service.steps.all %}
+{% with total_steps=steps|length %}
+<div class="col-12">
+{% for step in steps %}
+    {% with current_step=forloop.counter0 %}
+    {% url step.url_path as the_url %}
+    {% with order=step.order|slugify %}
+    {% with fieldclass="form-step-"|add:order|add:" form-control" %}
+    {% with fieldclassrange="form-step-"|add:order|add:" form-range" %}
+    {% with fieldclasscheck="form-step-"|add:order|add:" form-check-input" %}
+    
+    <div class="card"
+        style="position: absolute; display:{% if not forloop.first %}none{% else %}inline{% endif %};"
+        id="part-{{current_step}}">
+        <div class="card-header">
+            {{ step.title }}
+        </div>
+        <div class="card-body">
+            <div class="card-text">
+                {{ step.description }}
+            </div>
+        </div>
+        <div class="card-body">
+            <input name="date_started" id="start-step-{{step.order}}" class="form-step-{{step.order}} form-control" value="{% now 'c' %}" hidden>
+            <div class="card-text">
+                {% include step.template_path %}
+            </div>
+            <div class="text-center">
+                <div class="alert alert-danger" id="faltante-{{step.order}}" role="alert" style="display: none;">
+                    Rellena todos los campos correctamente
+                </div>
+            </div>            
+        </div>
+        <div class="card-footer">
+            <div class="clearfix">
+                <div class="float-start">
+                    {% if not forloop.first %}
+                    <button class="btn btn-primary btn-sm" onclick="ShowPrevStep({{current_step}})">Anterior</button>
+                    {% endif %}
+                </div>
+                <div class="float-end">
+                    {% if forloop.last %}
+                    <button class="btn btn-primary btn-sm" onclick="FinalizeTest({{current_step}}, '{{the_url}}', '{{step.id}}')">Finalizar</button>                                                    
+                    {% else %}
+                    <button class="btn btn-primary btn-sm" onclick="ShowNextStep({{current_step}}, '{{the_url}}', '{{step.id}}')">Siguiente</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endwith %}
+    {% endwith %}
+    {% endwith %}
+    {% endwith %}
+    {% endwith %}
+{% endfor %}
+</div>
+{% endwith %}
+{% endwith %}
+<div class="fondo-wait" id="fondo-wait" ></div>
+<div class="loader" id="loader"></div>
+{% endblock ListContent %}
+
+{% block MiddleCtaContent %}
+<!-- {% include "public_blog/cta/inicio_middle.html" %} -->
+{% endblock MiddleCtaContent %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script>
+        Object.defineProperty(Date.prototype, 'YYYYMMDDHHMMSS', {
+            value: function() {
+                function pad2(n) {  // always returns a string
+                    return (n < 10 ? '0' : '') + n;
+                }
+
+                return this.getFullYear() + "-" +
+                    pad2(this.getMonth() + 1) + "-" +
+                    pad2(this.getDate()) + "T" +
+                    pad2(this.getHours()) + ":" +
+                    pad2(this.getMinutes()) + ":" +
+                    pad2(this.getSeconds());
+            }
+        });
+        function SendData(step, url, stepID){
+            var dataFields = document.getElementsByClassName('form-step-' + step.toString())
+            
+
+            var formData = {
+                'step': stepID,
+                'user': '{{request.user.id}}',
+                'service_activity': '{{service_activity}}'
+            }
+            for (const s of dataFields){
+                formData[s.name] = s.value
+            }
+            // console.log(Cookies.get('cookie'))
+            event.preventDefault();
+            $.ajax({
+                url: url,
+                type: "POST",
+                dataType: "json",
+                data: formData,
+                headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                
+                },
+                success: (data) => {
+                    // console.log(data)
+                },
+            
+            });
+        }
+
+        function FinalizeTest(step, url, stepID){
+            var validation = ValidateData(step)
+            if (validation) {
+                document.getElementById('fondo-wait').classList.add('activo');
+                document.getElementById('loader').classList.add('activo');
+                // Cookies.set('final', true)
+                SendData(step, url, stepID)
+                setTimeout(function(){ 
+                    return window.location.replace("{% url 'roboadvisor:result' service.slug %}?before_service_activity={{service_activity}}");
+                }, 6000);
+            }
+        }
+
+        function ValidateData(step){
+            var dataFields = document.getElementsByClassName('form-step-' + step.toString())
+            for (const s of dataFields) {
+                if (s.value==''){
+                    document.getElementById("faltante-" + step.toString()).style.display = 'inline';
+                    return false
+                }
+            }
+            return true
+        }
+
+        function ShowStep(stepsDict){
+            var currentCard = document.getElementById("part-" + stepsDict.current.toString());
+            var selCard = document.getElementById("part-" + stepsDict.sel.toString());
+            currentCard.style.display = "none";
+            selCard.style.display = "inline";
+        }
+
+        function ShowPrevStep(step){
+            document.getElementById("faltante-" + step.toString()).style.display = 'none';
+            var selStep = step - 1
+            var stepsDict = {
+                'current':step,
+                'sel':selStep
+            }
+            return ShowStep(stepsDict)
+        }
+
+        function ShowNextStep(step, url, stepID){
+            var validation = ValidateData(step)
+            if (validation) {
+                document.getElementById("faltante-" + step.toString()).style.display = 'none';
+                var selStep = step + 1
+
+                document.getElementById('start-step-' + selStep.toString()).value = new Date().YYYYMMDDHHMMSS();
+
+                var stepsDict = {
+                    'current':step,
+                    'sel':selStep
+                }
+                SendData(step, url, stepID)
+                return ShowStep(stepsDict)
+            }            
+        }
+    </script>
+{% endblock %}

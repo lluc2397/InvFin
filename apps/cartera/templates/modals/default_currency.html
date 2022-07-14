@@ -1,0 +1,9 @@
+{% extends 'modals/base_modal.html' %}
+{% load static i18n extra crispy_forms_tags %}
+
+{% block mainForm %}
+<form method="POST" hx-post="{% url 'cartera:save_default_currency' %}"
+    hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' class="modal-content">
+{% endblock mainForm %}
+
+{% block formTitle %}Edita tu divisa por defecto{% endblock formTitle %}

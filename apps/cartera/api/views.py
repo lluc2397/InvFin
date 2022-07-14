@@ -38,17 +38,17 @@ class CurrencyInitial(BaseFinancialFormView):
 
 
 class AddDefaultCurrencyView(CurrencyInitial):
-    template_name = 'cartera/modals/default_currency.html'
+    template_name = 'modals/default_currency.html'
     form_class = DefaultCurrencyForm
 
 
 class AddCashflowMoveView(CurrencyInitial):
-    template_name = 'cartera/modals/cashflowmoves.html'
+    template_name = 'modals/cashflowmoves.html'
     form_class = CashflowMoveForm
 
 
 class AddPositionMovementView(CurrencyInitial):
-    template_name = 'cartera/modals/asset_movement.html'
+    template_name = 'modals/asset_movement.html'
     form_class = PositionMovementForm
 
     def get_form_kwargs(self):
@@ -58,17 +58,17 @@ class AddPositionMovementView(CurrencyInitial):
 
 
 class AddCategoriesView(BaseFinancialFormView):
-    template_name = 'cartera/modals/categories.html'
+    template_name = 'modals/categories.html'
     form_class = AddCategoriesForm
 
 
 class AddFinancialObjectifView(BaseFinancialFormView):
-    template_name = 'cartera/modals/objectives.html'
+    template_name = 'modals/objectives.html'
     form_class = FinancialObjectifForm
 
 
 class AddNewAssetView(CurrencyInitial):
-    template_name = 'cartera/modals/new_asset.html'
+    template_name = 'modals/new_asset.html'
     form_class = AddNewAssetForm
 
     def form_valid(self, form):

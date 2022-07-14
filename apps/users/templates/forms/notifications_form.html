@@ -1,0 +1,8 @@
+{% extends "index.html" %}
+{% load static %}
+{% block header %}{% include "complements/header_inicio.html" %}{% endblock header%}
+{% block content %}
+
+{% csrf_token %}
+
+{% endblock content %}

@@ -17,7 +17,7 @@ from .models import Term, TermContent
 
 class GlosarioView(SEOListView):
 	model = Term
-	template_name = 'glosario/inicio.html'
+	template_name = 'inicio.html'
 	ordering = ['title']
 	context_object_name = "terms"
 	paginate_by = 10
@@ -31,7 +31,7 @@ class GlosarioView(SEOListView):
 
 class TermDetailsView(SEODetailView):
 	model = Term
-	template_name = 'glosario/details.html'
+	template_name = 'details.html'
 	context_object_name = "object"
 	slug_field = 'slug'
 	is_article = True
@@ -45,7 +45,7 @@ class TermDetailsView(SEODetailView):
 
 class TermCorrectionView(CreateView):
 	form_class = CreateCorrectionForm
-	template_name = 'glosario/correction.html'
+	template_name = 'correction.html'
 	success_message = 'Gracias por tu aporte'
 
 	def get_object(self):

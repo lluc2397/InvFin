@@ -39,7 +39,7 @@ class BaseRecommendationView(TemplateView):
     rec_type = None
 
 class CompaniesRecommendedSide(BaseRecommendationView):
-    template_name = 'recsys/side.html'
+    template_name = 'side.html'
     model = Company
     place = constants.SIDE
     rec_type = constants.LISTA
