@@ -82,8 +82,3 @@ CELERY_TASK_EAGER_PROPAGATES = True
 # Your stuff...
 # ------------------------------------------------------------------------------
 REST_FRAMEWORK['DEFAULT_SCHEMA_CLASS'] = "drf_spectacular.openapi.AutoSchema"
-
-CORS_ALLOWED_ORIGINS = [
-    "http://example.com",
-    "http://lucas.example.com"
-]

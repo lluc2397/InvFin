@@ -50,7 +50,6 @@ SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-secure
 SESSION_COOKIE_SECURE = True
 
-SESSION_COOKIE_DOMAIN = f".{CURRENT_DOMAIN}"
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-secure
 CSRF_COOKIE_SECURE = True
 # https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
@@ -190,5 +189,8 @@ sentry_sdk.init(
     send_default_pii=True
 )
 
-# Your stuff...
+# CORS
 # ------------------------------------------------------------------------------
+CORS_ALLOWED_ORIGINS += [
+    FULL_DOMAIN
+]

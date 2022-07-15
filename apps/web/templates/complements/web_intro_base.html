@@ -1,10 +1,10 @@
 {% extends "bases/shared_source.html" %}
 {% block meta %}{% include "meta/meta.html" %}{% endblock meta %}
-{% block css %}{% include "complements/styling.html" %}{% endblock css %}
+{% block css %}{% include "complements/web_intro_styling.html" %}{% endblock css %}
 
 
 {% block MasterBody %}
-{% block navbar %}{% include "complements/navbar.html" %}{% endblock navbar%}
+{% block navbar %}{% include "complements/web_intro_navbar.html" %}{% endblock navbar%}
 {% block content %}{% endblock content%}
 {% block modal %}{% endblock modal %}
 {% block footer %}{% include "complements/footer.html" %}{% endblock footer %}
@@ -13,5 +13,5 @@
 window.addEventListener('DOMContentLoaded', () => {/* Run whatever you want */});
 </script>
 {% endblock inline_javascript %} -->
-{% block javascript %}{% include "complements/scripts.html" %}{% endblock javascript %}
+{% block javascript %}{% include "complements/web_intro_scripts.html" %}{% endblock javascript %}
 {% endblock MasterBody %}

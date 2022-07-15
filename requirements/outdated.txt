@@ -2,4 +2,4 @@ Package    Version Latest Type
 ---------- ------- ------ -----
 billiard   3.6.4.0 4.0.0  wheel
 Django     3.2.14  4.0.6  wheel
-setuptools 62.6.0  63.1.0 wheel
+setuptools 62.6.0  63.2.0 wheel

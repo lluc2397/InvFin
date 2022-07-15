@@ -16,7 +16,7 @@ User = get_user_model()
 
 class QuestionsView(SEOListView):
 	model = Question
-	template_name = 'inicio.html'
+	template_name = 'QA_inicio.html'
 	context_object_name = "questions"
 	ordering = ['-created_at']
 	meta_description = 'Haz una pregunta o responde a la comunidad para conseguir premios increíbles'
@@ -28,7 +28,7 @@ class QuestionsView(SEOListView):
 
 class QuestionDetailsView(SEODetailView):
 	model = Question
-	template_name = 'details.html'
+	template_name = 'QA_details.html'
 	context_object_name = "object"
 	slug_field = 'slug'
 

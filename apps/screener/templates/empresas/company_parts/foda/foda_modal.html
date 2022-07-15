@@ -1,6 +1,6 @@
 {% load static %}
 {% load crispy_forms_tags %}
-<form method="POST" hx-post="{% url 'screener:create_company_observation' %}?company_id={{company_id}}"
+<form method="POST" hx-post="{% url 'screener:create_company_observation' %}?company_ticker={{company_ticker}}"
 hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' class="modal-content">
 <div class="modal-header">
 <h5 class="modal-title">Añade tu comentario</h5>

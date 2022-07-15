@@ -33,7 +33,7 @@ django<4
 django-cors-headers<4
 django-environ
 gunicorn
-django-allauth
+# django-allauth
 django-crispy-forms
 crispy-bootstrap5
 django-redis

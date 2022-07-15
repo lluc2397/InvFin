@@ -52,7 +52,7 @@ def user_become_writter_view(request):
 
 class PublicBlogsListView(SEOListView):
 	model = PublicBlog
-	template_name = 'inicio.html'
+	template_name = 'blog_inicio.html'
 	ordering = ['-published_at']
 	context_object_name = "blogs"
 	meta_description = 'El blog donde tu también puedes escribir de forma libre'
@@ -70,7 +70,7 @@ class PublicBlogsListView(SEOListView):
 
 class PublicBlogDetailsView(SEODetailView):
 	model = PublicBlog
-	template_name = 'details.html'
+	template_name = 'blog_details.html'
 	context_object_name = "object"
 	slug_field = 'slug'
 	is_article = True

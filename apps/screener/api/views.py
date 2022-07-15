@@ -103,14 +103,14 @@ def retreive_top_lists(request):
 
 
 def create_company_observation(request):
-    company_id = request.GET['company_id']
+    company_ticker = request.GET.get('company_ticker')
     if request.method == 'POST':
         form = UserCompanyObservationForm(request.POST)
         user = User.objects.get_or_create_quick_user(request)
         if form.is_valid():
             model = form.save()
             model.user = user
-            company = Company.objects.get(id = company_id)
+            company = Company.objects.get(ticker = company_ticker)
             model.company = company
             model.save(update_fields=['user', 'company'])
             return HttpResponse(status=204, headers={'HX-Trigger': 'refreshObservationsCompany'})
@@ -120,7 +120,7 @@ def create_company_observation(request):
         form = UserCompanyObservationForm()
     return render(request, 'empresas/company_parts/foda/foda_modal.html', {
         'form': form,
-        "company_id": company_id
+        "company_id": company_ticker
     })
 
 
