@@ -19,7 +19,7 @@ def journey(request):
     if request.user.is_anonymous:
         try:
             visiteur = SeoInformation().find_visiteur(request)
-            request_visiteur.update({'visiteur': visiteur, 'is_visiteur': True})
+            # request_visiteur.update({'visiteur': visiteur, 'is_visiteur': True})
             VisiteurJourney.objects.create(user = visiteur, current_path = current_path, comes_from = comes_from)        
         except Exception as e:
             print(e, 'context seo')

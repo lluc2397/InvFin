@@ -18,9 +18,10 @@ if READ_DOT_ENV_FILE:
 # ------------------------------------------------------------------------------
 PROTOCOL = 'http://'
 MAIN_DOMAIN = 'inversionesyfinanzas.xyz'
-#CURRENT_DOMAIN = '0.0.0.0:8000'
-CURRENT_DOMAIN = 'example.com:8000'
-FULL_DOMAIN = f'{PROTOCOL}{CURRENT_DOMAIN}'
+#CURRENT_DOMAIN = '0.0.0.0'
+PORT = ":8000"
+CURRENT_DOMAIN = 'example.com'
+FULL_DOMAIN = f'{PROTOCOL}{CURRENT_DOMAIN}{PORT}'
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env.bool("DJANGO_DEBUG", False)
@@ -84,6 +85,9 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
     "crispy_forms",
     "crispy_bootstrap5",
     "django_celery_beat",
@@ -130,6 +134,7 @@ MIGRATION_MODULES = {"sites": "apps.contrib.sites.migrations"}
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
@@ -254,6 +259,8 @@ SESSION_SAVE_EVERY_REQUEST = False
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-httponly
 CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_DOMAIN = f".{CURRENT_DOMAIN}"
+CSRF_TRUSTED_ORIGINS = [f".{CURRENT_DOMAIN}"]
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-browser-xss-filter
 SECURE_BROWSER_XSS_FILTER = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options

@@ -28,7 +28,7 @@ urlpatterns = [
     path("", include("apps.general.urls", namespace="general")),
     path("", include("apps.web.urls", namespace="web")),
     path("", include("apps.users.urls", namespace="users")),
-    path("accounts/", include("apps.allauth.urls")),    
+    path("accounts/", include("allauth.urls")),    
     path("", include("apps.preguntas_respuestas.urls", namespace="preguntas_respuestas")),
     path("", include("apps.escritos.urls", namespace="escritos")),
     path("", include("apps.public_blog.urls", namespace="public_blog")),

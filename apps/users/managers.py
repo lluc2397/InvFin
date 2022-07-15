@@ -58,7 +58,13 @@ class CreditHistorialManager(Manager):
     def check_enought_credits(self, user: Model, amount: int) -> bool:
         return bool(user.user_profile.creditos >= amount)
     
-    def update_credits(self, user: Model, amount: int, move_source: str, movement: int = ADD, extra_objects: Model = None):
+    def update_credits(
+        self, 
+        user: Model,
+        amount: int, 
+        move_source: str, 
+        movement: int = ADD, 
+        extra_objects: Model = None):
 
         enought_credits = True
         if movement == REDUCE:

@@ -13,8 +13,8 @@ reboot:
 
 clean-start:
 	make requirements
-	docker-compose -f local.yml build $(ar)
-	start
+	docker-compose -f local.yml build django
+	make up-b
 
 restart:
 	docker-compose -f local.yml restart $(ar)

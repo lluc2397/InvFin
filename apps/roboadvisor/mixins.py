@@ -1,6 +1,6 @@
 import datetime
 
-from apps.users.constants import ROBOADVISOR_USAGE
+from apps.users.constants import ROBOADVISOR_USAGE, ADD
 from apps.users.models import CreditUsageHistorial
 
 from .brain.investor import get_investor_type
@@ -38,7 +38,7 @@ class ServicePaymentMixin:
         service = self.get_object()
         user_credits = user.user_profile.creditos
 
-        CreditUsageHistorial.objects.update_credits(user, service.price, ROBOADVISOR_USAGE, service)
+        CreditUsageHistorial.objects.update_credits(user, service.price, ROBOADVISOR_USAGE, ADD, service)
         if CreditUsageHistorial.objects.check_enought_credits(user, service.price):            
             user.update_credits(-service.price)
             self.manage_service_activity(service_activity, 'finished')

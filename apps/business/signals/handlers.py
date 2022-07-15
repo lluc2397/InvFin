@@ -97,8 +97,8 @@ class BusinessSignal:
             CreditUsageHistorial.objects.update_credits(
                 user, 
                 int(instance.product_complementary.product_result),
+                credits_constants.BOUGHT_CREDITS,
                 credits_constants.ADD,
-                credits_constants.BOUGHT_CREDITS, 
                 instance.product_complementary
             )
         elif instance.product_complementary.purchase_result == constants.SHARE_EXCEL:
