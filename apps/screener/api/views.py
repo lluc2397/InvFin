@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, FormView
 
 from apps.empresas.company.retreive_data import RetreiveCompanyData
 from apps.empresas.models import Company
@@ -102,26 +102,24 @@ def retreive_top_lists(request):
     })
 
 
-def create_company_observation(request):
-    company_ticker = request.GET.get('company_ticker')
-    if request.method == 'POST':
-        form = UserCompanyObservationForm(request.POST)
-        user = User.objects.get_or_create_quick_user(request)
-        if form.is_valid():
-            model = form.save()
-            model.user = user
-            company = Company.objects.get(ticker = company_ticker)
-            model.company = company
-            model.save(update_fields=['user', 'company'])
-            return HttpResponse(status=204, headers={'HX-Trigger': 'refreshObservationsCompany'})
-        else:
-            return HttpResponse(status=500)
-    else:
-        form = UserCompanyObservationForm()
-    return render(request, 'empresas/company_parts/foda/foda_modal.html', {
-        'form': form,
-        "company_id": company_ticker
-    })
+class CompanyObservationFormView(FormView):
+    form_class = UserCompanyObservationForm
+    template_name = 'empresas/company_parts/foda/foda_modal.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company_ticker'] = self.request.GET['company_ticker']
+        return context
+    
+    def form_valid(self, form):
+        company_ticker = self.request.POST['company_ticker']
+        user = User.objects.get_or_create_quick_user(self.request)
+        model = form.save()
+        model.user = user
+        company = Company.objects.get(ticker = company_ticker)
+        model.company = company
+        model.save(update_fields=['user', 'company'])
+        return HttpResponse(status=204, headers={'HX-Trigger': 'refreshObservationsCompany'})
 
 
 def suggest_list_search_companies(request):

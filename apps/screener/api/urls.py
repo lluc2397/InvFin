@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views import (
     CompanyFODAListView,
+    CompanyObservationFormView,
     create_company_observation,
     get_company_news,
     get_company_price,
@@ -21,7 +22,7 @@ urlpatterns = [
     path('retreive-company-price/<ticker>', get_company_price, name="get_company_price"),
     path('retreive-company-valuation/<ticker>', get_company_valuation, name="get_company_valuation"),
 
-    path('add-observation/', create_company_observation, name="create_company_observation"),
+    path('add-observation/', CompanyObservationFormView.as_view(), name="create_company_observation"),
 
     path('screener-simple-valuation/', simple_valuation_view, name="simple_valuation_view"),
     path('screener-medium-valuation/', medium_valuation_view, name="medium_valuation_view"),

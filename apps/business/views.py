@@ -93,7 +93,7 @@ class CheckoutRedirectView(RedirectView):
         customer, created = Customer.objects.get_or_create(user=user,defaults={'stripe_id': session.customer})
         self.save_transaction(session, customer, product_complementary)
         messages.success(request, 'Gracias por tu confianza.')
-        url = reverse('users:user_inicio')
+        url = reverse('business:all_products')
         return HttpResponseRedirect(url)
 
 
