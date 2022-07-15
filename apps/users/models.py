@@ -168,7 +168,7 @@ class User(AbstractUser):
                 #enviar email para avisar que tiene un nuevo seguidor
             
             following_historial.save(update_fields=['stop_following', 'started_following'])
-            writter_followers.save(update_fields=['followers'])
+            writter_followers.save()
             
             return True       
     

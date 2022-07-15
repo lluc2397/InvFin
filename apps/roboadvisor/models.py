@@ -111,7 +111,7 @@ class RoboAdvisorService(Model):
     
     @property
     def template_path(self):
-        return f'roboadvisor/results/{self.template_result}.html'
+        return f'results/{self.template_result}.html'
 
 
 class RoboAdvisorServiceStep(Model):
@@ -141,7 +141,7 @@ class RoboAdvisorServiceStep(Model):
     
     @property
     def template_path(self):
-        return f'roboadvisor/steps/{self.template}.html'
+        return f'steps/{self.template}.html'
     
     @property
     def url_path(self):

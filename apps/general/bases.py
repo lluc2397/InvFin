@@ -56,12 +56,7 @@ class BaseWrittenContent(CommonMixin):
         for tag in tags:
             if tag == '':
                 continue
-            exist_tag = Tag.objects.filter(name = tag.lower())
-            if exist_tag.exists():
-                tag = exist_tag[0]                
-            else:
-                tag = Tag.objects.create(name = tag.lower())
-            
+            tag, created = Tag.objects.get_or_create(slug = tag.lower())
             if tag in self.tags.all():
                 continue
             self.tags.add(tag)

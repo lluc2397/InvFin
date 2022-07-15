@@ -21,7 +21,7 @@ from .models import RoboAdvisorService, RoboAdvisorUserServiceActivity
 
 class RoboAdvisorServicesListView(SEOListView):
 	model = RoboAdvisorService
-	template_name = "inicio.html"
+	template_name = "roboadvisor_inicio.html"
 	context_object_name = "services"
 
 	def get_context_data(self, **kwargs):
@@ -39,7 +39,7 @@ class RoboAdvisorServicesListView(SEOListView):
 
 class RoboAdvisorServiceOptionView(LoginRequiredMixin, DetailView):
 	model = RoboAdvisorService
-	template_name = "details.html"
+	template_name = "roboadvisor_details.html"
 	context_object_name = "service"
 
 	def prepare_forms(self, user, service):

@@ -1,5 +1,6 @@
 import datetime
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.forms import (
     BooleanField,
@@ -35,8 +36,12 @@ class BaseForm(Form):
 
 class BaseAssetMoveForm(BaseForm):
     price = DecimalField(label='Precio unitario')
-    date = DateField(label='Fecha', initial=datetime.date.today,
-    widget = DateInput(attrs={'class':'datetimepicker1'}))
+    date = DateField(
+        label='Fecha', 
+        initial=datetime.date.today,
+        input_formats=settings.DATE_INPUT_FORMATS,
+        widget = DateInput(attrs={'class':'datetimepicker1'})
+        )
     quantity = IntegerField(label='Cantidad')
     observacion = CharField(widget=Textarea, required=False, label='Descripción')
     fee = DecimalField(label='Comisión', initial=0)

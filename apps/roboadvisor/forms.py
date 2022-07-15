@@ -1,11 +1,5 @@
 from django.forms import (
-    CharField,
-    DateTimeField,
-    Form,
-    IntegerField,
     ModelForm,
-    Textarea,
-    TextInput,
 )
 
 from .models import (
@@ -33,8 +27,12 @@ class RoboAdvisorQuestionInvestorExperienceForm(BaseRoboAdvisorForm):
     
     def __init__(self, *args, **kwargs):
         super(RoboAdvisorQuestionInvestorExperienceForm, self).__init__(*args, **kwargs)
-        self.fields['percentage_invested'].widget.attrs.update(self.range_values('rangeval6', step = 1))
-        self.fields['percentage_anualized_revenue'].widget.attrs.update(self.range_values('rangeval7', max = 1000, step = 0.1))
+        self.fields['percentage_invested'].widget.attrs.update(
+            self.range_values('rangeval6', step = 1)
+            )
+        self.fields['percentage_anualized_revenue'].widget.attrs.update(
+            self.range_values('rangeval7', max = 1000, step = 0.1)
+            )
 
     class Meta:
         model = RoboAdvisorQuestionInvestorExperience

@@ -3,7 +3,6 @@ from django.urls import path
 from .views import (
     CompanyFODAListView,
     CompanyObservationFormView,
-    create_company_observation,
     get_company_news,
     get_company_price,
     get_company_valuation,

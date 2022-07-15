@@ -1,5 +1,5 @@
 {% extends 'modals/base_modal.html' %}
-{% load static extra humanize i18n crispy_forms_tags %}
+{% load static extra humanize crispy_forms_tags %}
 
 {% block mainForm %}
 <form method="POST" hx-post="{% url 'cartera:save_new_asset_movement' %}"

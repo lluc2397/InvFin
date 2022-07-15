@@ -8,7 +8,7 @@
 <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
 <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
 {% endblock extra %}
-{% block header %} <div class="mb-2"></div> {% endblock header%}
+{% block header %}{% include "header/QA_form.html" %}{% endblock header%}
 {% block content %}
 
 <script type="text/javascript">

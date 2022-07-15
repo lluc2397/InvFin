@@ -1,13 +1,13 @@
 {% extends "bases/base_content.html" %}
 {% load static extra humanize i18n %}
-{% block header %}{% include "header/inicio.html" %}{% endblock header%}
+{% block header %}{% include "header/blog_inicio.html" %}{% endblock header%}
 
 {% block FirstCtaContent %}
-{% include "cta/inicio.html" %}
+{% include "cta/blog_inicio.html" %}
 {% endblock FirstCtaContent %}
 
 {% block FirstContent %}
-{% include "complements/first_content.html" %}
+{% include "complements/blog_first_content.html" %}
 {% endblock FirstContent%}
 
 {% block ListContent %}
@@ -63,5 +63,5 @@
 {% endblock ListContent %}
 
 {% block MiddleCtaContent %}
-{% include "cta/inicio_middle.html" %}
+{% include "cta/blog_inicio_middle.html" %}
 {% endblock MiddleCtaContent %}
