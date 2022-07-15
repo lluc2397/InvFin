@@ -46,8 +46,14 @@ class BaseAssetMoveForm(BaseForm):
     observacion = CharField(widget=Textarea, required=False, label='Descripción')
     fee = DecimalField(label='Comisión', initial=0)
 
+    def clean_date(self):
+        date = self.cleaned_data['date']
+        print(date)
+        return date
+
 
 class AddNewAssetForm(ModelForm, BaseAssetMoveForm):
+    
     class Meta:
         model = PositionMovement
         exclude = [
@@ -67,7 +73,7 @@ class AddNewAssetForm(ModelForm, BaseAssetMoveForm):
         position.user = request.user
         position.asset_related = asset
         position.move_type = 1
-        position.save()
+        position.save(update_fields=['user', 'asset_related', 'move_type'])
 
         request.user.user_patrimoine.assets.add(asset)
         request.user.user_patrimoine.save()

@@ -36,7 +36,7 @@ LANGUAGE_CODE = "es-ES"
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
 SITE_ID = 1
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
-USE_I18N = True
+USE_I18N = False
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-l10n
 USE_L10N = False
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
@@ -45,7 +45,11 @@ USE_TZ = True
 LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 
 DATE_INPUT_FORMATS = [
-    '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', # '2006-10-25', '10/25/2006', '10/25/06'
+    '%Y-%m-%d', # '2006-10-25'
+    '%m/%d/%Y', # '10/25/2006'
+    '%m/%d/%y', # '10/25/06'
+    '%d/%m/%Y', # '10/25/06'
+    '%d-%m-%Y', # '10-25-06'
 ]
 
 DATETIME_INPUT_FORMATS = [
@@ -55,6 +59,10 @@ DATETIME_INPUT_FORMATS = [
     '%m/%d/%Y %H:%M',        # '10/25/2006 14:30'
     '%m/%d/%y %H:%M:%S',     # '10/25/06 14:30:59'
     '%m/%d/%y %H:%M',        # '10/25/06 14:30'
+    '%d/%m/%Y %H:%M:%S',     # '10/25/06'
+    '%d-%m-%Y %H:%M',        # '10-25-06'
+    '%d/%m/%Y %H:%M:%S',     # '10/25/06'
+    '%d-%m-%Y %H:%M',        # '10-25-06'
 ]
 
 # Boolean that sets whether to add thousand separator when formatting numbers
