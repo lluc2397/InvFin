@@ -2,15 +2,16 @@ import math
 import operator
 from statistics import mean
 
-from django.db.models import Avg, Model
+from django.db.models import Avg
 
 from apps.empresas.valuations import discounted_cashflow
 from apps.general.utils import ChartSerializer
+from apps.general.mixins import BaseToAll
 
 from .retreive_data import RetreiveCompanyData
 
 
-class CompanyExtended(Model, ChartSerializer):
+class CompanyExtended(BaseToAll, ChartSerializer):
     class Meta:
         abstract = True
     

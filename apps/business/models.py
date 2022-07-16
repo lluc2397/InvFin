@@ -19,6 +19,7 @@ from django.urls import reverse
 from apps.business import constants
 from apps.general.bases import BaseComment
 from apps.general.models import Currency
+from apps.general.mixins import BaseToAll
 from apps.seo.models import Promotion
 
 from .managers import ProductManager
@@ -26,7 +27,7 @@ from .managers import ProductManager
 User = get_user_model()
 
 
-class StripeFields(Model):
+class StripeFields(BaseToAll):
     stripe_id = CharField(max_length=500, null=True, blank=True)
     for_testing = BooleanField(default=False)
 
@@ -145,7 +146,7 @@ class ProductComplementary(StripeFields):
         return reverse('business:create_checkout', kwargs={"pk": self.pk})
 
 
-class ProductSubscriber(Model):    
+class ProductSubscriber(BaseToAll):    
     product = ForeignKey(Product,
         on_delete=CASCADE,
         null=True,
@@ -249,7 +250,7 @@ class ProductComplementaryPaymentLink(StripeFields):
         return self.product_complementary.product.title
 
 
-class TransactionHistorial(Model):
+class TransactionHistorial(BaseToAll):
     product = ForeignKey(
         Product, 
         on_delete=SET_NULL, 

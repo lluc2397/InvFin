@@ -1,7 +1,8 @@
-from typing import Dict, Union
+from typing import Dict, List, Union
 
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Model
 from django.views.generic import TemplateView
+from django.apps import apps
 
 from apps.empresas.models import Company, Exchange
 from apps.escritos.models import Term
@@ -42,19 +43,55 @@ class BaseRecommendationView(TemplateView):
     place = None
     location = None
     kind = None
+    recommendation_log_model = None
 
-class CompaniesRecommendedSide(BaseRecommendationView):
-    template_name = 'side_recsys.html'
+    def get_recommendation_log_model(self) -> Model:
+        if not self.recommendation_log_model:
+            model_to_recommend_name = self.model_to_recommend.object_name
+            user = "User"
+            if self.request.is_visiteur:
+                user = "Visiteur"
+            object_name = f"{user}{model_to_recommend_name}Recommended"
+            return apps.get_model("recsys", object_name, require_ready=True)
+        return self.recommendation_log_model
+    
+    def save_recommendations(
+        self, 
+        recommendations: Union[QuerySet, List],
+        recommendation_explained: Dict
+    ) -> None:
+        recommendation_log_model = self.get_recommendation_log_model()
+        user = self.request.visiteur if self.request.is_visiteur else self.request.user
+        for recommendation in recommendations:
+            recommendation_log_model.objects.create(
+                user=user,
+                place=self.place,
+                location=self.location,
+                kind=self.kind,
+                recommendation_explained=recommendation_explained,
+                model_recommended=recommendation
+            )
+    
+    def return_recommendations(self, recommendations: Union[QuerySet, List], slice_recommedations: int = None):
+        if slice_recommedations:
+            final_recommendations = recommendations[:slice_recommedations]
+        
+        self.save_recommendations(final_recommendations, recommendation_explained)
+        return final_recommendations
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['recommendations'] = self.return_recommendations()
+        return context
+
+
+class BaseCompanyRecommendationView(BaseRecommendationView):
     model_to_recommend = Company
-    place = constants.SIDE
-    location = constants.ALL_WEB
-    kind = constants.LISTA
+    place = None
+    location = None
+    kind = None
 
-    def get_user(self):
-        print(self.request.__dict__)
-        pass
-
-    def get_specific_company_recommendations(self, companies_visited):
+    def get_specific_company_recommendations(self, companies_visited) -> QuerySet:
         unique_sectors_id = set()
         unique_industries_id = set()
         unique_countries_id = set()
@@ -81,23 +118,9 @@ class CompaniesRecommendedSide(BaseRecommendationView):
             exchanges,
         )
     
-    def get_random_companies_recommendations(self):
+    def get_random_companies_recommendations(self) -> QuerySet:
         return Company.objects.related_companies()
     
-    def save_recommendations(
-        self, 
-        recommendations: QuerySet, 
-        user: Union[Visiteur, User], 
-        recommendation_explained: Dict
-    ):
-        for recommendation in recommendations:
-            user=user,
-            place=self.place,
-            location=self.location,
-            kind=self.kind,
-            recommendation_explained=recommendation_explained,
-
-
     def get_companies_to_recommend(self):
         companies_visited = self.get_companies_visited()
         if companies_visited:
@@ -126,8 +149,11 @@ class CompaniesRecommendedSide(BaseRecommendationView):
                     self.request.session.modified = True
             return companies_visited
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        self.get_user()
-        context['recommendations'] = self.get_companies_to_recommend()[:5]
-        return context
+
+class CompaniesRecommendedSide(BaseCompanyRecommendationView):
+    template_name = 'side_recsys.html'
+    place = constants.SIDE
+    location = constants.ALL_WEB
+    kind = constants.LISTA
+
+    
