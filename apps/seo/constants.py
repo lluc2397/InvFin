@@ -51,8 +51,10 @@ SCREENER_COMPANY = 'screener-company'
 BLOG_DETAILS = 'blog-details'
 TERM_DETAILS = 'term-details'
 QUESTION_DETAILS = 'question-details'
+ALL_WEB = "all-web"
 
 WEP_PROMOTION_LOCATION = (
+    (ALL_WEB, "Toda la web"),
     (WEB_INICIO, 'Web Inicio'),
     (SCREENER_INICIO, 'Screener Inicio'),
     (SCREENER_MARKET, 'Screener Market'),

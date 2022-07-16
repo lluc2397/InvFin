@@ -3,7 +3,7 @@ from django.contrib.gis.geoip2 import GeoIP2
 from django.contrib.sessions.models import Session
 from django.urls import URLPattern, URLResolver
 
-from .models import Visiteur
+from apps.seo.models import Visiteur
 
 
 class SeoInformation:
@@ -41,7 +41,7 @@ class SeoInformation:
         if not request.session or not request.session.session_key:
             request.session.save()
         visiteur.session_id = request.session.session_key
-        visiteur.save()
+        visiteur.save(update_fields=['session_id'])
         request.session['visiteur_id'] = visiteur.id
         request.session.modified = True
         return visiteur

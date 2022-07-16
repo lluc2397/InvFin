@@ -4,7 +4,7 @@ import re
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
-from django.urls import resolve, reverse
+from django.urls import resolve
 from django.utils.cache import patch_vary_headers
 from django.utils.deprecation import MiddlewareMixin
 

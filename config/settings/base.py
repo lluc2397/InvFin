@@ -198,6 +198,7 @@ MIDDLEWARE = [
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "general.middleware.SubdomainURLRoutingMiddleware",
+    "seo.middleware.VisiteurMiddleware",
 ]
 
 # STATIC

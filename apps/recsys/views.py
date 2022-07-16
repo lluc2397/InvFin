@@ -1,3 +1,6 @@
+from typing import Dict, Union
+
+from django.db.models import QuerySet
 from django.views.generic import TemplateView
 
 from apps.empresas.models import Company, Exchange
@@ -5,7 +8,8 @@ from apps.escritos.models import Term
 from apps.general.models import Country, Industry, Sector
 from apps.public_blog.models import PublicBlog
 from apps.seo import constants
-
+from apps.seo.models import Visiteur
+from apps.users.models import User
 
 class ExplorationView(TemplateView):
     template_name = 'escritos/inicio.html'
@@ -34,15 +38,21 @@ class RecsysViewMixin:
 
 
 class BaseRecommendationView(TemplateView):
-    model = None
+    model_to_recommend = None
     place = None
-    rec_type = None
+    location = None
+    kind = None
 
 class CompaniesRecommendedSide(BaseRecommendationView):
-    template_name = 'side.html'
-    model = Company
+    template_name = 'side_recsys.html'
+    model_to_recommend = Company
     place = constants.SIDE
-    rec_type = constants.LISTA
+    location = constants.ALL_WEB
+    kind = constants.LISTA
+
+    def get_user(self):
+        print(self.request.__dict__)
+        pass
 
     def get_specific_company_recommendations(self, companies_visited):
         unique_sectors_id = set()
@@ -74,14 +84,18 @@ class CompaniesRecommendedSide(BaseRecommendationView):
     def get_random_companies_recommendations(self):
         return Company.objects.related_companies()
     
-    def save_recommendations(self, recommendations):
+    def save_recommendations(
+        self, 
+        recommendations: QuerySet, 
+        user: Union[Visiteur, User], 
+        recommendation_explained: Dict
+    ):
         for recommendation in recommendations:
-            user
-            place
-            kind
-            clicked
-            recommendation_personalized
-            recommendation_explained
+            user=user,
+            place=self.place,
+            location=self.location,
+            kind=self.kind,
+            recommendation_explained=recommendation_explained,
 
 
     def get_companies_to_recommend(self):
@@ -114,5 +128,6 @@ class CompaniesRecommendedSide(BaseRecommendationView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['companies'] = self.get_companies_to_recommend()[:5]
+        self.get_user()
+        context['recommendations'] = self.get_companies_to_recommend()[:5]
         return context
