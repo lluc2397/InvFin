@@ -157,7 +157,7 @@ class Company(CompanyExtended):
         f"{current_ratios['average_shares_out']} acciones en circulación la empresa obtiene una capitalización "
         f"bursátil de {round(current_ratios['marketcap'], 2)}{currency}")
     
-    def check_checkings(self, main_dict: str):
+    def check_checkings(self, main_dict: str) -> bool:
         status = self.checkings[main_dict]['state']
         if status == 'no':
             return False

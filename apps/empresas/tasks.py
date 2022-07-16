@@ -12,17 +12,17 @@ from .models import Company
 
 @celery_app.task()
 def update_institutionals_info_company_task():
-    org_name = 'Estados Unidos'
-    companies_without_info = Company.objects.clean_companies_by_main_exchange(org_name)
     intento = 0
-    for company in companies_without_info:
-        if intento == 5:
-            return
-        if company.checkings['has_institutionals']['state'] == 'no':
-            update = UpdateCompany(company).institutional_ownership
-            if update == 'all right':
-                intento += 1
-                company.modify_checkings('has_meta_image', 'yes')
+    for org_name in ['Estados Unidos', 'México']:
+        companies_without_info = Company.objects.clean_companies_by_main_exchange(org_name)
+        for company in companies_without_info:
+            if intento == 5:
+                return
+            if company.check_checkings("has_institutionals") == False:
+                update = UpdateCompany(company).institutional_ownership
+                if update == 'all right':
+                    intento += 1
+                    company.modify_checkings('has_institutionals', 'yes')
 
 
 @celery_app.task()
@@ -48,7 +48,7 @@ def save_remote_images_company_task():
 
 @celery_app.task()
 def update_company_financials_task():
-    org_name = 'Estados Unidos'
+    org_name = 'México'
     companies_without_info = Company.objects.clean_companies_to_update(org_name).filter(date_updated=False)
     if companies_without_info.exists():
         company = companies_without_info.first()

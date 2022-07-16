@@ -2,10 +2,13 @@ import random
 
 from django.conf import settings
 
+from apps.recsys.mixins import RecommenderMixin
+
+
 FULL_DOMAIN = settings.FULL_DOMAIN
 
 
-class SEOViewMixin:
+class SEOViewMixin(RecommenderMixin):
     """
     open_graph_type might be = website, article, or video
     https://ogp.me/#types

@@ -1,0 +1,31 @@
+{% load static i18n extra %}
+<div class="col-12">                
+    <ul class="list-group list-group-flush list my--3">
+        {% for recommendation in recommendations %}
+            <li class="list-group-item px-0">
+                <a href="{{recommendation.get_absolute_url}}">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <span class="avatar avatar-md rounded-circle mr-2">
+                                <img alt="{{recommendation.model_recommended.ticker}}"
+                                     src="{{recommendation.model_recommended.image}}">
+                              </span>
+                        </div>
+                        <div class="col">
+                            <small>{{recommendation.model_recommended.ticker}}</small>
+                            <h5 class="mb-0">{{recommendation.model_recommended.name}}</h5>
+                        </div>
+                        {% comment %} <div class="col">
+                            <small>Visits:</small>
+                            <h5 class="mb-0">2500</h5>
+                        </div>
+                        <div class="col">
+                            <small>Bounce:</small>
+                            <h5 class="mb-0">30%</h5>
+                        </div> {% endcomment %}
+                    </div>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

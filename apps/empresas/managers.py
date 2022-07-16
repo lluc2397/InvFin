@@ -119,20 +119,28 @@ class CompanyManager(Manager):
             has_error=False
             )
 
-    def get_random_recommendations(self):
+    def get_most_visited_companies(self):
         """
         Based on most visited companies
         """
+        return self.filter(
+            no_incs = False,
+            no_bs = False,
+            no_cfs = False
+        ).annotate(
+            visited_by_user=Count('usercompanyvisited'),
+            visited_by_visiteur=Count('visiteurcompanyvisited'),
+            total_visits=F('visited_by_user') + F('visited_by_visiteur')
+        ).order_by('total_visits')
     
-    def related_companies(
+    def related_companies_most_visited(
         self,
-        sector=None,
-        exchage=None,
-        industry=None,
-        country=None,
+        sector,
+        exchage,
+        industry,
+        country,
     ):
-        if sector:
-            filtered = self.filter(
+        return self.filter(
             Q(sector__id__in=sector) |
             Q(exchange__id__in=exchage) |
             Q(industry__id__in=industry) |
@@ -140,14 +148,7 @@ class CompanyManager(Manager):
             no_incs = False,
             no_bs = False,
             no_cfs = False
-        )
-        else:
-            filtered = self.filter(
-            no_incs = False,
-            no_bs = False,
-            no_cfs = False
-        )
-        return filtered.annotate(
+        ).annotate(
             visited_by_user=Count('usercompanyvisited'),
             visited_by_visiteur=Count('visiteurcompanyvisited'),
             total_visits=F('visited_by_user') + F('visited_by_visiteur')

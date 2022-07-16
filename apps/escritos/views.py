@@ -24,6 +24,8 @@ class GlosarioView(SEOListView):
 	meta_description = 'Todos los términos y definiciones que necesitas conocer para invertir correctamente'
 	meta_tags = 'finanzas, blog financiero, blog el financiera, invertir'
 	meta_title = 'El diccionario que necesitas como inversor'
+	path_name = "recommend_side_companies"
+	recsys_title = "Empresas más visitadas"
 
 	def get_queryset(self):
 		return Term.objects.clean_terms()
@@ -36,6 +38,8 @@ class TermDetailsView(SEODetailView):
 	slug_field = 'slug'
 	is_article = True
 	open_graph_type = 'article'
+	path_name = "recommend_side_companies"
+	recsys_title = "Te pueden interesar"
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
