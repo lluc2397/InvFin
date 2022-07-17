@@ -7,7 +7,6 @@ from apps.seo.models import Visiteur
 
 
 class SeoInformation:
-
     @staticmethod
     def get_client_ip(request):
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -22,10 +21,9 @@ class SeoInformation:
             ip = request.META.get('REMOTE_ADDR')
         return ip
 
-
     def meta_information(self, request):
         g = GeoIP2()
-        ip = SeoInformation.get_client_ip(request)
+        ip = self.get_client_ip(request)
         if settings.DEBUG:
             ip = '162.158.50.77'
         meta = {
@@ -36,7 +34,6 @@ class SeoInformation:
         
         return meta
 
-
     def update_visiteur_session(self, visiteur, request):
         if not request.session or not request.session.session_key:
             request.session.save()
@@ -46,15 +43,15 @@ class SeoInformation:
         request.session.modified = True
         return visiteur
 
-
     def get_visiteur_by_old_session(self, request):
         session = Session.objects.filter(session_key = request.session.session_key)
         visiteur = False
         if session.exists():
-            session = Session.objects.get(session_key = request.session.session_key)
-            visiteur = Visiteur.objects.get(id = session.get_decoded()['visiteur_id'])
+            session_obj = Session.objects.get(session_key = request.session.session_key)
+            session_obj_visiteur_id = session_obj.get_decoded().get("visiteur_id")
+            if session_obj_visiteur_id:
+                visiteur = Visiteur.objects.get(id = session_obj_visiteur_id)
         return visiteur
-
 
     def find_visiteur(self, request):
         seo = self.meta_information(request)
@@ -79,7 +76,6 @@ class SeoInformation:
                 visiteur = self.create_visiteur(request)
         return visiteur
     
-
     def create_visiteur(self, request):
         seo = self.meta_information(request)
         if not request.session or not request.session.session_key:
@@ -105,23 +101,3 @@ class SeoInformation:
         request.session['visiteur_id'] = visiteur.id
         request.session.modified = True
         return visiteur
-
-
-
-
-# urlconf = __import__(settings.ROOT_URLCONF, {}, {}, [''])
-
-# def list_urls(lis, acc=None):
-#     if acc is None:
-#         acc = []
-#     if not lis:
-#         return
-#     l = lis[0]
-#     if isinstance(l, URLPattern):
-#         yield acc + [str(l.pattern)]
-#     elif isinstance(l, URLResolver):
-#         yield from list_urls(l.url_patterns, acc + [str(l.pattern)])
-#     yield from list_urls(lis[1:], acc)
-
-# for p in list_urls(urlconf.urlpatterns):
-#     print(''.join(p))
