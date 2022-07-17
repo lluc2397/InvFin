@@ -7,6 +7,7 @@ from django.db.models import Avg
 from apps.empresas.valuations import discounted_cashflow
 from apps.general.utils import ChartSerializer
 from apps.general.mixins import BaseToAll
+from apps.general.models import Currency
 
 from .retreive_data import RetreiveCompanyData
 
@@ -28,7 +29,10 @@ class CompanyExtended(BaseToAll, ChartSerializer):
     def income_json(self, limit):
         inc = self.all_income_statements(limit)
         if not self.currency:
-            self.currency = inc[0].reported_currency
+            try:
+                self.currency = inc[0].reported_currency
+            except IndexError:
+                pass
         inc_json = {
             'currency': self.currency.currency,
             'labels': [data.date for data in inc],
@@ -1787,7 +1791,10 @@ class CompanyExtended(BaseToAll, ChartSerializer):
         except ZeroDivisionError:
             evsales = 0
 
-        gramvalu = (math.sqrt(22.5*current_eps * last_per_share.book_ps)) if current_eps > 0 else 0
+        try:
+            gramvalu = (math.sqrt(22.5*current_eps * last_per_share.book_ps)) if current_eps > 0 else 0
+        except ValueError:
+            gramvalu = 0
         safety_margin_pes = ((gramvalu / current_price)-1)*100 if current_price !=0 else 0
         
         fair_value = discounted_cashflow(

@@ -149,8 +149,13 @@ class Company(CompanyExtended):
         current_ratios = self.calculate_current_ratios()
         last_income_statement = current_ratios['last_income_statement']
         currency = last_income_statement.reported_currency
+        try:
+            cagr = round(current_ratios['cagr'], 2)
+        except TypeError:
+            cagr = 0
+
         return (f"{self.ticker} ha tenido un crecimiento en sus ingresos del "
-        f"{round(current_ratios['cagr'], 2)}% anualizado durante los últimos 10 años. "
+        f"{cagr}% anualizado durante los últimos 10 años. "
         f"Actualmente la empresa genera {round(last_income_statement.revenue, 2)}{currency} "
         f"con gastos elevándose a {round(last_income_statement.cost_of_revenue, 2)}{currency}. "
         f"La empresa cotiza a {round(current_ratios['current_price'], 2)}{currency} por acción, con "

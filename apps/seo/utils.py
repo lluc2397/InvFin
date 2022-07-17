@@ -29,7 +29,7 @@ class SeoInformation:
         if settings.DEBUG:
             ip = '162.158.50.77'
         meta = {
-            'http_user_agent' : request.META['HTTP_USER_AGENT'],
+            'http_user_agent' : request.META.get("HTTP_USER_AGENT"),
             'location':g.city(ip),
             'ip':ip
         }

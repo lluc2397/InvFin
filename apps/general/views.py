@@ -97,7 +97,10 @@ def search_results(request):
 		elif query == 'Término':
 			title = term.split(':')[1]
 			title = title[1:]
-			term_busqueda = Term.objects.get(title = title)
+			try:
+				term_busqueda = Term.objects.get(title = title)
+			except Term.MultipleObjectsReturned:
+				term_busqueda = Term.objects.filter(title = title).first()
 			redirect_to = term_busqueda.get_absolute_url()
 		
 		else:
@@ -113,7 +116,7 @@ def search_results(request):
 				messages.warning(request, 'No hemos entendido tu búsqueda')
 				return redirect(request.META.get('HTTP_REFERER'))
 				
-	return redirect(redirect_to)
+		return redirect(redirect_to)
 
 
 @login_required
