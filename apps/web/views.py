@@ -5,7 +5,12 @@ from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.views.generic import CreateView, DetailView, TemplateView
+from django.views.generic import (
+    CreateView, 
+    DetailView, 
+    TemplateView,
+    RedirectView
+)
 
 from apps.general.utils import HostChecker
 from apps.public_blog.models import WritterProfile
@@ -98,16 +103,11 @@ def soporte_view(request):
     return render(request, 'soporte.html', context)
 
 
-class ExcelView(TemplateView):
-    template_name = 'excel.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["meta_desc"] = 'El mejor excel para invertir correctamente y obtener mejores beneficios'
-        context["meta_tags"] = 'finanzas, blog financiero, blog el financiera, invertir, excel'
-        context["meta_title"] = 'Excel inteligente'
-        context["meta_url"] = 'excel-analisis/'
-        return context
+class ExcelRedirectView(RedirectView):
+    permanent = True
+    
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse("business:product", kwargs={"slug": "excel-inteligente-inifito"})
 
 
 class CreateWebEmailView(CreateView):

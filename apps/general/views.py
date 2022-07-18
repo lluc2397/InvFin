@@ -117,6 +117,8 @@ def search_results(request):
 				return redirect(request.META.get('HTTP_REFERER'))
 				
 		return redirect(redirect_to)
+	else:
+		return redirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required

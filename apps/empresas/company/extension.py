@@ -34,7 +34,7 @@ class CompanyExtended(BaseToAll, ChartSerializer):
             except IndexError:
                 pass
         inc_json = {
-            'currency': self.currency.currency,
+            'currency': self.currency,
             'labels': [data.date for data in inc],
             'fields': [
                 {'title':'Ingresos',
@@ -162,7 +162,7 @@ class CompanyExtended(BaseToAll, ChartSerializer):
     def balance_json(self, limit):
         bls = self.all_balance_sheets(limit)        
         bls_json = {
-            'currency': self.currency.currency,
+            'currency': self.currency,
             'labels': [data.date for data in bls],
             'fields': [
                 {'title':'Efectivo y equivalentes',
@@ -384,7 +384,7 @@ class CompanyExtended(BaseToAll, ChartSerializer):
     def cashflow_json(self, limit):
         cf = self.all_cashflow_statements(limit)
         cf_json = {
-            'currency': self.currency.currency,
+            'currency': self.currency,
             'labels': [data.date for data in cf],
             'fields': [
                 {'title': 'Beneficio neto',
