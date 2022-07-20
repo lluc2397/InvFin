@@ -1,10 +1,12 @@
 from django.contrib import admin
 
+from import_export.admin import ImportExportModelAdmin
+
 from .models import Answer, AnswerComment, QuesitonComment, Question
 
 
 @admin.register(Question)
-class QuestionAdmin(admin.ModelAdmin):
+class QuestionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = [
         'id',
         'title',

@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from import_export.admin import ImportExportActionModelAdmin
+
 from .models import (
     FollowingHistorial,
     NewsletterFollowers,
@@ -60,7 +62,7 @@ class NewsletterInline(admin.StackedInline):
 
 
 @admin.register(PublicBlog)
-class PublicBlogAdmin(admin.ModelAdmin):
+class PublicBlogAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
     inlines = [NewsletterInline]
 
     actions = [find_images]

@@ -2,7 +2,7 @@ from django.conf import settings
 from django.test import TestCase
 
 from apps.empresas.models import Company
-from apps.escritos.models import Term
+from apps.escritos.models import Term, TermContent
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog
 from apps.socialmedias.models import (
@@ -12,17 +12,24 @@ from apps.socialmedias.models import (
     QuestionSharedHistorial,
     TermSharedHistorial,
 )
+from apps.socialmedias.constants import FACEBOOK
 from apps.socialmedias.socialposter.facepy import Facebook
 
 from ..poster import SocialPosting
-from .data import AAPL
+from .data import AAPL, TERM, TERM_CONTENT, QUESTION, PUBLICBLOG
 from .factories import DefaultTilteFactory, EmojiFactory, HashtagFactory
 
-test_page_id = settings.NEW_FACEBOOK_ID
-test_page_token = settings.NEW_FB_PAGE_ACCESS_TOKEN
 
 
-class FacePosterTest(TestCase):    
+class FacePosterTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.facebook_poster = Facebook(settings.NEW_FACEBOOK_ID, settings.NEW_FB_PAGE_ACCESS_TOKEN)
+        cls.question = Question.objects.create(**QUESTION)
+        cls.term = Term.objects.create(**TERM)
+        cls.term_content = TermContent.objects.create(**TERM_CONTENT)
+        cls.public_blog = PublicBlog.objects.create(**PUBLICBLOG)
+
     def test_blog(self):
         publicBlog = PublicBlog.objects.get_random()
         blog_poster = SocialPosting(BlogSharedHistorial, publicBlog).generate_content()
@@ -55,5 +62,5 @@ class FacePosterTest(TestCase):
         title, link, description, media_url = SocialPosting(NewsSharedHistorial, company_related=company).generate_content()
         
     # def test_posting(self):
-    #     fb_response = Facebook(test_page_id, test_page_token).post_on_facebook(title=title, caption=description, post_type=3, link=link, media_url=media_url)
+    #     fb_response = self.facebook_poster.post_on_facebook(title=title, caption=description, post_type=3, link=link, media_url=media_url)
     #     print(fb_response)

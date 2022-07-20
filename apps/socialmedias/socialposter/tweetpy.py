@@ -95,6 +95,7 @@ class Twitter:
         media_url:str=None,
         link:str=None,
         title:str=None,
+        **kwargs,
         ):
             emojis = Emoji.objects.random_emojis(num_emojis)
             platform = 'twitter'

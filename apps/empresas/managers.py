@@ -118,6 +118,19 @@ class CompanyManager(Manager):
             updated=False, 
             has_error=False
             )
+    
+    def get_random_most_visited_clean_company(self):
+        return self.filter(
+            no_incs = False,
+            no_bs = False,
+            no_cfs = False,
+            has_error=False,
+            description_translated = True
+        ).annotate(
+            visited_by_user=Count('usercompanyvisited'),
+            visited_by_visiteur=Count('visiteurcompanyvisited'),
+            total_visits=F('visited_by_user') + F('visited_by_visiteur')
+        ).order_by('total_visits')
 
     def get_most_visited_companies(self):
         """

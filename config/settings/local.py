@@ -37,14 +37,14 @@ CACHES = {
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-httponly
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_NAME = "sessionid"
-SESSION_COOKIE_DOMAIN = f".{CURRENT_DOMAIN}"
+SESSION_COOKIE_DOMAIN = f".example.com"
 # Whether to save the session data on every request.
 SESSION_SAVE_EVERY_REQUEST = False
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-httponly
 CSRF_COOKIE_HTTPONLY = True
-CSRF_COOKIE_DOMAIN = f".{CURRENT_DOMAIN}"
-CSRF_TRUSTED_ORIGINS = [f".{CURRENT_DOMAIN}", f"{CURRENT_DOMAIN}"]
+CSRF_COOKIE_DOMAIN = f".example.com"
+CSRF_TRUSTED_ORIGINS = [f".example.com", f"example.com"]
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-browser-xss-filter
 SECURE_BROWSER_XSS_FILTER = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options

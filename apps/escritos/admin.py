@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from import_export.admin import ImportExportActionModelAdmin
+
 from .models import (
     Term,
     TermContent,
@@ -30,7 +32,7 @@ class TermContentInline(admin.StackedInline):
 
 
 @admin.register(TermContent)
-class TermContentAdmin(admin.ModelAdmin):
+class TermContentAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
     list_display = [
         'id',
         'title'
@@ -38,7 +40,7 @@ class TermContentAdmin(admin.ModelAdmin):
 
 
 @admin.register(Term)
-class TermAdmin(admin.ModelAdmin):
+class TermAdmin(ImportExportActionModelAdmin, admin.ModelAdmin):
     inlines = [TermContentInline]
     
     actions = [find_images]
