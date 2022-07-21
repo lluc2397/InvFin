@@ -1,3 +1,5 @@
+import vcr
+
 from django.conf import settings
 from django.test import TestCase
 
@@ -20,6 +22,11 @@ from .data import AAPL, TERM, TERM_CONTENT, QUESTION, PUBLICBLOG
 from .factories import DefaultTilteFactory, EmojiFactory, HashtagFactory
 
 
+arrivalguides_vcr = vcr.VCR(
+    cassette_library_dir='cassettes/arrivalguides/',
+    path_transformer=vcr.VCR.ensure_suffix('.yaml'),
+)
+
 
 class FacePosterTest(TestCase):
     @classmethod
@@ -29,6 +36,7 @@ class FacePosterTest(TestCase):
         cls.term = Term.objects.create(**TERM)
         cls.term_content = TermContent.objects.create(**TERM_CONTENT)
         cls.public_blog = PublicBlog.objects.create(**PUBLICBLOG)
+        cls.company = Company.objects.create(**AAPL)
 
     def test_blog(self):
         publicBlog = PublicBlog.objects.get_random()

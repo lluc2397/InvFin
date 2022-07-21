@@ -38,7 +38,7 @@ class Twitter:
         json_response = response._json
         return json_response['id']
     
-    def create_thread(self, title, caption, tweet_len, hashtags):
+    def create_thread(self, title, description, tweet_len, hashtags):
         post_type = 8 # Thread
         twitter_api = self.do_authenticate()
         parts = int(math.ceil(tweet_len / 186))
@@ -71,7 +71,7 @@ class Twitter:
                 last_position = current_position + 186
             extra = f'{pagination}'
             
-            content = caption[current_position: last_position]
+            content = description[current_position: last_position]
             text_part = f'{content} {extra}'
 
             response = twitter_api.update_status(status=text_part, 
@@ -89,7 +89,7 @@ class Twitter:
 
     def tweet(
         self,
-        caption:str, 
+        description:str, 
         num_emojis:int=1,
         post_type:int=2,
         media_url:str=None,
@@ -110,12 +110,12 @@ class Twitter:
             utm_term = f'utm_term={title}'
             link = f'{link}?{utm_source}&{utm_medium}&{utm_campaign}&{utm_term}'
 
-            tweet = f'{emojis[0].emoji} {caption} Más en {link} #{hashtag1.name} #{hashtag2.name} #{hashtag3.name}'
+            tweet = f'{emojis[0].emoji} {description} Más en {link} #{hashtag1.name} #{hashtag2.name} #{hashtag3.name}'
                     
             if post_type == 3 or post_type == 4:
                 tweet_len = len(tweet)
                 if tweet_len > 186:
-                    post_response = self.create_thread(title, caption, tweet_len, hashtags)
+                    post_response = self.create_thread(title, description, tweet_len, hashtags)
                 else:
                     post_response = self.tweet_text(tweet)
             
@@ -126,7 +126,7 @@ class Twitter:
                 elif post_type == 2 or post_type == 6:
                     content_type = 'image'
 
-                post_response = self.tweet_with_media(media_url, caption)
+                post_response = self.tweet_with_media(media_url, description)
             
             #Create the posibility of returning a list with all the posts in case of a thread
             if type(post_response) == list:
@@ -138,7 +138,7 @@ class Twitter:
                 twitter_post = {
                     'post_type': post_type ,
                     'social_id': post_response,
-                    'description': caption,
+                    'description': description,
                     'platform_shared': platform
                 }
                 

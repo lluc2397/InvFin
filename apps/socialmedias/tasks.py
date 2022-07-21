@@ -1,5 +1,3 @@
-import random
-
 from config import celery_app
 
 from apps.socialmedias import constants

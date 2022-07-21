@@ -1,9 +1,11 @@
+import vcr
+
 from django.test import TestCase
 from django.utils.html import strip_tags
 from django.utils.safestring import mark_safe
 
 from apps.empresas.models import Company
-from apps.escritos.models import Term
+from apps.escritos.models import Term, TermContent
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog
 from apps.socialmedias.models import (
@@ -16,53 +18,24 @@ from apps.socialmedias.models import (
 )
 
 from ..poster import SocialPosting
-from .factories import DefaultTilteFactory, EmojiFactory, HashtagFactory
+from .data import AAPL, TERM, TERM_CONTENT, QUESTION, PUBLICBLOG
 
 # from apps.public_blog.tests.factories
 
-
+arrivalguides_vcr = vcr.VCR(
+    cassette_library_dir='cassettes/arrivalguides/',
+    path_transformer=vcr.VCR.ensure_suffix('.yaml'),
+)
 
 
 class PosterTest(TestCase):
-    def setUp(self) -> None:
-        self.emoji = EmojiFactory()
-        self.def_title = DefaultTilteFactory()
-        self.hashtag = HashtagFactory()
-
-        self.term = Term.objects.create(
-            title='term',
-            resume='resumen',
-        )
-        self.question = Question.objects.create(
-            title='question',
-            content='<div><p>masidf sdbf sdf sfg fdïfdsf  hbsdf ónjbfds ds ds</p> <a>sdfjhfb  fusd fvgsvd fsvd <a/></div>',
-        )
-        self.publicBlog = PublicBlog.objects.create(
-            title='public blog',
-            resume='blog resumido',
-            content='contenido largo del blog',
-        )
-        self.company = Company.objects.create(
-            name='Apple',
-            ticker='AAPL'
-        )
-        self.term2 = Term.objects.create(
-            title='term 2',
-            resume='resumen 2',
-        )
-        self.question2 = Question.objects.create(
-            title='question 2',
-            content='pregutna larga 2',
-        )
-        self.publicBlog2 = PublicBlog.objects.create(
-            title='public blog 2',
-            resume='blog resumido 2',
-            content='contenido largo del blog 2',
-        )
-        self.company2 = Company.objects.create(
-            name='Intel',
-            ticker='INTC'
-        )
+    @classmethod
+    def setUpTestData(cls):
+        cls.question = Question.objects.create(**QUESTION)
+        cls.term = Term.objects.create(**TERM)
+        cls.term_content = TermContent.objects.create(**TERM_CONTENT)
+        cls.public_blog = PublicBlog.objects.create(**PUBLICBLOG)
+        cls.company = Company.objects.create(**AAPL)
 
     def test_random_content(self):
         random_Term_1 = Term.objects.get_random()

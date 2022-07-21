@@ -9,7 +9,7 @@ from apps.empresas.models import Company
 from apps.escritos.models import Term
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog
-
+from apps.seo.utils import generate_utm_url
 from apps.socialmedias import constants
 from apps.socialmedias.socialposter.facepy import Facebook
 from apps.socialmedias.socialposter.tweetpy import Twitter
@@ -91,7 +91,7 @@ class SocialPosting:
 
     def term_content(self, content:Term=None):
         if not content:
-            content = Term.objects.get_random()
+            content = Term.objects.random_clean()
         title = content.title
         description = content.resume
         shared_model_historial = TermSharedHistorial
@@ -117,14 +117,11 @@ class SocialPosting:
             "content_shared": content,
             "shared_model_historial": shared_model_historial,
         }
-    
-    def generate_utm_url(self):
-        pass
 
-    def generate_content(self, social_medias:List, content:Dict):
+    def generate_content(self, social_medias:List, content:Dict) -> List:
         social_media_actions = {
-            constants.FACEBOOK : self.facebook_poster,
-            constants.TWITTER : self.twitter_poster,
+            constants.FACEBOOK : self.facebook_poster.post_on_facebook,
+            constants.TWITTER : self.twitter_poster.tweet,
             constants.INSTAGRAM : "",
             constants.YOUTUBE : "",
             constants.REDDIT : "",
@@ -138,7 +135,8 @@ class SocialPosting:
             social_media_fnct = social_media_actions[social_media["platform"]]
             social_media_content.append({
                 **social_media_fnct(**content),
-                "platform_shared": social_media
+                "user": User.objects.get(username = 'Lucas')
+                # "platform_shared": social_media
             })
             
         return social_media_content
@@ -154,19 +152,11 @@ class SocialPosting:
         }
         generate_content = social_media_content[model_for_social_medias_content]
         content = generate_content()
-        cls.generate_content(social_medias, content)
+        content_generated_and_posted = cls.generate_content(social_medias, content)
+        shared_model_historial = content.pop("shared_model_historial")
+        cls.save_post(content_generated_and_posted, shared_model_historial)
 
-        fb_response = Facebook().post_on_facebook(title=title, caption=description, post_type=3, link=link)
-        tw_response = Twitter().tweet(caption=description, post_type=3, link=link, title=title)
-
-        data_to_save = {} 
-        data_to_save.update()
-        cls.save_post(data_to_save)
-
-    def save_post(self, data:dict):
-        data['user'] = User.objects.get(username = 'Lucas')
-        
+    def save_post(self, data:List, shared_model_historial):
         #Create a list inside the dict returned to generate multiples models and saved them in bulk
-        shared_model_historial = data.pop("shared_model_historial")
         default_manager = shared_model_historial._default_manager
-        default_manager.bulk_create([shared_model_historial(**post) for post in data['posts']])
+        default_manager.bulk_create([shared_model_historial(**post) for post in data])

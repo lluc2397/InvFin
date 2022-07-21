@@ -137,7 +137,7 @@ class Facebook():
     def post_on_facebook(
         self,
         title:str,
-        caption:str=None,
+        description:str=None,
         num_emojis:int=1,
         post_type:int=3,
         link:str=None,
@@ -156,12 +156,12 @@ class Facebook():
         utm_term = f'utm_term={title}'
         link = f'{link}?{utm_source}&{utm_medium}&{utm_campaign}&{utm_term}'
 
-        caption = self.create_fb_description(caption=caption, link=link, hashtags=[hashtag.name for hashtag in hashtags])
+        description = self.create_fb_description(description=description, link=link, hashtags=[hashtag.name for hashtag in hashtags])
         
         if post_type == 1 or post_type == 5 or post_type == 7:
             content_type = 'video'
             video_url = ''
-            post_response = self.post_fb_video(video_url= video_url, description=caption, title= custom_title, post_now = True)
+            post_response = self.post_fb_video(video_url= video_url, description=description, title= custom_title, post_now = True)
 
         elif post_type == 2 or post_type == 6:
             content_type = 'image'
@@ -169,22 +169,22 @@ class Facebook():
 
         elif post_type == 3 or post_type == 4:
             content_type = 'text'
-            caption = f'{caption}'
+            description = f'{description}'
 
-            post_response = self.post_text(text= caption, link=link, title=title)
+            post_response = self.post_text(text= description, link=link, title=title)
 
         if post_response['result'] == 'success':
             return {
                 'post_type': post_type ,
                 'social_id': post_response['extra'],
                 'title': custom_title ,
-                'description': caption,
+                'description': description,
                 'platform_shared': platform
             }
         else:
             return self.post_on_facebook(
                 title,
-                caption,
+                description,
                 num_emojis,
                 post_type,
                 link,
@@ -198,16 +198,16 @@ class Facebook():
             post_type=4,
             default_title = default_title,
             has_default_title = True,
-            caption=f'{default_title.title} {yb_title}',
+            description=f'{default_title.title} {yb_title}',
             link = url_to_share)  
 
-    def create_fb_description(self, caption:str, link:str = None, hashtags:list = None):
+    def create_fb_description(self, description:str, link:str = None, hashtags:list = None):
         hashtags = '#'.join(hashtags)
         if link:
             link = f'Más en {link}'
         else:
             link = 'Prueba las herramientas que todo inversor inteligente necesita: https://inversionesyfinanzas.xyz'
-        face_description = f"""{caption}
+        face_description = f"""{description}
 
         {link}
         
