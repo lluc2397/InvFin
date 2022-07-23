@@ -7,8 +7,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.generic import (
     CreateView, 
-    DetailView, 
-    TemplateView,
+    DetailView,
     RedirectView
 )
 

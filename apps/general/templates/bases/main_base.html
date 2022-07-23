@@ -12,15 +12,8 @@
     <div class="main-content" id="panel">
         {% block navbar %}{% include "navbar/navbar.html" %}{% endblock navbar%}
         {% include "navbar/historial-sub-navbar.html" %}
-        <div hx-trigger="load, showMessageSuccess from:body">
-            {% if messages %}
-                {% for message in messages %}
-                <div class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                {% endfor %}
-            {% endif %}
+        <div hx-trigger="showMessageSuccess from:body" hx-get="{% url 'general:nav_messages' %}">
+            {% include "complements/messages.html" %}
         </div>
         {% block TopHeader %}
         <div class="header pb-6">

@@ -11,7 +11,7 @@ from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 
 from apps.empresas.models import Company
 from apps.escritos.models import FavoritesTermsHistorial, FavoritesTermsList, Term
@@ -23,6 +23,10 @@ from apps.super_investors.models import (
 )
 
 from .models import Notification
+
+
+class MessagesTemplateview(TemplateView):
+	template_name = "complements/messages.html"
 
 
 @login_required

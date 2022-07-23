@@ -415,6 +415,8 @@ API_VERSION = {'CURRENT_VERSION': 'v1'}
 
 # Tags
 # ------------------------------------------------------------------------------
+# MESSAGE_STORAGE = 'django.contrib.messages.storage.fallback.FallbackStorage'
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 MESSAGE_TAGS = {
     messages.DEBUG: 'debug',
     messages.INFO: 'info',
