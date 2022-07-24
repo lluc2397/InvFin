@@ -39,7 +39,7 @@ class ScreenerInicioView(SEOListView):
 
 class CompanyScreenerInicioView(SEOListView):
     model = Company
-    template_name = 'empresas/inicio.html'
+    template_name = 'empresas/company_inicio.html'
     context_object_name = "empresas"
     paginate_by = 50
     slug_url_kwarg = 'slug'
@@ -89,40 +89,7 @@ class CompanyDetailsView(SEODetailView):
     def get_object(self):
         ticker = self.kwargs.get('ticker')
         try:
-            response = Company.objects.prefetch_related(
-                'inc_statements',
-                'balance_sheets',
-                'cf_statements',
-                'rentability_ratios',
-                'liquidity_ratios',
-                'margins',
-                'fcf_ratios',
-                'per_share_values',
-                'non_gaap_figures',
-                'operation_risks_ratios',
-                'ev_ratios',
-                'growth_rates',
-                'efficiency_ratios',
-                'price_to_ratios'
-            ).only(
-                'ticker',
-                'name',
-                'sector',
-                'website',
-                'state',
-                'country',
-                'ceo',
-                'image',
-                'city',
-                'employees',
-                'address',
-                'zip_code',
-                'cik',
-                'cusip',
-                'isin',
-                'description',
-                'ipoDate',
-            ).get(ticker=ticker)
+            response = Company.objects.fast_full().get(ticker=ticker)
         # except model.DoesNotExist:
         except Exception as e:
             response, _ = Company.objects.get_or_create(
@@ -196,8 +163,8 @@ class BuyCompanyInfo(RedirectView):
         CompanyInformationBought.objects.create(user=user, company=company)
         messages.success(
             request, 
-            f'Descubre toda la historia financiera de {company.name}, '
-            'ya que conoces la empresa no olvides hacer un análisis FODA'
+            f'Ahora que conoces toda la historia financiera de {company.name}, '
+            'no olvides hacer un análisis FODA'
         )
         return redirect(reverse('screener:company', kwargs={'ticker': company.ticker}))
 

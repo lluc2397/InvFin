@@ -19,8 +19,9 @@ from django.urls import reverse
 
 from apps.empresas.models import Company
 from apps.general.bases import BaseFavoritesHistorial
+from apps.general.models import Period
 
-from .managers import SuperinvestorManager
+from .managers import SuperinvestorManager, SuperinvestorHistoryManager
 
 User = get_user_model()
 
@@ -118,22 +119,6 @@ class FavoritesSuperinvestorsList(Model):
         return self.user.username
 
 
-class Period(Model):
-    PERIODS = ((1, '1 Quarter'), (2, '2 Quarter'), (3, '3 Quarter'), (4, '4 Quarter'))
-    year = DateField(null=True, blank=True)
-    period = IntegerField(choices=PERIODS, null=True, blank=True)
-
-    class Meta:
-        verbose_name = "Period"
-        verbose_name_plural = "Periods"
-        db_table = "assets_periods"
-        ordering = ['-year', '-period']
-        get_latest_by = ['-year', '-period']
-    
-    def __str__(self):
-        return f'Q{self.period} {str(self.year.year)}'
-
-
 class BaseSuperinvestorHoldingsInformation(Model):
     period_related = ForeignKey(Period, on_delete=SET_NULL, null=True, blank=True)
     company = ForeignKey(Company, on_delete=SET_NULL, null=True, blank=True)
@@ -215,6 +200,7 @@ class SuperinvestorHistory(BaseSuperinvestorHoldingsInformation):
     shares = FloatField(null=True, blank=True)
     reported_price = FloatField(null=True, blank=True)
     portfolio_weight = FloatField(null=True, blank=True)
+    objects = SuperinvestorHistoryManager()
 
     class Meta:
         verbose_name = "Superinvestor history"

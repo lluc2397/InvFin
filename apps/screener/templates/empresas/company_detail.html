@@ -81,13 +81,13 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
       <div class="tab-pane fade" id="pills-predictions" role="tabpanel" aria-labelledby="pills-predictions-tab">    
         {% include "empresas/company_parts/predictions/predictions.html" %}
       </div>               
-      <!-- recommendation tab -->
-      <div class="tab-pane fade" id="pills-recoms" role="tabpanel" aria-labelledby="pills-recoms-tab">
-        {% include "empresas/company_parts/cashflow_statement/cashflow_statement.html" %}
+      <!-- superinvestors tab -->
+      <div class="tab-pane fade" id="pills-superinvestors" role="tabpanel" aria-labelledby="pills-superinvestors-tab">
+        {% include "empresas/company_parts/relationships/superinvestors_relateds.html" %}
       </div>
       
       <div class="tab-pane fade" id="pills-relations" role="tabpanel" aria-labelledby="pills-relations-tab">
-        {% include "empresas/company_parts/relationships/relations.html" %}
+        {% include "empresas/company_parts/relationships/wait-relations.html" %}
       </div>
     </div>
 </div>
@@ -156,6 +156,8 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   htmx.on("hidden.bs.modal", () => {
     document.getElementById("dialog").innerHTML = ""
   })
+
 })()
+
 </script>
 {% endblock javascript %}

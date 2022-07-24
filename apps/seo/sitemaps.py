@@ -4,6 +4,19 @@ from apps.empresas.models import Company
 from apps.escritos.models import Term
 from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog
+from apps.super_investors.models import Superinvestor
+
+
+class SuperinvestorSitemap(Sitemap):
+    changefreq = "weekly"
+    priority = 0.8
+    protocol = 'https'
+
+    def items(self):
+        return Superinvestor.objects.all()
+
+    def location(self,obj):
+        return obj.get_absolute_url()
 
 
 class PublicBlogSitemap(Sitemap):
@@ -18,7 +31,7 @@ class PublicBlogSitemap(Sitemap):
         return obj.updated_at
 
     def location(self,obj):
-        return obj.get_absolute_url()
+        return obj.custom_url
 
 
 class TermSitemap(Sitemap):

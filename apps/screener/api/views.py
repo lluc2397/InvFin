@@ -102,6 +102,17 @@ def retreive_top_lists(request):
     })
 
 
+def return_similar_companies_screener(request, sector_id, industry_id):
+    return render(
+        request, 
+        'empresas/company_parts/relationships/relations.html', 
+        {
+            'similar_companies': Company.objects.get_similar_companies(sector_id, industry_id),
+            "previous_ticker": request.GET.get('extra')
+        }
+    )
+
+
 class CompanyObservationFormView(FormView):
     form_class = UserCompanyObservationForm
     template_name = 'empresas/company_parts/foda/foda_modal.html'

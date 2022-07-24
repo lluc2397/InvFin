@@ -2,8 +2,10 @@ import json
 from datetime import datetime
 
 from django import template
+from django.urls import reverse
 from django.contrib.auth.models import Group
 from django.utils.html import format_html, strip_tags
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -39,3 +41,19 @@ def api_json_example(example):
     parsed = json.loads(example)
     print(parsed)
     return json.dumps(example, indent=4, sort_keys=True)
+
+
+@register.simple_tag(name='pre_loading')
+def render_pre_loading(link_params:str, extra, *args):
+    link = reverse(link_params, args=args)
+    return mark_safe(f"""<div hx-trigger="load" hx-target="this"
+    hx-get='{link}?extra={extra}'>
+    <div class="text-center">
+        <div class="spinner-border" role="status"></div>
+        Cargando...
+    </div>
+</div>
+""")
+
+
+

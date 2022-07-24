@@ -33,7 +33,7 @@
                  <br>
                  <!-- <button type="button" class="btn btn-sm btn-primary mb-1">Añadir cartera</button>
                  <br> -->
-                 <a href="{% url 'screener:company' empresa.ticker %}" type="button" class="btn btn-sm btn-primary">
+                 <a href="{% url 'screener:company' empresa.ticker %}{% utm 'market' empresa.ticker %}" type="button" class="btn btn-sm btn-primary">
                   <i class="fa fa-eye" aria-hidden="true"></i>
                     Visitar
                   </a>

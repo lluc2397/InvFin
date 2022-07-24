@@ -94,7 +94,17 @@ class CompanyManager(Manager):
             no_cfs = False,
             description_translated = True,
             exchange__main_org__name = name
-            )        
+            )
+    
+    def get_similar_companies(self, sector_id, industry_id):
+        return self.filter(
+            no_incs = False,
+            no_bs = False,
+            no_cfs = False,
+            description_translated = True,
+            sector_id = sector_id,
+            industry_id = industry_id
+            )
     
     def random_clean_company(self):
         companies = self.clean_companies()

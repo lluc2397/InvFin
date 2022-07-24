@@ -1,5 +1,4 @@
-{% load static %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags static %}
 <form method="POST" hx-post="{% url 'screener:create_company_observation' %}"
 hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' class="modal-content">
 <div class="modal-header">

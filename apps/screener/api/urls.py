@@ -11,6 +11,7 @@ from .views import (
     retreive_yahoo_screener_info,
     simple_valuation_view,
     suggest_list_search_companies,
+    return_similar_companies_screener,
 )
 
 urlpatterns = [
@@ -28,4 +29,6 @@ urlpatterns = [
 
     path('retreive-top-lists/', retreive_top_lists, name="retreive_top_lists"),
     path('retreive-yahoo-lists/<query>', retreive_yahoo_screener_info, name="retreive_yahoo_screener_info"),
+
+    path('return-similar-companies-screener/<sector_id>/<industry_id>/', return_similar_companies_screener, name="return_similar_companies_screener"),
 ]

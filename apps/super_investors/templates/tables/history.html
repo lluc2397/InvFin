@@ -22,7 +22,7 @@
                     <th scope="row">
                         <div class="media align-items-center">
                             {% if company.actual_company_info.ticker %}
-                            <a href="{% url 'screener:company' company.actual_company_info.ticker %}{% utm superinvestor.name company.actual_company_info.ticker %}"
+                            <a target="_blank" href="{% url 'screener:company' company.actual_company_info.ticker %}{% utm "superinvestor-portfolio" superinvestor.name %}"
                             {% else %}
                             <a href="#!"
                             {% endif %} 
@@ -31,7 +31,7 @@
                             </a>
                             <div class="media-body">
                                 {% if company.actual_company_info.ticker %}
-                                <a href="{% url 'screener:company' company.actual_company_info.ticker %}{% utm superinvestor.name company.actual_company_info.ticker %}"
+                                <a target="_blank" href="{% url 'screener:company' company.actual_company_info.ticker %}{% utm "superinvestor-portfolio" superinvestor.name %}"
                                 {% else %}
                                 <a href="#!"
                                 {% endif %} 

@@ -9,6 +9,7 @@ from .models import (
     Notification,
     Sector,
     Tag,
+    Period
 )
 
 
@@ -77,3 +78,10 @@ class CountryAdmin(admin.ModelAdmin):
     ]
 
 
+@admin.register(Period)
+class PeriodAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'year',
+        'period',
+    ]

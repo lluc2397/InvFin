@@ -2,7 +2,12 @@ from django.shortcuts import render
 
 from apps.seo.views import SEODetailView, SEOListView
 
-from .models import Superinvestor, SuperinvestorActivity, FavoritesSuperinvestorsList
+from .models import (
+    Superinvestor, 
+    SuperinvestorActivity, 
+    FavoritesSuperinvestorsList,
+    SuperinvestorHistory
+)
 
 
 class AllSuperinvestorsView(SEOListView):
@@ -54,3 +59,11 @@ def return_superinvestor_movements(request, id):
             'period_related'
         ).filter(superinvestor_related_id=id)
     return render(request, 'tables/activity.html', {'all_activity': all_activity})
+
+
+def return_portfolios_with_company(request, company_id):
+    return render(
+        request, 
+        'empresas/company_parts/relationships/superinvestors_relateds.html', 
+        {'portfolios_with_company': SuperinvestorHistory.objects.company_in_current_portfolios(company_id)}
+    )

@@ -1,0 +1,31 @@
+{% load static extra %}
+<table class="display table table-striped table-bordered text-center" style="width:100%">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Parte de la cartera</th>
+            <th>Cantidad de acciones</th>
+            <th>Precio de compra</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody >
+        {% for portfolio in portfolios_with_company %}
+        <tr>
+    <td>
+        <a href="{{portfolio.superinvestor_related.get_absolute_url}}{% utm 'screener-relations' portfolio.company.ticker %}" target="_blank">
+            {{portfolio.superinvestor_related.name}}
+        </a>
+    </td>
+    <td>{{portfolio.portfolio_weight}} %</td>
+    <td>{{portfolio.shares}}</td>
+    <td>{{portfolio.reported_price}}</td>
+    <td>
+        <a class="btn btn-sm btn-success" href="{{portfolio.superinvestor_related.get_absolute_url}}{% utm 'screener-relations' portfolio.company.ticker %}" target="_blank">
+            Ver más
+        </a>
+    </td>
+        </tr>
+        {% endfor %}                           
+    </tbody>
+</table>

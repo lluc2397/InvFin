@@ -1,0 +1,19 @@
+{% load static extra %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">                
+            <div class="card-body table-responsive">
+                <h4>Súper inversores con la empresa en cartera</h4>
+                {% pre_loading "super_investors:return_portfolios_with_company" "" the_company.id %}
+            </div>
+        </div>
+    </div>
+    <div class="col-12 mt-1">
+        <div class="card">                
+            <div class="card-body table-responsive">
+                <h4>Empresas similares</h4>
+                {% pre_loading "screener:return_similar_companies_screener" the_company.ticker the_company.sector_id the_company.industry_id  %}
+            </div>
+        </div>
+    </div>
+</div>

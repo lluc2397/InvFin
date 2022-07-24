@@ -12,13 +12,15 @@ from apps.seo.sitemaps import (
     PublicBlogSitemap,
     QuestionSitemap,
     TermSitemap,
+    SuperinvestorSitemap
 )
 
 sitemaps = {
     'blogs':PublicBlogSitemap,    
     'preguntas':QuestionSitemap,
     'empresas':CompanySitemap,
-    'glosario':TermSitemap
+    'glosario':TermSitemap,
+    'superinversores':SuperinvestorSitemap
 }
 
 urlpatterns = [

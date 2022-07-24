@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Period, Superinvestor, SuperinvestorActivity, SuperinvestorHistory
+from .models import Superinvestor, SuperinvestorActivity, SuperinvestorHistory
 
 
 @admin.register(SuperinvestorHistory)
@@ -22,6 +22,7 @@ class SuperinvestorHistoryAdmin(admin.ModelAdmin):
 @admin.register(Superinvestor)
 class SuperinvestorAdmin(admin.ModelAdmin):
     list_display = [
+        'id',
         'name',
         'fund_name',
         'slug',
@@ -51,12 +52,3 @@ class SuperinvestorActivityAdmin(admin.ModelAdmin):
         'need_verify_company',
 
     ] 
-
-
-@admin.register(Period)
-class PeriodAdmin(admin.ModelAdmin):
-    list_display = [
-        'id',
-        'year',
-        'period',
-    ]
