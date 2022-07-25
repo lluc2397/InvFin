@@ -15,7 +15,7 @@ from apps.preguntas_respuestas.models import Question
 from apps.public_blog.models import PublicBlog
 
 from .mixins import SEOViewMixin
-from .models import Promotion
+from apps.web.models import Promotion
 
 
 def redirect_old_urls(request, ques_slug=False, term_slug=False, publs_slug=False):

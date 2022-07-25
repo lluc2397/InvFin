@@ -10,8 +10,6 @@ from apps.general.utils import ExportCsv
 from .models import (
     MetaParameters,
     MetaParametersHistorial,
-    Promotion,
-    PromotionCampaign,
     UserCompanyVisited,
     UserJourney,
     UserPublicBlogVisited,
@@ -74,41 +72,6 @@ class VisiteurTermVisitedAdmin(BaseModelVisitedAdmin):
 @admin.register(UserTermVisited)
 class UserTermVisitedAdmin(BaseModelVisitedAdmin):
     pass
-
-
-@admin.register(PromotionCampaign)
-class PromotionCampaignAdmin(admin.ModelAdmin):
-    list_display = [
-        'id',
-        'title',
-        'slug',
-        'start_date',
-        'end_date',
-    ]
-
-
-@admin.register(Promotion)
-class PromotionAdmin(admin.ModelAdmin):
-    list_display = [
-        'id',
-        'title',
-        'slug',
-        'prize',
-        'has_prize',
-        'shareable_url',
-        'redirect_to',
-        'medium',
-        'web_promotion_type',
-        'web_location',
-        'social_media',
-        'publication_date',
-        'campaign_related',
-        'reuse',
-        'times_to_reuse',
-        'clicks_by_user',
-        'clicks_by_not_user',
-        ]
-
 
 
 @admin.register(VisiteurUserRelation)

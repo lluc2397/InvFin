@@ -20,7 +20,7 @@ from apps.business import constants
 from apps.general.bases import BaseComment
 from apps.general.models import Currency
 from apps.general.mixins import BaseToAll
-from apps.seo.models import Promotion
+from apps.web.models import Promotion
 
 from .managers import ProductManager
 
