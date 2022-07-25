@@ -8,7 +8,7 @@ from django.db.models import Manager, Model
 from .constants import ADD, REDUCE
 
 
-class UserExtraManager(models.BaseUserManager):
+class UserExtraManager(models.UserManager):
     
     def get_or_create_quick_user(
         self, 

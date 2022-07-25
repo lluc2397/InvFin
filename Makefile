@@ -36,7 +36,7 @@ stop:
 	docker-compose -f local.yml stop
 
 shell:
-	docker-compose -f local.yml exec $(ar) /bin/bash
+	docker-compose -f local.yml exec django /bin/bash
 
 # Django
 up-d:
@@ -103,9 +103,11 @@ ls_backups:
 	docker-compose -f local.yml exec postgres backups
 
 rt_backups:
-	docker cp docker-compose -f local.yml ps -q postgres:/backups ./backups
+	dcpb
 
 restore:
+	docker-compose -f local.yml stop
+	docker-compose -f local.yml up -d postgres
 	docker-compose -f local.yml exec postgres restore $(ar)
 
 # Documentation

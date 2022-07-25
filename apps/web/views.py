@@ -10,6 +10,7 @@ from django.views.generic import (
     DetailView,
     RedirectView
 )
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from apps.general.utils import HostChecker
 from apps.public_blog.models import WritterProfile
@@ -109,7 +110,7 @@ class ExcelRedirectView(RedirectView):
         return reverse("business:product", kwargs={"slug": "excel-inteligente-inifito"})
 
 
-class CreateWebEmailView(CreateView):
+class CreateWebEmailView(UserPassesTestMixin, CreateView):
     form_class = WebEmailForm
     template_name = 'mandar_emails.html'
 
